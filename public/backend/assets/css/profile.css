@@ -1,0 +1,217 @@
+
+    /* ✅ ICON SIZE ADJUSTMENT */
+    .icon {
+        display: inline-block;
+        vertical-align: middle;
+        width: 1.25em;
+        height: 1.25em;
+    }
+
+
+
+    /* ✅ LIGHT MODE BASE COLORS */
+    body {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+    .header-bg {
+        background-color: #FCFCFC;
+    }
+    .sidebar-bg {
+        background-color: #F1F1F1;
+    }
+    .card-bg {
+        background-color: #ffffff;
+        color: #1f2937;
+    }
+    .text-default {
+        color: #374151;
+    }
+    .table-header-text {
+        color: #4b5563;
+    }
+
+    /* ✅ DARK MODE COLORS */
+    .dark body {
+        background-color: #1f2937;
+        color: #e5e7eb;
+    }
+    .dark .header-bg {
+        background-color: #1e3a8a;
+    }
+    .dark .sidebar-bg {
+        background-color: #1e40af;
+    }
+    .dark .card-bg {
+        background-color: #2d3748;
+        color: #e5e7eb;
+    }
+    .dark .text-default {
+        color: #e5e7eb;
+    }
+    .dark .border-b {
+        border-color: #4b5563;
+    }
+    .dark .table-header-text {
+        color: #d1d5db;
+    }
+
+    /* ✅ TOGGLE SWITCH STYLES */
+    .toggle-switch-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .toggle-switch-input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .toggle-switch-label {
+        display: block;
+        width: 56px;
+        height: 28px;
+        background-color: #cbd5e0;
+        border-radius: 9999px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    }
+    .dark .toggle-switch-label {
+        background-color: #4a5568;
+    }
+    .toggle-switch-handle-outer {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 24px;
+        height: 24px;
+        background-color: #ffffff;
+        border-radius: 9999px;
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2), 0 1px 1px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .dark .toggle-switch-handle-outer {
+        background-color: #a0aec0;
+    }
+
+    /* ✅ TOGGLE STATE LIGHT MODE */
+    .toggle-switch-input:checked + .toggle-switch-label {
+        background-color: #3b82f6;
+    }
+    .toggle-switch-input:checked + .toggle-switch-label .toggle-switch-handle-outer {
+        transform: translateX(28px);
+        background-color: #2563eb;
+    }
+
+    /* ✅ TOGGLE STATE DARK MODE */
+    .dark .toggle-switch-input:checked + .toggle-switch-label {
+        background-color: #63b3ed;
+    }
+    .dark .toggle-switch-input:checked + .toggle-switch-label .toggle-switch-handle-outer {
+        background-color: #4299e1;
+    }
+
+    /* ✅ ICONS INSIDE TOGGLE HANDLE */
+    .toggle-switch-handle-outer svg {
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        position: absolute;
+    }
+    .sun-icon-inside {
+        transform: translateX(0);
+    }
+    .toggle-switch-input:checked + .toggle-switch-label .sun-icon-inside {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    .moon-icon-inside {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    .toggle-switch-input:checked + .toggle-switch-label .moon-icon-inside {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    .toggle-switch-input:not(:checked) + .toggle-switch-label .moon-icon-inside {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    .toggle-switch-input:not(:checked) + .toggle-switch-label .sun-icon-inside {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* ✅ ACTIVE NAVIGATION LINK */
+    .nav-link.active-nav {
+        background-color: #F74749;
+        color: #ffffff;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dark .nav-link.active-nav {
+        background-color: #4a5568;
+        color: #ffffff;
+    }
+
+
+    .nav-link-none.active-nav {
+        background-color: #ffffff;
+        color: #000000;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* .nav-link.active-nav:hover {
+        background-color: #F74749;
+        transform: translateY(-1px);
+    }
+    .dark .nav-link.active-nav:hover {
+        background-color: #4a5568;
+    } */
+
+
+    /* --- NEW: Custom Input Field Styling for Profile Page --- */
+    .input-field-custom {
+        /* Remove default shadow, use border for definition */
+        box-shadow: none; 
+        /* Set background and text color for dark mode */
+        background-color: #2d3748; /* Same as card background for seamless look */
+        color: #e5e7eb; /* Light text for dark mode */
+        border: 1px solid #4a5568; /* Darker border for definition */
+        transition: all 0.2s ease-in-out; /* Smooth transitions */
+    }
+
+    .input-field-custom::placeholder {
+        color: #a0aec0; /* Lighter placeholder text */
+    }
+
+    .input-field-custom:focus {
+        border-color: #6366f1; /* Indigo on focus */
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3); /* Soft focus ring */
+        background-color: #2d3748; /* Keep background consistent on focus */
+    }
+
+    /* Override light mode styles for inputs if needed, or ensure dark mode classes are applied */
+    body:not(.dark) .input-field-custom {
+        background-color: #f8fafc; /* Very light background in light mode */
+        color: #1f2937; /* Dark text in light mode */
+        border-color: #cbd5e0; /* Light border in light mode */
+    }
+    body:not(.dark) .input-field-custom::placeholder {
+        color: #9ca3af; /* Gray placeholder in light mode */
+    }
+    body:not(.dark) .input-field-custom:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+
+    

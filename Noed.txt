@@ -1,0 +1,87 @@
+
+- php artisan make:model Product -m
+
+
+
+-------------------------------------- ការធ្វើការបង្កើត Project នេះឡើងមក --------------------------------
+1. 
+   - ដើម្បីបង្កើត laravel/breeze
+        > composer require laravel/breeze --dev
+        > php artisan breeze:install
+            blade
+            Would you like dark mode support? (yes/no) [no]
+                ❯ yes
+            PHPUnit
+
+    - View (\resources\views)
+        យើងអាចកែប្រែ forntend នៅត្រង់ទីតាំងហ្នឹងទៅតាមចិត្តយើងចង់បាន
+        
+
+2.  Login With Name Email Phone Part 1(106)
+    - D:\RunProgram\wamp64\www\Sarana\siemreap_gear\resources\views\auth\register.blade.php
+        យើងធ្វើការបន្ថែម មុខងារបញ្ចូល Phone
+    - D:\RunProgram\wamp64\www\Sarana\siemreap_gear\app\Http\Controllers\Auth\RegisteredUserController.php
+        ធ្វើការអនុញ្ញាតអោយអាចបញ្ចូល Phone ទៅកាន់ Database
+
+3.  Login With Name Email Phone Part 2 (107)
+    -   D:\RunProgram\wamp64\www\Sarana\siemreap_gear\app\Http\Requests\Auth\LoginRequest.php
+    -   D:\RunProgram\wamp64\www\Sarana\siemreap_gear\resources\views\auth\login.blade.php
+    
+4. Admin Template Setup 
+    - នៅក្នុងកន្លែងនេះ គឺយើងត្រូវយកTemplete គេមកប្រើ ប៉ុន្ដែយើងមិនចង់យកមកទេ យើងសរសេរ style ខ្លួនឯងស្រាប់ស្រាប់ក្នុងហ្នឹង
+        -> D:\RunProgram\wamp64\www\Sarana\siemreap_gear\public  (ជាទីតាំងសម្រាប់ដាក់Template Or Style CSS)
+
+
+**** ចំណុចថ្មីដោយឡែក
+5.                             111 . Admin Logout Option
+
+    1. Web
+    Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
+
+
+    2. View
+    - \resources\views\admin\body\header.blade.php
+        href="{{ route('admin.logout') }}"
+
+    3. Controller
+    - \Controllers\AdminController.php
+        ធ្វើការសរសេរកូដបង្កើត​Function ដើម្បី អាចធ្វើការ Logout បាន
+
+        
+
+6.  (112. Customize Login Form) 
+
+7.  (113. Customize Logout Page) 
+    1. Web
+
+    2. View
+
+    3. Controller
+
+    4. Model
+
+    
+
+7.  (114. Refreach Admin Template) 
+    1. Web
+
+    2. View
+
+    3. Controller
+
+    4. Model
+
+
+
+10. (122. Admin Profile Change Password Part 1)                   ***************************************************
+    - ជំហាន
+        1. គឺចូល header.blade.php និងបង្កើត link សម្រាប់ អោយយើងចុចទៅកាន់Page change password
+            link គឺ route('change.password')
+
+    1. Web
+        - Route::get('/change/password', [AdminController::class, 'ChangePassword'])->name('change.password');
+    2. View
+
+    3. Controller
+
+    4. Model
