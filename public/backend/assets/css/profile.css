@@ -148,6 +148,16 @@
         transform: translateX(0);
     }
 
+    .color-primary {
+        background-color: #F74749;
+    }
+
+    /* កុំមាន space កណ្តាល . color-primary */
+    .color-primary:hover {
+        background-color: #dc2626; /* Tailwind color code for red-600 */
+    }
+    
+
     /* ✅ ACTIVE NAVIGATION LINK */
     .nav-link.active-nav {
         background-color: #F74749;

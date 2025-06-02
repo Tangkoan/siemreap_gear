@@ -38,16 +38,36 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
 
 
+    // Route Employee
+    Route::controller(EmployeeContrlloer::class)->group(function(){
+        // Route::get('/all/employee','AllEmployee')->name('all.employee');
+        Route::get('/add/employee','AddEmployee')->name('add.employee');
+        // Route::get('/add/employee','AddEmployee')->name('add.employee');
+
+        Route::post('/store/employee','StoreEmployee')->name('employee.store');
+
+        Route::get('/edit/employee/{id}','EditEmployee')->name('edit.employee'); // គ្រាន់តែចាប់តម្លៃអោយបានថា id = ?
+        Route::post('/update/employee','UpdateEmployee')->name('employee.update'); // ធ្វើការUpdate Employee
+
+        Route::get('/delete/employee/{id}','DeleteEmployee')->name('delete.employee');  // សម្រាប់ Delete (Method គឺ Post តែយើងប្រើ JSនោះទេអ្នកជំនួយក្នុងការDelete)
+    });
+    // End Route Employee
+
+
+    
+    Route::get('/employee/page', [EmployeeContrlloer::class, 'EmployeePage'])->name('employee.all');
+
+    Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all');
+
+
+    // Start Product
+    Route::get('/product/page', [ProductController::class, 'ProductPage'])->name('product.all');
+    // End Product
 
 }); // End User Middleware
 
 
 
-Route::get('/employee/page', [EmployeeContrlloer::class, 'EmployeePage'])->name('employee.all');
-
-Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all');
 
 
-// Start Product
-Route::get('/product/page', [ProductController::class, 'ProductPage'])->name('product.all');
-// End Product
+

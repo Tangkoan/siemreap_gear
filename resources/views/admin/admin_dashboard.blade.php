@@ -6,11 +6,8 @@
     
     {{-- សារលោត --}}
         <!-- Local toastr CSS (ចាំបាច់ដាក់ CSS ដែរ) -->
-<link rel="stylesheet" href="{{ asset('backend/assets/css/toastr.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('backend/assets/css/toastr.min.css') }}">
     
-    {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
-
-
     @vite('resources/css/app.css')
     {{-- Start ការហៅ CSS មកប្រើ --}}
         <link href="{{ asset('backend/assets/css/profile.css') }}" rel="stylesheet"  />
@@ -18,7 +15,9 @@
 
     <title>Dashboard</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+    <script src="{{ asset('backend/assets/js/chart.js') }}"></script>
 
     {{-- Start Call Alpine.js --}}
         <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
@@ -239,6 +238,12 @@
 
     </script>
 
+
+{{-- លោតសារកន្លែង Delete --}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> --}}
+<script src="{{ asset('backend/assets/js/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/code.js') }}"></script>
+{{-- លោតសារកន្លែង Delete --}}
 
 <script type="text/javascript" src="{{ asset('backend/assets/js/toastr.min.js') }}"></script>
 

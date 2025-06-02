@@ -1,16 +1,13 @@
-<header class="header-bg text-white p-4 shadow-md transition-colors duration-300">
+<header class="header-bg text-white p-2 shadow-s transition-colors duration-300">
     <div class="container mx-auto flex justify-between items-center">
-        <a href="#" class="flex items-center">
-            <span class="ml-3 text-lg font-semibold hidden sm:block">
-                <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-6">
-                    <span class="text-blue-600">Siem Reap</span>
-                    <span class="text-purple-600">Gear</span>
-                </h2>
-            </span>
+        <a href="{{ route('dashboard') }}" class="flex items-center px-2">
+            <b>
+                <div class="text-black text-2xl">Siem Reap Gear</div>
+            </b>
         </a>
         
         <div class="flex items-center space-x-4">
-            <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200 hidden md:block">POS</button>
+            <button class="color-primary text-white font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200 hidden md:block">POS</button>
 
             {{-- កុំប៉ះពាល់ត្រង់នេះ --}}
             <div class="hidden">
