@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeContrlloer;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BrandController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -64,10 +65,19 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::get('/product/page', [ProductController::class, 'ProductPage'])->name('product.all');
     // End Product
 
+    // Route Brand
+    Route::controller(BrandController::class)->group(function(){
+        Route::get('/all/brand','BrandPage')->name('all.brand');
+        Route::get('/add/brand','AddBrand')->name('add.brand');
+        // Route::get('/add/employee','AddEmployee')->name('add.employee');
+
+        Route::post('/store/brand','StoreBrand')->name('brand.store');
+
+        Route::get('/edit/brand/{id}','EditBrand')->name('edit.brand'); // គ្រាន់តែចាប់តម្លៃអោយបានថា id = ?
+        Route::post('/update/brand','UpdateBrand')->name('brand.update'); // ធ្វើការUpdate Employee
+
+        Route::get('/delete/brand/{id}','DeleteBrand')->name('delete.brand');  // សម្រាប់ Delete (Method គឺ Post តែយើងប្រើ JSនោះទេអ្នកជំនួយក្នុងការDelete)
+    });
+    // End Route Brand
+
 }); // End User Middleware
-
-
-
-
-
-
