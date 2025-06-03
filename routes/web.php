@@ -8,6 +8,9 @@ use App\Http\Controllers\EmployeeContrlloer;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
+
+
 
 Route::get('/', function () {
     // return view('welcome');
@@ -79,5 +82,20 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::get('/delete/brand/{id}','DeleteBrand')->name('delete.brand');  // សម្រាប់ Delete (Method គឺ Post តែយើងប្រើ JSនោះទេអ្នកជំនួយក្នុងការDelete)
     });
     // End Route Brand
+
+
+    ///Category All Route 
+    Route::controller(CategoryController::class)->group(function(){
+        Route::get('/all/category','AllCategory')->name('all.category'); 
+        Route::get('/add/category','AddCategory')->name('add.category');
+        Route::post('/store/category','StoreCategory')->name('category.store');  
+
+
+        Route::get('/edit/category/{id}','EditCategory')->name('edit.category');
+        Route::post('/category/update','CategoryUpdate')->name('category.update');
+
+        Route::get('/delete/category/{id}','DeleteCategory')->name('delete.category');
+    });
+    // End
 
 }); // End User Middleware

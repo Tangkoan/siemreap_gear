@@ -19,27 +19,26 @@ class BrandController extends Controller
         return view('admin.brand.add_brand');
     } // End Method
 
-
     public function StoreBrand(Request $request)
     {
         $validateData = $request->validate([
-            'name' => 'required|max:200|unique:brands,brand_name',
+            'brand_name' => 'required|max:200|unique:brands,brand_name',
         ],
         [
-            'name.required' => 'This Brand Name Field is required.',
-            'name.unique' => 'This Brand Name already exists.',
+            'brand_name.required' => 'This Brand Name field is required.',
+            'brand_name.unique' => 'This Brand Name already exists.',
         ]);
-
+    
         Brand::insert([
-            'brand_name' => $request->name,
+            'brand_name' => $request->brand_name,
             'created_at' => Carbon::now(),
         ]);
-
+    
         $notification = [
-            'message' => 'Brand Inserted Successfully',
+            'message' => 'Category Inserted Successfully',
             'alert-type' => 'success',
         ];
-
+    
         return redirect()->route('all.brand')->with($notification);
     }
 
