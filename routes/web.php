@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SupplierController;
 
 
 
@@ -95,6 +96,23 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::post('/category/update','CategoryUpdate')->name('category.update');
 
         Route::get('/delete/category/{id}','DeleteCategory')->name('delete.category');
+    });
+    // End
+
+
+
+
+    // supplier All Route 
+    Route::controller(SupplierController::class)->group(function(){
+        Route::get('/all/supplier','SupplierPage')->name('all.supplier'); 
+        Route::get('/add/supplier','AddSupplier')->name('add.supplier');
+        Route::post('/store/supplier','StoreSupplier')->name('supplier.store');  
+
+
+        Route::get('/edit/supplier/{id}','EditSupplier')->name('edit.supplier');
+        Route::post('/supplier/update','SupplierUpdate')->name('supplier.update');
+
+        Route::get('/delete/supplier/{id}','DeleteSupplier')->name('delete.supplier');
     });
     // End
 
