@@ -89,7 +89,8 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::controller(CategoryController::class)->group(function(){
         Route::get('/all/category','AllCategory')->name('all.category'); 
         Route::get('/add/category','AddCategory')->name('add.category');
-        Route::post('/store/category','StoreCategory')->name('category.store');  
+        Route::post('/store/category','StoreCategory')->name('category.store');
+        
 
 
         Route::get('/edit/category/{id}','EditCategory')->name('edit.category');
@@ -117,3 +118,7 @@ Route::middleware(['auth'])->group(callback: function(){
     // End
 
 }); // End User Middleware
+
+
+Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');
+
