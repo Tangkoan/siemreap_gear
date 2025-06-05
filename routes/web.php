@@ -122,4 +122,5 @@ Route::middleware(['auth'])->group(callback: function(){
 
 Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');
 Route::get('/search-brand', [BrandController::class, 'searchBrand'])->name('search.brand');
+Route::get('/search-supplier', [SupplierController::class, 'searchSupplier'])->name('search.supplier');
 

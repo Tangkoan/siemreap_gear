@@ -99,6 +99,9 @@ public function searchCategory(Request $request)
         $query->where('category_name', 'LIKE', '%' . $request->search . '%');
     }
 
+    // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
+    $query->orderBy('created_at', 'desc');
+
     $perPage = $request->perPage ?? 10; // ✅ Default = 10
     $isAll = $perPage === 'all';
 
@@ -114,6 +117,7 @@ public function searchCategory(Request $request)
         <tr class="hover:bg-slate-50 border-b border-slate-200">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->category_name . '</td>
+             <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                 <div class="flex items-center gap-x-6">
                    

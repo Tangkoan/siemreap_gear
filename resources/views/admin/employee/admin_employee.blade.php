@@ -17,7 +17,7 @@
             <div>
 
 
-              <button type="button" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent color-primary text-white focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
+              <button type="button" class="icon-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
                 <a href="{{ route('add.employee') }}">Add Employee</a>
               </button>
             </div>

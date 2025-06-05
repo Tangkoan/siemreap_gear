@@ -198,6 +198,19 @@
         
     }
 
+
+    .button-blue {
+        color: white;
+        background-color: #4671ff;
+        
+    }
+
+    .button-blue:hover {
+        color: white;
+        background-color: #2e66c1;
+        
+    }
+
     .button-export {
         color: white;
         background-color: #ff4646;
