@@ -7,6 +7,9 @@
         height: 1.25em;
     }
 
+    
+
+
 
 
     /* ✅ LIGHT MODE BASE COLORS */
@@ -152,9 +155,69 @@
         background-color: #F74749;
     }
 
-    /* កុំមាន space កណ្តាល . color-primary */
+
     .color-primary:hover {
         background-color: #dc2626; /* Tailwind color code for red-600 */
+    }
+
+    .icon-add {
+        background-color: #28c014;
+        color: white;
+    }
+
+    .icon-add:hover {
+        background-color: #23b80f;
+        color: white;
+    }
+    .icon-edit {
+        color: #4671ff;
+    }
+
+    .icon-edit:hover {
+        color: #2e66c1;
+    }
+    
+
+    .icon-delete {
+        color: #ff4646;
+    }
+
+    .icon-delete:hover {
+        color: #ff0000;
+    }
+
+    .button-imaport {
+        color: white;
+        background-color: #4671ff;
+        
+    }
+
+    .button-imaport:hover {
+        color: white;
+        background-color: #2e66c1;
+        
+    }
+
+    .button-export {
+        color: white;
+        background-color: #ff4646;
+        
+    }
+
+    .button-export:hover {
+        color: white;
+        background-color: #ff0000;
+        
+    }
+
+    .button-add {
+        background-color: #28c014;
+        color: white;
+    }
+
+    .button-add:hover {
+        background-color: #23b80f;
+        color: white;
     }
     
 
