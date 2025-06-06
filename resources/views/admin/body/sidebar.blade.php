@@ -26,7 +26,12 @@
             <svg class="icon mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H6zm2 4a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1V7a1 1 0 00-1-1H8zm5 0a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1V7a1 1 0 00-1-1h-1zM8 12a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1v-2a1 1 0 00-1-1H8zm5 0a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1v-2a1 1 0 00-1-1h-1zM8 18a1 1 0 00-1 1v.5a1 1 0 001 1h4a1 1 0 001-1V19a1 1 0 00-1-1H8z" clip-rule="evenodd"></path></svg>
             <span>Customer</span>
         </a>
-        {{-- End Employee --}}
+        {{-- End Pos --}}
+    <a href="{{ route('pos.all') }}" class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            <svg class="icon mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H6zm2 4a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1V7a1 1 0 00-1-1H8zm5 0a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1V7a1 1 0 00-1-1h-1zM8 12a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1v-2a1 1 0 00-1-1H8zm5 0a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 001-1v-2a1 1 0 00-1-1h-1zM8 18a1 1 0 00-1 1v.5a1 1 0 001 1h4a1 1 0 001-1V19a1 1 0 00-1-1H8z" clip-rule="evenodd"></path></svg>
+            <span>POS</span>
+        </a>
+        {{-- End Pos --}}    
 
 
         

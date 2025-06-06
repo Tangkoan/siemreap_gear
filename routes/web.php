@@ -8,8 +8,10 @@ use App\Http\Controllers\EmployeeContrlloer;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 
+use App\Http\Controllers\PosController;
+
 Route::get('/', function () {
-    // return view('welcome');
+ // return view('welcome');
     return view('auth/login');
 });
 
@@ -51,3 +53,6 @@ Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name(
 // Start Product
 Route::get('/product/page', [ProductController::class, 'ProductPage'])->name('product.all');
 // End Product
+
+
+Route::get('/pos', [PosController::class, 'PosPage'])->name('pos.all');

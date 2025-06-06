@@ -7,6 +7,7 @@
     {{-- សារលោត --}}
         <!-- Local toastr CSS (ចាំបាច់ដាក់ CSS ដែរ) -->
 <link rel="stylesheet" href="{{ asset('backend/assets/css/toastr.min.css') }}">
+<link rel="stylesheet" href="{{ asset('backend/assets/css/pos.css') }}"> {{-- NOW INCLUDES YOUR PRINT STYLES --}}
     
     {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
 

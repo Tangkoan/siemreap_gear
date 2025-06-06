@@ -10,7 +10,11 @@
         </a>
         
         <div class="flex items-center space-x-4">
-            <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200 hidden md:block">POS</button>
+    <button onclick="location.href='{{ url('/pos') }}'" 
+            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 
+                   rounded-full shadow-md transition-colors duration-200 hidden md:inline-block">
+         POS
+    </button>
 
             {{-- កុំប៉ះពាល់ត្រង់នេះ --}}
             <div class="hidden">
