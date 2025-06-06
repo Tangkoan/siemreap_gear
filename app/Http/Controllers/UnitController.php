@@ -2,101 +2,100 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Category;
+use App\Models\unit;
 use Carbon\Carbon;
-
-class CategoryController extends Controller
+class UnitController extends Controller
 {
     //
 
-    public function AllCategory(){
-        $category = Category::latest()->get();
-        return view('admin.category.all_category',compact('category'));
+    
+    public function AllUnit(){
+        $unit = Unit::latest()->get();
+        return view('admin.unit.all_unit',compact('unit'));
     }// End Method
 
-    public function AddCategory(){
-        return view('admin.category.add_category');
+    public function AddUnit(){
+        return view('admin.unit.add_unit');
     } // End Method
 
 
-    public function StoreCategory(Request $request)
+    public function StoreUnit(Request $request)
     {
         $validateData = $request->validate([
-            'category_name' => 'required|max:200|unique:categories,category_name',
+            'unit_name' => 'required|max:200|unique:units,unit_name',
         ],
         [
-            'category_name.required' => 'This Category Name field is required.',
-            'category_name.unique' => 'This Category Name already exists.',
+            'unit_name.required' => 'This unit Name field is required.',
+            'unit_name.unique' => 'This unit Name already exists.',
         ]);
     
-        Category::insert([
-            'category_name' => $request->category_name,
+        Unit::insert([
+            'unit_name' => $request->unit_name,
             'created_at' => Carbon::now(),
         ]);
     
         $notification = [
-            'message' => 'Category Inserted Successfully',
+            'message' => 'Unit Inserted Successfully',
             'alert-type' => 'success',
         ];
     
-        return redirect()->route('all.category')->with($notification);
+        return redirect()->route('all.unit')->with($notification);
     }
     
 
 
 
-    public function EditCategory($id){
-        $category = Category::findOrFail($id);
-        return view('admin.category.edit_category',compact('category'));
+    public function EditUnit($id){
+        $unit = Unit::findOrFail($id);
+        return view('admin.unit.edit_unit',compact('unit'));
     } // End Method 
 
 
-    public function CategoryUpdate(Request $request)
+    public function UnitUpdate(Request $request)
 {
-    $category_id = $request->id;
+    $unit_id = $request->id;
 
     $request->validate([
-        'category_name' => 'required|max:200|unique:categories,category_name,' . $category_id,
+        'unit_name' => 'required|max:200|unique:units,unit_name,' . $unit_id,
     ],
     [
-        'category_name.required' => 'This Category Name field is required.',
-        'category_name.unique' => 'This Category Name already exists.',
+        'unit_name.required' => 'This Unit Name field is required.',
+        'unit_name.unique' => 'This Unit Name already exists.',
     ]);
 
-    Category::findOrFail($category_id)->update([
-        'category_name' => $request->category_name,
+    Unit::findOrFail($unit_id)->update([
+        'unit_name' => $request->unit_name,
         'updated_at' => Carbon::now(), // កែជា updated_at បើកំពុង update
     ]);
 
     $notification = [
-        'message' => 'Category Updated Successfully',
+        'message' => 'Unit Updated Successfully',
         'alert-type' => 'success'
     ];
 
-    return redirect()->route('all.category')->with($notification); 
+    return redirect()->route('all.unit')->with($notification); 
 }
 
 
-    public function DeleteCategory($id){
+    public function DeleteUnit($id){
 
-        $categroy_id = Category::findOrFail($id);
+        $categroy_id = Unit::findOrFail($id);
 
-        Category::findOrFail($id)->delete();
+        Unit::findOrFail($id)->delete();
         $notification = array(
-            'message' => 'Category Deleted Successfully',
+            'message' => 'Unit Deleted Successfully',
             'alert-type' => 'success'
         );
-        return redirect()->route('all.category')->with($notification); 
+        return redirect()->route('all.unit')->with($notification); 
     } // End Method 
-    public function searchCategory(Request $request)
+    public function searchUnit(Request $request)
     {
-        $query = Category::query();
+        $query = Unit::query();
 
         if ($request->has('search') && $request->search != '') {
-            $query->where('category_name', 'LIKE', '%' . $request->search . '%');
+            $query->where('unit_name', 'LIKE', '%' . $request->search . '%');
         }
 
         // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
@@ -116,7 +115,7 @@ class CategoryController extends Controller
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
-                <td class="p-4 py-5">' . $item->category_name . '</td>
+                <td class="p-4 py-5">' . $item->unit_name . '</td>
                 <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
@@ -124,7 +123,7 @@ class CategoryController extends Controller
                     
                     
                     <button class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
-                                <a href="' . route('edit.category', $item->id) . '" >
+                                <a href="' . route('edit.unit', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                 </svg>
@@ -132,7 +131,7 @@ class CategoryController extends Controller
                     </button>
                             
                     <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
-                                <a href="' . route('delete.category', $item->id) . '" id="delete">
+                                <a href="' . route('delete.unit', $item->id) . '" id="delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                 </svg>
@@ -156,5 +155,4 @@ class CategoryController extends Controller
             'pagination' => $pagination
         ]);
     }
-
 }

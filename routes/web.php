@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UnitController;
 
 
 
@@ -101,6 +102,22 @@ Route::middleware(['auth'])->group(callback: function(){
     // End
 
 
+    ///Unit All Route 
+    Route::controller(UnitController::class)->group(function(){
+        Route::get('/all/unit','AllUnit')->name('all.unit'); 
+        Route::get('/add/unit','AddUnit')->name('add.unit');
+        Route::post('/store/unit','StoreUnit')->name('unit.store');
+        
+
+
+        Route::get('/edit/unit/{id}','EditUnit')->name('edit.unit');
+        Route::post('/unit/update','UnitUpdate')->name('unit.update');
+
+        Route::get('/delete/unit/{id}','DeleteUnit')->name('delete.unit');
+    });
+    // End
+
+
 
 
     // supplier All Route 
@@ -123,4 +140,5 @@ Route::middleware(['auth'])->group(callback: function(){
 Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');
 Route::get('/search-brand', [BrandController::class, 'searchBrand'])->name('search.brand');
 Route::get('/search-supplier', [SupplierController::class, 'searchSupplier'])->name('search.supplier');
+Route::get('/search-unit', [UnitController::class, 'searchUnit'])->name('search.unit');
 
