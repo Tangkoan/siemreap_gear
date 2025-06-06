@@ -64,6 +64,7 @@ class SupplierController extends Controller
             'name' => 'required|max:200',
             'email' => 'nullable|unique:Suppliers|max:200',
             'phone' => 'required|max:200',
+            'notes' => 'nullable|max:200',
             ],
             [
                 'name.required' => 'This Supplier Name Field Is Required',
@@ -75,6 +76,7 @@ class SupplierController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'notes' => $request->notes,
             'updated_at' => Carbon::now(), 
         ]);
        
@@ -134,6 +136,7 @@ class SupplierController extends Controller
             <td class="p-4 py-5">' . ($item->email ?? 'null') . '</td>
 
             <td class="p-4 py-5"> '  . $item->phone . '</td>
+            <td class="p-4 py-5"> '  . ($item->notes ?? 'null') . '</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                 <div class="flex items-center gap-x-6">
                    
