@@ -36,18 +36,18 @@
   <div class="overflow-x-auto">
   <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
   <div>
-  <div class="flex items-center space-x-2">
-  <label for="perPage" class="text-sm text-slate-600">Show</label>
-  <select id="perPage" name="perPage"
-  class="h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-  <option value="6" selected>6</option>
-  <option value="10">10</option> <!-- ✅ Default -->
-  <option value="25">25</option>
-  <option value="50">50</option>
-  <option value="100">100</option>
-  <option value="all">All</option>
-  </select>
-  </div>
+    <div class="flex items-center space-x-2">
+    <label for="perPage" class="text-sm text-slate-600">Show</label>
+    <select id="perPage" name="perPage"
+    class="h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+    <option value="6" selected>6</option>
+    <option value="10">10</option> <!-- ✅ Default -->
+    <option value="25">25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+    <option value="all">All</option>
+    </select>
+    </div>
   </div>
   <div class="ml-3">
   <div class="w-full max-w-sm min-w-[200px] relative">

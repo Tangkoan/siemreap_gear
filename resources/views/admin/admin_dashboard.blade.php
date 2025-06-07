@@ -243,13 +243,16 @@
 {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> --}}
 <script src="{{ asset('backend/assets/js/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/code.js') }}"></script>
+
+
+<script src="{{ asset('backend/assets/js/validate.min.js') }}"></script>
 {{-- លោតសារកន្លែង Delete --}}
 
 <script type="text/javascript" src="{{ asset('backend/assets/js/toastr.min.js') }}"></script>
 
 <script>
  @if(Session::has('message'))
- var type = "{{ Session::get('alert-type','info') }}"
+ var type = "{{ Session::get('alert-type', 'info') }}"
  switch(type){
     case 'info':
     toastr.info(" {{ Session::get('message') }} ");

@@ -67,7 +67,30 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
     // Start Product
-    Route::get('/product/page', [ProductController::class, 'ProductPage'])->name('product.all');
+    
+
+    Route::controller(ProductController::class)->group(function(){
+
+
+        Route::get('/product/page','ProductPage')->name('all.product');
+
+        Route::get('/product/details/{id}','DetailProduct')->name('detail.product');
+
+        Route::get('/product/barcode/{id}','BarcodeProduct')->name('barcode.product');
+
+        // Route::get('/all/product','ProductPage')->name('all.product');
+        Route::get('/add/product','AddProduct')->name('add.product');
+        // Route::get('/add/employee','AddEmployee')->name('add.employee');
+
+        Route::post('/store/product','StoreProduct')->name('product.store');
+
+        Route::get('/edit/product/{id}','EditProduct')->name('edit.product'); // គ្រាន់តែចាប់តម្លៃអោយបានថា id = ?
+        Route::post('/update/product','UpdateProduct')->name('product.update'); // ធ្វើការUpdate Employee
+
+        Route::get('/delete/product/{id}','DeleteProduct')->name('delete.product');  // សម្រាប់ Delete (Method គឺ Post តែយើងប្រើ JSនោះទេអ្នកជំនួយក្នុងការDelete)
+    });
+    
+    
     // End Product
 
     // Route Brand
@@ -141,4 +164,6 @@ Route::get('/search-category', [CategoryController::class, 'searchCategory'])->n
 Route::get('/search-brand', [BrandController::class, 'searchBrand'])->name('search.brand');
 Route::get('/search-supplier', [SupplierController::class, 'searchSupplier'])->name('search.supplier');
 Route::get('/search-unit', [UnitController::class, 'searchUnit'])->name('search.unit');
+
+Route::get('/search-product', [ProductController::class, 'searchProduct'])->name('search.product');
 

@@ -232,6 +232,14 @@
         background-color: #23b80f;
         color: white;
     }
+
+    .icon-detail {
+        color: #28c014;
+    }
+
+    .icon-detail:hover { 
+        color: #23b80f;
+    }
     
 
     /* ✅ ACTIVE NAVIGATION LINK */
@@ -297,6 +305,17 @@
     body:not(.dark) .input-field-custom:focus {
         border-color: #6366f1;
         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+
+
+    /* នេះជា សារដែលលោតក្រហមក្នុង Add Product Page ពេលគេមិនបញ្ចូល product_name */
+    .invalid-feedback {
+        color: red !important;
+        /* បង្ខំអោយជាពណ៌ក្រហម */
+        font-size: 0.875rem;
+        display: block;
+        margin-top: 0.25rem;
     }
 
 

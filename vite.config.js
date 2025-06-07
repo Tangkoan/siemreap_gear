@@ -9,3 +9,21 @@ export default defineConfig({
         }),
     ],
 });
+
+
+
+// import { defineConfig } from "vite";
+// import laravel from "laravel-vite-plugin";
+
+// export default defineConfig({
+//     server: {
+//         host: "10.18.1.228", // ✅ អនុញ្ញាតអោយអាច run តាម IP
+//         port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
+//     },
+//     plugins: [
+//         laravel({
+//             input: ["resources/css/app.css", "resources/js/app.js"],
+//             refresh: true,
+//         }),
+//     ],
+// });
