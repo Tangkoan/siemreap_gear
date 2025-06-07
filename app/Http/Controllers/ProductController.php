@@ -225,6 +225,11 @@ class ProductController extends Controller
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
+                
+                <td class="p-4 py-5">
+                    <img src="' . asset($item->product_image) . '" alt="Product Image" class="rounded-md" style="width: 64px; height: 64px; object-fit: cover; object-position: center;" />
+                </td>
+
                 <td class="p-4 py-5">' . $item->product_code . '</td>
                 <td class="p-4 py-5">' . $item->product_name . '</td>
                 <td class="p-4 py-5">' . $item['category']['category_name'] . '</td>
@@ -309,8 +314,26 @@ class ProductController extends Controller
 
 
     //
-// public function ImportProduct(){
-//         return view('backend.product.import_product');
-// }// End Method 
+public function ImportProduct(){
+        return view('admin.product.import_product');
+}// End Method 
+
+public function Export(){
+    return Excel::download(new ProductExport,'products.xlsx');
+}
+// End Export
+
+public function Import(Request $request){
+        
+    Excel::import(new ProductImport, $request->file('import_file'));
+    // Excel::import(new ProductImport, $request->file('import_file'), null, \Maatwebsite\Excel\Excel::XLSX);
+
+
+      $notification = array(
+        'message' => 'Product Import Successfully',
+        'alert-type' => 'success'
+    );
+    return redirect()->back()->with($notification); 
+}
         
 }

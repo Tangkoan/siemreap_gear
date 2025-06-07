@@ -88,6 +88,14 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::post('/update/product','UpdateProduct')->name('product.update'); // ធ្វើការUpdate Employee
 
         Route::get('/delete/product/{id}','DeleteProduct')->name('delete.product');  // សម្រាប់ Delete (Method គឺ Post តែយើងប្រើ JSនោះទេអ្នកជំនួយក្នុងការDelete)
+
+
+
+        // Import Export Product
+        Route::get('/import/product','ImportProduct')->name('import.product');
+        Route::get('/export','Export')->name('export');
+
+        Route::post('/import','Import')->name('import');
     });
     
     

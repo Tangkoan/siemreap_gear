@@ -19,7 +19,8 @@
 
                         <button type="button"
                             class=" button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                            Import
+
+                            <a href="{{ route('import.product') }}">Import</a>
                         </button>
 
                         <button type="button"
@@ -73,7 +74,7 @@
                     </div>
 
                     <div
-                        class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+                        class="table-wrapper overflow-y-auto max-h-[450px]">
                         <table class="w-full text-left table-auto min-w-max">
                             <thead>
                                 <tr>
@@ -81,6 +82,12 @@
                                     <th class="p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             N<sup>0</sup>
+                                        </p>
+                                    </th>
+
+                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                        <p class="text-sm font-normal leading-none text-slate-500">
+                                            Image
                                         </p>
                                     </th>
 
