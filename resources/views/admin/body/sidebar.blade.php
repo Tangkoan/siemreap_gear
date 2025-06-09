@@ -84,33 +84,37 @@
             </svg>
             <div class="px-2">Supplier</div>
         </a>
-        {{-- End Employee --}}
+        {{-- End Supplier --}}
 
 
 
         <!-- Expense Dropdown -->
-        <div  id="expenseDropdown">
-            <a href="{{ route('add.expense') }}"
-                class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
-                <svg class="size-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-                </svg>
+        <div id="expenseDropdown" class="relative group">
+            <!-- Main Button -->
+            <a href="{{ route('add.expense') }}" class="nav-link flex items-center py-2 px-4 rounded-lg w-full transition-colors duration-200
+                      {{ request()->routeIs('add.expense', 'today.expense', 'month.expense', 'year.expense')
+                        ? 'bg-red-500 text-white'
+                        : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
+                        <svg class="size-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                        </svg>
                 <div class="px-2">Expense</div>
             </a>
         
-            <!-- Dropdown Options -->
-            <div id="dropdownMenu"
-                class="absolute hidden bg-white border border-gray-300 shadow-lg rounded-md mt-1 z-10 min-w-[150px] opacity-0 transition-opacity duration-500">
-                <a href="{{ route('today.expense') }}" class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Today</a>
-                <a href="{{ route('month.expense') }}" class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Month</a>
-                <a href="{{ route('year.expense') }}" class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Year</a>
+            <!-- Dropdown Below -->
+            <div id="dropdownMenu" class="absolute left-0 w-full mt-1 opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                        transition-all duration-300 bg-white border border-gray-300 shadow-lg rounded-md z-10">
+                <a href="{{ route('today.expense') }}"
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Today</a>
+                <a href="{{ route('month.expense') }}"
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Month</a>
+                <a href="{{ route('year.expense') }}"
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Year</a>
             </div>
         </div>
-        
-        <!-- End Expense Dropdown -->
 
-        
+
 
 
         
