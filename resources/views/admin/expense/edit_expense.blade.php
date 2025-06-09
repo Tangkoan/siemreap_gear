@@ -11,42 +11,77 @@
 
             <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />  </svg>
-                    <div class="px-2">Add Customer</div>
+                    <svg class="size-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                    </svg>
+                    <div class="px-2">Edit Expense</div>
                 </h2>
 
                 <div>
-                    <form method="post" action="{{ route('customer.store') }}">
+                    <form method="post" action="{{ route('expense.update') }}">
                         @csrf
+                        <input type="hidden" name="id" value="{{ $expense->id }}">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-1 gap-x-6 gap-y-4 mb-6">
 
                             {{-- Column 1 --}}
                             <div class="space-y-4">
-                                {{-- Customer Name --}}
+                                {{-- Expense Details --}}
                                 <div>
-                                    <label for="name" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Customer Name <span class="text-red-500">*</span>
+                                    <label for="details" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Expense Details
                                     </label>
-                                    <input type="text" id="name" name="name" required
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ">
-                                    @error('name')
+                                    
+
+                                    <input type="text" id="details" name="details" required value="{{ $expense->details }}"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+
+
+                                    @error('details')
                                         <span class="text-danger text-red-500"> {{ $message }} </span>
                                     @enderror
                                 </div>
 
-                                
 
-                                {{-- Customer Address --}}
+
+
+                                {{-- amount --}}
                                 <div>
-                                    <label for="address" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Customer <Address></Address>
+                                    <label for="amount" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Amount <Address></Address>
                                     </label>
-                                    <input type="text" id="address" name="address"
+                                    <input type="text" id="amount" name="amount" required value="{{ $expense->amount }}"
                                         class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+                                {{-- Date --}}
+                                <div>
+
+                                    <input type="hidden" name="date" class="form-control" value="{{ date('d-m-Y') }}">
+
+                                </div>
+
+                                {{-- amount --}}
+                                <div>
+                                    <input type="hidden" name="month" class="form-control" value="{{ date('F') }}">
+                                </div>
+
+                                {{-- amount --}}
+                                <div>
+                                    <input type="hidden" name="year" class="form-control" value="{{ date('Y') }}">
+
                                 </div>
 
 
@@ -55,32 +90,12 @@
 
                             </div>
 
-                            {{-- Column 2 --}}
-                            <div class="space-y-4">
-                                {{-- Note --}}
-                                <div>
-                                    <label for="notes" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Notes
-                                    </label>
-                                    <input type="text" id="notes" name="notes"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-
-                                </div>
-
-                                {{-- Customer Phone --}}
-                                <div>
-                                    <label for="phone" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Customer Phone 
-                                    </label>
-                                    <input type="number" id="phone" name="phone" 
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                </div>
 
 
 
 
 
-                            </div>
+
                         </div>
 
                         <div class="flex justify-end mt-6">

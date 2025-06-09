@@ -1,12 +1,12 @@
 @extends('admin/admin_dashboard')
 @section('admin')
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-  <div class="container mx-auto p-6">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="container mx-auto p-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-  <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
+    <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
     <div class="flex justify-between">
     <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -64,7 +64,7 @@
     </div>
 
     <div
-    class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+    class="table-wrapper overflow-y-auto max-h-[450px]">
     <table class="w-full text-left table-auto min-w-max">
     <thead>
     <tr>
@@ -175,13 +175,13 @@
 
 
 
-  </div>
-  </div>
-  </div>
+    </div>
+    </div>
+    </div>
 
-  <script type="text/javascript">
-  $(document).ready(function () {
-  $('.toggle-password').on('click', function () {
+    <script type="text/javascript">
+    $(document).ready(function () {
+    $('.toggle-password').on('click', function () {
     const targetId = $(this).data('target');
     const passwordField = $('#' + targetId);
     const icon = $(this).find('svg');
@@ -196,13 +196,13 @@
     } else {
     icon.html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7A10.05 10.05 0 0112 5c.424 0 .84.037 1.246.109m 3.167 3.167a3 3 0 11-4.243 4.243m4.243-4.243a3 3 0 00-4.243 4.243M3 3l3.59 3.59m0 0a9.953 9.953 0 01.442-.442L21 21"></path>'); // Eye closed
     }
-  });
-  });
+    });
+    });
 
 
-  // Start Short data
-  $(document).ready(function () {
-  function fetchData(page = 1) {
+    // Start Short data
+    $(document).ready(function () {
+    function fetchData(page = 1) {
     let query = $('#search').val();
     let perPage = $('#perPage').val();
 
@@ -218,26 +218,26 @@
     $('#pagination-links').html(data.pagination);
     }
     });
-  }
+    }
 
-  // Trigger fetch on load
-  fetchData(); // ✅ Fetch 10 by default
+    // Trigger fetch on load
+    fetchData(); // ✅ Fetch 10 by default
 
-  // Search or perPage change
-  $('#search, #perPage').on('keyup change', function () {
+    // Search or perPage change
+    $('#search, #perPage').on('keyup change', function () {
     fetchData(); // Always page 1 when changed
-  });
+    });
 
-  // Pagination click
-  $(document).on('click', '.pagination a', function (e) {
+    // Pagination click
+    $(document).on('click', '.pagination a', function (e) {
     e.preventDefault();
     let page = $(this).attr('href').split('page=')[1];
     fetchData(page);
-  });
-  });
+    });
+    });
 
-  // End
+    // End
 
-  </script>
+    </script>
 
 @endsection

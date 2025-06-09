@@ -74,7 +74,7 @@
                                     <label for="phone" class="block text-gray-400 text-sm font-medium mb-1">
                                         Customer Phone
                                     </label>
-                                    <input type="tel" id="phone" name="phone" value="{{ $customer->phone }}"
+                                    <input type="number" id="phone" name="phone" value="{{ $customer->phone }}"
                                         class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
 

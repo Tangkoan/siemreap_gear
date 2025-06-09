@@ -11,6 +11,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\Backend\ExpenseController;
 
 
 
@@ -181,6 +182,23 @@ Route::middleware(['auth'])->group(callback: function(){
     });
     // End
 
+
+    ///Expense All Route 
+    Route::controller(ExpenseController::class)->group(function(){
+
+        Route::get('/add/expense','AddExpense')->name('add.expense');
+        Route::post('/store/expense','StoreExpense')->name('expense.store');
+        Route::get('/today/expense','TodayExpense')->name('today.expense');
+
+
+        Route::get('/edit/expense/{id}','EditExpense')->name('edit.expense');
+        Route::post('/update/expense','UpdateExpense')->name('expense.update');
+
+        Route::get('/month/expense','MonthExpense')->name('month.expense');
+        Route::get('/year/expense','YearExpense')->name('year.expense');
+    });
+    // End
+
 }); // End User Middleware
 
 
@@ -192,4 +210,13 @@ Route::get('/search-unit', [UnitController::class, 'searchUnit'])->name('search.
 Route::get('/search-product', [ProductController::class, 'searchProduct'])->name('search.product');
 
 Route::get('/search-customer', [CustomerController::class, 'searchCustomer'])->name('search.customer');
+
+
+
+// Expense
+Route::get('/search-today', [ExpenseController::class, 'searchToday'])->name('search.today');
+
+Route::get('/search-month', [ExpenseController::class, 'searchMonth'])->name('search.month');
+
+Route::get('/search-year', [ExpenseController::class, 'searchYear'])->name('search.year');
 
