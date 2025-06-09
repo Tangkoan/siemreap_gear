@@ -1,0 +1,123 @@
+@extends('admin/admin_dashboard')
+@section('admin')
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+
+
+    <div class="container mx-auto p-6">
+        <div class="grid grid-cols-1">
+
+            <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <div class="px-2">Edit Customer</div>
+                </h2>
+
+                <div>
+                    <form method="post" action="{{ route('customer.update') }}">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $customer->id }}">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+
+                            {{-- Column 1 --}}
+                            <div class="space-y-4">
+                                {{-- Customer Name --}}
+                                <div>
+                                    <label for="name" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Customer Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" id="name" name="name" required value="{{ $customer->name }}"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ">
+                                    @error('name')
+                                        <span class="text-danger text-red-500"> {{ $message }} </span>
+                                    @enderror
+                                </div>
+
+
+
+                                {{-- Customer Address --}}
+                                <div>
+                                    <label for="address" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Customer <Address></Address>
+                                    </label>
+                                    <input type="text" id="address" name="address" value="{{ $customer->address }}"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            {{-- Column 2 --}}
+                            <div class="space-y-4">
+                                {{-- Note --}}
+                                <div>
+                                    <label for="notes" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Notes
+                                    </label>
+                                    <input type="text" id="notes" name="notes" value="{{ $customer->notes }}"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+
+                                </div>
+
+                                {{-- Customer Phone --}}
+                                <div>
+                                    <label for="phone" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Customer Phone
+                                    </label>
+                                    <input type="tel" id="phone" name="phone" value="{{ $customer->phone }}"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-6">
+                            <button type="submit"
+                                class="button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Image preview script (optional)
+            $('#image').on('change', function (event) {
+                const [file] = event.target.files;
+                if (file) {
+                    const preview = $('#image_preview');
+                    preview.attr('src', URL.createObjectURL(file));
+                    preview.removeClass('hidden');
+                    preview.on('load', function () {
+                        URL.revokeObjectURL(preview.attr('src')); // free memory
+                    })
+                } else {
+                    $('#image_preview').addClass('hidden').attr('src', '#');
+                }
+            });
+
+            // Note: The password toggle script from your original code was removed
+            // as there are no password fields in this "Add Employee" form.
+            // If you have other forms with password fields, you can use that script there.
+        });
+    </script>
+
+@endsection

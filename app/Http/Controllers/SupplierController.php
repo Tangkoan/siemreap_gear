@@ -174,7 +174,7 @@ class SupplierController extends Controller
         'table' => $table,
         'pagination' => $pagination
     ]);
-}
+    }
     
     
 }

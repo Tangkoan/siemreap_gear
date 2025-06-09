@@ -165,6 +165,22 @@ Route::middleware(['auth'])->group(callback: function(){
     });
     // End
 
+
+
+    // Customer All Route 
+    Route::controller(CustomerController::class)->group(function(){
+        Route::get('/all/customer','CustomerPage')->name('all.customer'); 
+        Route::get('/add/customer','AddCustomer')->name('add.customer');
+        Route::post('/store/customer','StoreCustomer')->name('customer.store');  
+
+
+        Route::get('/edit/customer/{id}','EditCustomer')->name('edit.customer');
+        Route::post('/customer/update','CustomerUpdate')->name('customer.update');
+
+        Route::get('/delete/customer/{id}','DeleteCustomer')->name('delete.customer');
+    });
+    // End
+
 }); // End User Middleware
 
 
@@ -174,4 +190,6 @@ Route::get('/search-supplier', [SupplierController::class, 'searchSupplier'])->n
 Route::get('/search-unit', [UnitController::class, 'searchUnit'])->name('search.unit');
 
 Route::get('/search-product', [ProductController::class, 'searchProduct'])->name('search.product');
+
+Route::get('/search-customer', [CustomerController::class, 'searchCustomer'])->name('search.customer');
 
