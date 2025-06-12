@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\Backend\ExpenseController;
+use App\Http\Controllers\PosController;
 
 
 
@@ -196,6 +197,17 @@ Route::middleware(['auth'])->group(callback: function(){
 
         Route::get('/month/expense','MonthExpense')->name('month.expense');
         Route::get('/year/expense','YearExpense')->name('year.expense');
+    });
+    // End
+
+    
+
+     ///POS All Route 
+     Route::controller(PosController::class)->group(function(){
+
+        Route::get('/page/pos','PosPage')->name('pos');
+        Route::get('/api/products-for-pos', 'getProductsForPos')->name('api.products.pos');
+
     });
     // End
 

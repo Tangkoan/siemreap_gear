@@ -7,7 +7,9 @@
         </a>
         
         <div class="flex items-center space-x-4">
-            <button class="color-primary text-white font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200 hidden md:block">POS</button>
+            <button class="color-primary text-white font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200 hidden md:block">
+                <a href="{{ route('pos') }}">POS</a>
+                </button>
 
             {{-- កុំប៉ះពាល់ត្រង់នេះ --}}
             <div class="hidden">
