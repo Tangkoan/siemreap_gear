@@ -206,7 +206,20 @@ Route::middleware(['auth'])->group(callback: function(){
      Route::controller(PosController::class)->group(function(){
 
         Route::get('/page/pos','PosPage')->name('pos');
+        Route::post('/add-cart','AddCart');
+        Route::get('/allitem','AllItem');
+        Route::post('/cart-update/{rowId}','CartUpdate');
+        Route::get('/cart-remove/{rowId}','CartRemove');
+
+        Route::post('/create-invoice','CreateInvoice');
+
+
+
+
+
         Route::get('/api/products-for-pos', 'getProductsForPos')->name('api.products.pos');
+
+
 
     });
     // End
