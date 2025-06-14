@@ -13,7 +13,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\Backend\ExpenseController;
 use App\Http\Controllers\PosController;
-use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\OrderController;
 
 
 
@@ -215,6 +215,11 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::post('/create-invoice','CreateInvoice');
 
 
+        Route::post('/create-invoice-pos','CreateInvoiceVI');
+
+
+
+
 
 
 
@@ -224,6 +229,32 @@ Route::middleware(['auth'])->group(callback: function(){
 
     });
     // End
+
+
+
+    ///Order All Route Add commentMore actions
+    Route::controller(OrderController::class)->group(function(){
+
+        Route::post('/final-invoice','FinalInvoice');
+        Route::get('/pending/order','PendingOrder')->name('pending.order');
+        Route::get('/order/details/{order_id}','OrderDetails')->name('order.details');
+
+
+    
+    
+    });
+
+
+
+
+
+
+
+
+
+
+
+
 
 }); // End User Middleware
 
@@ -246,3 +277,4 @@ Route::get('/search-month', [ExpenseController::class, 'searchMonth'])->name('se
 
 Route::get('/search-year', [ExpenseController::class, 'searchYear'])->name('search.year');
 
+Route::get('/search-order', [OrderController::class, 'searchOrder'])->name('search.order');

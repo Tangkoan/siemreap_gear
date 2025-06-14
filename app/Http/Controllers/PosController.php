@@ -106,4 +106,16 @@ class PosController extends Controller
         return view('admin.invoice.product_invoice',compact('contents','customer'));
 
    } // End Method 
+
+
+   public function CreateInvoiceVI(Request $request){
+
+    $contents = Cart::content();
+    $cust_id = $request->customer_id;
+    $customer = Customer::where('id',$cust_id)->first();
+    return view('admin.pos.pos',compact('contents','customer'));
+
+} // End Method 
+
+   
 }
