@@ -216,10 +216,12 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
         Route::post('/create-invoice-pos','CreateInvoiceVI');
+        
 
 
 
-
+        //
+        Route::post('/final-invoice','FinalInvoice');
 
 
 
@@ -238,6 +240,11 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::post('/final-invoice','FinalInvoice');
         Route::get('/pending/order','PendingOrder')->name('pending.order');
         Route::get('/order/details/{order_id}','OrderDetails')->name('order.details');
+
+        Route::post('/order/status/update','OrderStatusUpdate')->name('order.status.update');
+
+        Route::get('/complete/order','CompleteOrder')->name('complete.order');
+
 
 
     
@@ -278,3 +285,4 @@ Route::get('/search-month', [ExpenseController::class, 'searchMonth'])->name('se
 Route::get('/search-year', [ExpenseController::class, 'searchYear'])->name('search.year');
 
 Route::get('/search-order', [OrderController::class, 'searchOrder'])->name('search.order');
+Route::get('/search-comlete-order', [OrderController::class, 'searchCompleteOrder'])->name('search.complete_order');

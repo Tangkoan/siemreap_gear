@@ -179,4 +179,115 @@ class OrderController extends Controller
         return view('admin.order.order_details',compact('order','orderItem'));
 
     }// End Method 
+
+
+    public function OrderStatusUpdate(Request $request){
+        $order_id = $request->id;
+
+     Order::findOrFail($order_id)->update(['order_status' => 'complete']);
+
+         $notification = array(
+            'message' => 'Order Done Successfully',
+            'alert-type' => 'success'
+        ); 
+
+        return redirect()->route('pending.order')->with($notification);
+
+
+    }// End Method 
+
+    public function CompleteOrder(){
+
+        $orders = Order::where('order_status','complete')->get();
+        return view('admin.order.order_complete',compact('orders'));
+
+    }// End Method 
+
+
+    public function searchCompleteOrder(Request $request)
+    {
+        $query = Order::where('order_status', 'complete'); // ✅ មិនប្រើ get()
+
+        // $query = Order::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->WhereHas('customer', function ($cat) use ($request) {
+                        $cat->where('name', 'LIKE', '%' . $request->search . '%');
+                        });
+            });
+        }
+
+        // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
+        $query->orderBy('created_at', 'desc');
+
+        $perPage = $request->perPage ?? 10; // ✅ Default = 10
+        $isAll = $perPage === 'all';
+
+        // if ($isAll) {
+        //     // $orders = $query->get();
+        //     $orders = Order::where('order_status','pending')->get();;
+        // } else {
+        //     $orders = $query->paginate((int)$perPage);
+        // }
+
+        if ($isAll) {
+            $orders = $query->get(); // ✅ Use query result with filter
+        } else {
+            $orders = $query->paginate((int)$perPage);
+        }
+
+        $table = '';
+        foreach ($orders as $key => $item) {
+            $table .= '
+            <tr class="hover:bg-slate-50 border-b border-slate-200">
+                <td class="p-4 py-5">' . ($key + 1) . '</td>
+                
+                
+
+                
+                <td class="p-4 py-5">' . $item['customer']['name'] . '</td>
+                <td class="p-4 py-5">' . $item->order_date  . '</td>
+                <td class="p-4 py-5">' . $item->payment_status  . '</td>
+                <td class="p-4 py-5">' . $item->invoice_no  . '</td>
+                <td class="p-4 py-5">' . $item->pay  . '</td>
+                
+                <td class="p-4 py-5">
+                    <span class="inline-block px-3 py-1 rounded-full bg-green-500 text-white font-semibold shadow-sm">
+                        '. $item->order_status  .'
+                    </span>
+                </td>
+                
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <div class="flex items-center gap-x-6">
+                
+                   
+
+                    <button type="button" class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                                <a href="' . route('order.details', $item->id) . '" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
+
+                                </a>
+                    </button>
+                       
+                    
+                    
+                    
+                    
+                    </div>
+
+                    
+                </td>
+            </tr>';
+        }
+
+        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $orders->links('pagination::tailwind')->toHtml();
+
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination
+        ]);
+    }
 }

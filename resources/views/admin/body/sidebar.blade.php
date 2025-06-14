@@ -158,6 +158,8 @@
                 <a href="{{ route('pending.order') }}"
                     class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Pending</a>
                 
+                <a href="{{ route('complete.order') }}"
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Complete</a>
             </div>
         </div>
 
