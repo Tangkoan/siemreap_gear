@@ -8,12 +8,13 @@
             <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
                 <div class="flex justify-between">
                     <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                            class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                                d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                         </svg>
-                        <div class="px-2">Product</div>
+
+                        <div class="px-2">Stock</div>
                     </h2>
                     <div>
 
@@ -73,8 +74,7 @@
                         </div>
                     </div>
 
-                    <div
-                        class="table-wrapper overflow-y-auto max-h-[450px]">
+                    <div class="table-wrapper overflow-y-auto max-h-[450px]">
                         <table class="w-full text-left table-auto min-w-max">
                             <thead>
                                 <tr>
@@ -112,7 +112,11 @@
                                         </p>
                                     </th>
 
-                                    
+                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                        <p class="text-sm font-normal leading-none text-slate-500">
+                                            Unit
+                                        </p>
+                                    </th>
                                     <th class="p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Supplier
@@ -147,9 +151,12 @@
 
                                         <td class="p-4 py-5 text-sm text-black">{{ $item->selling_price ?? 'null' }}</td>
 
-                                      
+                                        <td class="p-4 py-5 text-sm text-black">{{ $item['unit']['unit_name'] }}</td>
                                         <td class="p-4 py-5 text-sm text-black">{{ $item['supplier']['name'] }}</td>
-                                        <td class="p-4 py-5 text-sm text-black">{{ $item->product_store ?? 'null' }}</td>
+                                        {{-- <td class="p-4 py-5 text-sm text-black">{{ $item->product_store ?? 'null' }}</td> --}}
+                                        <td class="p-4 py-5 text-sm text-black">
+                                             <button class="btn btn-warning waves-effect waves-light">{{ $item->product_store }}</button>
+                                        </td>
 
                                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                                             <div class="flex items-center gap-x-6">
@@ -158,9 +165,8 @@
                                                 <button
                                                     class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
                                                     <a href="{{ route('edit.category', $item->id) }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="w-5 h-5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                         </svg>
@@ -178,9 +184,8 @@
 
                                                 <button
                                                     class="icon-detail text-gray-500 transition-colors duration-200 dark:hover:text-gray-800 dark:text-gray-300 hover:text-gray-800 focus:outline-none">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="size-6">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                        stroke-width="1.5" stroke="currentColor" class="size-6">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -192,9 +197,8 @@
                                                 <button type="button"
                                                     class=" icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
                                                     <a href="{{ route('delete.category', $item->id) }}" id="delete">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="w-5 h-5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                         </svg>
@@ -220,8 +224,8 @@
     </div>
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('.toggle-password').on('click', function() {
+        $(document).ready(function () {
+            $('.toggle-password').on('click', function () {
                 const targetId = $(this).data('target');
                 const passwordField = $('#' + targetId);
                 const icon = $(this).find('svg');
@@ -234,18 +238,18 @@
                 if (type === 'password') {
                     icon.html(
                         '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>'
-                        ); // Eye open
+                    ); // Eye open
                 } else {
                     icon.html(
                         '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7A10.05 10.05 0 0112 5c.424 0 .84.037 1.246.109m 3.167 3.167a3 3 0 11-4.243 4.243m4.243-4.243a3 3 0 00-4.243 4.243M3 3l3.59 3.59m0 0a9.953 9.953 0 01.442-.442L21 21"></path>'
-                        ); // Eye closed
+                    ); // Eye closed
                 }
             });
         });
 
 
         // Start Short data
-        $(document).ready(function() {
+        $(document).ready(function () {
             function fetchData(page = 1) {
                 let query = $('#search').val();
                 let perPage = $('#perPage').val();
@@ -257,7 +261,7 @@
                         search: query,
                         perPage: perPage
                     },
-                    success: function(data) {
+                    success: function (data) {
                         $('tbody').html(data.table);
                         $('#pagination-links').html(data.pagination);
                     }
@@ -268,12 +272,12 @@
             fetchData(); // ✅ Fetch 10 by default
 
             // Search or perPage change
-            $('#search, #perPage').on('keyup change', function() {
+            $('#search, #perPage').on('keyup change', function () {
                 fetchData(); // Always page 1 when changed
             });
 
             // Pagination click
-            $(document).on('click', '.pagination a', function(e) {
+            $(document).on('click', '.pagination a', function (e) {
                 e.preventDefault();
                 let page = $(this).attr('href').split('page=')[1];
                 fetchData(page);

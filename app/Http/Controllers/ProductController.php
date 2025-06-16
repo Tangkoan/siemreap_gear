@@ -234,7 +234,6 @@ class ProductController extends Controller
                 <td class="p-4 py-5">' . $item->product_name . '</td>
                 <td class="p-4 py-5">' . $item['category']['category_name'] . '</td>
                 <td class="p-4 py-5">' . $item->selling_price  . '</td>
-                <td class="p-4 py-5">' . $item['unit']['unit_name'] . '</td>
                 <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
                 <td class="p-4 py-5">' . $item->product_store  . '</td> 
                 

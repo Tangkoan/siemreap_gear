@@ -64,7 +64,7 @@
                             </h2>
 
                             @php
-    $sub_total = (float) str_replace(',', '', Cart::subtotal()); // ចម្លង subtotal ពី backend
+                                $sub_total = (float) str_replace(',', '', Cart::subtotal()); // ចម្លង subtotal ពី backend
                             @endphp
 
                             <form class="px-3" method="post" action="{{ url('/final-invoice') }}">

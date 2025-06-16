@@ -12,21 +12,6 @@
             <div class="px-2">Dashboard</div>
         </a>
 
-
-        {{-- Brand --}}
-        <a href="{{ route('all.brand') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linejoin="round"
-                    d="M6.75 3.744h-.753v8.25h7.125a4.125 4.125 0 0 0 0-8.25H6.75Zm0 0v.38m0 16.122h6.747a4.5 4.5 0 0 0 0-9.001h-7.5v9h.753Zm0 0v-.37m0-15.751h6a3.75 3.75 0 1 1 0 7.5h-6m0-7.5v7.5m0 0v8.25m0-8.25h6.375a4.125 4.125 0 0 1 0 8.25H6.75m.747-15.38h4.875a3.375 3.375 0 0 1 0 6.75H7.497v-6.75Zm0 7.5h5.25a3.75 3.75 0 0 1 0 7.5h-5.25v-7.5Z" />
-            </svg>
-
-            <div class="px-2">Brand</div>
-
-        </a>
-        {{-- End Brand --}}
-
         {{-- Category --}}
         <a href="{{ route('all.category') }}"
             class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
@@ -42,18 +27,7 @@
         {{-- End Category --}}
 
 
-        {{-- Unit --}}
-        <a href="{{ route('all.unit') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m7.875 14.25 1.214 1.942a2.25 2.25 0 0 0 1.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 0 1 1.872 1.002l.164.246a2.25 2.25 0 0 0 1.872 1.002h2.092a2.25 2.25 0 0 0 1.872-1.002l.164-.246A2.25 2.25 0 0 1 16.954 9h4.636M2.41 9a2.25 2.25 0 0 0-.16.832V12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 0 1 .382-.632l3.285-3.832a2.25 2.25 0 0 1 1.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0 0 21.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 0 0 2.25 2.25Z" />
-            </svg>
-
-            <div class="px-2">Unit</div>
-        </a>
-        {{-- End Unit --}}
+        
 
         {{-- Product --}}
         <a href="{{ route('all.product') }}"
@@ -100,6 +74,19 @@
             <div class="px-2">Supplier</div>
         </a>
         {{-- End Supplier --}}
+
+        {{-- Stock --}}
+        <a href="{{ route('all.stock') }}"
+            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+            </svg>
+              
+            <div class="px-2">Stock</div>
+        </a>
+        {{-- End Stock --}}
 
 
 
