@@ -71,7 +71,7 @@
                                 @csrf
 
                                 <label class="block mb-2">Payment :</label>
-                                <select name="payment_status" id="example-select" class="w-full p-2 border rounded mb-4">
+                                <select name="payment_status" id="example-select" class="w-full p-2 border rounded mb-4" required>
                                     <option selected disabled>Select Payment </option>
                                     <option value="HandCash">HandCash</option>
                                     <option value="Cheque">Cheque</option>
@@ -79,7 +79,7 @@
                                 </select>
 
                                 <label class="block mb-2">Pay Now:</label>
-                                <input type="number" name="pay" id="payNow" class="w-full p-2 border rounded mb-4"
+                                <input type="number" name="pay" id="payNow" class="w-full p-2 border rounded mb-4" required
                                     placeholder="Pay Now" oninput="calculateDue()" min="0">
 
                                 <label class="block mb-2">Due Amount:</label>

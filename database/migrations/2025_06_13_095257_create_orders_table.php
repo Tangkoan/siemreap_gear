@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('customer_id');
+            
+            $table->unsignedBigInteger('customer_id');
             $table->string('order_date');
             $table->string('order_status');
             $table->string('total_products');
@@ -25,6 +26,12 @@ return new class extends Migration
             $table->string('pay')->nullable();
             $table->string('due')->nullable();
             $table->timestamps();
+
+            //
+            $table->foreign('customer_id')
+                ->references('id')->on('customers')
+                ->onDelete('restrict')  // កុំប្រើ cascade
+                ->onUpdate('cascade');
         });
     }
 

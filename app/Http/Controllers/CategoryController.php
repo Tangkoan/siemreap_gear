@@ -80,17 +80,29 @@ class CategoryController extends Controller
 }
 
 
-    public function DeleteCategory($id){
+    public function DeleteCategory($id)
+    {
+        $category = Category::findOrFail($id);
 
-        $categroy_id = Category::findOrFail($id);
+        // Check if any product is using this category
+        if ($category->products()->exists()) {
+            $notification = array(
+                'message' => 'Cannot delete category. There are products associated with it.',
+                'alert-type' => 'error'
+            );
+            return redirect()->route('all.category')->with($notification);
+        }
 
-        Category::findOrFail($id)->delete();
+        // If no products, proceed to delete
+        $category->delete();
+
         $notification = array(
             'message' => 'Category Deleted Successfully',
             'alert-type' => 'success'
         );
         return redirect()->route('all.category')->with($notification); 
-    } // End Method 
+    }
+
     public function searchCategory(Request $request)
     {
         $query = Category::query();

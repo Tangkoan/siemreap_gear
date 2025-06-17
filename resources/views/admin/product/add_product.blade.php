@@ -58,24 +58,11 @@
                                     </div>
 
 
-                                    {{-- Brand --}}
-                                    <div class="form-group">
-                                        <label for="Brand" class="block text-gray-400 text-sm font-medium mb-1">
-                                            Brand <span class="text-red-500">*</span>
-                                        </label>
-                                        <select name="brand_id"
-                                            class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                            id="example-select">
-                                            <option selected disabled>Select Brand </option>
-                                            @foreach($brand as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->brand_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
 
-                                    {{-- Brand --}}
+
+                                    {{-- Supplier --}}
                                     <div class="form-group">
-                                        <label for="Brand" class="block text-gray-400 text-sm font-medium mb-1">
+                                        <label for="Supplier" class="block text-gray-400 text-sm font-medium mb-1">
                                             Supplier <span class="text-red-500">*</span>
                                         </label>
                                         <select name="supplier_id"
@@ -88,19 +75,13 @@
                                         </select>
                                     </div>
 
-                                    {{-- Unit --}}
-                                    <div class="form-group">
-                                        <label for="Brand" class="block text-gray-400 text-sm font-medium mb-1">
-                                            Unit <span class="text-red-500">*</span>
+
+                                    <div>
+                                        <label for="product_detail" class="block text-gray-400 text-sm font-medium mb-1">
+                                            Details <span class="text-red-500">*</span>
                                         </label>
-                                        <select name="unit_id" 
-                                            class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                            id="example-select">
-                                            <option selected disabled>Select Unit </option>
-                                            @foreach($unit as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->unit_name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="tel" id="product_detail" name="product_detail"
+                                            class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     </div>
 
 
@@ -110,7 +91,7 @@
                                         <label for="image" class="block text-gray-400 text-sm font-medium mb-2">
                                             Product Image <span class="text-red-500">*</span>
                                         </label>
-                                        <input type="file" id="image" name="product_image" required
+                                        <input type="file" id="image" name="product_image" 
                                             class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-500 file:text-white hover:file:bg-gray-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                         {{-- Image preview script can be added here if needed --}}
                                         <img id="image_preview" src="#" alt="Image Preview"
@@ -170,13 +151,7 @@
                                             class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     </div>
 
-                                    <div>
-                                        <label for="product_detail" class="block text-gray-400 text-sm font-medium mb-1">
-                                            Details <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="tel" id="product_detail" name="product_detail"
-                                            class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    </div>
+
 
                                 </div>
                             </div>
@@ -221,12 +196,7 @@
                         category_id: {
                             required: true,
                         },
-                        brand_id: {
-                            required: true,
-                        },
-                        unit_id: {
-                            required: true,
-                        },
+
                         supplier_id: {
                             required: true,
                         },
@@ -244,14 +214,9 @@
                         category_id: {
                             required: 'Please Select Category Name',
                         },
-                        brand_id: {
-                            required: 'Please Select Brand Name',
-                        },
+
                         supplier_id: {
                             required: 'Please Select Supplier Name',
-                        },
-                        unit_id: {
-                            required: 'Please Select Unit Name',
                         },
                         selling_price: {
                             required: 'Please Enter Price Name',

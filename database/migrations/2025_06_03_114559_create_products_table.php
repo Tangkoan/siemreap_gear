@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('product_name');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('brand_id')->nullable(); // បន្ថែម brand_id
-            $table->unsignedBigInteger('unit_id')->nullable(); // បន្ថែម unit_id
     
             $table->string('product_code');
             $table->string('product_image');
             $table->string('product_store')->nullable();
+
+            $table->string('product_detail')->nullable();
+
             $table->string('buying_date')->nullable();
             $table->string('buying_price')->nullable();
             $table->string('selling_price')->nullable();
@@ -30,14 +31,16 @@ return new class extends Migration
             $table->timestamps();
         
             // Foreign keys
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
-            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+
+            $table->foreign('category_id')
+                ->references('id')->on('categories')
+                ->onDelete('restrict')  // កុំប្រើ cascade
+                ->onUpdate('cascade');
+            $table->foreign('supplier_id')
+                ->references('id')->on('suppliers')
+                ->onDelete('restrict')  // កុំប្រើ cascade
+                ->onUpdate('cascade');
             
-            
-            // ✅ បន្ថែម constraint brand_id
-            // $table->foreign('brand_id')->references('id')->on('brands')->onDelete('set null');
         });
         
     }

@@ -10,9 +10,6 @@ use Carbon\Carbon;
 
 use App\Models\Category;
 use App\Models\Supplier;
-use App\Models\Unit;
-use App\Models\Brand;
-
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 
@@ -22,7 +19,33 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductImport;
 
 class ProductController extends Controller
+
 {
+
+
+    // ProductController.php
+public function search(Request $request)
+{
+    $keyword = $request->input('keyword');
+
+    $products = Product::where('product_name', 'like', "%$keyword%")->get();
+
+    // Convert image path to URL
+    $products = $products->map(function ($product) {
+        return [
+            'id' => $product->id,
+            'name' => $product->product_name,
+            'price' => $product->selling_price,
+            'imageUrl' => asset($product->product_image),
+        ];
+    });
+
+    return response()->json([
+        'products' => $products
+    ]);
+}
+
+
     //
     public function ProductPage(){
        
@@ -36,16 +59,12 @@ class ProductController extends Controller
     public function AddProduct(){
 
         // $category = Category::latest()->get();
-        // $brand = Brand::latest()->get();
         // $supplier = Supplier::latest()->get();
-        // $unit = Unit::latest()->get();
 
         $category = Category::orderBy('category_name', 'asc')->get();
-        $unit = Unit::orderBy('unit_name', 'asc')->get();
         $supplier = Supplier::orderBy('name', 'asc')->get();
-        $brand = Brand::orderBy('brand_name', 'asc')->get();
 
-        return view('admin.product.add_product',compact('category','supplier', 'unit', 'brand'));
+        return view('admin.product.add_product',compact('category','supplier'));
        }// End Method 
     
     
@@ -67,8 +86,6 @@ class ProductController extends Controller
                 'product_name' => $request->product_name,
                 'category_id' => $request->category_id,
                 'supplier_id' => $request->supplier_id,
-                'unit_id' => $request->unit_id,
-                'brand_id' => $request->brand_id,
                 'product_code' => $pcode,
                 'product_store' => $request->product_store,
                 'buying_date' => $request->buying_date,
@@ -90,9 +107,7 @@ class ProductController extends Controller
                 $product = Product::findOrFail($id);
                 $category = Category::latest()->get();
                 $supplier = Supplier::latest()->get();
-                $unit = Unit::latest()->get();
-                $brand = Brand::latest()->get();
-                return view('admin.product.edit_product',compact('product','category','supplier','unit','brand'));
+                return view('admin.product.edit_product',compact('product','category','supplier',));
             } // End Method 
             
 
@@ -100,9 +115,7 @@ class ProductController extends Controller
                 $product = Product::findOrFail($id);
                 $category = Category::latest()->get();
                 $supplier = Supplier::latest()->get();
-                $unit = Unit::latest()->get();
-                $brand = Brand::latest()->get();
-                return view('admin.product.detail_product',compact('product','category','supplier','unit','brand'));
+                return view('admin.product.detail_product',compact('product','category','supplier',));
             } // End Method 
 
             
@@ -118,8 +131,6 @@ class ProductController extends Controller
                     'product_name' => $request->product_name,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
-                    'unit_id' => $request->unit_id,
-                    'brand_id' => $request->brand_id,
                     'product_detail' => $request->product_detail,
                     'product_code' => $request->product_code,
                     'product_store' => $request->product_store,
@@ -142,8 +153,6 @@ class ProductController extends Controller
                     'product_name' => $request->product_name,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
-                    'unit_id' => $request->unit_id,
-                    'brand_id' => $request->brand_id,
                     'product_code' => $request->product_code,
                     'product_store' => $request->product_store,
                     'buying_date' => $request->buying_date,
@@ -160,17 +169,7 @@ class ProductController extends Controller
                 return redirect()->route('all.product')->with($notification); 
                 } // End else Condition  
         } // End Method 
-        // public function DeleteProduct($id){
-        //         $product_img = Product::findOrFail($id);
-        //         $img = $product_img->product_image;
-        //         unlink($img);
-        //         Product::findOrFail($id)->delete();
-        //         $notification = array(
-        //             'message' => 'Product Deleted Successfully',
-        //             'alert-type' => 'success'
-        //         );
-        //         return redirect()->back()->with($notification); 
-        // } // End Method 
+        
 
         public function DeleteProduct($id){
             $product = Product::findOrFail($id);
@@ -240,11 +239,6 @@ class ProductController extends Controller
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                     
-                    
-
-
-
-                    
                     <button class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
                                 <a href="' . route('edit.product', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ">
@@ -263,9 +257,6 @@ class ProductController extends Controller
                     </button>
 
                     
-
-                  
-
                     <button type="button" class="icon-detail text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
                                 <a href="' . route('detail.product', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

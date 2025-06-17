@@ -64,16 +64,6 @@
                                                                         Order Date : <span>{{ $order->order_date }}</span>
                                                                     </label>
 
-
-
-
-
-
-
-
-
-
-
                                                                 </div>
 
                                                                 {{-- Column 2 --}}

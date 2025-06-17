@@ -9,6 +9,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Orderdetails;
+use App\Models\Category;
 
 
 
@@ -16,33 +17,98 @@ class PosController extends Controller
 {
     //
 
-    public function PosPage(){
+    
+
+    public function PosPage()
+    {
         $product = Product::latest()->get();
-        $customer = Customer::latest()->get();
-        return view('admin.pos.pos', compact('product', 'customer'));
-    }// End Method
+        $categories = Category::all(); // ទាញ category ទាំងអស់
+
+        $walkInCustomer = Customer::where('name', 'Walk-In')->first(); // ឬ ->get() បើច្រើន
+        $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
+
+        // បង្រួមជាមួយ nhau
+        $customers = collect(); // ទទេ
+        if ($walkInCustomer) {
+            $customers->push($walkInCustomer);
+        }
+        $customers = $customers->merge($otherCustomers);
+
+        return view('admin.pos.pos', compact('product', 'customers','categories'));
+    }
 
 
     // (AJAX/Fetch)
-    public function getProductsForPos()
-    {
+    // public function getProductsForPos()
+    // {
         
-        $products = Product::with('category')->latest()->get()->map(function($product) {
+    //     $products = Product::with('category')->latest()->get()->map(function($product) {
             
+    //         return [
+    //             'id' => $product->id,
+    //             'name' => $product->product_name,
+    //             'price' => (float)$product->selling_price, 
+    //             'category' => $product->category ? $product->category->category_name : 'No Category', 
+    //             'imageUrl' => asset($product->product_image) 
+    //         ];
+    //     });
+
+        
+    //     return response()->json([
+    //         'products' => $products,
+    //     ]);
+    // }
+
+    // public function getProductsForPos(Request $request)
+    // {
+    //     $query = Product::with('category');
+
+    //     if ($request->has('category_id') && $request->category_id != 'all') {
+    //         $query->where('category_id', $request->category_id);
+    //     }
+
+    //     $products = $query->latest()->get()->map(function($product) {
+    //         return [
+    //             'id' => $product->id,
+    //             'name' => $product->product_name,
+    //             'price' => (float)$product->selling_price, 
+    //             'category' => $product->category ? $product->category->category_name : 'No Category', 
+    //             'imageUrl' => asset($product->product_image) 
+    //         ];
+    //     });
+
+    //     return response()->json([
+    //         'products' => $products,
+    //     ]);
+    // }
+
+    public function getProductsByCategory(Request $request)
+    {
+        $categories = Category::all(); // ទាញ Category ទាំងអស់
+
+        $query = Product::with('category');
+
+        if ($request->has('category_id') && $request->category_id != 'all') {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $products = $query->latest()->get()->map(function($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->product_name,
-                'price' => (float)$product->selling_price, 
-                'category' => $product->category ? $product->category->category_name : 'No Category', 
-                'imageUrl' => asset($product->product_image) 
+                'price' => (float)$product->selling_price,
+                'category' => $product->category ? $product->category->category_name : 'No Category',
+                'imageUrl' => asset($product->product_image)
             ];
         });
 
-        
         return response()->json([
             'products' => $products,
+            'categories' => $categories
         ]);
     }
+
+
 
     public function AddCart(Request $request){
 
@@ -65,6 +131,24 @@ class PosController extends Controller
 
 
     } // End Method 
+
+    // public function AddCart(Request $request)
+    // {
+    //     Cart::add([
+    //         'id' => $request->id,
+    //         'name' => $request->name,
+    //         'qty' => $request->qty,
+    //         'price' => $request->price,
+    //         'weight' => 20,
+    //         'options' => ['size' => 'large']
+    //     ]);
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Product Added Successfully'
+    //     ]);
+    // }
+
 
     public function AllItem(){
 
@@ -107,100 +191,7 @@ class PosController extends Controller
         $customer = Customer::where('id',$cust_id)->first();
         return view('admin.invoice.product_invoice',compact('contents','customer'));
 
-        // // ========================================================================
-        // // ករណីទី១៖ បង្ហាញหน้าเว็บដំបូង (GET Request)
-        // // ========================================================================
-        // if ($request->isMethod('get')) {
-        //         $contents = Cart::content();
-        //         $cust_id = $request->customer_id;
-
-        //         // ពិនិត្យមើលថា Customer មានពិតหรือไม่
-        //         if (!$cust_id || !$customer = Customer::find($cust_id)) {
-        //             return redirect()->route('pos')->withErrors(['msg' => 'Invalid Customer Selected.']);
-        //         }
-
-        //         return view('admin.invoice.product_invoice', compact('contents', 'customer'));
-        // }
-
-
-        // // ========================================================================
-        // // ករណីទី២៖ ដោះស្រាយการ Submit Form (POST Request)
-        // // ========================================================================
-        // if ($request->isMethod('post')) {
-
-        //     // --- ការត្រួតពិនិត្យข้อมูลរួម (Common Validation) ---
-        //     $request->validate(['customer_id' => 'required|integer']);
-
-        //     $contents = Cart::content();
-        //     if ($contents->isEmpty()) {
-        //         return redirect()->route('pos')->withErrors(['msg' => 'Cannot create order from an empty cart.']);
-        //     }
-
-        //     // --- រៀបចំข้อมูลរួមសម្រាប់ Order (Common Data) ---
-        //     $data = [
-        //         'customer_id'    => $request->customer_id,
-        //         'order_date'     => Carbon::now()->format('d-F-Y'),
-        //         'total_products' => Cart::count(),
-        //         'sub_total'      => Cart::subtotal(),
-        //         'vat'            => Cart::tax(),
-        //         'total'          => Cart::total(),
-        //         'created_at'     => Carbon::now(),
-        //     ];
-
-        //     // --- ពិនិត្យមើលថាជា Final Invoice ឬ Pending Order ---
-
-        //     // A. ប្រសិនបើ Request មាន 'payment_status' (មកពី Popup) -> สร้าง Final Invoice
-        //     if ($request->has('payment_status')) {
-        //         $data['order_status']   = 'completed'; // កំណត់ status ជា completed
-        //         $data['invoice_no']     = 'EPOS' . mt_rand(10000000, 99999999);
-        //         $data['payment_status'] = $request->payment_status;
-        //         $data['pay']            = $request->pay;
-        //         $data['due']            = $request->due;
-
-        //         $notification_message = 'Order Complete Successfully';
-
-        //     }
-        //     // B. បើមិនដូច្នោះទេ (មកពីប៊ូតុង Submit ធម្មតា) -> สร้าง Pending Order
-        //     else {
-        //         $data['order_status']   = 'pending';
-        //         $data['invoice_no']     = null; // មិនទាន់មាន Invoice No.
-        //         $data['payment_status'] = 'unpaid';
-        //         $data['pay']            = 0;
-        //         $data['due']            = $data['total']; // ជំពាក់ทั้งหมด
-
-        //         $notification_message = 'Order Saved as Pending Successfully';
-        //     }
-
-        //     // --- ការរក្សាទុកข้อมูลទៅ Database (ដំណើរការเหมือนกันทั้งสองกรณี) ---
-        //     $order_id = Order::insertGetId($data);
-
-        //     // រៀបចំข้อมูลสินค้าទាំងអស់
-        //     $pdata = [];
-        //     foreach ($contents as $content) {
-        //         $pdata[] = [
-        //             'order_id' => $order_id,
-        //             'product_id' => $content->id,
-        //             'quantity' => $content->qty,
-        //             'unitcost' => $content->price,
-        //             'total' => $content->total,
-        //             'created_at' => Carbon::now(),
-        //         ];
-        //     }
-        //     // បញ្ចូលข้อมูลสินค้าทั้งหมดក្នុងครั้งเดียว
-        //     Orderdetails::insert($pdata);
-
-        //     // បង្កើត Notification
-        //     $notification = [
-        //         'message' => $notification_message,
-        //         'alert-type' => 'success'
-        //     ];
-
-        //     // លុបตะกร้าสินค้า
-        //     Cart::destroy();
-
-        //     // Redirect กลับไปหน้า POS
-        //     return redirect()->route('pos')->with($notification);
-        // }
+        
     } // End Method 
 
 

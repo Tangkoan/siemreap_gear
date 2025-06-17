@@ -219,6 +219,7 @@ Route::middleware(['auth'])->group(callback: function(){
 
         // Stock
         Route::get('/stock','StockManage')->name('all.stock');
+        
 
 
     
@@ -258,3 +259,10 @@ Route::get('/search-year', [ExpenseController::class, 'searchYear'])->name('sear
 
 Route::get('/search-order', [OrderController::class, 'searchOrder'])->name('search.order');
 Route::get('/search-comlete-order', [OrderController::class, 'searchCompleteOrder'])->name('search.complete_order');
+
+
+
+
+Route::get('/get-products', [PosController::class, 'getProductsByCategory']);
+Route::post('/add-cart', [PosController::class, 'AddCart']);
+Route::get('/search-products', [ProductController::class, 'search']);

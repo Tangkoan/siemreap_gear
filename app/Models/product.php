@@ -11,8 +11,13 @@ class product extends Model
 
 
     // បង្កើត សម្រាប់ Join
-    public function category(){
-        return $this->belongsTO(Category::class,'category_id','id');
+    // public function category(){
+    //     return $this->belongsTO(Category::class,'category_id','id');
+    // }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     // បង្កើត សម្រាប់ Join
@@ -21,13 +26,4 @@ class product extends Model
     }
 
 
-    // បង្កើត សម្រាប់ Join
-    public function brand(){
-        return $this->belongsTO(Brand::class,'brand_id','id');
-    }
-
-    // បង្កើត សម្រាប់ Join
-    public function unit(){
-        return $this->belongsTO(Unit::class,'unit_id','id');
-    }
 }

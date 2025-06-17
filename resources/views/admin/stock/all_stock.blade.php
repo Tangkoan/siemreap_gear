@@ -112,11 +112,7 @@
                                         </p>
                                     </th>
 
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
-                                        <p class="text-sm font-normal leading-none text-slate-500">
-                                            Unit
-                                        </p>
-                                    </th>
+                                    
                                     <th class="p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Supplier
@@ -151,7 +147,6 @@
 
                                         <td class="p-4 py-5 text-sm text-black">{{ $item->selling_price ?? 'null' }}</td>
 
-                                        <td class="p-4 py-5 text-sm text-black">{{ $item['unit']['unit_name'] }}</td>
                                         <td class="p-4 py-5 text-sm text-black">{{ $item['supplier']['name'] }}</td>
                                         {{-- <td class="p-4 py-5 text-sm text-black">{{ $item->product_store ?? 'null' }}</td> --}}
                                         <td class="p-4 py-5 text-sm text-black">

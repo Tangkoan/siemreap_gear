@@ -66,25 +66,9 @@
                                 </div>
 
 
-                                {{-- Brand --}}
-                                <div>
-                                    <label for="Brand" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Brand <span class="text-red-500">*</span>
-                                    </label>
 
 
-                                    <select name="brand_id"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                        id="example-select">
-                                        <option selected disabled>Select Brand </option>
-                                        @foreach($brand as $cat)
-                                            <option value="{{ $cat->id }}" {{ $cat->id == $product->brand_id ? 'selected' : ''  }}>{{ $cat->brand_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                {{-- Brand --}}
+                                {{-- Supplier --}}
                                 <div>
                                     <label for="supplier" class="block text-gray-400 text-sm font-medium mb-1">
                                         Supplier <span class="text-red-500">*</span>
@@ -103,24 +87,15 @@
 
                                 </div>
 
-                                {{-- Brand --}}
+
+
                                 <div>
-                                    <label for="Brand" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Unit <span class="text-red-500">*</span>
+                                    <label for="product_detail" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Details <span class="text-red-500">*</span>
                                     </label>
-
-                                    <select name="unit_id"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                        id="example-select">
-                                        <option selected disabled>Select Unit </option>
-                                        @foreach($unit as $cat)
-                                            <option value="{{ $cat->id }}" {{ $cat->id == $product->unit_id ? 'selected' : ''  }}>{{ $cat->unit_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <input type="tel" id="product_detail" name="product_detail" value="{{ $product->product_detail }}"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
-
-
 
 
 
@@ -200,13 +175,7 @@
                                         class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
 
-                                <div>
-                                    <label for="product_detail" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Details <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="tel" id="product_detail" name="product_detail" value="{{ $product->product_detail }}"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                </div>
+
 
                             </div>
                         </div>
