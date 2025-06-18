@@ -71,7 +71,7 @@ public function search(Request $request)
        // Store Product
        public function StoreProduct(Request $request){ 
      
-            $pcode = IdGenerator::generate(['table' => 'products','field' => 'product_code','length' => 6, 'prefix' => 'SR' ]);
+            $pcode = IdGenerator::generate(['table' => 'products','field' => 'product_code','length' => 6, 'prefix' => 'SR_GEAR' ]);
     
             $image = $request->file('product_image');
     

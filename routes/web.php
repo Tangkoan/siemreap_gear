@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\ExpenseController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RoleController;
 
 
 
@@ -63,7 +64,7 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
     
-    Route::get('/employee/page', [EmployeeContrlloer::class, 'EmployeePage'])->name('employee.all');
+    // Route::get('/employee/page', [EmployeeContrlloer::class, 'EmployeePage'])->name('employee.all');
 
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all');
 
@@ -247,6 +248,21 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
 
+    // Start Permision
+    Route::controller(RoleController::class)->group(function(){
+
+
+        Route::get('/all/permission','AllPermission')->name('all.permission');
+        Route::get('/add/permission','AddPermission')->name('add.permission');
+        Route::post('/store/permission','StorePermission')->name('permission.store');
+
+        Route::get('/edit/permission/{id}','EditPermission')->name('edit.permission');
+
+        Route::post('/update/permission','UpdatePermission')->name('permission.update');
+        Route::get('/delete/permission/{id}','DeletePermission')->name('delete.permission');
+        
+    });
+    // End Permision
 
 
 
@@ -297,3 +313,7 @@ Route::get('/get-product-price/{id}', [PurchaseController::class, 'getProductPri
 
 
 
+
+
+// Permission
+Route::get('/search-permission', [RoleController::class, 'searchPermission'])->name('search.permission');
