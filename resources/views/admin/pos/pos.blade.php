@@ -138,7 +138,6 @@
                                                                                                         <th class="p-2">Subtotal</th>
                                                                                                         <th class="p-2">Action</th>
 
-
                                                                                                     </tr>
                                                                                                 </thead>
 

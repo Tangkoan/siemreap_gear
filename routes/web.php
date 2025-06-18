@@ -12,6 +12,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Backend\ExpenseController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PurchaseController;
 
 
 
@@ -68,8 +69,6 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
     // Start Product
-    
-
     Route::controller(ProductController::class)->group(function(){
 
 
@@ -98,8 +97,6 @@ Route::middleware(['auth'])->group(callback: function(){
 
         Route::post('/import','Import')->name('import');
     });
-    
-    
     // End Product
 
     
@@ -219,6 +216,11 @@ Route::middleware(['auth'])->group(callback: function(){
 
         // Stock
         Route::get('/stock','StockManage')->name('all.stock');
+
+
+        
+        // PDF Complete Order
+        Route::get('/order/invoice-download/{order_id}','OrderInvoice');
         
 
 
@@ -229,6 +231,19 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
 
+    // Start Product
+    Route::controller(PurchaseController::class)->group(function(){
+
+
+        Route::get('/purchase/page','PurchasePage')->name('all.purchase');
+        Route::get('/purchase/add','AddPurchase')->name('add.purchase');
+
+
+        Route::post('/purchase-create','store.purchase');
+        Route::get('/pending/purchase','PendingPurchase')->name('pending.purchase');
+        
+    });
+    // End Product
 
 
 
@@ -266,3 +281,19 @@ Route::get('/search-comlete-order', [OrderController::class, 'searchCompleteOrde
 Route::get('/get-products', [PosController::class, 'getProductsByCategory']);
 Route::post('/add-cart', [PosController::class, 'AddCart']);
 Route::get('/search-products', [ProductController::class, 'search']);
+Route::get('/search-purchase', [PurchaseController::class, 'search']);
+
+
+
+
+
+
+
+
+// Get Price Product( puying_price shwo in fill purchse_price)
+// routes/web.php
+Route::get('/get-product-price/{id}', [PurchaseController::class, 'getProductPrice']);
+
+
+
+

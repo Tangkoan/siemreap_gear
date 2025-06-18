@@ -15,6 +15,9 @@ use App\Models\product;
 use App\Models\Orderdetails;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
+// PDF 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use DB;
 
 
@@ -73,6 +76,22 @@ class OrderController extends Controller
 
     }// End Method 
 
+
+    // Print Invoice IN PDF
+    public function OrderInvoice($order_id){
+
+        $order = Order::where('id',$order_id)->first();
+
+       $orderItem = Orderdetails::with('product')->where('order_id',$order_id)->orderBy('id','DESC')->get();
+
+       $pdf = Pdf::loadView('admin.invoice.order_invoice', compact('order','orderItem'))->setPaper('a4')->setOption([
+               'tempDir' => public_path(),
+               'chroot' => public_path(),
+
+       ]);
+        return $pdf->download('invoice.pdf');
+
+   }// End Method 
 
 
 
@@ -212,7 +231,7 @@ class OrderController extends Controller
         $product = Product::latest()->get();
         return view('admin.stock.all_stock',compact('product'));
     
-        }// End Method 
+    }// End Method 
 
 
     public function CompleteOrder(){
@@ -283,7 +302,7 @@ class OrderController extends Controller
                    
 
                     <button type="button" class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
-                                <a href="' . route('order.details', $item->id) . '" >
+                                <a href="' .  url('order/invoice-download/' . $item->id)  . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                     </svg>
