@@ -260,6 +260,15 @@ Route::middleware(['auth'])->group(callback: function(){
 
         Route::post('/update/permission','UpdatePermission')->name('permission.update');
         Route::get('/delete/permission/{id}','DeletePermission')->name('delete.permission');
+
+        /// ROLE
+        Route::get('/all/roles','AllRoles')->name('all.roles');
+        Route::get('/add/roles','AddRoles')->name('add.roles');
+        Route::post('/store/roles','StoreRoles')->name('roles.store');
+
+        Route::get('/edit/roles/{id}','EditRoles')->name('edit.roles');
+        Route::post('/update/roles','UpdateRoles')->name('roles.update');
+        Route::get('/delete/roles/{id}','DeleteRoles')->name('delete.roles');
         
     });
     // End Permision
@@ -317,3 +326,4 @@ Route::get('/get-product-price/{id}', [PurchaseController::class, 'getProductPri
 
 // Permission
 Route::get('/search-permission', [RoleController::class, 'searchPermission'])->name('search.permission');
+Route::get('/search-roles', [RoleController::class, 'searchRoles'])->name('search.roles');
