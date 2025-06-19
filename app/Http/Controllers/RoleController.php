@@ -469,6 +469,66 @@ class RoleController extends Controller
     } // End Method 
 
 
+    // អត់ដើរ
+                        // public function RolePermissionUpdate(Request $request,$id){
+
+                        //     $role = Role::findOrFail($id);
+                        //     $permissions = $request->permission;
+
+                        //     if (!empty($permissions)) {
+                        //         $role->syncPermissions($permissions);
+                        //     }
+
+                        //      $notification = array(
+                        //         'message' => 'Role Permission Updated Successfully',
+                        //         'alert-type' => 'success'
+                        //     );
+
+                        //     return redirect()->route('all.roles.permission')->with($notification);
+
+                        // }// End Method 
+
+
+    /// ដើរ តែបើករណី គេមិនបញ្ចូល Role វាមិនដំណើរការទៅលោតសារ Error
+    // public function RolePermissionUpdate(Request $request, $id){
+    //     $role = Role::findOrFail($id);
+    //     $permissions = Permission::whereIn('id', $request->permission)->pluck('name')->toArray();
+
+    //     if (!empty($permissions)) {
+    //         $role->syncPermissions($permissions);
+    //     }
+
+    //     $notification = array(
+    //         'message' => 'Role Permission Updated Successfully',
+    //         'alert-type' => 'success'
+    //     );
+
+    //     return redirect()->route('all.roles.permission')->with($notification);
+    // }
+
+
+    // ដើរ ពេលEdit ទោះមិនបញ្ចូល Role ក៏ Success
+                            public function RolePermissionUpdate(Request $request, $id)
+                            {
+                                $role = Role::findOrFail($id);
+                                $permissionIds = $request->permission ?? [];
+
+                                // ផ្លាស់ប្តូរពី ID ទៅជា Permission Object
+                                $permissions = Permission::whereIn('id', $permissionIds)->get();
+
+                                $role->syncPermissions($permissions);
+
+                                $notification = [
+                                    'message' => 'Role Permission Updated Successfully',
+                                    'alert-type' => 'success'
+                                ];
+
+                                return redirect()->route('all.roles.permission')->with($notification);
+                            }
+
+    
+
+
 
 
 
