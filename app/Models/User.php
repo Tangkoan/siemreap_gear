@@ -11,6 +11,10 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 // End Persion
 
+// Role Permission
+use DB;
+// End
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -52,4 +56,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    // Start Role Permission
+        public static function getpermissionGroups(){
+            $permission_groups = DB::table('permissions')->select('group_name')->groupBy('group_name')->get();
+            return $permission_groups;
+        } // End Method 
+
+
+        public static function getpermissionByGroupName($group_name){
+            $permissions = DB::table('permissions')
+                            ->select('name','id')
+                            ->where('group_name',$group_name)
+                            ->get();
+            return $permissions;
+
+        }// End Method 
+    // End
 }
