@@ -18,6 +18,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 // Import សម្រាប់ Hsah Password
 
+// Role For User
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 class AdminController extends Controller
 {
@@ -175,6 +179,7 @@ class AdminController extends Controller
     <td class="p-4 py-5">' . $item->name . '</td>
     <td class="p-4 py-5">' . ($item->email ?? 'null') . '</td>
     <td class="p-4 py-5">' . ($item->phone ?? 'null') . '</td> 
+    <td class="p-4 py-5">' . ($item->role ?? 'null') . '</td> 
     
     <td class="px-4 py-4 text-sm whitespace-nowrap">
         <div class="flex items-center gap-x-6">
@@ -211,5 +216,11 @@ class AdminController extends Controller
             'table' => $table,
             'pagination' => $pagination
         ]);
-    }
+    } // End Method
+
+    public function AddAdmin(){
+
+        $roles = Role::all();
+        return view('admin.admin.add_admin',compact('roles'));
+    }// End Method 
 }
