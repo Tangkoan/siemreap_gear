@@ -15,7 +15,7 @@
                         <a href="{{ route('all.roles') }}" >Add Roles Permission</a>
                     </h2>
 
-                    <form id="myForm" method="post" action="{{ route('roles.store') }}">
+                    <form id="myForm" method="post" action="{{ route('role.permission.store') }}">
                         @csrf
 
                         {{-- Group Name --}}
@@ -23,7 +23,7 @@
                             <label for="group_name" class="block text-gray-700 text-sm font-medium mb-2">
                                 Group Name <span class="text-red-500">*</span>
                             </label>
-                            <select name="group_name" id="group_name" required
+                            <select name="role_id" id="role_id" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 <option value="" disabled selected>Select Roles</option>
                                 @foreach($roles as $role)
