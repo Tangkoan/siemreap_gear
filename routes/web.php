@@ -273,6 +273,8 @@ Route::middleware(['auth'])->group(callback: function(){
         // Role Permission
         Route::get('/add/roles/permission','AddRolesPermission')->name('add.roles.permission');
         Route::post('/role/permission/store','StoreRolesPermission')->name('role.permission.store');
+        Route::get('/all/roles/permission','AllRolesPermission')->name('all.roles.permission');
+
 
 
         // 
@@ -334,3 +336,5 @@ Route::get('/get-product-price/{id}', [PurchaseController::class, 'getProductPri
 // Permission
 Route::get('/search-permission', [RoleController::class, 'searchPermission'])->name('search.permission');
 Route::get('/search-roles', [RoleController::class, 'searchRoles'])->name('search.roles');
+
+Route::get('/search-roles-permission', [RoleController::class, 'searchRolesPermission'])->name('search.roles.permission');

@@ -200,6 +200,10 @@
 
             <a href="{{ route('add.roles.permission') }}"
                     class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Roles in Permission</a>
+
+
+            <a href="{{ route('all.roles.permission') }}"
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All Roles in Permission</a>
         </div>
     </div>
 
