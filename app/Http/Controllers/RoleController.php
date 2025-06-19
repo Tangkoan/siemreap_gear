@@ -166,6 +166,21 @@ class RoleController extends Controller
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// Start Setup Role
         public function AllRoles(){
 
@@ -316,6 +331,24 @@ class RoleController extends Controller
     }
 
     /// End
+
+
+
+
+
+
+
+
+    //////////////// Add Roles Permission All Method ////////////
+
+
+     public function AddRolesPermission(){
+
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view('admin.role.add_roles_permission',compact('roles','permissions'));
+
+    }// End Method 
 
 
 

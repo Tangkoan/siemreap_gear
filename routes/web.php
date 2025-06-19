@@ -269,6 +269,13 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::get('/edit/roles/{id}','EditRoles')->name('edit.roles');
         Route::post('/update/roles','UpdateRoles')->name('roles.update');
         Route::get('/delete/roles/{id}','DeleteRoles')->name('delete.roles');
+
+        // Role Permission
+        Route::get('/add/roles/permission','AddRolesPermission')->name('add.roles.permission');
+
+
+
+        // 
         
     });
     // End Permision
