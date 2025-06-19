@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 
 
@@ -12,53 +13,56 @@ use DB;
 class RoleController extends Controller
 {
     //
-    public function AllPermission(){
+    public function AllPermission()
+    {
         $permissions = Permission::all();
-        return view('admin.permission.all_permission',compact('permissions'));
-
+        return view('admin.permission.all_permission', compact('permissions'));
     } // End Method 
 
-    public function AddPermission(){
+    public function AddPermission()
+    {
 
         return view('admin.permission.add_permission');
-
     } // End Method 
 
 
     public function StorePermission(Request $request)
-{
-    $request->validate([
-        'name' => 'required|unique:permissions,name',
-        'group_name' => 'required',
-    ],
-    [
-        'name.unique' => 'Permission Name has Already!!!',
-        'name.required' => 'Please Enter Permission',
-        'group_name.required' => 'Enter Group Name',
-    ]);
+    {
+        $request->validate(
+            [
+                'name' => 'required|unique:permissions,name',
+                'group_name' => 'required',
+            ],
+            [
+                'name.unique' => 'Permission Name has Already!!!',
+                'name.required' => 'Please Enter Permission',
+                'group_name.required' => 'Enter Group Name',
+            ]
+        );
 
-    $role = Permission::create([
-        'name' => $request->name,
-        'group_name' => $request->group_name,
-    ]);
+        $role = Permission::create([
+            'name' => $request->name,
+            'group_name' => $request->group_name,
+        ]);
 
-    $notification = array(
-        'message' => 'Permission Added Successfully',
-        'alert-type' => 'success'
-    );
+        $notification = array(
+            'message' => 'Permission Added Successfully',
+            'alert-type' => 'success'
+        );
 
-    return redirect()->route('all.permission')->with($notification);
-}
+        return redirect()->route('all.permission')->with($notification);
+    }
 
-    public function EditPermission($id){
+    public function EditPermission($id)
+    {
 
         $permission = Permission::findOrFail($id);
-        return view('admin.permission.edit_permission',compact('permission'));
+        return view('admin.permission.edit_permission', compact('permission'));
+    } // End Method 
 
-    }// End Method 
 
-
-    public function UpdatePermission(Request $request){
+    public function UpdatePermission(Request $request)
+    {
 
         $per_id = $request->id;
 
@@ -74,11 +78,11 @@ class RoleController extends Controller
         );
 
         return redirect()->route('all.permission')->with($notification);
+    } // End Method 
 
-    }// End Method 
 
-
-    public function DeletePermission($id){
+    public function DeletePermission($id)
+    {
 
         Permission::findOrFail($id)->delete();
 
@@ -88,8 +92,7 @@ class RoleController extends Controller
         );
 
         return redirect()->back()->with($notification);
-
-    }// End Method 
+    } // End Method 
 
     public function searchPermission(Request $request)
     {
@@ -98,8 +101,7 @@ class RoleController extends Controller
         if ($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
                 $q->where('group_name', 'LIKE', '%' . $request->search . '%')
-                  ->orWhere('name', 'LIKE', '%' . $request->search . '%');
-                  
+                    ->orWhere('name', 'LIKE', '%' . $request->search . '%');
             });
         }
 
@@ -184,88 +186,87 @@ class RoleController extends Controller
 
 
     /// Start Setup Role
-        public function AllRoles(){
+    public function AllRoles()
+    {
 
-            $roles = Role::all();
-        return view('admin.role.all_roles',compact('roles'));
-
-        }// End Method 
-
-
-        public function AddRoles(){
-
-            return view('admin.role.add_roles');
-
-        }// End Method 
+        $roles = Role::all();
+        return view('admin.role.all_roles', compact('roles'));
+    } // End Method 
 
 
-        public function EditRoles($id){
+    public function AddRoles()
+    {
 
-            $roles = Role::findOrFail($id);
-            return view('admin.role.edit_roles',compact('roles'));
-    
-        }// End Method 
-    
-         public function UpdateRoles(Request $request){
-    
-            $role_id = $request->id;
-    
-            Role::findOrFail($role_id)->update([
-                'name' => $request->name, 
-    
-            ]);
-    
-            $notification = array(
-                'message' => 'Role Updated Successfully',
-                'alert-type' => 'success'
-            );
-    
-            return redirect()->route('all.roles')->with($notification);
-    
-        }// End Method 
-    
-    
-         public function DeleteRoles($id){
-    
-            Role::findOrFail($id)->delete();
-    
-            $notification = array(
-                'message' => 'Role Deleted Successfully',
-                'alert-type' => 'success'
-            );
-    
-            return redirect()->back()->with($notification);
-    
-        }// End Method 
+        return view('admin.role.add_roles');
+    } // End Method 
 
 
-            public function StoreRoles(Request $request){
+    public function EditRoles($id)
+    {
 
-            $role = Role::create([
-                'name' => $request->name, 
+        $roles = Role::findOrFail($id);
+        return view('admin.role.edit_roles', compact('roles'));
+    } // End Method 
 
-            ]);
+    public function UpdateRoles(Request $request)
+    {
 
-            $notification = array(
-                'message' => 'Role Added Successfully',
-                'alert-type' => 'success'
-            );
+        $role_id = $request->id;
 
-            return redirect()->route('all.roles')->with($notification);
+        Role::findOrFail($role_id)->update([
+            'name' => $request->name,
 
-        }// End Method 
+        ]);
+
+        $notification = array(
+            'message' => 'Role Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.roles')->with($notification);
+    } // End Method 
+
+
+    public function DeleteRoles($id)
+    {
+
+        Role::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Role Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    } // End Method 
+
+
+    public function StoreRoles(Request $request)
+    {
+
+        $role = Role::create([
+            'name' => $request->name,
+
+        ]);
+
+        $notification = array(
+            'message' => 'Role Added Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.roles')->with($notification);
+    } // End Method 
 
 
 
-        public function searchRoles(Request $request)
+    public function searchRoles(Request $request)
     {
         $query = Role::query();
 
         if ($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
                 $q->where('group_name', 'LIKE', '%' . $request->search . '%')
-                  ->orWhere('name', 'LIKE', '%' . $request->search . '%');
-                  
+                    ->orWhere('name', 'LIKE', '%' . $request->search . '%');
             });
         }
 
@@ -344,27 +345,27 @@ class RoleController extends Controller
     //////////////// Add Roles Permission All Method ////////////
 
 
-     public function AddRolesPermission(){
+    public function AddRolesPermission()
+    {
 
         $roles = Role::all();
         $permissions = Permission::all();
         $permission_groups = User::getpermissionGroups();
-        return view('admin.role.add_roles_permission',compact('roles','permissions','permission_groups'));
+        return view('admin.role.add_roles_permission', compact('roles', 'permissions', 'permission_groups'));
+    } // End Method 
 
-    }// End Method 
 
-
-    public function StoreRolesPermission(Request $request){
+    public function StoreRolesPermission(Request $request)
+    {
 
         $data = array();
         $permissions = $request->permission;
 
-        foreach($permissions as $key => $item){
-           $data['role_id'] = $request->role_id;
-           $data['permission_id'] = $item;
+        foreach ($permissions as $key => $item) {
+            $data['role_id'] = $request->role_id;
+            $data['permission_id'] = $item;
 
-           DB::table('role_has_permissions')->insert($data);
-
+            DB::table('role_has_permissions')->insert($data);
         }
 
         $notification = array(
@@ -373,49 +374,48 @@ class RoleController extends Controller
         );
 
         return redirect()->route('all.roles.permission')->with($notification);
+    } // End Method 
 
-    }// End Method 
-
-    public function AllRolesPermission(){
+    public function AllRolesPermission()
+    {
 
         $roles = Role::all();
-        return view('admin.role.all_roles_permission',compact('roles'));
-
+        return view('admin.role.all_roles_permission', compact('roles'));
     } // End Method
 
 
     public function searchRolesPermission(Request $request)
-{
-    $query = Role::with('permissions');
+    {
+        $query = Role::with('permissions');
 
-    if ($request->has('search') && $request->search !== '') {
-        $query->where(function ($q) use ($request) {
-            $q->where('name', 'LIKE', '%' . $request->search . '%');
-        });
-    }
-
-    $query->orderBy('created_at', 'desc');
-
-    $perPage = $request->perPage ?? 10;
-    $isAll = $perPage === 'all';
-
-    $roles = $isAll ? $query->get() : $query->paginate((int) $perPage);
-
-    $table = '';
-    foreach ($roles as $key => $item) {
-        $permissionTags = '';
-        foreach ($item->permissions as $perm) {
-            $permissionTags .= '<span class="inline-block bg-blue-500 text-white text-l px-2 py-1 rounded-md mr-1 mb-1 text-center align-middle ">' . $perm->name . '</span>';
+        if ($request->has('search') && $request->search !== '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->search . '%');
+            });
         }
 
-        $table .= '<tr class="hover:bg-slate-50 border-b border-slate-200">'
-            . '<td class="p-4 py-5 font-semibold text-sm text-slate-800">' . ($key + 1) . '</td>'
-            . '<td class="p-4 py-5 text-sm text-black">' . $item->name . '</td>'
-            . '<td  class="p-4 py-5 text-sm text-black grid grid-cols-3 grid-rows-3 gap-4 ">' . $permissionTags . '</td>'
-            . '<td class="px-4 py-4 text-sm whitespace-nowrap">'
-            . '<div class="flex items-center gap-x-6">'
+        $query->orderBy('created_at', 'desc');
 
-            . '<td class="px-4 py-4 text-sm whitespace-nowrap">
+        $perPage = $request->perPage ?? 10;
+        $isAll = $perPage === 'all';
+
+        $roles = $isAll ? $query->get() : $query->paginate((int) $perPage);
+
+        $table = '';
+        foreach ($roles as $key => $item) {
+            $permissionTags = '';
+            foreach ($item->permissions as $perm) {
+                $permissionTags .= '<span class="inline-block bg-blue-500 text-white text-l px-2 py-1 rounded-md mr-1 mb-1 text-center align-middle ">' . $perm->name . '</span>';
+            }
+
+            $table .= '<tr class="hover:bg-slate-50 border-b border-slate-200">'
+                . '<td class="p-4 py-5 font-semibold text-sm text-slate-800">' . ($key + 1) . '</td>'
+                . '<td class="p-4 py-5 text-sm text-black">' . $item->name . '</td>'
+                . '<td  class="p-4 py-5 text-sm text-black grid grid-cols-3 grid-rows-3 gap-4 ">' . $permissionTags . '</td>'
+                . '<td class="px-4 py-4 text-sm whitespace-nowrap">'
+                . '<div class="flex items-center gap-x-6">'
+
+                . '<td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                     
                     <button class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
@@ -429,7 +429,7 @@ class RoleController extends Controller
                     
                             
                     <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
-                                <a href="' . route('delete.roles', parameters: $item->id) . '" id="delete">
+                                <a href="' . route('admin.delete.roles', parameters: $item->id) . '" id="delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                 </svg>
@@ -444,49 +444,47 @@ class RoleController extends Controller
                     
                 </td>'
 
-            . '</div>'
-            . '</td>'
-            . '</tr>';
+                . '</div>'
+                . '</td>'
+                . '</tr>';
+        }
+
+        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $roles->links('pagination::tailwind')->toHtml();
+
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination
+        ]);
     }
 
-    $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $roles->links('pagination::tailwind')->toHtml();
-
-    return response()->json([
-        'table' => $table,
-        'pagination' => $pagination
-    ]);
-
-
-    }
-
-    public function AdminEditRoles($id){
+    public function AdminEditRoles($id)
+    {
 
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
         $permission_groups = User::getpermissionGroups();
-        return view('admin.role.edit_roles_permission',compact('role','permissions','permission_groups')); 
-
+        return view('admin.role.edit_roles_permission', compact('role', 'permissions', 'permission_groups'));
     } // End Method 
 
 
     // អត់ដើរ
-                        // public function RolePermissionUpdate(Request $request,$id){
+    // public function RolePermissionUpdate(Request $request,$id){
 
-                        //     $role = Role::findOrFail($id);
-                        //     $permissions = $request->permission;
+    //     $role = Role::findOrFail($id);
+    //     $permissions = $request->permission;
 
-                        //     if (!empty($permissions)) {
-                        //         $role->syncPermissions($permissions);
-                        //     }
+    //     if (!empty($permissions)) {
+    //         $role->syncPermissions($permissions);
+    //     }
 
-                        //      $notification = array(
-                        //         'message' => 'Role Permission Updated Successfully',
-                        //         'alert-type' => 'success'
-                        //     );
+    //      $notification = array(
+    //         'message' => 'Role Permission Updated Successfully',
+    //         'alert-type' => 'success'
+    //     );
 
-                        //     return redirect()->route('all.roles.permission')->with($notification);
+    //     return redirect()->route('all.roles.permission')->with($notification);
 
-                        // }// End Method 
+    // }// End Method 
 
 
     /// ដើរ តែបើករណី គេមិនបញ្ចូល Role វាមិនដំណើរការទៅលោតសារ Error
@@ -508,40 +506,38 @@ class RoleController extends Controller
 
 
     // ដើរ ពេលEdit ទោះមិនបញ្ចូល Role ក៏ Success
-                            public function RolePermissionUpdate(Request $request, $id)
-                            {
-                                $role = Role::findOrFail($id);
-                                $permissionIds = $request->permission ?? [];
+    public function RolePermissionUpdate(Request $request, $id)
+    {
+        $role = Role::findOrFail($id);
+        $permissionIds = $request->permission ?? [];
 
-                                // ផ្លាស់ប្តូរពី ID ទៅជា Permission Object
-                                $permissions = Permission::whereIn('id', $permissionIds)->get();
+        // ផ្លាស់ប្តូរពី ID ទៅជា Permission Object
+        $permissions = Permission::whereIn('id', $permissionIds)->get();
 
-                                $role->syncPermissions($permissions);
+        $role->syncPermissions($permissions);
 
-                                $notification = [
-                                    'message' => 'Role Permission Updated Successfully',
-                                    'alert-type' => 'success'
-                                ];
+        $notification = [
+            'message' => 'Role Permission Updated Successfully',
+            'alert-type' => 'success'
+        ];
 
-                                return redirect()->route('all.roles.permission')->with($notification);
-                            }
+        return redirect()->route('all.roles.permission')->with($notification);
+    }
 
-    
+    public function AdminDeleteRoles($id)
+    {
+        $role = Role::findOrFail($id);
+        if (!is_null($role)) {
+            $role->delete();
+        }
 
+        $notification = array(
+            'message' => 'Role Permission Deleted Successfully',
+            'alert-type' => 'success'
+        );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return redirect()->back()->with($notification);
+    } // End Method 
 
 
 
@@ -570,5 +566,21 @@ class RoleController extends Controller
 
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
