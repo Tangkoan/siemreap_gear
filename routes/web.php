@@ -284,6 +284,16 @@ Route::middleware(['auth'])->group(callback: function(){
     // End Permision
 
 
+    
+    ///Admin User All Route 
+    Route::controller(AdminController::class)->group(function(){
+
+    Route::get('/all/admin','AllAdmin')->name('all.admin');
+    
+
+    });
+
+
 
 
 
@@ -339,3 +349,7 @@ Route::get('/search-permission', [RoleController::class, 'searchPermission'])->n
 Route::get('/search-roles', [RoleController::class, 'searchRoles'])->name('search.roles');
 
 Route::get('/search-roles-permission', [RoleController::class, 'searchRolesPermission'])->name('search.roles.permission');
+
+
+// Admin Role ACC
+Route::get('/search-admin', [AdminController::class, 'searchAdmin'])->name('search.admin');
