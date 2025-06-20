@@ -7,13 +7,14 @@
         </a>
 
         
-          
+        
         
         <div class="flex items-center space-x-4">
+            @if(Auth::user()->can('pos.menu'))
             <button class="color-primary text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200 hidden md:block">
                 <a href="{{ route('pos') }}">POS</a>
                 </button>
-
+            @endif
             {{-- កុំប៉ះពាល់ត្រង់នេះ --}}
             <div class="hidden">
                 <input type="hidden" id="theme-toggle" >
