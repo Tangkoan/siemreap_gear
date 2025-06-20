@@ -43,7 +43,7 @@
                                                                         </style>
 
                                                                                 <!-- MAIN POS WRAPPER -->
-                                                                                <div class="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 font-sans no-print">
+                                                                                <div class="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 font-sans no-print w-full">
                                                                                     <div class="flex-2 bg-white p-4 rounded shadow flex flex-col max-h-[88vh]">
                                                                                         <div class="mb-4">
                                                                                             <div class="flex justify-between items-center mb-4">
@@ -60,7 +60,7 @@
 
 
                                                                                             {{-- Category Get --}}
-                                                                                            <div class="w-full sm:w-[200px] md:w-[400px] lg:w-[800px] overflow-x-auto whitespace-nowrap mb-4"
+                                                                                            <div class="w-full sm:w-[200px] md:w-[400px] lg:w-[500px] overflow-x-auto whitespace-nowrap mb-4"
                                                                                                 id="category-buttons">
                                                                                                 <button onclick="loadProducts('all')"
                                                                                                     class="inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
@@ -112,7 +112,7 @@
                                                                                                 @endforeach
                                                                                                 <!-- Example Product Cards -->
                                                                                             </div> --}}
-                                                                                            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-2">
+                                                                                            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
                                                                                                 <!-- Products will be dynamically loaded here -->                                  
                                                                                             </div>
                                                                                         </div>
@@ -142,7 +142,7 @@
                                                                                                 </thead>
 
                                                                                                 @php
-    $allcart = Cart::content();
+                                                                                                    $allcart = Cart::content();
                                                                                                 @endphp
                                                                                                 <tbody>
                                                                                                     @foreach ($allcart as $cart)
