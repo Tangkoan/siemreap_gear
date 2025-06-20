@@ -128,7 +128,11 @@
 
                                         <td class="p-4 py-5 text-sm text-black">{{ $item->email ?? 'null' }}</td>
                                         <td class="p-4 py-5 text-sm text-black">{{ $item->phone ?? 'null' }}</td>
-                                        <td class="p-4 py-5 text-sm text-black">Role</td>
+                                        <td class="p-4 py-5 text-sm text-black"> 
+                                            @foreach($item->roles as $role)
+                                                <span class="badge badge-pill bg-danger"> {{ $role->name }} </span>
+                                            @endforeach
+                                        </td>
 
 
 

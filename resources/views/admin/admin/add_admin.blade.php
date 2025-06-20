@@ -28,7 +28,7 @@
 
                         <div>
 
-                            <form id="myForm" method="post" action="{{ route('product.store') }}" enctype="multipart/form-data">
+                            <form id="myForm" method="post" action="{{ route('admin.store') }}" enctype="multipart/form-data">
                                 @csrf
 
 
@@ -47,27 +47,18 @@
 
                                         {{-- Role --}}
                                         <div class="form-group">
-                                            <label for="Category" class="block text-gray-400 text-sm font-medium mb-1">
+                                            <label for="roles" class="block text-gray-400 text-sm font-medium mb-1">
                                                 Role <span class="text-red-500">*</span>
                                             </label>
-                                            <select name="role"
+                                            <select name="roles"
                                                 class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                                 id="example-select">
                                                 <option selected disabled>Select Role </option>
                                                 @foreach($roles as $role)
-                                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-
-
-
-
-
-
-
-
-
 
 
                                         {{-- Profile --}}
