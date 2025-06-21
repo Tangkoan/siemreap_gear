@@ -18,21 +18,60 @@
                     </h2>
                     <div>
 
-                        <button type="button"
-                            class=" button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
+                        @can('product.import')
+                            <!-- បើមានសិទ្ធ -->
+                            <button type="button"
+                                class="button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
+                                <a href="{{ route('import.product') }}">Import</a>
+                            </button>
+                        @else
+                            <!-- បើអត់មានសិទ្ធ -->
+                            <button
+                                class="button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
+                                disabled title="You don't have permission to access Import">
+                                Import
+                            </button>
+                        @endcan
 
-                            <a href="{{ route('import.product') }}">Import</a>
-                        </button>
 
-                        <button type="button"
-                            class="button-export py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                            Export
-                        </button>
 
-                        <button type="button"
+
+
+
+                        @can('product.export')
+                            <!-- បើមានសិទ្ធ -->
+                            <button type="button"
+                                class="button-export py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
+                                <a href="{{ route('export') }}">Export</a>
+                            </button>
+                        @else
+                            <!-- បើអត់មានសិទ្ធ -->
+                            <button
+                                class="button-export   py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
+                                disabled title="You don't have permission to access Export">
+                                Export
+                            </button>
+                        @endcan
+
+                        {{-- <button type="button"
                             class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
                             <a href="{{ route('add.product') }}">Add Product</a>
-                        </button>
+                        </button> --}}
+
+                        @can('product.add')
+                            <!-- បើមានសិទ្ធ -->
+                            <button type="button"
+                                class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
+                                <a href="{{ route('add.product') }}">Add Product</a>
+                            </button>
+                        @else
+                            <!-- បើអត់មានសិទ្ធ -->
+                            <button
+                                class="button-add   py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
+                                disabled title="You don't have permission to access Import">
+                                Add Product
+                            </button>
+                        @endcan
                     </div>
                 </div>
 
@@ -112,7 +151,7 @@
                                         </p>
                                     </th>
 
-                                    
+
                                     <th class="p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Supplier
