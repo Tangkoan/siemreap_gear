@@ -110,33 +110,33 @@
 
 
         @php
-$canAdd = Auth::user()->can('expense.add');
-$canToday = Auth::user()->can('expense.today');
-$canMonth = Auth::user()->can('expense.month');
-$canYear = Auth::user()->can('expense.year');
+            
+            $canAdd = Auth::user()->can('expense.menu');
+            $canToday = Auth::user()->can('expense.today');
+            $canMonth = Auth::user()->can('expense.month');
+            $canYear = Auth::user()->can('expense.year');
         @endphp
         
-        {{-- ចាប់ផ្ដើម Expense Dropdown --}}
-        <div id="expenseDropdown" class="relative group">
-        
-            {{-- Main Button --}}
-            @if($canAdd)
+        @if($canAdd || $canToday || $canMonth || $canYear)
+            <div id="expenseDropdown" class="relative group">
+
+                {{-- Main Button --}}
+                @if($canAdd)
                     <a href="{{ route('add.expense') }}" class="nav-link flex items-center py-2 px-4 rounded-lg w-full transition-colors duration-200
-                              {{ request()->routeIs('add.expense', 'today.expense', 'month.expense', 'year.expense')
-        ? 'bg-red-500 text-white'
-        : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
+                                        {{ request()->routeIs('add.expense', 'today.expense', 'month.expense', 'year.expense')
+                    ? 'bg-red-500 text-white'
+                    : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                         </svg>
                         <div class="px-2">Expense</div>
                     </a>
-            @endif
-        
-            {{-- Dropdown Submenu --}}
-            @if($canToday || $canMonth || $canYear)
+                @endif
+
+                {{-- Submenu --}}
                 <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
-                            transition-all duration-300 bg-white border border-gray-300 shadow-lg rounded-md z-10">
+                                    transition-all duration-300 bg-white border border-gray-300 shadow-lg rounded-md z-10">
 
                     @if($canToday)
                         <a href="{{ route('today.expense') }}"
@@ -152,11 +152,10 @@ $canYear = Auth::user()->can('expense.year');
                         <a href="{{ route('year.expense') }}"
                             class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Year</a>
                     @endif
-
                 </div>
-            @endif
-        </div>
-
+            </div>
+        @endif
+    
         
         
         @php
