@@ -5,7 +5,8 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
+            {{-- <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform "> --}}
+                <div class="lg:col-span-full p-0">
                 <div class="flex justify-between">
                     <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -155,11 +156,11 @@
                                             <div class="flex items-center gap-x-6">
 
 
-                                               
 
-                                                
 
-                                                
+
+
+
 
                                                 <button type="button"
                                                     class=" icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">

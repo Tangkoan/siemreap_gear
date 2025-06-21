@@ -1,8 +1,8 @@
-<header class="header-bg text-white p-2 shadow-s transition-colors duration-300">
+<header class="bg-gray-800 text-white p-2 shadow-sm duration-300">
     <div class="container mx-auto flex justify-between items-center">
         <a href="{{ route('dashboard') }}" class="flex items-center px-2">
             <b>
-                <div class="text-black text-2xl">Siem Reap Gear</div>
+                <div class="text-white text-2xl">Siem Reap Gear</div>
             </b>
         </a>
 
@@ -33,7 +33,7 @@
             </div>
             {{-- កុំប៉ះពាល់ត្រង់នេះ --}}
 
-            <div style="color:black;">
+            <div >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -54,7 +54,7 @@ $adminData = App\Models\User::find($id);
                 <button @click="open = !open" class="flex items-center space-x-2 text-white focus:outline-none">
                     <img class="h-9 w-9 rounded-full border-2 border-white object-cover" src="{{ (!empty($adminData->photo)) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}" alt="User Profile">
                     
-                    <span class="font-medium ttext-xl hidden md:block text-black">{{ $adminData->name }}</span>
+                    <span class="font-medium ttext-xl hidden md:block text-white">{{ $adminData->name }}</span>
                     <svg class="h-4 w-4 hidden md:block" fill="black" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>

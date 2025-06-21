@@ -14,24 +14,24 @@
     <!-- toastr -->
         </head>
 
-    <style>
+    {{-- <style>
         /* CSS បន្ថែមសម្រាប់ប្រសិទ្ធភាព Shadow និង Background Gradient */
         .login-card {
             box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05); /* កែប្រែ shadow សម្រាប់រូបរាងកាន់តែទន់ */
-            background-image: linear-gradient(to right top, #a1c4fd, #c2e9fb); /* ស្រមោលពណ៌ខៀវខ្ចី */
+            background-image: linear-gradient(to right top, #7e92b3, #a4acb0); /* ស្រមោលពណ៌ខៀវខ្ចី */
         }
         .input-field:focus {
             outline: none;
             border-color: #6366f1; /* Indigo-500 សម្រាប់ focus */
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3); /* Shadow ពេល focus */
         }
-    </style>
+    </style> --}}
 </head>
-<body class="bg-gradient-to-r from-blue-400 to-purple-500 min-h-screen flex items-center justify-center p-4">
-    <div class="login-card bg-white rounded-xl p-8 max-w-md w-full relative transform hover:scale-105 transition-transform duration-300 ease-in-out">
+<body class="bg-gradient-to-r min-h-screen flex items-center justify-center p-4">
+    <div class=" shadow-lg border border-gray-200 bg-white rounded-xl p-8 max-w-md w-full relative transform hover:scale-105 transition-transform duration-300 ease-in-out">
         <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-6">
-            <span class="text-blue-600">Siem Reap</span>
-            <span class="text-purple-600">Gear</span>
+            <span >Siem Reap</span>
+            <span >Gear</span>
         </h2>
         <p class="text-center text-gray-600 mb-8">Please Login To Dashboard</p>
 
@@ -73,15 +73,12 @@
             </div>
 
             <button type="submit"
-                    class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    class="w-full bg-red-500 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition duration-300 ease-in-out transform hover:-translate-y-1">
                 Login
             </button>
         </form>
 
-        <p class="text-center text-gray-600 text-sm mt-8">
-            Don't have Account?
-            <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Register Hear</a>
-        </p>
+        
     </div>
 
 

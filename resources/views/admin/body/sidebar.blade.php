@@ -1,21 +1,22 @@
 <nav id="sidebar"
-    class="sidebar-bg text-white w-64  p-4 space-y-2 md:block hidden transition-all duration-300 ease-in-out shadow-lg md:shadow-none">
-    <div id="nav-links" class="space-y-2">
-        <a href="{{ route('dashboard') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-            </svg>
+    class="bg-white text-white w-64 p-4 space-y-2 md:block hidden transition-all duration-300 ease-in-out shadow-lg md:shadow-none">
 
-            <div class="px-2">Dashboard</div>
-        </a>
+    <div id="nav-links" class="space-y-2">
+            <a href="{{ route('dashboard') }}"
+                class="nav-link  text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                </svg>
+
+                <div class="px-2">Dashboard</div>
+            </a>
 
         @if(Auth::user()->can('category.menu'))
         {{-- Category --}}
         <a href="{{ route('all.category') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            class="nav-link   text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -33,7 +34,7 @@
         {{-- Product --}}
         @if(Auth::user()->can('product.menu'))
         <a href="{{ route('all.product') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            class="nav-link   text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -50,7 +51,7 @@
         {{-- Customer --}}
         @if(Auth::user()->can('customer.menu'))
         <a href="{{ route('customer.all') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            class="nav-link   text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -64,7 +65,7 @@
         {{-- Supplier --}}
         @if(Auth::user()->can('supplier.menu'))
         <a href="{{ route('all.supplier') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            class="nav-link   text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -78,7 +79,7 @@
         {{-- Stock --}}
         @if(Auth::user()->can('stock.menu'))
         <a href="{{ route('all.stock') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            class="nav-link   text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -93,7 +94,7 @@
         {{-- Purchase --}}
         @if(Auth::user()->can('purchase.menu'))
         <a href="{{ route('all.purchase') }}"
-            class="nav-link bg-white text-black flex items-center py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+            class="nav-link   text-black flex items-center py-2 px-4 rounded-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -110,11 +111,11 @@
 
 
         @php
-            
-            $canAdd = Auth::user()->can('expense.menu');
-            $canToday = Auth::user()->can('expense.today');
-            $canMonth = Auth::user()->can('expense.month');
-            $canYear = Auth::user()->can('expense.year');
+
+$canAdd = Auth::user()->can('expense.menu');
+$canToday = Auth::user()->can('expense.today');
+$canMonth = Auth::user()->can('expense.month');
+$canYear = Auth::user()->can('expense.year');
         @endphp
         
         @if($canAdd || $canToday || $canMonth || $canYear)
@@ -122,10 +123,10 @@
 
                 {{-- Main Button --}}
                 @if($canAdd)
-                    <a href="{{ route('add.expense') }}" class="nav-link flex items-center py-2 px-4 rounded-lg w-full transition-colors duration-200
+                    <a href="{{ route('add.expense') }}" class="nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
                                         {{ request()->routeIs('add.expense', 'today.expense', 'month.expense', 'year.expense')
-                    ? 'bg-red-500 text-white'
-                    : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
+            ? 'bg-red-500 text-white'
+            : '  text-black hover:bg-red-500 hover:text-white' }}">
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
@@ -136,7 +137,7 @@
 
                 {{-- Submenu --}}
                 <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
-                                    transition-all duration-300 bg-white border border-gray-300 shadow-lg rounded-md z-10">
+                                    transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10">
 
                     @if($canToday)
                         <a href="{{ route('today.expense') }}"
@@ -169,10 +170,10 @@ $orderComplete = Auth::user()->can('order.complete');
             <div id="orderDropdown" class="relative group">
                 {{-- Main Button --}}
                 @if($orderMenu)
-                    <a href="{{ route('pending.order') }}" class="nav-link flex items-center py-2 px-4 rounded-lg w-full transition-colors duration-200
+                    <a href="{{ route('pending.order') }}" class="nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
                                     {{ request()->routeIs('pending.order', 'complete.order')
             ? 'bg-red-500 text-white'
-            : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
+            : '  text-black hover:bg-red-500 hover:text-white' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -186,7 +187,7 @@ $orderComplete = Auth::user()->can('order.complete');
 
                 {{-- Dropdown --}}
                 <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
-                            transition-all duration-300 bg-white border border-gray-300 shadow-lg rounded-md z-10">
+                            transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10">
 
                     @if($orderPending)
                         <a href="{{ route('pending.order') }}"
@@ -218,10 +219,10 @@ $orderComplete = Auth::user()->can('order.complete');
             <!-- Permission Dropdown -->
             <div id="permissionDropdown" class="relative group">
                 <!-- Main Button -->
-                <a href="{{ route('all.permission') }}" class="nav-link flex items-center py-2 px-4 rounded-lg transition-colors duration-200
+                <a href="{{ route('all.permission') }}" class="nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
                     {{ request()->routeIs('all.permission', 'add.permission', 'all.roles', 'add.roles', 'edit.roles', 'edit.permission', 'add.roles.permission')
         ? 'bg-red-500 text-white'
-        : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
+        : '  text-black hover:bg-red-500 hover:text-white' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                         class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -232,7 +233,7 @@ $orderComplete = Auth::user()->can('order.complete');
 
                 <!-- Dropdown -->
                 <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
-                        transition-all duration-300 bg-white border border-gray-300 shadow-lg rounded-md z-10 min-w-max">
+                        transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10 min-w-max">
                     <a href="{{ route('all.permission') }}"
                         class="block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All Permission</a>
                     <a href="{{ route('all.roles') }}"
@@ -254,8 +255,8 @@ $orderComplete = Auth::user()->can('order.complete');
     <div id="userDropdown" class="relative group ">
         <!-- Main Button -->
         <a href="{{ route('all.admin') }}"
-            class="nav-link flex items-center py-2 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('all.admin', ) ? 'bg-red-500 text-white' : 'bg-white text-black hover:bg-red-500 hover:text-white' }}">
+            class="nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                {{ request()->routeIs('all.admin', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"

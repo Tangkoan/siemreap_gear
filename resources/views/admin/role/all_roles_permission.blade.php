@@ -5,7 +5,8 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
+            {{-- <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform "> --}}
+                <div class="lg:col-span-full p-0">
                 <div class="flex justify-between">
                     <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -92,7 +93,7 @@
 
                                     <th class="p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            
+
                                         </p>
                                     </th>
                                     <th class="p-4 border-b border-slate-200 bg-slate-50">
