@@ -76,6 +76,7 @@
                                                 <option value="purchases"> Purchases</option>
                                                 <option value="report"> Report</option>
                                                 <option value="user"> User</option>
+                                                <option value="permission"> Permission</option>
                                             </select>
 
                                         </div>
