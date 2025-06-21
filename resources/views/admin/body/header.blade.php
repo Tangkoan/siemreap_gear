@@ -10,11 +10,20 @@
         
         
         <div class="flex items-center space-x-4">
-            @if(Auth::user()->can('pos.menu'))
-            <button class="color-primary text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200 hidden md:block">
-                <a href="{{ route('pos') }}">POS</a>
+            @can('pos.menu')
+                <!-- បើមានសិទ្ធ -->
+                <button
+                    class="color-primary text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200 hidden md:block">
+                    <a href="{{ route('pos') }}">POS</a>
                 </button>
-            @endif
+            @else
+                <!-- បើអត់មានសិទ្ធ -->
+                <button class="bg-gray-400 text-white font-semibold py-2 px-4 rounded-md shadow-md cursor-not-allowed hidden md:block"
+                    disabled title="You don't have permission to access POS">
+                    POS
+                </button>
+            @endcan
+
             {{-- កុំប៉ះពាល់ត្រង់នេះ --}}
             <div class="hidden">
                 <input type="hidden" id="theme-toggle" >

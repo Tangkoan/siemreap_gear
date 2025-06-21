@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(callback: function(){
     
     // Route::get('/employee/page', [EmployeeContrlloer::class, 'EmployeePage'])->name('employee.all');
 
-    Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all');
+    Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
 
     // Start Product
@@ -142,8 +142,8 @@ Route::middleware(['auth'])->group(callback: function(){
 
     // Customer All Route 
     Route::controller(CustomerController::class)->group(function(){
-        Route::get('/all/customer','CustomerPage')->name('all.customer'); 
-        Route::get('/add/customer','AddCustomer')->name('add.customer');
+        Route::get('/all/customer','CustomerPage')->name('all.customer')->middleware('permission:customer.all'); 
+        Route::get('/add/customer','AddCustomer')->name('add.customer')->middleware('permission:customer.add');
         Route::post('/store/customer','StoreCustomer')->name('customer.store');  
 
 
@@ -288,7 +288,7 @@ Route::middleware(['auth'])->group(callback: function(){
     ///Admin User All Route 
     Route::controller(AdminController::class)->group(function(){
 
-    Route::get('/all/admin','AllAdmin')->name('all.admin');
+    Route::get('/all/admin','AllAdmin')->name('all.admin')->middleware('permission:user.menu');
     Route::get('/add/admin','AddAdmin')->name('add.admin');
     Route::post('/store/admin','StoreAdmin')->name('admin.store');
     Route::get('/edit/admin/{id}','EditAdmin')->name('edit.admin');
@@ -302,8 +302,16 @@ Route::middleware(['auth'])->group(callback: function(){
 
 
 
-}); // End User Middleware
 
+
+
+
+
+
+
+
+
+    
 
 Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');
 Route::get('/search-supplier', [SupplierController::class, 'searchSupplier'])->name('search.supplier');
@@ -357,3 +365,6 @@ Route::get('/search-roles-permission', [RoleController::class, 'searchRolesPermi
 
 // Admin Role ACC
 Route::get('/search-admin', [AdminController::class, 'searchAdmin'])->name('search.admin');
+
+
+}); // End User Middleware

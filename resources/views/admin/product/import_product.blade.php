@@ -28,10 +28,23 @@
 
 
 
-                        <button type="button"
-                            class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                            <a href="{{ route('export') }}">Download Xisx</a>
-                        </button>
+                        
+
+                        @can('product.export')
+                            <!-- បើមានសិទ្ធ -->
+                            <button type="button"
+                                class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
+                                <a href="{{ route('export') }}">Download Xisx</a>
+                            </button>
+                        @else
+                            <!-- បើអត់មានសិទ្ធ -->
+                            <button
+                                class="button-add  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
+                                disabled title="You don't have permission to access Export">
+                                Export
+                            </button>
+                        @endcan
+
                     </div>
                 </div>
 
