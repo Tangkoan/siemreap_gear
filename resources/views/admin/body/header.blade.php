@@ -1,3 +1,5 @@
+
+
 <header class="bg-gray-800 text-white p-2 shadow-sm duration-300">
     <div class="container mx-auto flex justify-between items-center">
         <a href="{{ route('dashboard') }}" class="flex items-center px-2">
@@ -5,6 +7,14 @@
                 <div class="text-white text-2xl">Siem Reap Gear</div>
             </b>
         </a>
+        <!-- បើចង់អោយបង្ហាញគ្រប់ទំហំ -->
+        {{-- <button id="toggleSidebar" class="block mb-4 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            </button> --}}
+
+            
 
         
         
@@ -105,7 +115,7 @@ $adminData = App\Models\User::find($id);
 
 
             
-            <button id="menu-button" class="md:hidden focus:outline-none icon-edit">
+            <button id="menu-button" class="md:hidden focus:outline-none ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
