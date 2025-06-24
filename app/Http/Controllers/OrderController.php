@@ -139,7 +139,7 @@ class OrderController extends Controller
         $table = '';
         foreach ($orders as $key => $item) {
             $table .= '
-            <tr class="hover:bg-slate-50 border-b border-slate-200">
+            <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
                 
                 
@@ -151,8 +151,9 @@ class OrderController extends Controller
                 <td class="p-4 py-5">' . $item->invoice_no  . '</td>
                 <td class="p-4 py-5">' . $item->pay  . '</td>
                 
-                <td class="p-4 py-5">
-                    <span class="inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold shadow-sm">
+                <td class="p-4 px-4 py-5 text-center align-middle">
+                        <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">
+
                         '. $item->order_status  .'
                     </span>
                 </td>
@@ -162,7 +163,7 @@ class OrderController extends Controller
                 
                    
 
-                    <button type="button" class="icon-detail text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                    <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
                                 <a href="' . route('order.details', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     class="size-6">
@@ -203,29 +204,64 @@ class OrderController extends Controller
     }// End Method 
 
 
+    // public function OrderStatusUpdate(Request $request){
+    //     $order_id = $request->id;
+
+
+
+    //     $product = Orderdetails::where('order_id',$order_id)->get();
+    //     foreach($product as $item){
+    //        Product::where('id',$item->product_id)
+    //             ->update(['product_store' => DB::raw('product_store-'.$item->quantity) ]);
+    //     }
+
+        
+
+    //  Order::findOrFail($order_id)->update(['order_status' => 'complete']);
+
+    //      $notification = array(
+    //         'message' => 'Order Done Successfully',
+    //         'alert-type' => 'success'
+    //     ); 
+
+    //     return redirect()->route('pending.order')->with($notification);
+
+
+    // }// End Method 
+
+    
     public function OrderStatusUpdate(Request $request){
         $order_id = $request->id;
-
-
-
-        $product = Orderdetails::where('order_id',$order_id)->get();
-        foreach($product as $item){
-           Product::where('id',$item->product_id)
-                ->update(['product_store' => DB::raw('product_store-'.$item->quantity) ]);
+    
+        $orderProducts = Orderdetails::where('order_id', $order_id)->get();
+    
+        foreach ($orderProducts as $item) {
+            $product = Product::find($item->product_id);
+    
+            if ($product->product_store >= $item->quantity) {
+                // Stock គ្រប់គ្រាន់ -> កាត់ Stock
+                $product->decrement('product_store', $item->quantity);
+            } else {
+                // Stock មិនគ្រប់គ្រាន់ -> បោះ message error
+                $notification = array(
+                    'message' => 'Stock Not enough for the product: ' . $product->product_name,
+                    'alert-type' => 'error'
+                );
+                return redirect()->route('pending.order')->with($notification);
+            }
         }
-
-     Order::findOrFail($order_id)->update(['order_status' => 'complete']);
-
-         $notification = array(
+    
+        // បន្ទាប់ពីកាត់ stock សម្រេច -> update status order
+        Order::findOrFail($order_id)->update(['order_status' => 'complete']);
+    
+        $notification = array(
             'message' => 'Order Done Successfully',
             'alert-type' => 'success'
-        ); 
-
+        );
+    
         return redirect()->route('pending.order')->with($notification);
-
-
-    }// End Method 
-
+    }
+    
     public function StockManage(){
 
         $product = Product::latest()->get();
@@ -278,7 +314,7 @@ class OrderController extends Controller
         $table = '';
         foreach ($orders as $key => $item) {
             $table .= '
-            <tr class="hover:bg-slate-50 border-b border-slate-200">
+            <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
                 
                 
@@ -290,10 +326,13 @@ class OrderController extends Controller
                 <td class="p-4 py-5">' . $item->invoice_no  . '</td>
                 <td class="p-4 py-5">' . $item->pay  . '</td>
                 
-                <td class="p-4 py-5">
-                    <span class="inline-block px-3 py-1 rounded-full bg-green-500 text-white font-semibold shadow-sm">
-                        '. $item->order_status  .'
-                    </span>
+                <td class="p-4 py-5 text-center align-middle">
+                    
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-500 text-white font-semibold shadow-sm">
+                            '. $item->order_status  .'
+                        </span>
+                    
+                    
                 </td>
                 
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
@@ -301,7 +340,7 @@ class OrderController extends Controller
                 
                    
 
-                    <button type="button" class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                    <button type="button" class="icon-edit dark:hover:text-blue-900  hover:text-blue-900 text-gray-500 transition-colors duration-200  focus:outline-none">
                                 <a href="' .  url('order/invoice-download/' . $item->id)  . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />

@@ -735,3 +735,11 @@
     }
   }
 }
+/* អ្នកអាចបន្ថែម class ខាងក្រោមក្នុង tailwind.config.js ឬ app.css ប្រសិនបើប្រើ Tailwind */
+.collapsed-sidebar {
+  width: 80px !important;
+}
+
+.collapsed-sidebar .nav-link div {
+  display: none;
+}

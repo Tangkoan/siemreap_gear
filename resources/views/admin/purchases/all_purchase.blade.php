@@ -41,7 +41,7 @@
                             <div class="flex items-center space-x-2">
                                 <label for="perPage" class="text-sm text-slate-600">Show</label>
                                 <select id="perPage" name="perPage"
-                                    class="h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                    class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="6" selected>6</option>
                                     <option value="10">10</option> <!-- ✅ Default -->
                                     <option value="25">25</option>
@@ -55,10 +55,10 @@
                             <div class="w-full max-w-sm min-w-[200px] relative">
                                 <div class="relative">
                                     <input
-                                        class="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                                        class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                                         placeholder="Search for name" name="search" type="text" />
                                     <button
-                                        class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                                        class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                                         type="button">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
@@ -76,40 +76,40 @@
                             <thead>
                                 <tr>
 
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             N<sup>0</sup>
                                         </p>
                                     </th>
 
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Date
                                         </p>
                                     </th>
 
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Supplier
                                         </p>
                                     </th>
 
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Inventory
                                         </p>
                                     </th>
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Total Price
                                         </p>
                                     </th>
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Discount
                                         </p>
                                     </th>
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Total Pay
                                         </p>
@@ -120,7 +120,7 @@
 
 
 
-                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             Action
                                         </p>

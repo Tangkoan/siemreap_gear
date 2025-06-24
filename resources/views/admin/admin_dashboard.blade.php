@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="km">
+{{-- <html lang="km"> --}}
+    <html lang="km">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     {{-- សារលោត --}}
         <!-- Local toastr CSS (ចាំបាច់ដាក់ CSS ដែរ) -->
         <link rel="stylesheet" href="{{ asset('backend/assets/css/toastr.min.css') }}">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     
     @vite('resources/css/app.css')
     {{-- Start ការហៅ CSS មកប្រើ --}}

@@ -134,7 +134,7 @@ class CategoryController extends Controller
             // ✅ Edit Button
             if (Auth::user()->can('category.edit')) {
                 $editBtn = '
-                <button class="icon-edit  transition-colors duration-200 dark:hover:text-yellow-500  hover:text-yellow-500 focus:outline-none">
+                <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
                     <a href="' . route('edit.category', $item->id) . '">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -166,7 +166,7 @@ class CategoryController extends Controller
             // ✅ Delete Button
             if (Auth::user()->can('category.delete')) {
                 $deleteBtn = '
-                <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-red-500  hover:text-red-500 focus:outline-none">
                     <a href="' . route('delete.category', $item->id) . '" id="delete">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -209,7 +209,7 @@ class CategoryController extends Controller
             
         
             $table .= '
-            <tr class="hover:bg-slate-50 border-b border-slate-200">
+            <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
                 <td class="p-4 py-5">' . $item->category_name . '</td>
                 <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at)) . '</td>

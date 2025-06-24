@@ -229,7 +229,7 @@ public function search(Request $request)
             // ✅ Edit Button
             if (Auth::user()->can('product.edit')) {
                 $editBtn = '
-                <button class="icon-edit  transition-colors duration-200 dark:hover:text-yellow-500  hover:text-yellow-500 focus:outline-none">
+                <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
                     <a href="' . route('edit.product', $item->id) . '">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -261,7 +261,7 @@ public function search(Request $request)
             // ✅ barcode Button
             if (Auth::user()->can('product.barcode')) {
                 $barcodeBtn = '
-                <button type="button" class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                <button class="icon-edit dark:hover:text-blue-900  hover:text-blue-900  transition-colors duration-200  focus:outline-none">
                     <a href="' . route('barcode.product', $item-> id) . '" >
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                         stroke-width="1.5">
@@ -283,7 +283,7 @@ public function search(Request $request)
             // ✅ View Button
             if (Auth::user()->can('product.details')) {
                 $viewBtn = '
-                <button type="button" class="icon-detail text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                <button class="icon-detail dark:hover:text-green-900  hover:text-green-900  transition-colors duration-200  focus:outline-none">
                     <a href="' . route('detail.product', $item->id) . '" >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     class="size-6">
@@ -310,7 +310,7 @@ public function search(Request $request)
             // ✅ Delete Button
             if (Auth::user()->can('product.delete')) {
                 $deleteBtn = '
-                <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                <button class="icon-delete  transition-colors duration-200 dark:hover:text-red-900  hover:text-red-900 focus:outline-none">
                     <a href="' . route('delete.product', $item->id) . '" id="delete">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -364,7 +364,7 @@ public function search(Request $request)
 
 
             $table .= '
-            <tr class="hover:bg-slate-50 border-b border-slate-200">
+            <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
                 
                 <td class="p-4 py-5">

@@ -133,7 +133,7 @@ class ExpenseController extends Controller
         // ✅ Edit Button
         if (Auth::user()->can('expense.edit')) {
             $editBtn = '
-            <button class="icon-edit  transition-colors duration-200 dark:hover:text-yellow-500  hover:text-yellow-500 focus:outline-none">
+                <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
                 <a href="' . route('edit.expense', $item->id) . '">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -165,7 +165,7 @@ class ExpenseController extends Controller
 
 
         $table .= '
-        <tr class="hover:bg-slate-50 border-b border-slate-200">
+        <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->details . '</td>
             <td class="p-4 py-5"> '  . ($item->amount ?? 'null') . '</td>
@@ -225,7 +225,7 @@ class ExpenseController extends Controller
         // ✅ Edit Button
         if (Auth::user()->can('expense.edit')) {
             $editBtn = '
-            <button class="icon-edit  transition-colors duration-200 dark:hover:text-yellow-500  hover:text-yellow-500 focus:outline-none">
+                <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
                 <a href="' . route('edit.expense', $item->id) . '">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -257,7 +257,7 @@ class ExpenseController extends Controller
 
 
         $table .= '
-        <tr class="hover:bg-slate-50 border-b border-slate-200">
+        <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->details . '</td>
             <td class="p-4 py-5"> '  . ($item->amount ?? 'null') . '</td>
@@ -309,7 +309,7 @@ class ExpenseController extends Controller
         // ✅ Edit Button
         if (Auth::user()->can('expense.edit')) {
             $editBtn = '
-            <button class="icon-edit  transition-colors duration-200 dark:hover:text-yellow-500  hover:text-yellow-500 focus:outline-none">
+                <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
                 <a href="' . route('edit.expense', $item->id) . '">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -339,7 +339,7 @@ class ExpenseController extends Controller
         }
 
         $table .= '
-        <tr class="hover:bg-slate-50 border-b border-slate-200">
+        <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->details . '</td>
             <td class="p-4 py-5"> '  . ($item->amount ?? 'null') . '</td>

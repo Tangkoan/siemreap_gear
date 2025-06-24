@@ -181,7 +181,7 @@ class SupplierController extends Controller
         // ✅ Delete Button
         if (Auth::user()->can('supplier.delete')) {
             $deleteBtn = '
-            <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                <button class="icon-delete  transition-colors duration-200 dark:hover:text-red-900  hover:text-red-900 focus:outline-none">
                 <a href="' . route('delete.supplier', $item->id) . '" id="delete">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -223,7 +223,7 @@ class SupplierController extends Controller
         }
 
         $table .= '
-        <tr class="hover:bg-slate-50 border-b border-slate-200">
+        <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->name . '</td>
             <td class="p-4 py-5">' . ($item->email ?? 'null') . '</td>
