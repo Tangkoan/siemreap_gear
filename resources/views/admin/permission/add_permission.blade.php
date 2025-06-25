@@ -77,6 +77,7 @@
                                                 <option value="report"> Report</option>
                                                 <option value="user"> User</option>
                                                 <option value="permission"> Permission</option>
+                                                <option value="backup"> Backup</option>
                                             </select>
 
                                         </div>

@@ -169,6 +169,15 @@
         background-color: #23b80f;
         color: white;
     }
+
+    .icon-download {
+        color: #28c014;
+    }
+
+    .icon-download:hover {
+        color: #23b80f;
+    }
+
     .icon-edit {
         color: #4671ff;
     }

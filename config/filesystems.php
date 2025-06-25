@@ -32,7 +32,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/private'),
+            // 'root' => storage_path('app/private'),
+            'root' => storage_path('app/SRGEAR'), // 📌 ទៅទីតាំង SRGEAR ដែលអ្នកចង់
             'serve' => true,
             'throw' => false,
             'report' => false,

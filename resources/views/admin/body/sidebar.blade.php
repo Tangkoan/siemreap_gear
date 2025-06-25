@@ -151,8 +151,8 @@ $canYear = Auth::user()->can('expense.year');
                 @if($canAdd)
                     <a href="{{ route('add.expense') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
                                         {{ request()->routeIs('add.expense', 'today.expense', 'month.expense', 'year.expense')
-                                            ? 'bg-red-500 text-white dark:bg-gray-600'
-                                            : '  text-black hover:bg-red-500 hover:text-white ' }}">
+            ? 'bg-red-500 text-white dark:bg-gray-600'
+            : '  text-black hover:bg-red-500 hover:text-white ' }}">
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
@@ -199,8 +199,8 @@ $orderComplete = Auth::user()->can('order.complete');
                 @if($orderMenu)
                                             <a href="{{ route('pending.order') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
                                                             {{ request()->routeIs('pending.order', 'complete.order')
-                    ? 'bg-red-500 text-white dark:bg-gray-600'
-                    : '  text-black hover:bg-red-500 hover:text-white' }}">
+            ? 'bg-red-500 text-white dark:bg-gray-600'
+            : '  text-black hover:bg-red-500 hover:text-white' }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -248,8 +248,8 @@ $orderComplete = Auth::user()->can('order.complete');
                                             <!-- Main Button -->
                                             <a href="{{ route('all.permission') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
                                                 {{ request()->routeIs('all.permission', 'add.permission', 'all.roles', 'add.roles', 'edit.roles', 'edit.permission', 'add.roles.permission')
-            ? 'bg-red-500 text-white dark:bg-gray-600'
-            : '  text-black hover:bg-red-500 hover:text-white' }}">
+        ? 'bg-red-500 text-white dark:bg-gray-600'
+        : '  text-black hover:bg-red-500 hover:text-white' }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -291,6 +291,25 @@ $orderComplete = Auth::user()->can('order.complete');
                     </svg>
 
                 <div class="px-2 dark:text-white ">User</div>
+            </a>
+        </div>
+    @endif
+
+    <!-- User back -->
+    @if(Auth::user()->can('backup.menu'))
+        <div id="userDropdown" class="relative group ">
+            <!-- Main Button -->
+            <a href="{{ route('admin.backup') }}"
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                            {{ request()->routeIs('admin.backup', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                            </svg>
+
+
+                <div class="px-2 dark:text-white ">Backup</div>
             </a>
         </div>
     @endif

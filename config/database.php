@@ -59,6 +59,11 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            'dump' => [
+                'dump_command_path' => 'D:/phpstudy_pro/Extensions/MySQL5.7.26/bin/', // ឧទាហរណ៍ path ដែលមាន mysqldump.exe
+                'use_single_transaction',
+                'timeout' => 60 * 5, // 5 minute timeout
+            ],
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],

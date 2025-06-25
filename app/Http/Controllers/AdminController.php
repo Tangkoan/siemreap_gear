@@ -22,6 +22,14 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+// use end path
+use Illuminate\Support\Str;
+
+
+// Backup
+use File;
+use Illuminate\Support\Facades\Storage;
+
 
 class AdminController extends Controller
 {
@@ -330,5 +338,174 @@ class AdminController extends Controller
         return redirect()->back()->with($notification); 
 
     }// End Method 
+
+
+
+
+
+
+
+
+
+
+    //////////////// Database Backup Method //////////////////Add commentMore actions
+
+    public function DatabaseBackup(){
+
+        return view('admin/backup.db_backup')->with('files',File::allFiles(storage_path('app/SRGEAR')));
+
+    }// End Method 
+    public function searchBackup(Request $request)
+{
+    $search = $request->search;
+
+    $files = collect(File::allFiles(storage_path('app/SRGEAR/SRGEAR')))
+        ->filter(function ($file) {
+            return $file->getExtension() === 'zip';
+        })
+        ->sortByDesc(function ($file) {
+            return $file->getCTime();
+        });
+
+    if ($search) {
+        $files = $files->filter(function ($file) use ($search) {
+            return stripos($file->getFilename(), $search) !== false;
+        });
+    }
+
+    $perPage = $request->perPage ?? 10;
+    $isAll = $perPage === 'all';
+    $currentPage = $request->page ?? 1;
+
+    if (!$isAll) {
+        $filesPaginated = $files->forPage($currentPage, $perPage);
+    } else {
+        $filesPaginated = $files;
+    }
+
+    $table = '';
+    foreach ($filesPaginated as $index => $file) {
+        $filename = $file->getFilename();
+        $getSize = $file->getSize();
+        $size = number_format($file->getSize() / 1024, 2) . ' KB';
+        $path = $file->getPath();
+    
+        // ✅ ផ្លាស់ប្តូរមក Route download និង delete
+        $downloadUrl = url('backup/download/' . $filename);
+        $deleteUrl = url('delete/database/'.$file->getFilename());
+    
+        $table .= '
+            <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
+                <td class="p-4 py-5">' . ($index + 1) . '</td>
+                <td class="p-4 py-5">' . $filename . '</td>
+                <td class="p-4 py-5">' . $size . '</td>
+                <td class="p-4 py-5">' . $path . '</td>
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <a href="' . $downloadUrl . '" download>
+                        <button class="icon-download inline-flex items-center px-3 py-1  text-white text-sm rounded-md  transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                            </svg>
+                        </button>
+                    </a>
+    
+                    <a href="' . $deleteUrl . '" id="delete">
+                        <button class="icon-delete inline-flex items-center px-3 py-1  text-white text-sm rounded-md  transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21
+                                    c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673
+                                    a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0
+                                    01-2.244-2.077L4.772 5.79m14.456 0
+                                    a48.108 48.108 0 00-3.478-.397m-12 .562
+                                    c.34-.059.68-.114 1.022-.165m0 0
+                                    a48.11 48.11 0 013.478-.397m7.5 0v-.916
+                                    c0-1.18-.91-2.164-2.09-2.201
+                                    a51.964 51.964 0 00-3.32 0
+                                    c-1.18.037-2.09 1.022-2.09 2.201v.916
+                                    m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                        </button>
+                    </a>
+                </td>
+            </tr>';
+    }
+    
+
+    $pagination = !$isAll
+        ? '<div class="text-sm text-slate-500">Page ' . $currentPage . ' of ' . ceil($files->count() / $perPage) . '</div>'
+        : '<div class="text-sm text-slate-500">Showing all results</div>';
+
+    return response()->json([
+        'table' => $table,
+        'pagination' => $pagination
+    ]);
+
+
+     
+
+}
+
+
+
+public function DeleteBackup($getFilename)
+{
+    $filePath = storage_path('SRGEAR/SRGEAR/' . $getFilename);
+
+    if (File::exists($filePath)) {
+        File::delete($filePath);
+        return redirect()->back()->with('success', 'File deleted successfully');
+    }
+
+    return redirect()->back()->with('error', 'File not found');
+}
+
+
+
+    public function BackupNow(){
+        \Artisan::call('backup:run');
+
+        $notification = array(
+            'message' => 'Database Backup Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+
+
+    }// End Method 
+
+    public function DeleteDatabase($getFilename){
+
+        Storage::delete('SRGEAR/'.$getFilename);
+
+         $notification = array(
+            'message' => 'Database Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+
+
+    }// End Method 
+
+
+    public function DownloadDatabase($getFilename){
+
+        $path = storage_path('app\SRGEAR\SRGEAR/'.$getFilename);
+        return response()->download($path);
+
+    }// End Method
+
+
+
+
+
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////
 
 }

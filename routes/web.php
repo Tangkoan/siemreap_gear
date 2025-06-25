@@ -292,6 +292,11 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::post('/update/admin','UpdateAdmin')->name('admin.update');
     Route::get('/delete/admin/{id}','DeleteAdmin')->name('delete.admin')->middleware('permission:user.delete');
 
+
+
+    // backup
+    Route::get('/backup/now','BackupNow');
+    Route::get('/delete/database/{getFilename}','DeleteDatabase');
     });
 
 
@@ -362,6 +367,13 @@ Route::get('/search-roles-permission', [RoleController::class, 'searchRolesPermi
 
 // Admin Role ACC
 Route::get('/search-admin', [AdminController::class, 'searchAdmin'])->name('search.admin');
+
+// Admin Role ACC
+Route::get('/search-backup', [AdminController::class, 'searchBackup'])->name('search.backup');
+Route::get('/admin/backup', [AdminController::class, 'DatabaseBackup'])->name('admin.backup');
+
+Route::get('/backup/download/{getFilename}', [AdminController::class, 'DownloadDatabase'])->name('backup.download');
+Route::get('/backup/delete/{getFilename}', [AdminController::class, 'DeleteBackup'])->name('backup.delete');
 
 
 }); // End User Middleware
