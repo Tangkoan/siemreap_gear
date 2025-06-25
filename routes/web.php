@@ -223,6 +223,11 @@ Route::middleware(['auth'])->group(callback: function(){
         
         // PDF Complete Order
         Route::get('/order/invoice-download/{order_id}','OrderInvoice');
+
+        
+        
+        //// Due All Route Add commentMore actions
+        Route::get('/pending/due','PendingDue')->name('pending.due');
         
     });
 
@@ -333,6 +338,7 @@ Route::get('/search-year', [ExpenseController::class, 'searchYear'])->name('sear
 
 Route::get('/search-order', [OrderController::class, 'searchOrder'])->name('search.order');
 Route::get('/search-comlete-order', [OrderController::class, 'searchCompleteOrder'])->name('search.complete_order');
+Route::get('/search-pending-due', [OrderController::class, 'searchPendingDue'])->name('search.pending_due');
 
 
 

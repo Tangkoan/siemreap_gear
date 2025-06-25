@@ -138,10 +138,10 @@
 
         @php
 
-$canAdd = Auth::user()->can('expense.menu');
-$canToday = Auth::user()->can('expense.today');
-$canMonth = Auth::user()->can('expense.month');
-$canYear = Auth::user()->can('expense.year');
+        $canAdd = Auth::user()->can('expense.menu');
+        $canToday = Auth::user()->can('expense.today');
+        $canMonth = Auth::user()->can('expense.month');
+        $canYear = Auth::user()->can('expense.year');
         @endphp
         
         @if($canAdd || $canToday || $canMonth || $canYear)
@@ -187,29 +187,32 @@ $canYear = Auth::user()->can('expense.year');
         
         
         @php
-$orderMenu = Auth::user()->can('order.menu');
-$orderPending = Auth::user()->can('order.pending');
-$orderComplete = Auth::user()->can('order.complete');
+            $orderMenu = Auth::user()->can('order.menu');
+            $orderPending = Auth::user()->can('order.pending');
+            $orderComplete = Auth::user()->can('order.complete');
+            $orderPendingDue = Auth::user()->can('order.pending.due');
+
         @endphp
+
         
         {{-- Render Dropdown បើមានសិទ្ធណាមួយ --}}
-        @if($orderMenu || $orderPending || $orderComplete)
+        @if($orderMenu || $orderPending || $orderComplete || $orderPendingDue)
             <div id="orderDropdown" class="relative group">
                 {{-- Main Button --}}
                 @if($orderMenu)
-                                            <a href="{{ route('pending.order') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
-                                                            {{ request()->routeIs('pending.order', 'complete.order')
-            ? 'bg-red-500 text-white dark:bg-gray-600'
-            : '  text-black hover:bg-red-500 hover:text-white' }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0
-                                                                    4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662
-                                                                    a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
-                                                </svg>
-                                                <div class="px-2 dark:text-white">Order</div>
-                                            </a>
+                            <a href="{{ route('pending.order') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
+                                                                            {{ request()->routeIs('pending.order', 'complete.order', 'order.pending.due')
+                    ? 'bg-red-500 text-white dark:bg-gray-600'
+                    : '  text-black hover:bg-red-500 hover:text-white' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                    class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0
+                                                    4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662
+                                                    a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
+                                </svg>
+                                <div class="px-2 dark:text-white">Order</div>
+                        </a>
                 @endif
 
                 {{-- Dropdown --}}
@@ -225,6 +228,12 @@ $orderComplete = Auth::user()->can('order.complete');
                         <a href="{{ route('complete.order') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Complete</a>
                     @endif
+
+                    @if($orderPendingDue)
+                        <a href="{{ route('pending.due') }}"
+                            class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">PedingDue</a>
+                    @endif
+
                 </div>
             </div>
         @endif

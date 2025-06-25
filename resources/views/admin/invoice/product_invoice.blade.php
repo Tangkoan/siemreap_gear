@@ -82,9 +82,9 @@
                                 <input type="number" name="pay" id="payNow" class="w-full p-2 border rounded mb-4" required
                                     placeholder="Pay Now" oninput="calculateDue()" min="0">
 
-                                <label class="block mb-2">Due Amount:</label>
+                                {{-- <label class="block mb-2">Due Amount:</label>
                                 <input type="text" name="due" id="dueAmount" class="w-full p-2 border rounded mb-4"
-                                    placeholder="Due amount" readonly>
+                                    placeholder="Due amount" readonly> --}}
 
                                 <label class="block mb-2">Change:</label>
                                 <input type="text" name="change" id="changeAmount" class="w-full p-2 border rounded mb-4" placeholder="Change" readonly>
