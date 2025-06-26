@@ -228,7 +228,11 @@ Route::middleware(['auth'])->group(callback: function(){
         
         //// Due All Route Add commentMore actions
         Route::get('/pending/due','PendingDue')->name('pending.due');
+        // Route::get('/order/due/{id}','OrderDueAjax');
+        Route::get('/order/due/{id}', 'getDue'); // ← This will never be reached!
+        Route::get('/order/paydue/{id}','payDueModel')->name('paydue.due');
         
+        Route::post('/update/due','UpdateDue')->name('update.due');
     });
 
 

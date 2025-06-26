@@ -93,7 +93,7 @@
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Invoice
+                                                Total
                                             </p>
                                         </th>
 
@@ -137,7 +137,7 @@
 
                                             <td class="p-4 py-5 text-sm text-black ">{{ $item->payment_status }}</td>
 
-                                            <td class="p-4 py-5 text-sm text-black">{{ $item->invoice_no }}</td>
+                                            <td class="p-4 py-5 text-sm text-black">{{ $item->total  }}</td>
                                             <td class="p-4 py-5 text-sm text-black">{{ $item->pay }}</td>
                                             <td class="p-4 py-5 text-sm text-black">{{ $item->due }}</td>
 
@@ -173,6 +173,20 @@
                 </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+            function orderDue(id) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/order/due/' + id,
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#due').val(data.due); // បញ្ចូលចំនួន due
+                        $('#order_id').val(id); // បញ្ចូល ID ទៅ input hidden (បើមាន)
+                    }
+                });
+            }
+        </script>
 
         <script type="text/javascript">
             $(document).ready(function () {

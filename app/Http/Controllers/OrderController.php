@@ -26,60 +26,115 @@ class OrderController extends Controller
     //
     public function PendingDue(){
 
-        $alldue = Order::where('due','>','0')->orderBy('id','DESC')->get();
+        $alldue = Order::where('due','>','0')
+        ->orderBy('id','DESC')->get();
         return view('admin.order.pending_due',compact('alldue'));
     }// End Method 
 
-    public function FinalInvoice(Request $request){
+    // public function FinalInvoice(Request $request){
 
+
+
+
+
+
+    //     $rtotal = $request->total;
+    //     $rpay = $request->pay;
+    //     $mtotal = $rtotal - $rpay;
+
+    //     $data = array();
+    //     $data['customer_id'] = $request->customer_id;
+    //     $data['order_date'] = $request->order_date;
+    //     $data['order_status'] = $request->order_status;
+    //     $data['total_products'] = $request->total_products;
+    //     $data['sub_total'] = $request->sub_total;
+    //     $data['vat'] = $request->vat;
+
+    //     $data['invoice_no'] = 'EPOS'.mt_rand(10000000,99999999);
+    //     $data['total'] = $request->total;
+    //     $data['payment_status'] = $request->payment_status;
+    //     $data['pay'] = $request->pay;
+    //      $data['due'] = $mtotal;
+    //     $data['due'] = $request->due;
+    //     $data['created_at'] = Carbon::now(); 
+
+    //     $order_id = Order::insertGetId($data);
+    //     $contents = Cart::content();
+
+    //     $pdata = array();
+    //     foreach($contents as $content){
+    //         $pdata['order_id'] = $order_id;
+    //         $pdata['product_id'] = $content->id;
+    //         $pdata['quantity'] = $content->qty;
+    //         $pdata['unitcost'] = $content->price;
+    //         $pdata['total'] = $content->total;
+            
+    //         $insert = Orderdetails::insert($pdata); 
+
+    //     } // end foreach
+
+
+    //     $notification = array(
+    //         'message' => 'Order Complete Successfully',
+    //         'alert-type' => 'success'
+    //     );
+
+    //     Cart::destroy();
+
+    //     return redirect()->route('pos')->with($notification);
+
+    // } // End Method 
+
+    
+    
+    public function FinalInvoice(Request $request){
 
         $rtotal = $request->total;
         $rpay = $request->pay;
         $mtotal = $rtotal - $rpay;
-
-        $data = array();
+    
+        $data = [];
         $data['customer_id'] = $request->customer_id;
         $data['order_date'] = $request->order_date;
         $data['order_status'] = $request->order_status;
         $data['total_products'] = $request->total_products;
         $data['sub_total'] = $request->sub_total;
         $data['vat'] = $request->vat;
-
-        $data['invoice_no'] = 'EPOS'.mt_rand(10000000,99999999);
-        $data['total'] = $request->total;
+    
+        $data['invoice_no'] = 'SR GEAR' . mt_rand(10000000, 99999999);
+        $data['total'] = $rtotal;
         $data['payment_status'] = $request->payment_status;
-        $data['pay'] = $request->pay;
-         $data['due'] = $mtotal;
-        $data['due'] = $request->due;
-        $data['created_at'] = Carbon::now(); 
-
+        $data['pay'] = $rpay;
+        $data['due'] = $mtotal; // ✅ តែម្ដង!
+        $data['created_at'] = Carbon::now();
+    
         $order_id = Order::insertGetId($data);
+    
         $contents = Cart::content();
-
-        $pdata = array();
+    
         foreach($contents as $content){
+            $pdata = [];
             $pdata['order_id'] = $order_id;
             $pdata['product_id'] = $content->id;
             $pdata['quantity'] = $content->qty;
             $pdata['unitcost'] = $content->price;
             $pdata['total'] = $content->total;
-            
-            $insert = Orderdetails::insert($pdata); 
-
-        } // end foreach
-
-
-        $notification = array(
+    
+            Orderdetails::insert($pdata);
+        }
+    
+        $notification = [
             'message' => 'Order Complete Successfully',
             'alert-type' => 'success'
-        );
-
+        ];
+    
         Cart::destroy();
-
+    
         return redirect()->route('pos')->with($notification);
-
-    } // End Method 
-
+    }
+    
+    
+    
     public function PendingOrder(){
 
         $orders = Order::where('order_status','pending')->get();
@@ -425,7 +480,13 @@ class OrderController extends Controller
                 <td class="p-4 py-5">' . $item['customer']['name'] . '</td>
                 <td class="p-4 py-5">' . $item->order_date  . '</td>
                 <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                <td class="p-4 py-5">' . $item->invoice_no  . '</td>
+                <td class="p-4 py-5">
+                <span class="inline-block px-3 py-1 rounded-md bg-gray-400 text-white font-semibold shadow-sm">
+                            ' . $item->total  . ' $
+                        </span>
+                    
+                
+                </td>
 
                 <td class="p-4 py-5 ">
                     
@@ -450,18 +511,28 @@ class OrderController extends Controller
                 
                    
 
-                    <button type="button" class="icon-detail text-gray-500 transition-colors duration-200  focus:outline-none">
-                                <a href="' .  url('order/invoice-download/' . $item->id)  . '" >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                    </svg>
+                    <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
+                                <a href="' . route('order.details', $item->id) . '" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                    class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                                </a>
+                    </button>
+
+                    <button type="button" class="icon-edit dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
+                                <a href="' . route('paydue.due', $item->id) . '" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                                </svg>
 
                                 </a>
                     </button>
+
+
+                    
                        
                     
                     
@@ -481,4 +552,41 @@ class OrderController extends Controller
             'pagination' => $pagination
         ]);
     }
+
+    public function payDueModel(Request $request, $id){
+        $paydue = Order::findOrFail($id);
+        
+
+        return view('admin.order.order_payduepage',compact('paydue',));
+
+    }
+
+    public function UpdateDue(Request $request){
+        $order_id = $request->id;
+        $due_amount = $request->due;
+        $pay_amount = $request->pay;
+
+        $allorder = Order::findOrFail($order_id);
+        $maindue = $allorder->due;
+        $maindpay = $allorder->pay;
+ 
+        $paid_due = $maindue - $due_amount;
+        $paid_pay = $maindpay + $due_amount;
+
+        Order::findOrFail($order_id)->update([
+            'due' => $paid_due,
+            'pay' => $paid_pay, 
+        ]);
+
+         $notification = array(
+            'message' => 'Due Amount Updated Successfully',
+            'alert-type' => 'success'
+        ); 
+
+        return redirect()->route('pending.due')->with($notification);
+
+
+    }// End Method 
+
+    
 }
