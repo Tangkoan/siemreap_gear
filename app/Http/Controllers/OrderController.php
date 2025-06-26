@@ -86,6 +86,8 @@ class OrderController extends Controller
     // } // End Method 
 
     
+
+    
     
     public function FinalInvoice(Request $request){
 
