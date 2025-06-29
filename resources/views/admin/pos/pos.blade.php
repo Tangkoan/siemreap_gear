@@ -210,7 +210,7 @@
 
                             {{-- customer --}}
                             <div class="form-group">
-                                <label for="customer" class="text-2xl block text-black font-medium mb-1">
+                                <label for="customer" class="text-2xl block dark:text-white text-black font-medium mb-1">
                                     customer
                                 </label>
                                 <select name="customer_id"

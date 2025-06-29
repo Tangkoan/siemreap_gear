@@ -37,6 +37,7 @@ class PosController extends Controller
         return view('admin.pos.pos', compact('product', 'customers','categories'));
     }
 
+    
 
     // (AJAX/Fetch)
     // public function getProductsForPos()

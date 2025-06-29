@@ -1,255 +1,181 @@
 @extends('admin/admin_dashboard')
 @section('admin')
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
 
+            #invoice-box,
+            #invoice-box * {
+                visibility: visible;
+            }
 
+            #invoice-box {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
 
+            @page {
+                size: A5;
+                margin: 0;
+            }
+        }
+    </style>
 
-
-    <div class="container mx-auto p-6">
-        <div class="grid grid-cols-1">
-
-            <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                    </svg>
-
-
-                    <div class="px-2">
-                        <a href="{{ route('all.product') }}">
-                            Add Purchase
-                        </a>
+    <div class="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 font-sans no-print w-full dark:bg-gray-800">
+        <!-- LEFT SIDE - PRODUCT BROWSER -->
+        <div class="flex-2 bg-white p-4 rounded shadow flex flex-col max-h-[88vh] dark:bg-gray-900">
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold mb-2 dark:text-white">Purchase</h2>
+                    <div class="w-64 mb-4">
+                        <input type="text" placeholder="Search Product by Name" id="searchBox"
+                            class="dark:bg-gray-800 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
                     </div>
-                </h2>
+                </div>
 
-                <div>
+                <!-- Category Filter -->
+                <div class="w-full overflow-x-auto whitespace-nowrap mb-4" id="category-buttons">
+                    <button onclick="loadProducts('all')"
+                        class="dark:bg-gray-800 bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+                        All Category
+                    </button>
+                    @foreach ($categories as $category)
+                        <button onclick="loadProducts({{ $category->id }})"
+                            class="dark:bg-gray-800 bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+                            {{ $category->category_name }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
 
-                    <form id="myForm" method="post" action="{{ url('/purchase-create') }}" >
-                        @csrf
-
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
-
-                            {{-- Column 1 --}}
-                            <div class="space-y-4">
-
-
-                                {{-- Product --}}
-                                <div class="form-group">
-                                    <label for="Supplier" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Product <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="product_id"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                        id="example-select">
-                                        <option selected disabled>Select Product </option>
-                                        @foreach($product as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->product_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                {{-- Supplier --}}
-                                <div class="form-group">
-                                    <label for="Supplier" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Supplier <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="supplier_id"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                        id="example-select">
-                                        <option selected disabled>Select Supplier </option>
-                                        @foreach($supplier as $sup)
-                                            <option value="{{ $sup->id }}">{{ $sup->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                {{-- Discount --}}
-                                <div class="form-group">
-                                    <label for="discount" class="block text-gray-400 text-sm font-medium mb-1  ">
-                                        Discount <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" id="discount" name="discount"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ">
-                                </div>
-
-
-                                {{-- Discount --}}
-                                <div class="form-group">
-                                    <label for="discount" class="block text-gray-400 text-sm font-medium mb-1  ">
-                                        Discount <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" id="discount" name="discount"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ">
-                                </div>
-
-                            </div>
-
-                            {{-- Column 2 --}}
-                            <div class="space-y-4">
-
-
-                                {{-- Price --}}
-                                <div class="form-group">
-                                    <label for="pay" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Price
-                                    </label>
-                                    <input type="number" min="0" step="0.01" id="price" name="price" disabled
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                </div>
-
-                                {{-- Pay --}}
-                                <div class="form-group">
-                                    <label for="pay" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Pay
-                                    </label>
-                                    <input type="number" min="0" step="0.01" id="pay" name="pay"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-
-                                </div>
-
-
-
-
-
-
-
-                                {{-- Product Invetory --}}
-
-                                <div class="form-group">
-                                    <label for="product_store" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Inventory <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" min="0" step="0.01" id="product_store" name="product_store"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                </div>
-
-                                <!-- Hidden Fields -->
-
-                                <input type="hidden" name="purchase_date" value="{{ date('d-F-Y') }}">
-                                <input type="hidden" name="purchase_status" value="pending">
-
-                                <!-- អាចបន្សល់ sub_total / vat / total បើគណនាចេញនៅ JS -->
-                                <input type="hidden" name="sub_total" id="subTotal" value="">
-                                <input type="hidden" name="vat" value="">
-                                <input type="hidden" name="total" value="">
-
-
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end mt-6">
-                            <button type="submit"
-                                class="button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                                Save
-                            </button>
-                        </div>
-                    </form>
+            <!-- PRODUCT LIST -->
+            <div class="flex-1 overflow-y-auto dark:bg-gray-500">
+                <div id="product-grid"
+                    class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
+                    <!-- Products loaded by JS -->
                 </div>
             </div>
         </div>
+
+        <!-- RIGHT SIDE - PURCHASE CART -->
+        <div class="dark:bg-gray-900 flex-1 bg-white p-4 rounded shadow overflow-hidden max-h-[88vh]">
+            <h2 class="text-xl font-bold mb-4">Purchase Cart</h2>
+            <div class="dark:bg-gray-800 mt-4 overflow-auto max-h-64 border rounded-lg shadow-sm">
+                <table class="w-full text-auto border-collapse">
+                    <thead class="bg-gray-100 sticky top-0 z-10">
+                        <tr class="text-left dark:bg-gray-800">
+                            <th class="p-2">Product</th>
+                            <th class="p-2">Price</th>
+                            <th class="p-2">Qty</th>
+                            <th class="p-2">Subtotal</th>
+                            <th class="p-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Cart::content() as $cart)
+                            <tr class="dark:bg-gray-800">
+                                <td class="px-4">{{ $cart->name }}</td>
+                                <td class="px-4">{{ $cart->price }}</td>
+                                <td class="px-2">
+                                    <form method="post" action="{{ url('/purchase/cart/update/' . $cart->rowId) }}">
+                                        @csrf
+                                        <input name="qty" type="number" min="1" value="{{ $cart->qty }}"
+                                            class="w-16 py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200"
+                                            onchange="this.form.submit()">
+                                    </form>
+                                </td>
+                                <td class="px-4">{{ $cart->price * $cart->qty }}</td>
+                                <td class="px-4">
+                                    <a href="{{ url('/purchase/cart/remove/' . $cart->rowId) }}" class="text-red-500">
+                                        Remove
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded">
+                Total Payable : $ {{ Cart::subtotal() }}
+            </div>
+
+            <!-- SUPPLIER SELECTION -->
+            <form method="POST" action="{{ url('/purchase/store') }}">
+                @csrf
+                <label for="supplier" class="block mt-4 mb-2 text-gray-800">Supplier</label>
+                <select name="supplier_id" required
+                    class="w-full py-2 px-4 border border-gray-300 rounded dark:bg-gray-800 dark:text-white">
+                    <option value="" disabled selected>Select Supplier</option>
+                    @foreach ($supplier as $sup)
+                        <option value="{{ $sup->id }}">{{ $sup->name }}</option>
+                    @endforeach
+                </select>
+
+                <input type="hidden" name="payment_status" value="Paid">
+                <input type="hidden" name="paid" value="{{ Cart::subtotal() }}">
+                <input type="hidden" name="due" value="0">
+                <input type="hidden" name="total" value="{{ Cart::subtotal() }}">
+
+                <button type="submit" class="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded">
+                    Complete Purchase
+                </button>
+            </form>
+        </div>
     </div>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // Image preview script (optional)
-            $('#image').on('change', function (event) {
-                const [file] = event.target.files;
-                if (file) {
-                    const preview = $('#image_preview');
-                    preview.attr('src', URL.createObjectURL(file));
-                    preview.removeClass('hidden');
-                    preview.on('load', function () {
-                        URL.revokeObjectURL(preview.attr('src')); // free memory
-                    })
-                } else {
-                    $('#image_preview').addClass('hidden').attr('src', '#');
-                }
-            });
-        });
+    <script>
+        function loadProducts(categoryId = 'all') {
+            fetch(`/api/purchase/products?category_id=${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const productGrid = document.getElementById('product-grid');
+                    productGrid.innerHTML = '';
 
+                    data.products.forEach(product => {
+                        const card = `
+                            <form method="POST" action="/purchase/add-to-cart" id="form-${product.id}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="id" value="${product.id}">
+                                <input type="hidden" name="name" value="${product.name}">
+                                <input type="hidden" name="qty" value="1">
+                                <input type="hidden" name="price" value="${product.price}">
 
-        $(document).ready(function () {
-            $('#myForm').validate({
-                rules: {
-                    product_name: {
-                        required: true,
-                    },
-                    category_id: {
-                        required: true,
-                    },
-
-                    supplier_id: {
-                        required: true,
-                    },
-                    selling_price: {
-                        required: true,
-                    },
-                    product_store: {
-                        required: true,
-                    },
-                },
-                messages: {
-                    product_name: {
-                        required: 'Please Enter Product Name',
-                    },
-                    category_id: {
-                        required: 'Please Select Category Name',
-                    },
-
-                    supplier_id: {
-                        required: 'Please Select Supplier Name',
-                    },
-                    selling_price: {
-                        required: 'Please Enter Price Name',
-                    },
-                    product_store: {
-                        required: 'Please Enter Inventory Name',
-                    },
-
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                },
-            });
-        });
-
-
-        /// Get Price product
-        $(document).ready(function () {
-                $('#example-select').on('change', function () {
-                    var productId = $(this).val();
-
-                    if (productId) {
-                        $.ajax({
-                            url: '/get-product-price/' + productId,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function (response) {
-                                $('#price').val(response.price);
-                            },
-                            error: function () {
-                                $('#price').val('');
-                            }
-                        });
-                    } else {
-                        $('#price').val('');
-                    }
+                                <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer hover:scale-105"
+                                    onclick="document.getElementById('form-${product.id}').submit();">
+                                    <img src="${product.imageUrl}" class="w-full h-24 object-cover">
+                                    <div class="p-4">
+                                        <h3 class="font-semibold text-center">${product.name}</h3>
+                                        <p class="text-blue-600 font-bold text-center mt-2">$${product.price}</p>
+                                    </div>
+                                </div>
+                            </form>
+                        `;
+                        productGrid.innerHTML += card;
+                    });
                 });
-            });
+        }
 
+        window.onload = () => loadProducts();
+
+        document.getElementById('searchBox').addEventListener('input', function () {
+            const keyword = this.value;
+            fetch(`/search-products?keyword=${keyword}`)
+                .then(response => response.json())
+                .then(data => {
+                    const productGrid = document.getElementById('product-grid');
+                    productGrid.innerHTML = '';
+
+                    data.products.forEach(product => {
+                        const card = `... same as above ...`;
+                        productGrid.innerHTML += card;
+                    });
+                });
+        });
     </script>
-
 @endsection

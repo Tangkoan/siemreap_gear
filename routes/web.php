@@ -46,26 +46,6 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::get('/change/password', [AdminController::class, 'ChangePassword'])->name('change.password');
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
 
-
-    // Route Employee
-    Route::controller(EmployeeContrlloer::class)->group(function(){
-        // Route::get('/all/employee','AllEmployee')->name('all.employee');
-        Route::get('/add/employee','AddEmployee')->name('add.employee');
-        // Route::get('/add/employee','AddEmployee')->name('add.employee');
-
-        Route::post('/store/employee','StoreEmployee')->name('employee.store');
-
-        Route::get('/edit/employee/{id}','EditEmployee')->name('edit.employee'); // គ្រាន់តែចាប់តម្លៃអោយបានថា id = ?
-        Route::post('/update/employee','UpdateEmployee')->name('employee.update'); // ធ្វើការUpdate Employee
-
-        Route::get('/delete/employee/{id}','DeleteEmployee')->name('delete.employee');  // សម្រាប់ Delete (Method គឺ Post តែយើងប្រើ JSនោះទេអ្នកជំនួយក្នុងការDelete)
-    });
-    // End Route Employee
-
-
-    
-    // Route::get('/employee/page', [EmployeeContrlloer::class, 'EmployeePage'])->name('employee.all');
-
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
 
@@ -117,7 +97,7 @@ Route::middleware(['auth'])->group(callback: function(){
 
         Route::get('/delete/category/{id}','DeleteCategory')->name('delete.category')->middleware('permission:category.delete'); 
     });
-    // End
+    /// End Category Route
 
 
    
@@ -174,34 +154,7 @@ Route::middleware(['auth'])->group(callback: function(){
 
     
 
-     ///POS All Route 
-     Route::controller(PosController::class)->group(function(){
-
-        Route::get('/page/pos','PosPage')->name('pos')->middleware('permission:pos.menu');
-        Route::post('/add-cart','AddCart');
-        Route::get('/allitem','AllItem');
-        Route::post('/cart-update/{rowId}','CartUpdate');
-        Route::get('/cart-remove/{rowId}','CartRemove');
-
-        Route::post('/create-invoice','CreateInvoice');
-
-
-        Route::post('/create-invoice-pos','CreateInvoiceVI');
-        
-
-
-
-        //
-        Route::post('/final-invoice','FinalInvoice');
-
-
-
-        Route::get('/api/products-for-pos', 'getProductsForPos')->name('api.products.pos');
-
-
-
-    });
-    // End
+    
 
 
 
@@ -227,30 +180,52 @@ Route::middleware(['auth'])->group(callback: function(){
         
         
         //// Due All Route Add commentMore actions
-        Route::get('/pending/due','PendingDue')->name('pending.due');
+        Route::get('/order/pending/due','PendingDue')->name('pending.due');
         // Route::get('/order/due/{id}','OrderDueAjax');
         Route::get('/order/due/{id}', 'getDue'); // ← This will never be reached!
-        Route::get('/order/paydue/{id}','payDueModel')->name('paydue.due');
+        Route::get('/order/paydue/{id}','payDueModel')->name('order.paydue.due');
         
         Route::post('/update/due','UpdateDue')->name('update.due');
     });
 
 
 
-
-    // Start Product
+    ///Purchase All Route Add commentMore actions
     Route::controller(PurchaseController::class)->group(function(){
 
-
-        Route::get('/purchase/page','PurchasePage')->name('all.purchase')->middleware('permission:purchase.menu');
-        Route::get('/purchase/add','AddPurchase')->name('add.purchase')->middleware('permission:purchase.add');
-
-
-        Route::post('/purchase-create','store.purchase');
-        Route::get('/pending/purchase','PendingPurchase')->name('pending.purchase');
+        Route::post('/final-invoice','FinalInvoice')->middleware('permission:purchase.menu');
         
+        Route::get('/pending/purchase','PendingPurchase')->name('pending.purchase')->middleware('permission:purchase.pending');
+        
+        Route::get('/purchase/details/{purchase_id}','PurchaseDetails')->name('purchase.details');
+
+        Route::post('/purchase/status/update','PurchaserStatusUpdate')->name('purchase.status.update');
+
+        Route::get('/complete/purchase','CompletePurchase')->name('complete.purchase')->middleware('permission:purchase.complete');
+
+        // Stock
+        Route::get('/stock','StockManage')->name('all.stock')->middleware('permission:stock.menu');
+
+
+        
+        // PDF Complete Purchase
+        Route::get('/purchase/invoice-download/{order_id}','PurchaseInvoice');
+
+        
+        
+        //// Due All Route Add commentMore actions
+        Route::get('/purchase/pending/due','PendingDue')->name('purchase.pending.due');
+        // Route::get('/order/due/{id}','OrderDueAjax');
+        Route::get('/purchase/due/{id}', 'getDue'); // ← This will never be reached!
+        Route::get('/purchasesearch.purchase/paydue/{id}','payDueModel')->name('paydue.due');
+        
+        Route::post('/purchase/update/due','PurchaseUpdateDue')->name('purchase.update.due');
     });
-    // End Product
+
+
+
+
+    
 
 
 
@@ -340,28 +315,78 @@ Route::get('/search-month', [ExpenseController::class, 'searchMonth'])->name('se
 
 Route::get('/search-year', [ExpenseController::class, 'searchYear'])->name('search.year');
 
-Route::get('/search-order', [OrderController::class, 'searchOrder'])->name('search.order');
-Route::get('/search-comlete-order', [OrderController::class, 'searchCompleteOrder'])->name('search.complete_order');
+
 Route::get('/search-pending-due', [OrderController::class, 'searchPendingDue'])->name('search.pending_due');
 
 
 
 
-Route::get('/get-products', [PosController::class, 'getProductsByCategory']);
-Route::post('/add-cart', [PosController::class, 'AddCart']);
+
 Route::get('/search-products', [ProductController::class, 'search']);
 Route::get('/search-purchase', [PurchaseController::class, 'search']);
 
 
 
+// Order 
+Route::get('/search-order', [OrderController::class, 'searchOrder'])->name('search.order');
+Route::get('/search-comlete-order', [OrderController::class, 'searchCompleteOrder'])->name('search.complete_order');
+// End Order Controler on Page Search
 
 
 
 
 
-// Get Price Product( puying_price shwo in fill purchse_price)
-// routes/web.php
-Route::get('/get-product-price/{id}', [PurchaseController::class, 'getProductPrice']);
+
+
+// Purchase
+Route::get('/search-purchase', [PurchaseController::class, 'searchPurchase'])->name('search.purchase');
+    // Update ពី Pending to Complete ទំនិញចូល Stock
+    Route::post('/purchase/status/update', [PurchaseController::class, 'PurchaseStatusUpdate'])->name('purchase.status.update');
+
+Route::get('/search-purchase-complete', [PurchaseController::class, 'searchCompletePurchase'])->name('search.complete_purchase');
+Route::get('/search-purchase-pending-due', [PurchaseController::class, 'searchPendingDue'])->name('search.purchase_pending_due');
+// End Purchase
+
+
+
+
+
+// Pos
+Route::get('/get-products', [PosController::class, 'getProductsByCategory']);
+Route::post('/add-cart', [PosController::class, 'AddCart']);
+// End POS
+///POS All Route 
+Route::controller(PosController::class)->group(function(){
+
+    Route::get('/page/pos','PosPage')->name('pos')->middleware('permission:pos.menu');
+    Route::post('/add-cart','AddCart');
+    Route::get('/allitem','AllItem');
+    Route::post('/cart-update/{rowId}','CartUpdate');
+    Route::get('/cart-remove/{rowId}','CartRemove');
+
+    Route::post('/create-invoice','CreateInvoice');
+
+
+    Route::post('/create-invoice-pos','CreateInvoiceVI');
+  
+    //
+    Route::post('/final-invoice','FinalInvoice');
+    Route::get('/api/products-for-pos', 'getProductsForPos')->name('api.products.pos');
+
+   
+
+
+});
+// End
+
+
+
+
+
+
+
+
+
 
 
 
@@ -387,3 +412,15 @@ Route::get('/backup/delete/{getFilename}', [AdminController::class, 'DeleteBacku
 
 
 }); // End User Middleware
+
+
+
+Route::controller(PurchaseController::class)->group(function () {
+    Route::get('/purchase', 'PurchasePage')->name('purchase.page');
+
+    Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
+    Route::post('/purchase/add-to-cart', 'AddToCart');
+    Route::get('/purchase/cart/remove/{rowId}', 'RemoveCartItem');
+    Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
+    Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
+});

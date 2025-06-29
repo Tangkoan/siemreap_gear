@@ -25,7 +25,7 @@
                         <button type="button"
                             class="icon-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none"
                             @if(!Auth::user()->can('purchase.add')) disabled @endif>
-                            <a href="{{ Auth::user()->can('purchase.add') ? route('add.purchase') : '#' }}"
+                            <a href="{{ Auth::user()->can('purchase.add') ? route('purchase.page') : '#' }}"
                                 class="{{ !Auth::user()->can('purchase.add') ? 'pointer-events-none text-gray-400' : '' }}">
                                 Add Purchase
                             </a>

@@ -2,30 +2,30 @@
     class="bg-white-800 text-white w-64 p-4 space-y-2 md:block hidden transition-all duration-300 ease-in-out shadow-lg md:shadow-none">
 
     <div id="nav-links" class="space-y-2">
-            
 
-            <!-- Dashboard -->
-                <div id="userDropdown" class="relative group ">
-                    <!-- Main Button -->
-                    <a href="{{ route('dashboard') }}"
-                        class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
-                                {{ request()->routeIs('dashboard', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                    class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />      </svg>
 
-                        <div class="px-2 dark:text-white ">Dashboard</div>
-                    </a>
-                </div>
-            
+        <!-- Dashboard -->
+        <div id="userDropdown" class="relative group ">
+            <!-- Main Button -->
+            <a href="{{ route('dashboard') }}"
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                                {{ request()->routeIs('dashboard') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                </svg>
 
-        @if(Auth::user()->can('category.menu'))
+                <div class="px-2 dark:text-white ">Dashboard</div>
+            </a>
+        </div>
+
+
+        @if (Auth::user()->can('category.menu'))
             {{-- Category --}}
             <a href="{{ route('all.category') }}"
-
-            class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
-                                {{ request()->routeIs('all.category', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                                {{ request()->routeIs('all.category') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -36,16 +36,15 @@
 
             </a>
             {{-- End Category --}}
-
         @endif
-        
+
 
         {{-- Product --}}
-        @if(Auth::user()->can('product.menu'))
+        @if (Auth::user()->can('product.menu'))
             <a href="{{ route('all.product') }}"
                 class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
                 duration-200
-                {{ request()->routeIs('all.product', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+                {{ request()->routeIs('all.product') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
@@ -58,14 +57,14 @@
         @endif
         {{-- End Product --}}
 
-       
+
 
         {{-- Customer --}}
-        @if(Auth::user()->can('customer.menu'))
+        @if (Auth::user()->can('customer.menu'))
             <a href="{{ route('customer.all') }}"
-            class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
             duration-200
-            {{ request()->routeIs('customer.all', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+            {{ request()->routeIs('customer.all') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
@@ -78,13 +77,13 @@
         {{-- End Customer --}}
 
         {{-- Supplier --}}
-        @if(Auth::user()->can('supplier.menu'))
+        @if (Auth::user()->can('supplier.menu'))
             <a href="{{ route('all.supplier') }}"
-            class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
             duration-200
-            {{ request()->routeIs('all.supplier', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+            {{ request()->routeIs('all.supplier') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
@@ -95,15 +94,15 @@
         {{-- End Supplier --}}
 
         {{-- Stock --}}
-        @if(Auth::user()->can('stock.menu'))
+        @if (Auth::user()->can('stock.menu'))
             <a href="{{ route('all.stock') }}"
-            class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
             duration-200
-            {{ request()->routeIs('all.stock', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+            {{ request()->routeIs('all.stock') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
 
 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                    class="size-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                 </svg>
@@ -114,23 +113,76 @@
         {{-- End Stock --}}
 
         {{-- Purchase --}}
-        @if(Auth::user()->can('purchase.menu'))
-            <a href="{{ route('all.purchase') }}"
-            class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
-            duration-200
-            {{ request()->routeIs('all.purchase', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+        {{-- @if (Auth::user()->can('purchase.menu'))
+                <a href="{{ route('all.purchase') }}"
+                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors
+                duration-200
+                {{ request()->routeIs('all.purchase', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
 
 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                    class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                    </svg>
 
 
-                <div class="px-2 dark:text-white">Purchase</div>
+                    <div class="px-2 dark:text-white">Purchase</div>
 
-            </a>
+                </a>
+            @endif --}}
+
+
+        @php
+$purchaseMenu = Auth::user()->can('purchase.menu');
+$purchasePending = Auth::user()->can('purchase.pending');
+$purchaseComplete = Auth::user()->can('purchase.complete');
+$purchasePendingDue = Auth::user()->can('purchase.pending.due');
+
+        @endphp
+
+
+        {{-- Render Dropdown បើមានសិទ្ធណាមួយ --}}
+        @if ($purchaseMenu || $purchasePending || $purchaseComplete || $purchasePendingDue)
+            <div id="purchaseDropdown" class="relative group">
+                {{-- Main Button --}}
+                @if ($purchaseMenu)
+                            <a href="{{ route('pending.purchase') }}"
+                                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
+                                                                                                                    {{ request()->routeIs('pending.purchase', 'complete.purchase', 'purchase.pending.due')
+                    ? 'bg-red-500 text-white dark:bg-gray-600'
+                    : '  text-black hover:bg-red-500 hover:text-white' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                    class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                                </svg>
+                                <div class="px-2 dark:text-white">purchase</div>
+                            </a>
+                @endif
+
+                {{-- Dropdown --}}
+                <div id="dropdownMenu"
+                    class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                                        transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10">
+
+                    @if ($purchasePending)
+                        <a href="{{ route('pending.purchase') }}"
+                            class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Pending</a>
+                    @endif
+
+                    @if ($purchaseComplete)
+                        <a href="{{ route('complete.purchase') }}"
+                            class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Complete</a>
+                    @endif
+
+                    @if ($purchasePendingDue)
+                        <a href="{{ route('purchase.pending.due') }}"
+                            class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">PedingDue</a>
+                    @endif
+
+                </div>
+            </div>
         @endif
         {{-- End Purchase --}}
 
@@ -138,23 +190,25 @@
 
         @php
 
-        $canAdd = Auth::user()->can('expense.menu');
-        $canToday = Auth::user()->can('expense.today');
-        $canMonth = Auth::user()->can('expense.month');
-        $canYear = Auth::user()->can('expense.year');
+$canAdd = Auth::user()->can('expense.menu');
+$canToday = Auth::user()->can('expense.today');
+$canMonth = Auth::user()->can('expense.month');
+$canYear = Auth::user()->can('expense.year');
         @endphp
-        
-        @if($canAdd || $canToday || $canMonth || $canYear)
+
+        @if ($canAdd || $canToday || $canMonth || $canYear)
             <div id="expenseDropdown" class="relative group">
 
                 {{-- Main Button --}}
-                @if($canAdd)
-                    <a href="{{ route('add.expense') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
+                @if ($canAdd)
+                    <a href="{{ route('add.expense') }}"
+                        class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
                                         {{ request()->routeIs('add.expense', 'today.expense', 'month.expense', 'year.expense')
             ? 'bg-red-500 text-white dark:bg-gray-600'
             : '  text-black hover:bg-red-500 hover:text-white ' }}">
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5"
                                 d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                         </svg>
                         <div class="px-2 dark:text-white">Expense</div>
@@ -162,74 +216,76 @@
                 @endif
 
                 {{-- Submenu --}}
-                <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                <div id="dropdownMenu"
+                    class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
                                     transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10">
 
-                    @if($canToday)
+                    @if ($canToday)
                         <a href="{{ route('today.expense') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Today</a>
+                    @endif
 
-                            @endif
-
-                    @if($canMonth)
+                    @if ($canMonth)
                         <a href="{{ route('month.expense') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Month</a>
                     @endif
 
-                    @if($canYear)
+                    @if ($canYear)
                         <a href="{{ route('year.expense') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Year</a>
                     @endif
                 </div>
             </div>
         @endif
-    
-        
-        
+
+
+
         @php
-            $orderMenu = Auth::user()->can('order.menu');
-            $orderPending = Auth::user()->can('order.pending');
-            $orderComplete = Auth::user()->can('order.complete');
-            $orderPendingDue = Auth::user()->can('order.pending.due');
+$orderMenu = Auth::user()->can('order.menu');
+$orderPending = Auth::user()->can('order.pending');
+$orderComplete = Auth::user()->can('order.complete');
+$orderPendingDue = Auth::user()->can('order.pending.due');
 
         @endphp
 
-        
+
         {{-- Render Dropdown បើមានសិទ្ធណាមួយ --}}
-        @if($orderMenu || $orderPending || $orderComplete || $orderPendingDue)
+        @if ($orderMenu || $orderPending || $orderComplete || $orderPendingDue)
             <div id="orderDropdown" class="relative group">
                 {{-- Main Button --}}
-                @if($orderMenu)
-                            <a href="{{ route('pending.order') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
+                @if ($orderMenu)
+                    <a href="{{ route('pending.order') }}"
+                        class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm w-full transition-colors duration-200
                                                                             {{ request()->routeIs('pending.order', 'complete.order', 'order.pending.due')
-                    ? 'bg-red-500 text-white dark:bg-gray-600'
-                    : '  text-black hover:bg-red-500 hover:text-white' }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                    class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0
+            ? 'bg-red-500 text-white dark:bg-gray-600'
+            : '  text-black hover:bg-red-500 hover:text-white' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0
                                                     4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662
                                                     a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
-                                </svg>
-                                <div class="px-2 dark:text-white">Order</div>
-                        </a>
+                        </svg>
+                        <div class="px-2 dark:text-white">Order</div>
+                    </a>
                 @endif
 
                 {{-- Dropdown --}}
-                <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                <div id="dropdownMenu"
+                    class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
                             transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10">
 
-                    @if($orderPending)
+                    @if ($orderPending)
                         <a href="{{ route('pending.order') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Pending</a>
                     @endif
 
-                    @if($orderComplete)
+                    @if ($orderComplete)
                         <a href="{{ route('complete.order') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Complete</a>
                     @endif
 
-                    @if($orderPendingDue)
+                    @if ($orderPendingDue)
                         <a href="{{ route('pending.due') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">PedingDue</a>
                     @endif
@@ -239,7 +295,6 @@
         @endif
 
 
-        
 
 
 
@@ -247,83 +302,96 @@
 
 
 
-    
 
-       
-        
-        @if(Auth::user()->can('role.menu')) 
-                                        <!-- Permission Dropdown -->
-                                        <div id="permissionDropdown" class="relative group ">
-                                            <!-- Main Button -->
-                                            <a href="{{ route('all.permission') }}" class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
-                                                {{ request()->routeIs('all.permission', 'add.permission', 'all.roles', 'add.roles', 'edit.roles', 'edit.permission', 'add.roles.permission')
+
+
+
+
+        @if (Auth::user()->can('role.menu'))
+            <!-- Permission Dropdown -->
+            <div id="permissionDropdown" class="relative group ">
+                <!-- Main Button -->
+                <a href="{{ route('all.permission') }}"
+                    class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                                                {{ request()->routeIs(
+        'all.permission',
+        'add.permission',
+        'all.roles',
+        'add.roles',
+        'edit.roles',
+        'edit.permission',
+        'add.roles.permission',
+    )
         ? 'bg-red-500 text-white dark:bg-gray-600'
         : '  text-black hover:bg-red-500 hover:text-white' }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
-                                                </svg>
-                                                <div class="px-2 dark:text-white ">Permission</div>
-                                            </a>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
+                    </svg>
+                    <div class="px-2 dark:text-white ">Permission</div>
+                </a>
 
-                                            <!-- Dropdown -->
-                                            <div id="dropdownMenu" class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
+                <!-- Dropdown -->
+                <div id="dropdownMenu"
+                    class="absolute top-0 left-full ml-2 opacity-0 invisible group-hover:visible group-hover:opacity-100 
                                                     transition-all duration-300   border border-gray-300 shadow-lg rounded-md z-10 min-w-max">
-                                                <a href="{{ route('all.permission') }}"
-                                                    class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All Permission</a>
-                                                <a href="{{ route('all.roles') }}"
-                                                    class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All Roles</a>
-                                                <a href="{{ route('add.roles.permission') }}"
-                                                    class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Roles in Permission</a>
-                                                <a href="{{ route('all.roles.permission') }}"
-                                                    class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All Roles in
-                                                    Permission</a>
-                                            </div>
-                                        </div>
+                    <a href="{{ route('all.permission') }}"
+                        class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All
+                        Permission</a>
+                    <a href="{{ route('all.roles') }}"
+                        class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All
+                        Roles</a>
+                    <a href="{{ route('add.roles.permission') }}"
+                        class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Roles
+                        in Permission</a>
+                    <a href="{{ route('all.roles.permission') }}"
+                        class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">All
+                        Roles in
+                        Permission</a>
+                </div>
+            </div>
         @endif
 
 
 
 
-    <!-- User Dropdown -->
-    @if(Auth::user()->can('user.menu')) 
-        <div id="userDropdown" class="relative group ">
-            <!-- Main Button -->
-            <a href="{{ route('all.admin') }}"
-                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
-                    {{ request()->routeIs('all.admin', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                        class="size-6">
+        <!-- User Dropdown -->
+        @if (Auth::user()->can('user.menu'))
+            <div id="userDropdown" class="relative group ">
+                <!-- Main Button -->
+                <a href="{{ route('all.admin') }}"
+                    class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                    {{ request()->routeIs('all.admin') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
 
-                <div class="px-2 dark:text-white ">User</div>
-            </a>
-        </div>
-    @endif
+                    <div class="px-2 dark:text-white ">User</div>
+                </a>
+            </div>
+        @endif
 
-    <!-- User back -->
-    @if(Auth::user()->can('backup.menu'))
-        <div id="userDropdown" class="relative group ">
-            <!-- Main Button -->
-            <a href="{{ route('admin.backup') }}"
-                class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
-                            {{ request()->routeIs('admin.backup', ) ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                            </svg>
-
-
-                <div class="px-2 dark:text-white ">Backup</div>
-            </a>
-        </div>
-    @endif
+        <!-- User back -->
+        @if (Auth::user()->can('backup.menu'))
+            <div id="userDropdown" class="relative group ">
+                <!-- Main Button -->
+                <a href="{{ route('admin.backup') }}"
+                    class="dark:text-white hover:dark:bg-gray-500 nav-link flex items-center py-2 px-4 rounded-sm transition-colors duration-200
+                            {{ request()->routeIs('admin.backup') ? 'bg-red-500 text-white' : '  text-black hover:bg-red-500 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                    </svg>
 
 
+                    <div class="px-2 dark:text-white ">Backup</div>
+                </a>
+            </div>
+        @endif
 
 
 
@@ -332,43 +400,45 @@
 
 
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const sidebar = document.getElementById("sidebar");
-            const toggleBtn = document.getElementById("toggleSidebar");
-            const pxTexts = sidebar.querySelectorAll(".px-2"); // catch all text divs
 
-            // Load sidebar state from localStorage
-            const sidebarState = localStorage.getItem("sidebarState");
 
-            function applySidebarState(state) {
-                if (state === "collapsed") {
-                    sidebar.classList.remove("w-64");
-                    sidebar.classList.add("w-[80px]");
-                    pxTexts.forEach(el => el.classList.add("hidden"));
-                } else {
-                    sidebar.classList.remove("w-[80px]");
-                    sidebar.classList.add("w-64");
-                    pxTexts.forEach(el => el.classList.remove("hidden"));
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const sidebar = document.getElementById("sidebar");
+                const toggleBtn = document.getElementById("toggleSidebar");
+                const pxTexts = sidebar.querySelectorAll(".px-2"); // catch all text divs
+
+                // Load sidebar state from localStorage
+                const sidebarState = localStorage.getItem("sidebarState");
+
+                function applySidebarState(state) {
+                    if (state === "collapsed") {
+                        sidebar.classList.remove("w-64");
+                        sidebar.classList.add("w-[80px]");
+                        pxTexts.forEach(el => el.classList.add("hidden"));
+                    } else {
+                        sidebar.classList.remove("w-[80px]");
+                        sidebar.classList.add("w-64");
+                        pxTexts.forEach(el => el.classList.remove("hidden"));
+                    }
                 }
-            }
 
-            // Apply state on page load
-            applySidebarState(sidebarState);
+                // Apply state on page load
+                applySidebarState(sidebarState);
 
-            // Toggle sidebar + save state
-            toggleBtn.addEventListener("click", () => {
-                if (sidebar.classList.contains("w-64")) {
-                    localStorage.setItem("sidebarState", "collapsed");
-                    applySidebarState("collapsed");
-                } else {
-                    localStorage.setItem("sidebarState", "expanded");
-                    applySidebarState("expanded");
-                }
+                // Toggle sidebar + save state
+                toggleBtn.addEventListener("click", () => {
+                    if (sidebar.classList.contains("w-64")) {
+                        localStorage.setItem("sidebarState", "collapsed");
+                        applySidebarState("collapsed");
+                    } else {
+                        localStorage.setItem("sidebarState", "expanded");
+                        applySidebarState("expanded");
+                    }
+                });
             });
-        });
-    </script>
-    
+        </script>
+
 
         <script>
             const dropdown = document.getElementById('expenseDropdown');

@@ -63,20 +63,24 @@
                                     <select name="group_name"
                                         class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                         id="example-select" required>
-                                        <option value="" selected disabled>Select Group Name </option>
-                                        <option value="pos" {{ $permission->group_name == 'pos' ? 'selected' : '' }}> Pos</option>
-                                        <option value="employee" {{ $permission->group_name == 'employee' ? 'selected' : '' }}> Employee</option>
-                                        <option value="customer" {{ $permission->group_name == 'customer' ? 'selected' : '' }}> Customer</option>
-                                        <option value="supplier" {{ $permission->group_name == 'supplier' ? 'selected' : '' }}> Supplier</option>
-                                        <option value="salary" {{ $permission->group_name == 'salary' ? 'selected' : '' }}> Salary </option>
-                                        <option value="attendence" {{ $permission->group_name == 'attendence' ? 'selected' : '' }}> Attendence </option>
-                                        <option value="category" {{ $permission->group_name == 'category' ? 'selected' : '' }}> Category </option>
-                                        <option value="product" {{ $permission->group_name == 'product' ? 'selected' : '' }}> Product </option>
-                                        <option value="expense" {{ $permission->group_name == 'expense' ? 'selected' : '' }}> Expense </option>
-                                        <option value="orders" {{ $permission->group_name == 'orders' ? 'selected' : '' }}> Orders</option>
-                                        <option value="stock" {{ $permission->group_name == 'stock' ? 'selected' : '' }}> Stock </option>
-                                        <option value="roles" {{ $permission->group_name == 'roles' ? 'selected' : '' }}> Roles</option>
+                                        <option value="" selected disabled>Select Group Name</option>
+
+                                        <option value="pos" {{ $permission->group_name == 'pos' ? 'selected' : '' }}>Pos</option>
+                                        <option value="customer" {{ $permission->group_name == 'customer' ? 'selected' : '' }}>Customer</option>
+                                        <option value="supplier" {{ $permission->group_name == 'supplier' ? 'selected' : '' }}>Supplier</option>
+                                        <option value="category" {{ $permission->group_name == 'category' ? 'selected' : '' }}>Category</option>
+                                        <option value="product" {{ $permission->group_name == 'product' ? 'selected' : '' }}>Product</option>
+                                        <option value="expense" {{ $permission->group_name == 'expense' ? 'selected' : '' }}>Expense</option>
+                                        <option value="orders" {{ $permission->group_name == 'orders' ? 'selected' : '' }}>Orders</option>
+                                        <option value="purchases" {{ $permission->group_name == 'purchases' ? 'selected' : '' }}>Purchases</option>
+                                        <option value="stock" {{ $permission->group_name == 'stock' ? 'selected' : '' }}>Stock</option>
+                                        <option value="roles" {{ $permission->group_name == 'roles' ? 'selected' : '' }}>Roles</option>
+                                        <option value="report" {{ $permission->group_name == 'report' ? 'selected' : '' }}>Report</option>
+                                        <option value="user" {{ $permission->group_name == 'user' ? 'selected' : '' }}>User</option>
+                                        <option value="permission" {{ $permission->group_name == 'permission' ? 'selected' : '' }}>Permission</option>
+                                        <option value="backup" {{ $permission->group_name == 'backup' ? 'selected' : '' }}>Backup</option>
                                     </select>
+
 
                                 </div>
                             </div>
