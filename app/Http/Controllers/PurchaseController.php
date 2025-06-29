@@ -451,58 +451,84 @@ class PurchaseController extends Controller
         return redirect()->back()->with('message', 'Cart updated successfully.');
     }
 
-    public function StorePurchase(Request $request) {
-        $request->validate([
-            'supplier_id' => 'required',
-            'payment_status' => 'required',
-            'total' => 'required|numeric',
-            'due' => 'required|numeric',
+
+
+
+public function StorePurchase(Request $request)
+{
+    // Validate input
+    $request->validate([
+        'supplier_id' => 'required',
+        'payment_status' => 'required',
+        'total' => 'required|numeric|min:0',
+        'discount' => 'nullable|numeric|min:0',
+        'pay' => 'required|numeric|min:0',
+    ]);
+
+    $cartItems = Cart::content();
+
+    if ($cartItems->isEmpty()) {
+        return redirect()->back()->with([
+            'message' => 'Please select product for purchase',
+            'alert-type' => 'error',
         ]);
+    }
 
-        $cartItems = Cart::content();
-        $subTotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->qty;
-        });
+    // Subtotal from cart
+    $subTotal = $cartItems->sum(function ($item) {
+        return $item->price * $item->qty;
+    });
 
-        $data = [
-            'supplier_id' => $request->supplier_id,
-            'purchase_date' => Carbon::now(),
-            'invoice_no' => 'PUR_' . mt_rand(10000000, 99999999),
-            'purchase_status' => 'pending',
-            'discount' => 0,
-            'total_products' => $cartItems->count(),
-            'sub_total' => $subTotal,
-            'vat' => 0,
-            'total' => $request->total,
-            'payment_status' => $request->payment_status,
-            'pay' => $request->paid,
-            'due' => $request->due,
+    $total = floatval($request->total);
+    $discount = floatval($request->discount ?? 0);
+    $paid = floatval($request->pay);
+
+    // បន្ទាប់ពីបញ្ចុះថ្លៃ (final payable)
+    $finalTotal = $total - $discount;
+    $due = max($finalTotal - $paid, 0); // prevent negative due
+
+    $data = [
+        'supplier_id' => $request->supplier_id,
+        'purchase_date' => Carbon::now(),
+        'invoice_no' => 'PUR_' . mt_rand(10000000, 99999999),
+        'purchase_status' => 'pending',
+        'discount' => $discount,
+        'total_products' => $cartItems->count(),
+        'sub_total' => $subTotal,
+        'vat' => 0,
+        'total' => $total,
+        'payment_status' => $request->payment_status,
+        'pay' => $paid,
+        'due' => $due,
+        'created_at' => Carbon::now(),
+        'updated_at' => Carbon::now(),
+    ];
+
+    $purchase_id = Purchase::insertGetId($data);
+
+    foreach ($cartItems as $item) {
+        purchase_details::create([
+            'purchase_id' => $purchase_id,
+            'product_id' => $item->id,
+            'purchase_price' => $item->price,
+            'unitcost' => $item->price,
+            'quantity' => $item->qty,
+            'total' => $item->price * $item->qty,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-        ];
+        ]);
 
-        $purchase_id = Purchase::insertGetId($data);
-
-        foreach ($cartItems as $item) {
-            purchase_details::create([
-                'purchase_id' => $purchase_id,
-                'product_id' => $item->id,
-                'purchase_price' => $item->price,
-                'unitcost' => $item->price,
-                'quantity' => $item->qty,
-                'total' => $item->price * $item->qty,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-
-            // Update product stock
-            Product::where('id', $item->id)->increment('product_store', $item->qty);
-        }
-
-        Cart::destroy();
-
-        return redirect()->route('purchase.page')->with('message', 'Purchase completed successfully!');
+        // កូដបន្ទាត់នេះគឺ Update ភ្លាមៗតែម្ដង
+        // Product::where('id', $item->id)->increment('product_store', $item->qty);
     }
+
+    Cart::destroy();
+
+    return redirect()->route('purchase.page')->with([
+        'message' => 'Purchase completed successfully!',
+        'alert-type' => 'success',
+    ]);
+}
 
     public function payDueModel(Request $request, $id){
         $purchasepaydue = Purchase::findOrFail($id);

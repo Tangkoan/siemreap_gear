@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->string('purchase_date');
             $table->string('purchase_status');
-            $table->tinyInteger('discount')->default(0);
+            $table->decimal('discount')->default(0);
             $table->string('total_products');
             $table->string('sub_total')->nullable();
             $table->string('vat')->nullable();

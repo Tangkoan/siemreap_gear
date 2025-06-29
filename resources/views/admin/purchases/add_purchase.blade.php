@@ -38,26 +38,33 @@
                     </div>
                 </div>
 
-                <!-- Category Filter -->
-                <div class="w-full overflow-x-auto whitespace-nowrap mb-4" id="category-buttons">
+                {{-- Category Get --}}
+                <div class="w-full sm:w-[200px] md:w-[400px] lg:w-[500px] overflow-x-auto whitespace-nowrap mb-4" id="category-buttons">
                     <button onclick="loadProducts('all')"
-                        class="dark:bg-gray-800 bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+                        class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
                         All Category
                     </button>
                     @foreach ($categories as $category)
                         <button onclick="loadProducts({{ $category->id }})"
-                            class="dark:bg-gray-800 bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+                            class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
                             {{ $category->category_name }}
                         </button>
                     @endforeach
                 </div>
             </div>
 
-            <!-- PRODUCT LIST -->
+            {{-- <!-- PRODUCT LIST -->
             <div class="flex-1 overflow-y-auto dark:bg-gray-500">
                 <div id="product-grid"
                     class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
                     <!-- Products loaded by JS -->
+                </div>
+            </div> --}}
+
+            <!-- Product Grid -->
+            <div class="flex-1 overflow-y-auto  dark:bg-gray-500">
+                <div id="product-grid" class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
+                    <!-- Products will be dynamically loaded here -->
                 </div>
             </div>
         </div>
@@ -101,78 +108,191 @@
                 </table>
             </div>
 
-            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded">
+            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700">
                 Total Payable : $ {{ Cart::subtotal() }}
             </div>
 
-            <!-- SUPPLIER SELECTION -->
-            <form method="POST" action="{{ url('/purchase/store') }}">
+            <form method="POST" action="{{ url('/purchase/store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @csrf
-                <label for="supplier" class="block mt-4 mb-2 text-gray-800">Supplier</label>
-                <select name="supplier_id" required
-                    class="w-full py-2 px-4 border border-gray-300 rounded dark:bg-gray-800 dark:text-white">
-                    <option value="" disabled selected>Select Supplier</option>
-                    @foreach ($supplier as $sup)
-                        <option value="{{ $sup->id }}">{{ $sup->name }}</option>
-                    @endforeach
-                </select>
 
-                <input type="hidden" name="payment_status" value="Paid">
-                <input type="hidden" name="paid" value="{{ Cart::subtotal() }}">
-                <input type="hidden" name="due" value="0">
+                <!-- Supplier -->
+                <div>
+                    <label for="supplier_id" class="block mb-1 font-medium text-gray-800 dark:text-white">Supplier</label>
+                    <select name="supplier_id" id="supplier_id" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled selected>Select Supplier</option>
+                        @foreach ($supplier as $sup)
+                            <option value="{{ $sup->id }}">{{ $sup->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Payment Method -->
+                <div>
+                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">Payment Method</label>
+                    <select name="payment_status" id="payment_status" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled selected>Select Payment</option>
+                        <option value="HandCash">HandCash</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="Due">Due</option>
+                    </select>
+                </div>
+
+                <!-- Pay Now -->
+                <div>
+                    <label for="payNow" class="block mb-1 font-medium text-gray-800 dark:text-white">Pay Now ($)</label>
+                    <input type="number" name="pay" id="payNow" placeholder="Pay Now" min="0"
+                        class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        oninput="calculateDue()" required>
+                </div>
+
+                <!-- Discount -->
+                <div>
+                    <label for="discount" class="block mb-1 font-medium text-gray-800 dark:text-white">Discount ($)</label>
+                    <input type="number" name="discount" id="discount" placeholder="Discount"
+                        class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        oninput="calculateDue()" min="0" value="0" required>
+                </div>
+
+                <!-- Hidden Fields (keep them outside of visible grid) -->
+                <input type="hidden" name="paid" id="paidHidden" value="{{ Cart::subtotal() }}">
+                <input type="hidden" name="due" id="dueHidden" value="0">
                 <input type="hidden" name="total" value="{{ Cart::subtotal() }}">
 
-                <button type="submit" class="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded">
-                    Complete Purchase
-                </button>
+                <!-- Submit Button (span both columns) -->
+                <div class="md:col-span-2">
+                    <button type="submit"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-200">
+                        Complete Purchase
+                    </button>
+                </div>
             </form>
+
         </div>
     </div>
 
-    <script>
+    <!-- Include Local jQuery -->
+    <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
+    <!-- Include Local jQuery Validation -->
+    <script src="{{ asset('backend/assets/js/jquery.validate.min.js') }}"></script>
+
+
+    <script src="{{ asset('backend/assets/js/pos.js') }}"></script> {{-- Correct way to include static JS --}}
+
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myForm').validate({
+                rules: {
+                    customer_id: {
+                        required: true,
+                    },
+
+                },
+                messages: {
+                    customer_id: {
+                        required: 'Please Select Customer',
+                    },
+
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+        });
+
         function loadProducts(categoryId = 'all') {
-            fetch(`/api/purchase/products?category_id=${categoryId}`)
+            fetch(`/get-products?category_id=${categoryId}`)
                 .then(response => response.json())
                 .then(data => {
                     const productGrid = document.getElementById('product-grid');
                     productGrid.innerHTML = '';
 
                     data.products.forEach(product => {
-                        const card = `
-                            <form method="POST" action="/purchase/add-to-cart" id="form-${product.id}">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="hidden" name="id" value="${product.id}">
-                                <input type="hidden" name="name" value="${product.name}">
-                                <input type="hidden" name="qty" value="1">
-                                <input type="hidden" name="price" value="${product.price}">
+                        const card =
+                            `
+                                                                                                                                                    <form method="POST" action="/add-cart" id="form-${product.id}">
+                                                                                                                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                                                                                                                        <input type="hidden" name="id" value="${product.id}">
+                                                                                                                                                        <input type="hidden" name="name" value="${product.name}">
+                                                                                                                                                        <input type="hidden" name="qty" value="1">
+                                                                                                                                                        <input type="hidden" name="price" value="${product.price}">
 
-                                <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md cursor-pointer hover:scale-105"
-                                    onclick="document.getElementById('form-${product.id}').submit();">
-                                    <img src="${product.imageUrl}" class="w-full h-24 object-cover">
-                                    <div class="p-4">
-                                        <h3 class="font-semibold text-center">${product.name}</h3>
-                                        <p class="text-blue-600 font-bold text-center mt-2">$${product.price}</p>
-                                    </div>
-                                </div>
-                            </form>
-                        `;
+                                                                                                                                                        <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-200 hover:scale-105"
+                                                                                                                                                            onclick="document.getElementById('form-${product.id}').submit();"
+                                                                                                                                                            title="Click to add to cart">
+
+                                                                                                                                                            <div class="p-3" style="width:150px; height: 50px;">
+                                                                                                                                                                <img class="w-full h-24 rounded-md" src="${product.imageUrl}" alt="${product.name}">
+                                                                                                                                                            </div>
+
+                                                                                                                                                            <br><br><br>
+
+                                                                                                                                                            <div class="p-4 px-3">
+                                                                                                                                                                <h3 class="font-semibold mb-2 text-center">${product.name}</h3>
+                                                                                                                                                                <p class="text-blue-600 font-bold text-lg text-center">$${product.price}</p>
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </form>
+                                                                                                                                                `;
                         productGrid.innerHTML += card;
                     });
                 });
         }
 
+        // Load all products initially
         window.onload = () => loadProducts();
 
+
+        // Search
         document.getElementById('searchBox').addEventListener('input', function () {
             const keyword = this.value;
+
             fetch(`/search-products?keyword=${keyword}`)
                 .then(response => response.json())
                 .then(data => {
                     const productGrid = document.getElementById('product-grid');
-                    productGrid.innerHTML = '';
+                    productGrid.innerHTML = ''; // Clear old results
 
                     data.products.forEach(product => {
-                        const card = `... same as above ...`;
+                        const card = `
+                                <form method="POST" action="/add-cart" id="form-${product.id}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="id" value="${product.id}">
+                                    <input type="hidden" name="name" value="${product.name}">
+                                    <input type="hidden" name="qty" value="1">
+                                    <input type="hidden" name="price" value="${product.price}">
+
+                                        <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-200 hover:scale-105"
+                                        onclick="document.getElementById('form-${product.id}').submit();"
+                                        title="Click to add to cart">
+
+                                        <div class="p-3" style="width:150px; height: 50px;">
+                                            <img class="w-full h-24 rounded-md" src="${product.imageUrl}" alt="${product.name}">
+                                        </div>
+
+                                        <br><br><br>
+
+                                        <div class="p-4 px-3">
+                                            <h3 class="font-semibold mb-2 text-center">${product.name}</h3>
+                                            <p class="text-blue-600 font-bold text-lg text-center">$${product.price}</p>
+                                        </div>
+                                    </div>
+                                    </form>
+                            `;
                         productGrid.innerHTML += card;
                     });
                 });
