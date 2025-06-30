@@ -194,7 +194,7 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::controller(PurchaseController::class)->group(function(){
 
         Route::post('/final-invoice','FinalInvoice')->middleware('permission:purchase.menu');
-        
+
         Route::get('/pending/purchase','PendingPurchase')->name('pending.purchase')->middleware('permission:purchase.pending');
         
         Route::get('/purchase/details/{purchase_id}','PurchaseDetails')->name('purchase.details');
@@ -202,11 +202,6 @@ Route::middleware(['auth'])->group(callback: function(){
         Route::post('/purchase/status/update','PurchaserStatusUpdate')->name('purchase.status.update');
 
         Route::get('/complete/purchase','CompletePurchase')->name('complete.purchase')->middleware('permission:purchase.complete');
-
-        // Stock
-        Route::get('/stock','StockManage')->name('all.stock')->middleware('permission:stock.menu');
-
-
         
         // PDF Complete Purchase
         Route::get('/purchase/invoice-download/{order_id}','PurchaseInvoice');
@@ -424,3 +419,7 @@ Route::controller(PurchaseController::class)->group(function () {
     Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
     Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
 });
+
+
+Route::post('/store-sell', [POSController::class, 'FinalInvoice'])->name('store.sell');
+Route::get('/print-invoice/{id}', [POSController::class, 'PrintInvoice'])->name('print.invoice');

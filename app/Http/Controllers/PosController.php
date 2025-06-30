@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Orderdetails;
 use App\Models\Category;
 
+use Illuminate\Support\Facades\DB;
 
 
 class PosController extends Controller
@@ -37,52 +38,8 @@ class PosController extends Controller
         return view('admin.pos.pos', compact('product', 'customers','categories'));
     }
 
+
     
-
-    // (AJAX/Fetch)
-    // public function getProductsForPos()
-    // {
-        
-    //     $products = Product::with('category')->latest()->get()->map(function($product) {
-            
-    //         return [
-    //             'id' => $product->id,
-    //             'name' => $product->product_name,
-    //             'price' => (float)$product->selling_price, 
-    //             'category' => $product->category ? $product->category->category_name : 'No Category', 
-    //             'imageUrl' => asset($product->product_image) 
-    //         ];
-    //     });
-
-        
-    //     return response()->json([
-    //         'products' => $products,
-    //     ]);
-    // }
-
-    // public function getProductsForPos(Request $request)
-    // {
-    //     $query = Product::with('category');
-
-    //     if ($request->has('category_id') && $request->category_id != 'all') {
-    //         $query->where('category_id', $request->category_id);
-    //     }
-
-    //     $products = $query->latest()->get()->map(function($product) {
-    //         return [
-    //             'id' => $product->id,
-    //             'name' => $product->product_name,
-    //             'price' => (float)$product->selling_price, 
-    //             'category' => $product->category ? $product->category->category_name : 'No Category', 
-    //             'imageUrl' => asset($product->product_image) 
-    //         ];
-    //     });
-
-    //     return response()->json([
-    //         'products' => $products,
-    //     ]);
-    // }
-
     public function getProductsByCategory(Request $request)
     {
         $categories = Category::all(); // ទាញ Category ទាំងអស់
@@ -133,24 +90,7 @@ class PosController extends Controller
 
     } // End Method 
 
-    // public function AddCart(Request $request)
-    // {
-    //     Cart::add([
-    //         'id' => $request->id,
-    //         'name' => $request->name,
-    //         'qty' => $request->qty,
-    //         'price' => $request->price,
-    //         'weight' => 20,
-    //         'options' => ['size' => 'large']
-    //     ]);
-
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'Product Added Successfully'
-    //     ]);
-    // }
-
-
+    
     public function AllItem(){
 
         $product_item = Cart::content();
@@ -206,48 +146,114 @@ class PosController extends Controller
 } // End Method 
 
 
-public function FinalInvoice(Request $request){
+public function FinalInvoice(Request $request)
+{
+    $cartItems = Cart::content();
 
-    $data = array();
-    $data['customer_id'] = $request->customer_id;
-    $data['order_date'] = $request->order_date;
-    $data['order_status'] = $request->order_status;
-    $data['total_products'] = $request->total_products;
-    $data['sub_total'] = $request->sub_total;
-    $data['vat'] = $request->vat;
+    if ($cartItems->isEmpty()) {
+        return back()->with([
+            'message' => 'You must add product to cart!',
+            'alert-type' => 'error'
+        ]);
+    }
 
-    $data['invoice_no'] = 'SR_GEAR'.mt_rand(10000000,99999999);
-    $data['total'] = $request->total;
-    $data['payment_status'] = $request->payment_status;
-    $data['pay'] = $request->pay;
-    $data['due'] = $request->due;
-    $data['created_at'] = Carbon::now(); 
+    // Pre-check stock before transaction
+    foreach ($cartItems as $item) {
+        $product = Product::find($item->id);
+        if (!$product || $product->product_store < $item->qty) {
+            return back()->with([
+                'message' => "Not enough stock for product: {$product->product_name}",
+                'alert-type' => 'error'
+            ]);
+        }
+    }
 
-    $order_id = Order::insertGetId($data);
-    $contents = Cart::content();
+    DB::beginTransaction();
 
-    $pdata = array();
-    foreach($contents as $content){
-        $pdata['order_id'] = $order_id;
-        $pdata['product_id'] = $content->id;
-        $pdata['quantity'] = $content->qty;
-        $pdata['unitcost'] = $content->price;
-        $pdata['total'] = $content->total;
-        
-        $insert = Orderdetails::insert($pdata); 
+    try {
+        $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+        $discount = floatval($request->discount ?? 0);
+        $pay = floatval($request->pay);
+        $total = $subTotal - $discount;
+        $due = $total - $pay;
 
-    } // end foreach
+        // ✅ Logic: Check if paid in full (considering discount)
+        $orderStatus = $due <= 0 ? 'complete' : 'pending';
+
+        $data = [
+            'customer_id' => $request->customer_id,
+            'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+            'order_status' => $orderStatus,
+            'total_products' => Cart::count(),
+            'sub_total' => $subTotal,
+            'vat' => 0,
+            'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+            'total' => $total,
+            'payment_status' => $request->payment_status,
+            'pay' => $pay,
+            'due' => max(0, $due),
+            'created_at' => Carbon::now(),
+        ];
+
+        $order_id = Order::insertGetId($data);
+
+        foreach ($cartItems as $item) {
+            $product = Product::find($item->id);
+
+            // Final stock check again for safety
+            if (!$product || $product->product_store < $item->qty) {
+                DB::rollBack();
+                return back()->with([
+                    'message' => "Not enough stock for product: {$product->product_name}",
+                    'alert-type' => 'error'
+                ]);
+            }
+
+            // Save order details
+            Orderdetails::insert([
+                'order_id' => $order_id,
+                'product_id' => $item->id,
+                'quantity' => $item->qty,
+                'unitcost' => $item->price,
+                'total' => $item->qty * $item->price,
+            ]);
+
+            // ✅ Only deduct stock if order is complete
+            if ($orderStatus === 'complete') {
+                $product->decrement('product_store', $item->qty);
+            }
+        }
+
+        DB::commit();
+        Cart::destroy();
+
+        return redirect()->route('print.invoice', $order_id)->with([
+            'message' => 'Order completed successfully',
+            'alert-type' => 'success'
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        return back()->with([
+            'message' => 'Something went wrong! ' . $e->getMessage(),
+            'alert-type' => 'error'
+        ]);
+    }
+}
 
 
-    $notification = array(
-        'message' => 'Order Complete Successfully',
-        'alert-type' => 'success'
-    );
+public function PrintInvoice($id)
+{
+    $order = Order::with('customer')->findOrFail($id);
+    $orderDetails = Orderdetails::with('product')->where('order_id', $id)->get();
 
-    Cart::destroy();
+    return view('admin.invoice.print', compact('order', 'orderDetails'));
+}
 
-    return redirect()->route('pos')->with($notification);
 
-} // End Method 
+
+
+
+
    
 }
