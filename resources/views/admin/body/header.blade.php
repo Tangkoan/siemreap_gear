@@ -1,4 +1,14 @@
 
+<!-- ✅ Fix: Early dark mode class before CSS -->
+<script>
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+</script>
+
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const toggleBtn = document.getElementById("theme-toggle");
@@ -39,20 +49,26 @@
         document.documentElement.classList.toggle("dark", isDarkInit);
         updateUI(isDarkInit);
 
+        
+
         toggleBtn.addEventListener("click", () => {
             const isDark = document.documentElement.classList.toggle("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
             updateUI(isDark);
+
+            // ✅ Force CSS Repaint / Reflow
+            document.body.offsetHeight; // trick browser to force repaint
+
+            // ✅ Optional: Reload page (soft reload)
+            // location.reload();
         });
+
 
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark');
         }
     });
 </script>
-
-
-
 
 
 <header class="bg-gray-800 text-white p-2 shadow-sm duration-300">
