@@ -29,7 +29,7 @@
     <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
 </head>
 
-<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
 
     {{-- Topbar --}}
     @include('admin.body.header')
