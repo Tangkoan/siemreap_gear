@@ -1,7 +1,7 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
-    <div class="page-content py-8 px-4 dark:bg-gray-800 min-h-screen">
+    <div class="page-content py-8 px-4 dark:bg-gray-900 min-h-screen">
         <div class="container mx-auto">
 
             <!-- Page Title -->

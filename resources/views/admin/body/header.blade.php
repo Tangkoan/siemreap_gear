@@ -190,7 +190,7 @@ $adminData = App\Models\User::find($id);
                     x-transition:leave="transition ease-in duration-150 transform"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
-                    class="absolute right-0 mt-2 w-48 card-bg rounded-md shadow-lg py-1 z-10 origin-top-right">
+                    class="absolute right-0 mt-2 w-48 card-bg rounded-md shadow-lg py-1 z-50 origin-top-right">
                     <div class="px-4 py-2 text-sm font-semibold gap-2"> <span class="text-black text-xs dark:text-white">Welcome </span>
                         <span class="uppercase  text-black text-xs dark:text-white">{{ $adminData->name }}</span></div>
 
