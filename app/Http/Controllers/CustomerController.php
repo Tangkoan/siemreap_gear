@@ -97,17 +97,31 @@ class CustomerController extends Controller
 
     
 
-    public function DeleteCustomer($id){
-        
-        $customer_id = Customer::findOrFail($id);
-       
-        Customer::findOrFail($id)->delete();
+    public function DeleteCustomer($id)
+{
+    $customer = Customer::findOrFail($id);
+
+    // ✅ ពិនិត្យថា customer មាន order ឬទិន្នន័យផ្សេងទៀតទេ
+    $hasOrders = $customer->orders()->exists(); // បើអ្នកមាន table orders
+    // $hasInvoices = $customer->invoices()->exists(); // ឧទាហរណ៍បើមាន table invoices
+
+    if ($hasOrders) {
         $notification = array(
-            'message' => 'Customer Deleted Successfully',
-            'alert-type' => 'success'
+            'message' => 'Cannot delete customer. Related records exist.',
+            'alert-type' => 'error'
         );
-        return redirect()->back()->with($notification); 
-    } // End Method 
+        return redirect()->back()->with($notification);
+    }
+
+    $customer->delete();
+
+    $notification = array(
+        'message' => 'Customer Deleted Successfully',
+        'alert-type' => 'success'
+    );
+    return redirect()->back()->with($notification);
+}
+
 
 
 

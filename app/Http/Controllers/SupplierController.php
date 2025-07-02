@@ -99,10 +99,15 @@ class SupplierController extends Controller
 {
     $supplier = Supplier::findOrFail($id);
 
-    // ពិនិត្យមើលថា supplier នេះមាន product ឬអត់
-    if ($supplier->products()->exists()) {
+    // ពិនិត្យមើលថា supplier នេះមាន products ឬ purchases ទាក់ទង
+    $hasProducts = $supplier->products()->exists();
+    $hasPurchases = $supplier->purchases()->exists();
+
+    if ($hasProducts || $hasPurchases) {
         $notification = array(
-            'message' => 'Cannot delete supplier. Products are linked to this supplier.',
+            // 'message' => 'មិនអាចលុបបានទេ ព្រោះមានទិន្នន័យភ្ជាប់ជាមួយ Supplier នេះ!',
+            'message' => 'Cannot delete supplier. There are purchase associated with it.!',
+            
             'alert-type' => 'error'
         );
         return redirect()->back()->with($notification);
@@ -111,11 +116,12 @@ class SupplierController extends Controller
     $supplier->delete();
 
     $notification = array(
-        'message' => 'Supplier Deleted Successfully',
+        'message' => 'Delete Supplier Successfully!',
         'alert-type' => 'success'
     );
     return redirect()->back()->with($notification); 
 }
+
 
 
 

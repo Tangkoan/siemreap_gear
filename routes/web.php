@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
-use App\Http\Controllers\EmployeeContrlloer;
+
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
@@ -14,6 +14,7 @@ use App\Http\Controllers\PosController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ReportController;
 
 
 
@@ -47,6 +48,43 @@ Route::middleware(['auth'])->group(callback: function(){
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
 
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
+
+
+
+
+
+
+
+
+
+    // Report Route
+    Route::controller(ReportController::class)->group(function(){
+        Route::get('/all/reports', 'AllReports')->name('all.reports'); 
+        // Route::post('/admin/search/bydate', 'AdminSearchByDate')->name('admin.search.bydate');
+        Route::match(['get', 'post'], '/admin/search/bydate', 'AdminSearchByDate')->name('admin.search.bydate');
+
+
+        //  Export Sale(Order Report)
+        Route::get('/report-order/export','SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')
+        
+    });
+    // End Report Route
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // Start Product
