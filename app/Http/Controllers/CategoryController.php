@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Category;
 use Carbon\Carbon;
-
+use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
 
@@ -25,28 +25,35 @@ class CategoryController extends Controller
     } // End Method
 
 
+
     public function StoreCategory(Request $request)
-    {
-        $validateData = $request->validate([
-            'category_name' => 'required|max:200|unique:categories,category_name',
-        ],
-        [
-            'category_name.required' => 'This Category Name field is required.',
-            'category_name.unique' => 'This Category Name already exists.',
-        ]);
-    
-        Category::insert([
-            'category_name' => $request->category_name,
-            'created_at' => Carbon::now(),
-        ]);
-    
-        $notification = [
-            'message' => 'Category Inserted Successfully',
-            'alert-type' => 'success',
-        ];
-    
-        return redirect()->route('all.category')->with($notification);
-    }
+{
+    // Validate input
+    $request->validate([
+        'category_name' => 'required|max:200|unique:categories,category_name',
+    ], [
+        'category_name.required' => 'This Category Name field is required.',
+        'category_name.unique' => 'This Category Name already exists.',
+    ]);
+
+    // Generate slug
+    $slug = Str::slug($request->category_name);
+
+    // Insert into DB
+    Category::insert([
+        'category_name' => $request->category_name,
+        'category_slug' => $slug,
+        'created_at' => Carbon::now(),
+    ]);
+
+    // Notification
+    $notification = [
+        'message' => 'Category Inserted Successfully',
+        'alert-type' => 'success',
+    ];
+
+    return redirect()->route('all.category')->with($notification);
+}
     
 
 
@@ -61,22 +68,28 @@ class CategoryController extends Controller
 {
     $category_id = $request->id;
 
+    // Validate input (ignore current ID for uniqueness)
     $request->validate([
         'category_name' => 'required|max:200|unique:categories,category_name,' . $category_id,
-    ],
-    [
+    ], [
         'category_name.required' => 'This Category Name field is required.',
         'category_name.unique' => 'This Category Name already exists.',
     ]);
 
+    // Generate new slug
+    $slug = Str::slug($request->category_name);
+
+    // Update category
     Category::findOrFail($category_id)->update([
         'category_name' => $request->category_name,
-        'updated_at' => Carbon::now(), // កែជា updated_at បើកំពុង update
+        'category_slug' => $slug,
+        'updated_at' => Carbon::now(),
     ]);
 
+    // Notification
     $notification = [
         'message' => 'Category Updated Successfully',
-        'alert-type' => 'success'
+        'alert-type' => 'success',
     ];
 
     return redirect()->route('all.category')->with($notification); 
@@ -212,6 +225,7 @@ class CategoryController extends Controller
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
                 <td class="p-4 py-5">' . $item->category_name . '</td>
+                <td class="p-4 py-5">' .( $item->category_slug ?? "null") . '</td>
                 <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">

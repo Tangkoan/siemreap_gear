@@ -3,6 +3,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 
+    <script>
+        $(document).on('click', '.btn-delete-category', function () {
+                let id = $(this).data('id');
+                let $row = $(this).closest('tr');
+
+                if (confirm("Are you sure you want to delete this category?")) {
+                    $.ajax({
+                        url: '/category/ajax-delete/' + id,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                $row.remove();
+                                alert(response.message);
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('Something went wrong!');
+                        }
+                    });
+                }
+            });
+
+    </script>
+
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -90,7 +119,13 @@
                                     <th
                                         class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            Name
+                                            Category Name
+                                        </p>
+                                    </th>
+
+                                    <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
+                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
+                                            Category Slug
                                         </p>
                                     </th>
                                     <th

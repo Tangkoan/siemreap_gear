@@ -128,7 +128,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($purchases as $key => $item)
+                                {{-- @foreach ($purchases as $key => $item)
                                     <tr class="hover:bg-slate-50 border-b border-slate-200">
                                         <td class="p-4 py-5 font-semibold text-sm text-slate-800">{{ $key + 1 }}</td>
 
@@ -188,7 +188,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
 

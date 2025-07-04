@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\product;
+use App\Models\Order;
+use App\Models\Orderdetails;
+
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
+
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\WareHouse;
+
+
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
@@ -63,8 +70,9 @@ public function search(Request $request)
 
         $category = Category::orderBy('category_name', 'asc')->get();
         $supplier = Supplier::orderBy('name', 'asc')->get();
+        $warehouses = WareHouse::orderBy('name', 'asc')->get();
 
-        return view('admin.product.add_product',compact('category','supplier'));
+        return view('admin.product.add_product',compact('category','supplier','warehouses'));
        }// End Method 
     
     
@@ -73,17 +81,29 @@ public function search(Request $request)
      
             $pcode = IdGenerator::generate(['table' => 'products','field' => 'product_code','length' => 6, 'prefix' => 'SR_GEAR' ]);
     
-            $image = $request->file('product_image');
+            // គ្រាន់តែយក path តែប៉ុណ្ណោះ (string), null ប្រសិនបើមិនមាន
+            $image_path = $request->input('product_image') ?? null;
+
+            if ($request->hasFile('product_image')) {
+                $image = $request->file('product_image');
+                $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('upload/product/'), $name_gen);
+                $image_path = 'upload/product/' . $name_gen;
+            }
+        
+
+            // $image = $request->file('product_image');
     
-            // $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-            // Image::make($image)->resize(300,300)->save('upload/product/'.$name_gen);
+            // $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            // $image->move(public_path('upload/product/'), $name_gen);
     
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('upload/product/'), $name_gen);
-    
-            $save_url = 'upload/product/'.$name_gen;
+            // $save_url = 'upload/product/'.$name_gen;
             Product::insert([
                 'product_name' => $request->product_name,
+
+                'stock_alert' => $request->stock_alert,
+                'warehouse_id' => $request->warehouse_id,
+
                 'category_id' => $request->category_id,
                 'supplier_id' => $request->supplier_id,
                 'product_code' => $pcode,
@@ -93,7 +113,7 @@ public function search(Request $request)
                 'buying_price' => $request->buying_price,
                 'selling_price' => $request->selling_price,
                 'cost' => $request->cost,
-                'product_image' => $save_url,
+                'product_image' => $image_path,
                 'created_at' => Carbon::now(), 
             ]);
              $notification = array(
@@ -107,11 +127,13 @@ public function search(Request $request)
                 $product = Product::findOrFail($id);
                 $category = Category::latest()->get();
                 $supplier = Supplier::latest()->get();
-                return view('admin.product.edit_product',compact('product','category','supplier',));
+                $warehouses = WareHouse::latest()->get();
+                
+                return view('admin.product.edit_product',compact('product','category','supplier','warehouses'));
             } // End Method 
             
 
-            public function DetailProduct($id){
+        public function DetailProduct($id){
                 $product = Product::findOrFail($id);
                 $category = Category::latest()->get();
                 $supplier = Supplier::latest()->get();
@@ -129,6 +151,8 @@ public function search(Request $request)
                 Product::findOrFail($product_id)->update([
 
                     'product_name' => $request->product_name,
+                    'stock_alert' => $request->stock_alert,
+                    'warehouse_id' => $request->warehouse_id,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
                     'product_detail' => $request->product_detail,
@@ -151,6 +175,8 @@ public function search(Request $request)
                     Product::findOrFail($product_id)->update([
 
                     'product_name' => $request->product_name,
+                    'stock_alert' => $request->stock_alert,
+                    'warehouse_id' => $request->warehouse_id,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
                     'product_code' => $request->product_code,
@@ -174,6 +200,15 @@ public function search(Request $request)
         public function DeleteProduct($id){
             $product = Product::findOrFail($id);
             $img = $product->product_image;
+
+            // Check if any product is using this category
+        if ($product->orderDetails()->exists()) {
+            $notification = array(
+                'message' => 'Cannot delete product. There are order associated with it.',
+                'alert-type' => 'error'
+            );
+            return redirect()->route('all.product')->with($notification);
+        }
         
             // បើមានរូបភាព និង file មានស្ថិតនៅលើ server នោះទើបលុប
             if ($img && file_exists($img)) {
@@ -191,6 +226,7 @@ public function search(Request $request)
         } // End Method
         
     
+
 
         public function searchProduct(Request $request)
         {
@@ -374,9 +410,11 @@ public function search(Request $request)
                     <td class="p-4 py-5">' . $item->product_code . '</td>
                     <td class="p-4 py-5">' . $item->product_name . '</td>
                     <td class="p-4 py-5">' . $item['category']['category_name'] . '</td>
+                    
                     <td class="p-4 py-5">' . $item->selling_price  . '</td>
                     <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
                     <td class="p-4 py-5">' . $item->product_store  . '</td> 
+                    <td class="p-4 py-5">' . ($item->WareHouse->name ?? 'N/A') . '</td>
                     
                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div class="flex items-center gap-x-6">

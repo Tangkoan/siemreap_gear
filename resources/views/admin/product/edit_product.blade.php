@@ -98,6 +98,16 @@
                                 </div>
 
 
+                                {{-- Stock Alert --}}
+                                <div class="form-group">
+                                    <label for="stock_alert" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                        Stock Alert <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert" value="{{ $product->stock_alert }}"
+                                        class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
 
 
 
@@ -164,6 +174,25 @@
                                     <input type="date" id="buying_date" name="buying_date" value="{{ $product->buying_date }}"
                                         class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
+
+
+                                {{-- Warehouse --}}
+                                <div>
+                                    <label for="supplier" class="block text-gray-400 text-sm font-medium mb-1">
+                                        Ware House <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="warehouse_id"
+                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                        id="example-select">
+                                        <option selected disabled>Select Ware House </option>
+                                        @foreach($warehouses as $w)
+                                            <option value="{{ $w->id }}" {{ $w->id == $product->warehouse_id ? 'selected' : ''  }}>{{ $w->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+
 
                                 {{-- Product Invetory --}}
 

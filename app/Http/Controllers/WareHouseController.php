@@ -2,132 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
+use App\Models\WareHouse;
+use Illuminate\Support\Facades\Auth;
 
-use Carbon\Carbon;
-
-class CustomerController extends Controller
+class WareHouseController extends Controller
 {
     //
-
-    public function CustomerPage(){
-        $customer = Customer::latest()->get();
-        return view('admin.customer.admin_customer', compact('customer'));
+    public function AllWarehouse(){
+        $warehouse = WareHouse::latest()->get();
+        return view('admin.warehouse.all_warehouse',compact('warehouse'));
     }
+    //End Method 
 
-
-
-    public function AddCustomer(){
-        return view('admin.customer.add_customer');
-    } // End Method
-
-    public function EditCustomer($id){
-        $customer = Customer::findOrFail($id);
-        return view('admin.customer.edit_customer', compact('customer'));
-    } // End Method
-
-
-    public function StoreCustomer(Request $request)
-    {
-        $validateData = $request->validate([
-            'name' => 'required|max:200',
-            'phone' => 'nullable|max:200',
-            'notes' => 'nullable|max:200',
-            'address' => 'nullable|max:200',
-            ],
-            [
-                'name.required' => 'This customers Name Field Is Required',
-            ]
-        );
-
-
-        Customer::insert([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'notes' => $request->phone,
-            'address' => $request->address,
-            'created_at' => Carbon::now(),
-        ]);
-       
-
-        $notification = array(
-            'message' => 'Customer Inserted Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('all.customer')->with($notification);
-       
-    }
-    // End
-
-    public function CustomerUpdate(Request $request){
-        $customer_id = $request->id;
-        $validateData = $request->validate([
-            'name' => 'required|max:200',
-            'phone' => 'nullable|max:200',
-            'address' => 'nullable|max:200',
-            'notes' => 'nullable|max:200',
-            ],
-            [
-                'name.required' => 'This Customer Name Field Is Required',
-            ]
-        );
-
-        Customer::findOrFail($customer_id)->update([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'notes' => $request->notes,
-            'updated_at' => Carbon::now(), 
-        ]);
-       
-
-        $notification = array(
-            'message' => 'Customer Update Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('all.customer')->with($notification);
-       
-    }// End Method
-
-
-    
-
-    public function DeleteCustomer($id)
+    public function searchWareHouse(Request $request)
 {
-    $customer = Customer::findOrFail($id);
-
-    // ✅ ពិនិត្យថា customer មាន order ឬទិន្នន័យផ្សេងទៀតទេ
-    $hasOrders = $customer->orders()->exists(); // បើអ្នកមាន table orders
-    // $hasInvoices = $customer->invoices()->exists(); // ឧទាហរណ៍បើមាន table invoices
-
-    if ($hasOrders) {
-        $notification = array(
-            'message' => 'Cannot delete customer. Related records exist.',
-            'alert-type' => 'error'
-        );
-        return redirect()->back()->with($notification);
-    }
-
-    $customer->delete();
-
-    $notification = array(
-        'message' => 'Customer Deleted Successfully',
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification);
-}
-
-
-
-
-    public function searchCustomer(Request $request)
-{
-    $query = Customer::query();
+    $query = WareHouse::query();
 
     if ($request->has('search') && $request->search != '') {
         $query->where('name', 'LIKE', '%' . $request->search . '%')
@@ -142,21 +33,21 @@ class CustomerController extends Controller
     $isAll = $perPage === 'all';
 
     if ($isAll) {
-        $customers = $query->get();
+        $warehouses = $query->get();
     } else {
-        $customers = $query->paginate((int)$perPage);
+        $warehouses = $query->paginate((int)$perPage);
     }
 
     $table = '';
-    foreach ($customers as $key => $item) {
+    foreach ($warehouses as $key => $item) {
         $editBtn = '';
         $deleteBtn = '';
 
         // ✅ Edit Button
-        if (Auth::user()->can('customer.edit')) {
+        if (Auth::user()->can('warehouse.edit')) {
             $editBtn = '
             <button class="icon-edit  transition-colors duration-200  focus:outline-none">
-                <a href="' . route('edit.customer', $item->id) . '">
+                <a href="' . route('edit.warehouse', $item->id) . '">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -185,10 +76,10 @@ class CustomerController extends Controller
         }
         
         // ✅ Delete Button
-        if (Auth::user()->can('customer.delete')) {
+        if (Auth::user()->can('warehouse.delete')) {
             $deleteBtn = '
                 <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-red-500  hover:text-red-500 focus:outline-none">
-                <a href="' . route('delete.customer', $item->id) . '" id="delete">
+                <a href="' . route('delete.warehouse', $item->id) . '" id="delete">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -232,9 +123,9 @@ class CustomerController extends Controller
         <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->name . '</td>
+            <td class="p-4 py-5"> '  . ($item->email ?? 'null') . '</td>
             <td class="p-4 py-5"> '  . ($item->phone ?? 'null') . '</td>
-            <td class="p-4 py-5"> '  . ($item->notes ?? 'null') . '</td>
-            <td class="p-4 py-5"> '  . ($item->address ?? 'null') . '</td>
+            <td class="p-4 py-5"> '  . ($item->city ?? 'null') . '</td>
             <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at) ?? 'null') . '</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
@@ -244,11 +135,103 @@ class CustomerController extends Controller
         </tr>';
     }
 
-    $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $customers->links('pagination::tailwind')->toHtml();
+    $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $warehouses->links('pagination::tailwind')->toHtml();
 
     return response()->json([
         'table' => $table,
         'pagination' => $pagination
     ]);
     }
+
+
+    public function AddWarehouse(){ 
+        return view('admin.warehouse.add_warehouse');
+    }
+    //End Method 
+
+    public function StoreWarehouse(Request $request){
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:ware_houses,email|max:255',
+            'phone' => 'required|string|max:20',
+            'city' => 'nullable|string|max:255',
+        ]);
+
+        WareHouse::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'city' => $validated['city'],
+        ]);
+
+        $notification = array(
+            'message' => 'WareHouse Inserted Successfully',
+            'alert-type' => 'success'
+         ); 
+         return redirect()->route('all.warehouse')->with($notification);
+
+    }
+    //End Method 
+
+    public function EditWarehouse($id){
+        $warehouse = WareHouse::find($id);
+        return view('admin.warehouse.edit_warehouse',compact('warehouse'));
+    }
+     //End Method 
+
+     public function UpdateWarehouse(Request $request){
+        $ware_id = $request->id;
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:200|unique:ware_houses,email,' . $ware_id,
+            'phone' => 'required|string|max:20',
+            'city' => 'nullable|string|max:255',
+        ]);
+
+        WareHouse::find($ware_id)->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'city' => $validated['city'],
+        ]);
+
+        $notification = array(
+            'message' => 'WareHouse Updated Successfully',
+            'alert-type' => 'success'
+         ); 
+         return redirect()->route('all.warehouse')->with($notification);
+
+    }
+    //End Method
+
+    
+
+    public function DeleteWarehouse($id)
+{
+    $warehouse = WareHouse::findOrFail($id);
+
+    // Check if any product is using this warehouse
+    if ($warehouse->products()->exists()) {
+        $notification = [
+            'message' => 'Cannot delete Warehouse. There are products associated with it.',
+            'alert-type' => 'error'
+        ];
+        return redirect()->route('all.warehouse')->with($notification);
+    }
+
+    // If no products, proceed to delete
+    $warehouse->delete();
+
+    $notification = [
+        'message' => 'Warehouse Deleted Successfully',
+        'alert-type' => 'success'
+    ];
+    return redirect()->route('all.warehouse')->with($notification); 
+}
+
+
+
+
 }

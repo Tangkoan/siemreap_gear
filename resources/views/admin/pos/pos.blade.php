@@ -42,7 +42,7 @@
     </style>
 
     <!-- MAIN POS WRAPPER -->
-    <div class="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 font-sans no-print w-full dark:bg-gray-800">
+    <div class="flex flex-col md:flex-row gap-4 m-1 p-4 bg-gray-50 font-sans no-print w-full dark:bg-gray-800">
         <div class="flex-2 bg-white p-4 rounded shadow flex flex-col max-h-[88vh] dark:bg-gray-900">
             <div class="mb-4">
                 <div class="flex justify-between items-center mb-4">
@@ -63,7 +63,7 @@
                     id="category-buttons">
 
                     <button onclick="loadProducts('all')"
-                        class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+                        class="dark:bg-gray-800 m-1 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
                         All Category
                     </button>
                     @foreach ($categories as $category)

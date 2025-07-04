@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Orderdetails extends Model
 {
     //
+
+
+    protected $table = 'orderdetails';  // ត្រូវតាម migration
     protected $guarded = [];
 
     // public function product(){

@@ -12,17 +12,20 @@ use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
 class SupplierController extends Controller
 {
 
-    public function SupplierPage(){
+    public function SupplierPage()
+    {
         $supplier = Supplier::latest()->get();
         return view('admin.supplier.all_supplier', compact('supplier'));
     } // End Method
 
 
-    public function AddSupplier(){
+    public function AddSupplier()
+    {
         return view('admin.supplier.add_supplier');
     } // End Method
 
-    public function EditSupplier($id){
+    public function EditSupplier($id)
+    {
         $supplier = Supplier::findOrFail($id);
         return view('admin.supplier.edit_supplier', compact('supplier'));
     } // End Method
@@ -30,10 +33,11 @@ class SupplierController extends Controller
 
     public function StoreSupplier(Request $request)
     {
-        $validateData = $request->validate([
-            'name' => 'required|max:200',
-            'email' => 'nullable|unique:Suppliers|max:200',
-            'phone' => 'required|max:200',
+        $validateData = $request->validate(
+            [
+                'name' => 'required|max:200',
+                'email' => 'nullable|unique:Suppliers|max:200',
+                'phone' => 'required|max:200',
             ],
             [
                 'name.required' => 'This Supplier Name Field Is Required',
@@ -48,7 +52,7 @@ class SupplierController extends Controller
             'phone' => $request->phone,
             'created_at' => Carbon::now(),
         ]);
-       
+
 
         $notification = array(
             'message' => 'Supplier Inserted Successfully',
@@ -56,17 +60,18 @@ class SupplierController extends Controller
         );
 
         return redirect()->route('all.supplier')->with($notification);
-       
     }
     // End
 
-    public function SupplierUpdate(Request $request){
+    public function SupplierUpdate(Request $request)
+    {
         $supplier_id = $request->id;
-        $validateData = $request->validate([
-            'name' => 'required|max:200',
-            'email' => 'nullable|unique:Suppliers|max:200',
-            'phone' => 'required|max:200',
-            'notes' => 'nullable|max:200',
+        $validateData = $request->validate(
+            [
+                'name' => 'required|max:200',
+                'email' => 'nullable|email|max:200|unique:suppliers,email,' . $supplier_id,
+                'phone' => 'required|max:200',
+                'notes' => 'nullable|max:200',
             ],
             [
                 'name.required' => 'This Supplier Name Field Is Required',
@@ -79,9 +84,9 @@ class SupplierController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'notes' => $request->notes,
-            'updated_at' => Carbon::now(), 
+            'updated_at' => Carbon::now(),
         ]);
-       
+
 
         $notification = array(
             'message' => 'Supplier Inserted Successfully',
@@ -89,73 +94,72 @@ class SupplierController extends Controller
         );
 
         return redirect()->route('all.supplier')->with($notification);
-       
-    }// End Method
+    } // End Method
 
 
-    
+
 
     public function DeleteSupplier($id)
-{
-    $supplier = Supplier::findOrFail($id);
+    {
+        $supplier = Supplier::findOrFail($id);
 
-    // ពិនិត្យមើលថា supplier នេះមាន products ឬ purchases ទាក់ទង
-    $hasProducts = $supplier->products()->exists();
-    $hasPurchases = $supplier->purchases()->exists();
+        // ពិនិត្យមើលថា supplier នេះមាន products ឬ purchases ទាក់ទង
+        $hasProducts = $supplier->products()->exists();
+        $hasPurchases = $supplier->purchases()->exists();
 
-    if ($hasProducts || $hasPurchases) {
+        if ($hasProducts || $hasPurchases) {
+            $notification = array(
+                // 'message' => 'មិនអាចលុបបានទេ ព្រោះមានទិន្នន័យភ្ជាប់ជាមួយ Supplier នេះ!',
+                'message' => 'Cannot delete supplier. There are purchase associated with it.!',
+
+                'alert-type' => 'error'
+            );
+            return redirect()->back()->with($notification);
+        }
+
+        $supplier->delete();
+
         $notification = array(
-            // 'message' => 'មិនអាចលុបបានទេ ព្រោះមានទិន្នន័យភ្ជាប់ជាមួយ Supplier នេះ!',
-            'message' => 'Cannot delete supplier. There are purchase associated with it.!',
-            
-            'alert-type' => 'error'
+            'message' => 'Delete Supplier Successfully!',
+            'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
     }
-
-    $supplier->delete();
-
-    $notification = array(
-        'message' => 'Delete Supplier Successfully!',
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification); 
-}
 
 
 
 
 
     public function searchSupplier(Request $request)
-{
-    $query = Supplier::query();
+    {
+        $query = Supplier::query();
 
-    if ($request->has('search') && $request->search != '') {
-        $query->where('name', 'LIKE', '%' . $request->search . '%');
-    }
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
+        }
 
-    // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
-    $query->orderBy('created_at', 'desc');
+        // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
+        $query->orderBy('created_at', 'desc');
 
-    $perPage = $request->perPage ?? 10; // ✅ Default = 10
-    $isAll = $perPage === 'all';
+        $perPage = $request->perPage ?? 10; // ✅ Default = 10
+        $isAll = $perPage === 'all';
 
-    if ($isAll) {
-        $categories = $query->get();
-    } else {
-        $categories = $query->paginate((int)$perPage);
-    }
+        if ($isAll) {
+            $categories = $query->get();
+        } else {
+            $categories = $query->paginate((int)$perPage);
+        }
 
-    $table = '';
-    foreach ($categories as $key => $item) {
+        $table = '';
+        foreach ($categories as $key => $item) {
 
-        $editBtn = '';
-        $deleteBtn = '';
+            $editBtn = '';
+            $deleteBtn = '';
 
-        // ✅ Edit Button
-        if (Auth::user()->can('supplier.edit')) {
-            $editBtn = '
-            <button class="icon-edit  transition-colors duration-200 dark:hover:text-yellow-500  hover:text-yellow-500 focus:outline-none">
+            // ✅ Edit Button
+            if (Auth::user()->can('supplier.edit')) {
+                $editBtn = '
+            <button class="icon-edit  transition-colors duration-200  focus:outline-none">
                 <a href="' . route('edit.supplier', $item->id) . '">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -168,9 +172,9 @@ class SupplierController extends Controller
                     </svg>
                 </a>
             </button>';
-        } else {
-            // Disabled Edit Button (grey)
-            $editBtn = '
+            } else {
+                // Disabled Edit Button (grey)
+                $editBtn = '
             <button class=" text-gray-400 cursor-not-allowed" disabled title="No permission to edit">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -182,11 +186,11 @@ class SupplierController extends Controller
                         A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                 </svg>
             </button>';
-        }
-        
-        // ✅ Delete Button
-        if (Auth::user()->can('supplier.delete')) {
-            $deleteBtn = '
+            }
+
+            // ✅ Delete Button
+            if (Auth::user()->can('supplier.delete')) {
+                $deleteBtn = '
                 <button class="icon-delete  transition-colors duration-200 dark:hover:text-red-900  hover:text-red-900 focus:outline-none">
                 <a href="' . route('delete.supplier', $item->id) . '" id="delete">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -206,9 +210,9 @@ class SupplierController extends Controller
                     </svg>
                 </a>
             </button>';
-        } else {
-            // Disabled Delete Button (grey)
-            $deleteBtn = '
+            } else {
+                // Disabled Delete Button (grey)
+                $deleteBtn = '
             <button type="button" class=" text-gray-400 cursor-not-allowed" disabled title="No permission to delete">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -226,9 +230,9 @@ class SupplierController extends Controller
                         m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
             </button>';
-        }
+            }
 
-        $table .= '
+            $table .= '
         <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
             <td class="p-4 py-5">' . ($key + 1) . '</td>
             <td class="p-4 py-5">' . $item->name . '</td>
@@ -245,15 +249,13 @@ class SupplierController extends Controller
             
             
         </tr>';
-    }
+        }
 
-    $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $categories->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $categories->links('pagination::tailwind')->toHtml();
 
-    return response()->json([
-        'table' => $table,
-        'pagination' => $pagination
-    ]);
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination
+        ]);
     }
-    
-    
 }

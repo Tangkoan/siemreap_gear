@@ -6,15 +6,16 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
             {{-- <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform "> --}}
-                <div class="lg:col-span-full p-0">
+            <div class="lg:col-span-full p-0">
                 <div class="flex justify-between">
                     <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                            class="size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
-                        <div class="px-2">All Admin</div> <div class="text-xl text-red-500">{{ count($alladminuser) }}</div>
+                        <div class="px-2">All Admin</div>
+                        <div class="text-xl text-red-500">{{ count($alladminuser) }}</div>
                     </h2>
                     <div>
 
@@ -55,8 +56,8 @@
                                     <button
                                         class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                                         type="button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
-                                            stroke="currentColor" class="w-8 h-8 text-slate-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                         </svg>
@@ -66,7 +67,7 @@
                         </div>
                     </div>
 
-                    <div class="table-wrapper overflow-y-auto max-h-[450px]">
+                    <div class="table-wrapper overflow-y-auto max-h-[520px]">
                         <table class="w-full text-left table-auto min-w-max">
                             <thead>
                                 <tr>
@@ -117,59 +118,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($alladminuser as $key => $item)
-                                    <tr class="hover:bg-slate-50 border-b border-slate-200">
-                                        <td class="p-4 py-5 font-semibold text-sm text-slate-800">{{ $key + 1 }}</td>
-
-                                        <td class="p-4 py-5 text-sm text-black"><img src="{{ (!empty($item->photo)) ? url('upload/admin_image/' . $item->photo) : url('upload/no_image.jpg') }}"
-                                            style="width:50px; height: 40px;"></td>
-
-                                        <td class="p-4 py-5 text-sm text-black">{{ $item->name }}</td>
-
-
-
-                                        <td class="p-4 py-5 text-sm text-black">{{ $item->email ?? 'null' }}</td>
-                                        <td class="p-4 py-5 text-sm text-black">{{ $item->phone ?? 'null' }}</td>
-                                        <td class="p-4 py-5 text-sm text-black"> 
-                                            @foreach($item->roles as $role)
-                                                <span class="badge badge-pill bg-danger"> {{ $role->name }} </span>
-                                            @endforeach
-                                        </td>
-
-
-
-                                        <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                            <div class="flex items-center gap-x-6">
-
-
-                                                <button
-                                                    class="icon-edit text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
-                                                    <a href="{{ route('edit.category', $item->id) }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                        </svg>
-                                                    </a>
-                                                </button>
-
-
-
-                                                <button type="button"
-                                                    class=" icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
-                                                    <a href="{{ route('delete.category', $item->id) }}" id="delete">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                        </svg>
-                                                    </a>
-                                                </button>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                
                             </tbody>
                         </table>
 
@@ -185,8 +134,8 @@
     </div>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('.toggle-password').on('click', function () {
+        $(document).ready(function() {
+            $('.toggle-password').on('click', function() {
                 const targetId = $(this).data('target');
                 const passwordField = $('#' + targetId);
                 const icon = $(this).find('svg');
@@ -210,7 +159,7 @@
 
 
         // Start Short data
-        $(document).ready(function () {
+        $(document).ready(function() {
             function fetchData(page = 1) {
                 let query = $('#search').val();
                 let perPage = $('#perPage').val();
@@ -222,7 +171,7 @@
                         search: query,
                         perPage: perPage
                     },
-                    success: function (data) {
+                    success: function(data) {
                         $('tbody').html(data.table);
                         $('#pagination-links').html(data.pagination);
                     }
@@ -233,12 +182,12 @@
             fetchData(); // ✅ Fetch 10 by default
 
             // Search or perPage change
-            $('#search, #perPage').on('keyup change', function () {
+            $('#search, #perPage').on('keyup change', function() {
                 fetchData(); // Always page 1 when changed
             });
 
             // Pagination click
-            $(document).on('click', '.pagination a', function (e) {
+            $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
                 let page = $(this).attr('href').split('page=')[1];
                 fetchData(page);

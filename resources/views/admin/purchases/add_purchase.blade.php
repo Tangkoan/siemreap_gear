@@ -26,7 +26,7 @@
         }
     </style>
 
-    <div class="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 font-sans no-print w-full dark:bg-gray-800">
+    <div class="flex flex-col md:flex-row gap-4 p-4  m-1  font-sans no-print w-full dark:bg-gray-800">
         <!-- LEFT SIDE - PRODUCT BROWSER -->
         <div class="flex-2 bg-white p-4 rounded shadow flex flex-col max-h-[88vh] dark:bg-gray-900">
             <div class="mb-4">

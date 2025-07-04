@@ -170,13 +170,19 @@
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
+                                            Ware House
+                                        </p>
+                                    </th>
+
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <p class="text-sm font-normal leading-none text-slate-500">
                                             Action
                                         </p>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($product as $key => $item)
+                                {{-- @foreach ($product as $key => $item)
                                     <tr class="hover:bg-slate-50  border-b border-slate-200 dark:border-gray-700">
                                         <td class=" p-4 py-5 font-semibold text-sm text-slate-800 dark:text-gray-200">{{ $key + 1 }}</td>
                                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item->product_code }}</td>
@@ -231,7 +237,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>

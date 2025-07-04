@@ -1,7 +1,7 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
-    <div class="page-content py-8 px-4 dark:bg-gray-900 min-h-screen">
+    <div class="page-content py-8 px-4 dark:bg-gray-800 min-h-screen">
         <div class="container mx-auto">
 
             <!-- Page Title -->
@@ -34,7 +34,7 @@
 
                 <!-- Search by Month -->
                 <div class="bg-white dark:bg-gray-700 shadow-xl rounded-2xl p-6">
-                    <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="myForm" action="{{ route('admin.search.bymonth') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">📆 Search By Month</h2>
 
@@ -69,7 +69,7 @@
 
                 <!-- Search by Year -->
                 <div class="bg-white dark:bg-gray-700 shadow-xl rounded-2xl p-6">
-                    <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="myForm" action="{{ route('admin.search.byyear') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">📈 Search By Year</h2>
 

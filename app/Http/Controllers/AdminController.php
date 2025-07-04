@@ -507,5 +507,23 @@ public function DeleteBackup($getFilename)
 
 
     ///////////////////////////////////////////////////////////////////////////////////
-
+    public function dashboard()
+    {
+        $currentMonth = Carbon::now()->format('F Y');
+        $thisMonthSales = Order::whereMonth('order_date', Carbon::now()->month)
+                               ->whereYear('order_date', Carbon::now()->year)
+                               ->sum('total');
+    
+        $lastMonthSales = Order::whereMonth('order_date', Carbon::now()->subMonth()->month)
+                               ->whereYear('order_date', Carbon::now()->subMonth()->year)
+                               ->sum('total');
+    
+        // Calculate percentage growth
+        $growth = 0;
+        if ($lastMonthSales > 0) {
+            $growth = (($thisMonthSales - $lastMonthSales) / $lastMonthSales) * 100;
+        }
+    
+        return view('admin.dashboard', compact('currentMonth', 'thisMonthSales', 'lastMonthSales', 'growth'));
+    }
 }

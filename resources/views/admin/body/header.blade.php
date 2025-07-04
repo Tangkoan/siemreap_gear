@@ -1,5 +1,5 @@
 
-<!-- ✅ Fix: Early dark mode class before CSS -->
+<!-- ✅ Fix: Early dark mode before CSS load -->
 <script>
     if (localStorage.getItem('theme') === 'dark') {
         document.documentElement.classList.add('dark');
@@ -8,70 +8,59 @@
     }
 </script>
 
-
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const toggleBtn = document.getElementById("theme-toggle");
         const thumb = document.getElementById("toggle-thumb");
         const icon = document.getElementById("toggle-icon");
 
-        function setMoonIcon() {
-            icon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 12.79A9 9 0 1 1 11.21 3c.09.26.19.52.3.77a9 9 0 0 0 9.49 9.02z"/>`;
-        }
-
         function setSunIcon() {
             icon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 3v1m0 16v1m8.66-8.66h1M3.34 12H2m15.36 
-            6.36l.71.71M6.34 6.34l-.71-.71m12.02 0l.71-.71M6.34 
-            17.66l-.71.71M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/>`;
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="text-yellow-400" fill="currentColor"
+            d="M12 4V2m0 20v-2m8-8h2M2 12h2m15.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 17.95l-1.414-1.414M6.05 6.05L4.636 7.464M12 8a4 4 0 100 8 4 4 0 000-8z" />`;
+            icon.classList.add('text-yellow-400');
+        }
+
+
+        function setMoonIcon() {
+            icon.classList.remove('text-yellow-400');
+            icon.innerHTML = `
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 009.79 9.79z" />`;
         }
 
         function updateUI(isDark) {
-            // move thumb
+            // Move thumb
             thumb.classList.toggle("translate-x-8", isDark);
             thumb.classList.toggle("translate-x-1", !isDark);
 
-            // icon update
+            // Fade icon
             icon.classList.add("scale-75", "opacity-0");
             setTimeout(() => {
                 icon.innerHTML = '';
-                isDark ? setSunIcon() : setMoonIcon();
+                isDark ? setMoonIcon() : setSunIcon();
                 icon.classList.remove("scale-75", "opacity-0");
                 icon.classList.add("scale-100", "opacity-100");
             }, 200);
         }
 
-        // Initial state
+        // Initial load
         const isDarkInit = localStorage.getItem("theme") === "dark";
         document.documentElement.classList.toggle("dark", isDarkInit);
         updateUI(isDarkInit);
-
-        
 
         toggleBtn.addEventListener("click", () => {
             const isDark = document.documentElement.classList.toggle("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
             updateUI(isDark);
-
-            // ✅ Force CSS Repaint / Reflow
-            document.body.offsetHeight; // trick browser to force repaint
-
-            // ✅ Optional: Reload page (soft reload)
-            // location.reload();
         });
-
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
     });
 </script>
 
 
-<header class="bg-gray-800 text-white p-2 shadow-sm duration-300">
+
+<header class="dark:bg-gray-800 text-white p-2 shadow-sm duration-300 bg-white">
     <div class="container mx-auto flex justify-between items-center">
 
         <!-- បន្ថែម items-center នៅទីនេះ -->
@@ -79,13 +68,13 @@
             <div>
                 <a href="{{ route('dashboard') }}" class="flex items-center px-2">
                     <b>
-                        <div class="text-white text-2xl">Siem Reap Gear</div>
+                        <div class="text-black text-2xl dark:text-white">Siem Reap Gear</div>
                     </b>
                 </a>
             </div>
             <div>
                 <!-- បើចង់អោយបង្ហាញគ្រប់ទំហំ -->
-                <button id="toggleSidebar" class="hidden md:flex items-center px-2 text-white">
+                <button id="toggleSidebar" class="hidden md:flex items-center  px-2 text-black dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,15 +120,16 @@
 
             <div class="flex items-center">
                 <button id="theme-toggle"
-                    class="w-16 h-8 rounded-full bg-gray-400 dark:bg-gray-700 relative flex items-center transition-colors duration-500">
+                    class="text-black dark:text-white w-16 h-8 rounded-full bg-gray-400 dark:bg-gray-700 relative flex items-center transition-colors duration-500">
                     <!-- Toggle circle -->
                     <span id="toggle-thumb"
-                        class="absolute left-1 w-6 h-6 bg-white dark:bg-yellow-400 rounded-full shadow-md transform transition-transform duration-500 flex items-center justify-center">
+                        class="absolute left-1 translate-x-1 w-6 h-6 bg-white dark:bg-gray-800 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center">
                         <svg id="toggle-icon" class="w-4 h-4 text-gray-700 dark:text-white transition-all duration-300"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <!-- inserted by JS -->
                         </svg>
                     </span>
+
                 </button>
             </div>
 
@@ -155,7 +145,7 @@
 
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
+                    stroke="currentColor" class="size-6 text-black dark:text-white ">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                 </svg>
@@ -173,12 +163,12 @@ $adminData = App\Models\User::find($id);
 
 
             <div class="relative" x-data="{ open: false }" @click.outside="open = false">
-                <button @click="open = !open" class="flex items-center space-x-2 text-white focus:outline-none">
+                <button @click="open = !open" class="flex items-center space-x-2  focus:outline-none text-black dark:text-white ">
                     <img class="h-9 w-9 rounded-full border-2 border-white object-cover"
                         src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}"
                         alt="User Profile">
 
-                    <span class="font-medium ttext-xl hidden md:block text-white">{{ $adminData->name }}</span>
+                    <span class="font-medium ttext-xl hidden md:block text-black dark:text-white ">{{ $adminData->name }}</span>
                     <svg class="h-4 w-4 hidden md:block" fill="black" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
