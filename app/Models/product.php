@@ -31,8 +31,4 @@ class product extends Model
         return $this->hasMany(Orderdetails::class, 'product_id', 'id');
     }
 
-    public function WareHouse() {
-        return $this->belongsTo(WareHouse::class, 'warehouse_id');
-    }
-
 }

@@ -14,8 +14,6 @@ use Carbon\Carbon;
 
 use App\Models\Category;
 use App\Models\Supplier;
-use App\Models\WareHouse;
-
 
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
@@ -24,6 +22,8 @@ use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
 use App\Exports\ProductExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductImport;
+
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 
@@ -70,24 +70,34 @@ public function search(Request $request)
 
         $category = Category::orderBy('category_name', 'asc')->get();
         $supplier = Supplier::orderBy('name', 'asc')->get();
-        $warehouses = WareHouse::orderBy('name', 'asc')->get();
 
-        return view('admin.product.add_product',compact('category','supplier','warehouses'));
+        return view('admin.product.add_product',compact('category','supplier'));
        }// End Method 
     
     
        // Store Product
        public function StoreProduct(Request $request){ 
      
-            $pcode = IdGenerator::generate(['table' => 'products','field' => 'product_code','length' => 6, 'prefix' => 'SR_GEAR' ]);
-    
-            // Generate unique product code with prefix and length
+        
+           
+        do {
             $pcode = IdGenerator::generate([
                 'table' => 'products',
                 'field' => 'product_code',
-                'length' => 10, // SR_GEAR + 3 digits
-                'prefix' => 'SR_GEAR'
+                'length' => 5,
+                'prefix' => 'SR-'
             ]);
+        } while (Product::where('product_code', $pcode)->exists());
+
+        DB::beginTransaction();
+        try {
+            // Insert logic
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+
 
             // Default null if no image
             $image_path = $request->input('product_image') ?? null;
@@ -111,17 +121,15 @@ public function search(Request $request)
                 'product_name' => $request->product_name,
 
                 'stock_alert' => $request->stock_alert,
-                'warehouse_id' => $request->warehouse_id,
-
                 'category_id' => $request->category_id,
                 'supplier_id' => $request->supplier_id,
                 'product_code' => $pcode,
                 'product_store' => $request->product_store,
-                'buying_date' => $request->buying_date,
+               
                 'product_detail' => $request->product_detail,
                 'buying_price' => $request->buying_price,
                 'selling_price' => $request->selling_price,
-                'cost' => $request->cost,
+                
                 'product_image' => $image_path,
                 'created_at' => Carbon::now(), 
             ]);
@@ -138,9 +146,8 @@ public function search(Request $request)
                 $product = Product::findOrFail($id);
                 $category = Category::latest()->get();
                 $supplier = Supplier::latest()->get();
-                $warehouses = WareHouse::latest()->get();
                 
-                return view('admin.product.edit_product',compact('product','category','supplier','warehouses'));
+                return view('admin.product.edit_product',compact('product','category','supplier'));
             } // End Method 
             
 
@@ -163,16 +170,15 @@ public function search(Request $request)
 
                     'product_name' => $request->product_name,
                     'stock_alert' => $request->stock_alert,
-                    'warehouse_id' => $request->warehouse_id,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
                     'product_detail' => $request->product_detail,
                     'product_code' => $request->product_code,
                     'product_store' => $request->product_store,
-                    'buying_date' => $request->buying_date,
+                    
                     'buying_price' => $request->buying_price,
                     'selling_price' => $request->selling_price,
-                    'cost' => $request->cost,
+                    
                     'product_image' => $save_url,
                     'updated_at' => Carbon::now(),
                 ]);
@@ -187,16 +193,15 @@ public function search(Request $request)
 
                     'product_name' => $request->product_name,
                     'stock_alert' => $request->stock_alert,
-                    'warehouse_id' => $request->warehouse_id,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
                     'product_code' => $request->product_code,
                     'product_store' => $request->product_store,
-                    'buying_date' => $request->buying_date,
+                    
                     'product_detail' => $request->product_detail,
                     'buying_price' => $request->buying_price,
                     'selling_price' => $request->selling_price,
-                    'cost' => $request->cost,
+                    
                     'updated_at' => Carbon::now(),
                 ]);
                 $notification = array(
@@ -208,33 +213,39 @@ public function search(Request $request)
         } // End Method 
         
 
-        public function DeleteProduct($id){
-            $product = Product::findOrFail($id);
-            $img = $product->product_image;
+        public function DeleteProduct($id)
+{
+    $product = Product::findOrFail($id);
+    $img = $product->product_image;
 
-            // Check if any product is using this category
-        if ($product->orderDetails()->exists()) {
-            $notification = array(
-                'message' => 'Cannot delete product. There are order associated with it.',
-                'alert-type' => 'error'
-            );
-            return redirect()->route('all.product')->with($notification);
-        }
-        
-            // បើមានរូបភាព និង file មានស្ថិតនៅលើ server នោះទើបលុប
-            if ($img && file_exists($img)) {
-                unlink($img);
-            }
-        
-            // បន្ទាប់មកលុប product
-            $product->delete();
-        
-            $notification = array(
-                'message' => 'Product Deleted Successfully',
-                'alert-type' => 'success'
-            );
-            return redirect()->back()->with($notification); 
-        } // End Method
+    // បញ្ហា: ត្រូវពិនិត្យទាំង purchase_details (PurchaseItem)
+    $hasPurchaseDetails = \App\Models\purchase_details::where('product_id', $id)->exists();
+
+    // បញ្ហា: ត្រូវពិនិត្យទាំង orderDetails ប្រសិនបើវាដូចជា Sale Detail
+    $hasOrderDetails = $product->orderDetails()->exists();
+
+    if ($hasPurchaseDetails || $hasOrderDetails) {
+        $notification = array(
+            'message' => 'Cannot delete product. It is used in Purchase or Orders.',
+            'alert-type' => 'error'
+        );
+        return redirect()->route('all.product')->with($notification);
+    }
+
+    // Delete image if it exists
+    if ($img && file_exists($img)) {
+        unlink($img);
+    }
+
+    $product->delete();
+
+    $notification = array(
+        'message' => 'Product Deleted Successfully',
+        'alert-type' => 'success'
+    );
+    return redirect()->back()->with($notification);
+}
+
         
     
 
@@ -424,8 +435,18 @@ public function search(Request $request)
                     
                     <td class="p-4 py-5">' . $item->selling_price  . '</td>
                     <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
-                    <td class="p-4 py-5">' . $item->product_store  . '</td> 
                     
+                    <td class="p-4 py-5 text-center align-middle">
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm
+                                     ">
+                            '. $item->product_store  .'
+                        </span>
+                    
+                    
+                    </td>
+
+                    
+
                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div class="flex items-center gap-x-6">
                             ' . $editBtn . $barcodeBtn . $viewBtn . $deleteBtn . '

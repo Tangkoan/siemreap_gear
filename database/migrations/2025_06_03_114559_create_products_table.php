@@ -16,10 +16,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('warehouse_id')->nullable();
-
-
-            $table->string('product_code');
+            $table->string('product_code')->unique();
             $table->string('product_image');
             $table->string('product_store')->nullable();
             $table->integer('stock_alert')->default(0);
@@ -44,10 +41,7 @@ return new class extends Migration
                 ->onDelete('restrict')  // កុំប្រើ cascade
                 ->onUpdate('cascade');
 
-            $table->foreign('warehouse_id')
-                ->references('id')->on('ware_houses')
-                ->onDelete('restrict')  // កុំប្រើ cascade
-                ->onUpdate('cascade');
+            
             
         });
         

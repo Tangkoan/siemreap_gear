@@ -22,12 +22,7 @@
         }
     </script>
 
-    {{-- Purchase --}}
-    <script src="{{ asset('backend/assets/js/custome.js') }}"></script>
-
-    {{-- Chart.js --}}
-    <script src="{{ asset('backend/assets/js/chart.js') }}"></script>
-
+  
     {{-- Alpine.js --}}
     <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
 </head>

@@ -3,14 +3,12 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-
-
-
-    <div class="container mx-auto p-6">
+    <div class="container mx-auto p-6 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
 
-            <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+            <div
+                class="lg:col-span-full rounded-lg shadow-xl p-6 bg-gray-100 dark:bg-gray-900 transition-all duration-300 transform">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -30,64 +28,55 @@
                             <div class="space-y-4">
                                 {{-- Customer Name --}}
                                 <div>
-                                    <label for="name" class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label for="name"
+                                        class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                         Customer Name <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" id="name" name="name" required value="{{ $customer->name }}"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     @error('name')
-                                        <span class="text-danger text-red-500"> {{ $message }} </span>
+                                        <span class="text-red-500"> {{ $message }} </span>
                                     @enderror
                                 </div>
 
-
-
                                 {{-- Customer Address --}}
                                 <div>
-                                    <label for="address" class="block text-gray-400 text-sm font-medium mb-1">
-                                        Customer <Address></Address>
+                                    <label for="address"
+                                        class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                        Customer Address
                                     </label>
                                     <input type="text" id="address" name="address" value="{{ $customer->address }}"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
-
-
-
-
-
                             </div>
 
                             {{-- Column 2 --}}
                             <div class="space-y-4">
-                                {{-- Note --}}
+                                {{-- Notes --}}
                                 <div>
-                                    <label for="notes" class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label for="notes"
+                                        class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                         Notes
                                     </label>
                                     <input type="text" id="notes" name="notes" value="{{ $customer->notes }}"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
 
                                 {{-- Customer Phone --}}
                                 <div>
-                                    <label for="phone" class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label for="phone"
+                                        class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                         Customer Phone
                                     </label>
                                     <input type="number" id="phone" name="phone" value="{{ $customer->phone }}"
-                                        class="input-field-custom w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
-
-
-
-
-
                             </div>
                         </div>
 
                         <div class="flex justify-end mt-6">
                             <button type="submit"
-                                class="button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
                                 Save
                             </button>
                         </div>
@@ -99,7 +88,6 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            // Image preview script (optional)
             $('#image').on('change', function (event) {
                 const [file] = event.target.files;
                 if (file) {
@@ -113,10 +101,6 @@
                     $('#image_preview').addClass('hidden').attr('src', '#');
                 }
             });
-
-            // Note: The password toggle script from your original code was removed
-            // as there are no password fields in this "Add Employee" form.
-            // If you have other forms with password fields, you can use that script there.
         });
     </script>
 

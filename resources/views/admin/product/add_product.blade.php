@@ -88,17 +88,7 @@
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
 
-                            {{-- Stock Alert --}}
-                            <div class="form-group">
-                                <label for="stock_alert"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Stock Alert <span class="text-red-500">*</span>
-                                </label>
-                                <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert"
-                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            </div>
+
 
                             {{-- Image --}}
                             <div class="mb-2">
@@ -143,46 +133,6 @@
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
 
-                            {{-- Cost --}}
-                            <div>
-                                <label for="cost"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Cost
-                                </label>
-                                <input type="number" min="0" step="0.01" id="cost" name="cost"
-                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            </div>
-
-                            {{-- Buying Date --}}
-                            <div>
-                                <label for="buying_date"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Buying Date
-                                </label>
-                                <input type="date" id="buying_date" name="buying_date"
-                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            </div>
-
-                            {{-- Warehouse --}}
-                            <div class="form-group">
-                                <label for="WareHouse"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    WareHouse <span class="text-red-500">*</span>
-                                </label>
-                                <select name="warehouse_id" id="example-select"
-                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    <option selected disabled>Select Ware House</option>
-                                    @foreach ($warehouses as $w)
-                                        <option value="{{ $w->id }}">{{ $w->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
 
                             {{-- Inventory --}}
                             <div class="form-group">
@@ -196,6 +146,18 @@
                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
+
+                            {{-- Stock Alert --}}
+                            <div class="form-group">
+                                <label for="stock_alert" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    Stock Alert <span class="text-red-500">*</span>
+                                </label>
+                                <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert"
+                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                                                       bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                                                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            
                         </div>
                     </div>
 
@@ -211,6 +173,84 @@
     </div>
 
     <script type="text/javascript">
-        // Your existing jQuery scripts here...
+        $(document).ready(function () {
+            // Image preview script (optional)
+            $('#image').on('change', function (event) {
+                const [file] = event.target.files;
+                if (file) {
+                    const preview = $('#image_preview');
+                    preview.attr('src', URL.createObjectURL(file));
+                    preview.removeClass('hidden');
+                    preview.on('load', function () {
+                        URL.revokeObjectURL(preview.attr('src')); // free memory
+                    })
+                } else {
+                    $('#image_preview').addClass('hidden').attr('src', '#');
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('#myForm').validate({
+                rules: {
+                    product_name: {
+                        required: true,
+                    },
+                    category_id: {
+                        required: true,
+                    },
+
+                    supplier_id: {
+                        required: true,
+                    },
+                    selling_price: {
+                        required: true,
+                    },
+                    product_store: {
+                        required: true,
+                    },
+                    stock_alert: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    product_name: {
+                        required: 'Please Enter Product Name',
+                    },
+                    category_id: {
+                        required: 'Please Select Category Name',
+                    },
+
+                    supplier_id: {
+                        required: 'Please Select Supplier Name',
+                    },
+                    selling_price: {
+                        required: 'Please Enter Price Name',
+                    },
+                    product_store: {
+                        required: 'Please Enter Inventory Name',
+                    },
+
+                    stock_alert: {
+                        required: 'Please Enter Stock Alert Name',
+                    },
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+        });
+
     </script>
+
 @endsection

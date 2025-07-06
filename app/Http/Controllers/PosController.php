@@ -56,7 +56,8 @@ class PosController extends Controller
                 'name' => $product->product_name,
                 'price' => (float)$product->selling_price,
                 'category' => $product->category ? $product->category->category_name : 'No Category',
-                'imageUrl' => asset($product->product_image)
+                'imageUrl' => asset($product->product_image),
+                'stock' => (int) $product->product_store // ✅ Add this line
             ];
         });
 
