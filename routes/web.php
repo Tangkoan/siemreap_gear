@@ -251,8 +251,26 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/purchasesearch.purchase/paydue/{id}', 'payDueModel')->name('paydue.due');
 
         Route::post('/purchase/update/due', 'PurchaseUpdateDue')->name('purchase.update.due');
+
+
+        // New Route
+        // Route::get('/add/purchase', 'AddPurchase')->name('add.purchase'); 
     });
 
+    //
+    Route::controller(PurchaseController::class)->group(function () {
+        Route::get('/add/purchase', 'PurchasePage')->name('purchase.page');
+        Route::get('/purchase/product/search', 'PurchaseProductSearch')->name('purchase.product.search'); 
+
+
+
+        Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
+        Route::post('/purchase/add-to-cart', 'AddToCart');
+        Route::get('/purchase/cart/remove/{rowId}', 'RemoveCartItem');
+        Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
+        Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
+    });
+    
 
 
 
@@ -441,15 +459,6 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
 
-Route::controller(PurchaseController::class)->group(function () {
-    Route::get('/purchase', 'PurchasePage')->name('purchase.page');
-
-    Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
-    Route::post('/purchase/add-to-cart', 'AddToCart');
-    Route::get('/purchase/cart/remove/{rowId}', 'RemoveCartItem');
-    Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
-    Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
-});
 
 
 Route::post('/store-sell', [POSController::class, 'FinalInvoice'])->name('store.sell');

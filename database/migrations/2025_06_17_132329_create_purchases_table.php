@@ -16,9 +16,14 @@ return new class extends Migration
             
 
             $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('warehouse_id');
+
             $table->string('purchase_date');
             $table->string('purchase_status');
+
             $table->decimal('discount')->default(0);
+            $table->decimal('shipping', 10 , 2)->default(0.00);
+            
             $table->string('total_products');
             $table->string('sub_total')->nullable();
             $table->string('vat')->nullable();
@@ -32,6 +37,12 @@ return new class extends Migration
             // 
             $table->foreign('supplier_id')
                 ->references('id')->on('suppliers')
+                ->onDelete('restrict')  // កុំប្រើ cascade
+                ->onUpdate('cascade');
+
+
+                $table->foreign('warehouse_id')
+                ->references('id')->on('ware_houses')
                 ->onDelete('restrict')  // កុំប្រើ cascade
                 ->onUpdate('cascade');
         });

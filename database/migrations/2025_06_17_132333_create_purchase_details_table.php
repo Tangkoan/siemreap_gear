@@ -17,6 +17,7 @@ return new class extends Migration
             
             $table->unsignedBigInteger('purchase_id');
             $table->unsignedBigInteger('product_id');
+            $table->date('date');
 
             $table->integer('purchase_price');
 

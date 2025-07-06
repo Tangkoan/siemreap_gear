@@ -81,9 +81,18 @@ public function search(Request $request)
      
             $pcode = IdGenerator::generate(['table' => 'products','field' => 'product_code','length' => 6, 'prefix' => 'SR_GEAR' ]);
     
-            // គ្រាន់តែយក path តែប៉ុណ្ណោះ (string), null ប្រសិនបើមិនមាន
+            // Generate unique product code with prefix and length
+            $pcode = IdGenerator::generate([
+                'table' => 'products',
+                'field' => 'product_code',
+                'length' => 10, // SR_GEAR + 3 digits
+                'prefix' => 'SR_GEAR'
+            ]);
+
+            // Default null if no image
             $image_path = $request->input('product_image') ?? null;
 
+            // Handle image upload if available
             if ($request->hasFile('product_image')) {
                 $image = $request->file('product_image');
                 $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
@@ -116,6 +125,8 @@ public function search(Request $request)
                 'product_image' => $image_path,
                 'created_at' => Carbon::now(), 
             ]);
+
+            // Success notification
              $notification = array(
                 'message' => 'Product Inserted Successfully',
                 'alert-type' => 'success'
@@ -404,7 +415,7 @@ public function search(Request $request)
                     <td class="p-4 py-5">' . ($key + 1) . '</td>
                     
                     <td class="p-4 py-5">
-                        <img src="' . asset($item->product_image) . '" alt="Product Image" class="rounded-md" style="width: 64px; height: 64px; object-fit: cover; object-position: center;" />
+                        <img src="' . asset($item->product_image) . '" alt="Product Image" class="rounded-md" style="width: 40px; height: 40px; object-fit: cover; object-position: center;" />
                     </td>
 
                     <td class="p-4 py-5">' . $item->product_code . '</td>
@@ -414,7 +425,6 @@ public function search(Request $request)
                     <td class="p-4 py-5">' . $item->selling_price  . '</td>
                     <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
                     <td class="p-4 py-5">' . $item->product_store  . '</td> 
-                    <td class="p-4 py-5">' . ($item->WareHouse->name ?? 'N/A') . '</td>
                     
                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div class="flex items-center gap-x-6">

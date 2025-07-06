@@ -39,7 +39,8 @@
                 </div>
 
                 {{-- Category Get --}}
-                <div class="w-full sm:w-[200px] md:w-[400px] lg:w-[500px] overflow-x-auto whitespace-nowrap mb-4" id="category-buttons">
+                <div class="w-full sm:w-[200px] md:w-[400px] lg:w-[500px] overflow-x-auto whitespace-nowrap mb-4"
+                    id="category-buttons">
                     <button onclick="loadProducts('all')"
                         class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
                         All Category
@@ -63,7 +64,8 @@
 
             <!-- Product Grid -->
             <div class="flex-1 overflow-y-auto  dark:bg-gray-500">
-                <div id="product-grid" class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
+                <div id="product-grid"
+                    class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
                     <!-- Products will be dynamically loaded here -->
                 </div>
             </div>
@@ -129,7 +131,8 @@
 
                 <!-- Payment Method -->
                 <div>
-                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">Payment Method</label>
+                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">Payment
+                        Method</label>
                     <select name="payment_status" id="payment_status" required
                         class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="" disabled selected>Select Payment</option>
@@ -224,30 +227,30 @@
                     data.products.forEach(product => {
                         const card =
                             `
-                                                                                                                                                    <form method="POST" action="/add-cart" id="form-${product.id}">
-                                                                                                                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                                                                                                                        <input type="hidden" name="id" value="${product.id}">
-                                                                                                                                                        <input type="hidden" name="name" value="${product.name}">
-                                                                                                                                                        <input type="hidden" name="qty" value="1">
-                                                                                                                                                        <input type="hidden" name="price" value="${product.price}">
+                                                                                                                                                        <form method="POST" action="/add-cart" id="form-${product.id}">
+                                                                                                                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                                                                                                                            <input type="hidden" name="id" value="${product.id}">
+                                                                                                                                                            <input type="hidden" name="name" value="${product.name}">
+                                                                                                                                                            <input type="hidden" name="qty" value="1">
+                                                                                                                                                            <input type="hidden" name="price" value="${product.price}">
 
-                                                                                                                                                        <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-200 hover:scale-105"
-                                                                                                                                                            onclick="document.getElementById('form-${product.id}').submit();"
-                                                                                                                                                            title="Click to add to cart">
+                                                                                                                                                            <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-200 hover:scale-105"
+                                                                                                                                                                onclick="document.getElementById('form-${product.id}').submit();"
+                                                                                                                                                                title="Click to add to cart">
 
-                                                                                                                                                            <div class="p-3" style="width:150px; height: 50px;">
-                                                                                                                                                                <img class="w-full h-24 rounded-md" src="${product.imageUrl}" alt="${product.name}">
+                                                                                                                                                                <div class="p-3" style="width:150px; height: 50px;">
+                                                                                                                                                                    <img class="w-full h-24 rounded-md" src="${product.imageUrl}" alt="${product.name}">
+                                                                                                                                                                </div>
+
+                                                                                                                                                                <br><br><br>
+
+                                                                                                                                                                <div class="p-4 px-3">
+                                                                                                                                                                    <h3 class="font-semibold mb-2 text-center">${product.name}</h3>
+                                                                                                                                                                    <p class="text-blue-600 font-bold text-lg text-center">$${product.price}</p>
+                                                                                                                                                                </div>
                                                                                                                                                             </div>
-
-                                                                                                                                                            <br><br><br>
-
-                                                                                                                                                            <div class="p-4 px-3">
-                                                                                                                                                                <h3 class="font-semibold mb-2 text-center">${product.name}</h3>
-                                                                                                                                                                <p class="text-blue-600 font-bold text-lg text-center">$${product.price}</p>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                    </form>
-                                                                                                                                                `;
+                                                                                                                                                        </form>
+                                                                                                                                                    `;
                         productGrid.innerHTML += card;
                     });
                 });
@@ -269,30 +272,30 @@
 
                     data.products.forEach(product => {
                         const card = `
-                                <form method="POST" action="/add-cart" id="form-${product.id}">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="hidden" name="id" value="${product.id}">
-                                    <input type="hidden" name="name" value="${product.name}">
-                                    <input type="hidden" name="qty" value="1">
-                                    <input type="hidden" name="price" value="${product.price}">
+                                    <form method="POST" action="/add-cart" id="form-${product.id}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="id" value="${product.id}">
+                                        <input type="hidden" name="name" value="${product.name}">
+                                        <input type="hidden" name="qty" value="1">
+                                        <input type="hidden" name="price" value="${product.price}">
 
-                                        <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-200 hover:scale-105"
-                                        onclick="document.getElementById('form-${product.id}').submit();"
-                                        title="Click to add to cart">
+                                            <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-200 hover:scale-105"
+                                            onclick="document.getElementById('form-${product.id}').submit();"
+                                            title="Click to add to cart">
 
-                                        <div class="p-3" style="width:150px; height: 50px;">
-                                            <img class="w-full h-24 rounded-md" src="${product.imageUrl}" alt="${product.name}">
+                                            <div class="p-3" style="width:150px; height: 50px;">
+                                                <img class="w-full h-24 rounded-md" src="${product.imageUrl}" alt="${product.name}">
+                                            </div>
+
+                                            <br><br><br>
+
+                                            <div class="p-4 px-3">
+                                                <h3 class="font-semibold mb-2 text-center">${product.name}</h3>
+                                                <p class="text-blue-600 font-bold text-lg text-center">$${product.price}</p>
+                                            </div>
                                         </div>
-
-                                        <br><br><br>
-
-                                        <div class="p-4 px-3">
-                                            <h3 class="font-semibold mb-2 text-center">${product.name}</h3>
-                                            <p class="text-blue-600 font-bold text-lg text-center">$${product.price}</p>
-                                        </div>
-                                    </div>
-                                    </form>
-                            `;
+                                        </form>
+                                `;
                         productGrid.innerHTML += card;
                     });
                 });

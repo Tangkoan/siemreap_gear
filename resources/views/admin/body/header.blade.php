@@ -60,7 +60,7 @@
 
 
 
-<header class="dark:bg-gray-800 text-white p-2 shadow-sm duration-300 bg-white">
+<header class="dark:bg-gray-800  text-white p-2 shadow-sm duration-300 bg-white">
     <div class="container mx-auto flex justify-between items-center">
 
         <!-- បន្ថែម items-center នៅទីនេះ -->

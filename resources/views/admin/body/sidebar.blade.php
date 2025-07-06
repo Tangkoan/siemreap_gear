@@ -1,5 +1,5 @@
 <nav id="sidebar"
-    class="bg-white-800 text-white w-64 p-4 space-y-2 md:block hidden transition-all duration-300 ease-in-out shadow-lg md:shadow-none">
+    class="bg-white dark:bg-gray-800 text-white w-64 p-4 space-y-2 md:block hidden transition-all duration-300 ease-in-out shadow-lg md:shadow-none">
 
     <div id="nav-links" class="space-y-2">
 

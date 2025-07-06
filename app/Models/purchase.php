@@ -13,4 +13,8 @@ class purchase extends Model
     public function supplier(){
         return $this->belongsTO(Supplier::class,'supplier_id','id');
     }
+
+    public function warehouse(){
+        return $this->belongsTO(WareHouse::class,'warehouse_id','id');
+    }
 }
