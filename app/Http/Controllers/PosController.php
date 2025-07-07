@@ -100,6 +100,15 @@ class PosController extends Controller
 
     } // End Method 
 
+    public function CartRemove($rowId){
+        Cart::remove($rowId);
+        $notification = array(
+            'message' => 'Cart Remove Successfully',
+            'alert-type' => 'success'
+        );
+        // return redirect()->back()->with($notification);
+        return redirect()->back();
+    } // End Method 
 
     public function CartUpdate(Request $request,$rowId){
         $qty = $request->qty;
@@ -116,15 +125,7 @@ class PosController extends Controller
     } // End Method 
 
 
-    public function CartRemove($rowId){
-        Cart::remove($rowId);
-        $notification = array(
-            'message' => 'Cart Remove Successfully',
-            'alert-type' => 'success'
-        );
-        // return redirect()->back()->with($notification);
-        return redirect()->back();
-    } // End Method 
+    
 
     public function CreateInvoice(Request $request){
 

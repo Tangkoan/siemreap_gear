@@ -272,6 +272,16 @@ class OrderController extends Controller
     }// End Method 
 
 
+    public function OrderDetailsDue($order_id){
+
+        $order = Order::where('id',$order_id)->first();
+
+        $orderItem = Orderdetails::with('product')->where('order_id',$order_id)->orderBy('id','DESC')->get();
+        return view('admin.order.order_details_due',compact('order','orderItem'));
+
+    }// End Method 
+
+
     // public function OrderStatusUpdate(Request $request){
     //     $order_id = $request->id;
 
@@ -396,7 +406,7 @@ class OrderController extends Controller
                 
                 <td class="p-4 py-5 text-center align-middle">
                     
-                        <span class="inline-block px-3 py-1 rounded-md bg-green-500 text-white font-semibold shadow-sm">
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">
                             '. $item->order_status  .'
                         </span>
                     
@@ -492,7 +502,7 @@ class OrderController extends Controller
 
                 <td class="p-4 py-5 ">
                     
-                        <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">
                             '. $item->pay  .' $
                         </span>
                     
@@ -501,7 +511,7 @@ class OrderController extends Controller
                 
                 <td class="p-4 py-5">
                     
-                        <span class="inline-block px-3 py-1 rounded-md bg-green-500 text-white font-semibold shadow-sm">
+                        <span class=" inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">
                             '. $item->due  .' $
                         </span>
                     
@@ -514,7 +524,7 @@ class OrderController extends Controller
                    
 
                     <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
-                                <a href="' . route('order.details', $item->id) . '" >
+                                <a href="' . route('order.details.due', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"

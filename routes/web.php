@@ -51,21 +51,6 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
 
-    // WareHouse
-    Route::controller(WareHouseController::class)->group(function(){
-        Route::get('/all/warehouse', 'AllWarehouse')->name('all.warehouse'); 
-        Route::get('/add/warehouse', 'AddWarehouse')->name('add.warehouse');
-        Route::post('/store/warehouse', 'StoreWarehouse')->name('store.warehouse');
-        
-        Route::get('/edit/warehouse/{id}', 'EditWarehouse')->name('edit.warehouse');
-        Route::post('/update/warehouse', 'UpdateWarehouse')->name('update.warehouse');
-        Route::get('/delete/warehouse/{id}', 'DeleteWarehouse')->name('delete.warehouse');
-        
-        Route::get('/delete/brand/{id}', 'DeleteBrand')->name('delete.brand');
-
-
-    });
-    // End WareHouse
 
 
     // Report Route
@@ -200,6 +185,8 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');
         Route::get('/pending/order', 'PendingOrder')->name('pending.order')->middleware('permission:order.pending');
         Route::get('/order/details/{order_id}', 'OrderDetails')->name('order.details');
+
+        Route::get('/order/details/due/{order_id}', 'OrderDetailsDue')->name('order.details.due');
 
         Route::post('/order/status/update', 'OrderStatusUpdate')->name('order.status.update');
 
@@ -403,16 +390,22 @@ Route::middleware(['auth'])->group(callback: function () {
 
     // Pos
     Route::get('/get-products', [PosController::class, 'getProductsByCategory']);
+    // Route::post('/add-cart', [PosController::class, 'AddCart']);
+
+
     Route::post('/add-cart', [PosController::class, 'AddCart']);
+    Route::get('/all-cart-items', [PosController::class, 'AllItem']);
+    Route::get('/cart-remove/{id}', [PosController::class, 'CartRemove']);
+
     // End POS
     ///POS All Route 
     Route::controller(PosController::class)->group(function () {
 
         Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
-        Route::post('/add-cart', 'AddCart');
-        Route::get('/allitem', 'AllItem');
+        // Route::post('/add-cart', 'AddCart');
+        // Route::get('/allitem', 'AllItem');
         Route::post('/cart-update/{rowId}', 'CartUpdate');
-        Route::get('/cart-remove/{rowId}', 'CartRemove');
+        // Route::get('/cart-remove/{rowId}', 'CartRemove');
 
         Route::post('/create-invoice', 'CreateInvoice');
 
