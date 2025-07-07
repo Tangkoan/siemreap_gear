@@ -101,13 +101,6 @@ class PurchaseController extends Controller
         $perPage = $request->perPage ?? 10; // ✅ Default = 10
         $isAll = $perPage === 'all';
 
-        // if ($isAll) {
-        //     // $orders = $query->get();
-        //     $orders = Order::where('order_status','pending')->get();;
-        // } else {
-        //     $orders = $query->paginate((int)$perPage);
-        // }
-
         if ($isAll) {
             $purchases = $query->get(); // ✅ Use query result with filter
         } else {
@@ -388,19 +381,6 @@ class PurchaseController extends Controller
     
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function PurchasePage() {
         $products = Product::latest()->get();
         $categories = Category::all();
@@ -428,7 +408,32 @@ class PurchaseController extends Controller
         return response()->json(['products' => $products]);
     }
 
+    // public function AddToCart(Request $request) {
+    //     Cart::add([
+    //         'id' => $request->id,
+    //         'name' => $request->name,
+    //         'qty' => $request->qty,
+    //         'price' => $request->price,
+    //         'weight' => 0,
+    //         'options' => [],
+    //     ]);
+
+    //     return redirect()->back()->with('message', 'Product added to purchase cart.');
+    // }
+
+    // public function RemoveCartItem($rowId) {
+    //     Cart::remove($rowId);
+    //     return redirect()->back()->with('message', 'Item removed from cart.');
+    // }
+
+    // public function UpdateCartItem(Request $request, $rowId) {
+    //     Cart::update($rowId, $request->qty);
+    //     return redirect()->back()->with('message', 'Cart updated successfully.');
+    // }
+
+
     public function AddToCart(Request $request) {
+        // You might want to add stock validation here before adding to cart
         Cart::add([
             'id' => $request->id,
             'name' => $request->name,
@@ -438,21 +443,50 @@ class PurchaseController extends Controller
             'options' => [],
         ]);
 
-        return redirect()->back()->with('message', 'Product added to purchase cart.');
+        // Return JSON response instead of redirect
+        return response()->json([
+            // No 'message' for silent add
+            'cart_content' => Cart::content(), // Send updated cart content
+            'cart_subtotal' => Cart::subtotal(), // Send updated subtotal
+        ]);
     }
 
     public function RemoveCartItem($rowId) {
         Cart::remove($rowId);
-        return redirect()->back()->with('message', 'Item removed from cart.');
+
+        // Return JSON response instead of redirect
+        return response()->json([
+            // 'message' => 'Item removed from cart.', 
+            'alert_type' => 'success',
+            'cart_content' => Cart::content(),
+            'cart_subtotal' => Cart::subtotal(),
+        ]);
     }
 
     public function UpdateCartItem(Request $request, $rowId) {
-        Cart::update($rowId, $request->qty);
-        return redirect()->back()->with('message', 'Cart updated successfully.');
+        $qty = $request->qty;
+
+        // Basic validation for quantity
+        if ($qty <= 0) {
+            Cart::remove($rowId); // Remove item if quantity is 0 or less
+            return response()->json([
+                // 'message' => 'Item removed due to zero quantity.',
+                'alert_type' => 'warning',
+                'cart_content' => Cart::content(),
+                'cart_subtotal' => Cart::subtotal(),
+            ]);
+        }
+
+        Cart::update($rowId, $qty);
+
+        // Return JSON response instead of redirect
+        return response()->json([
+            // 'message' => 'Cart updated successfully.', // Keep message for update
+            'alert_type' => 'success',
+            'cart_content' => Cart::content(),
+            'cart_subtotal' => Cart::subtotal(),
+        ]);
     }
-
-
-
 
 public function StorePurchase(Request $request)
 {

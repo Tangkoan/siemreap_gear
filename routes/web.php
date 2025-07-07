@@ -253,17 +253,17 @@ Route::middleware(['auth'])->group(callback: function () {
 
         Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
         Route::post('/purchase/add-to-cart', 'AddToCart');
-        Route::get('/purchase/cart/remove/{rowId}', 'RemoveCartItem');
-        Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
+
         Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
+
+        // Route::get('/purchase/cart/remove/{rowId}', 'RemoveCartItem');
+        // Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
+
+        Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
+        Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
+        Route::get('/purchase/cart/remove/{rowId}', [PurchaseController::class, 'RemoveCartItem']);
     });
     
-
-
-
-
-
-
 
     // Start Permision
     Route::controller(RoleController::class)->group(function () {
@@ -393,9 +393,13 @@ Route::middleware(['auth'])->group(callback: function () {
     // Route::post('/add-cart', [PosController::class, 'AddCart']);
 
 
+    // Route::post('/add-cart', [PosController::class, 'AddCart']);
+    // Route::get('/all-cart-items', [PosController::class, 'AllItem']);
+    // Route::get('/cart-remove/{id}', [PosController::class, 'CartRemove']);
+
     Route::post('/add-cart', [PosController::class, 'AddCart']);
-    Route::get('/all-cart-items', [PosController::class, 'AllItem']);
-    Route::get('/cart-remove/{id}', [PosController::class, 'CartRemove']);
+    Route::post('/cart-update/{rowId}', [PosController::class, 'CartUpdate']);
+    Route::get('/cart-remove/{rowId}', [PosController::class, 'CartRemove']);
 
     // End POS
     ///POS All Route 
@@ -404,7 +408,7 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
         // Route::post('/add-cart', 'AddCart');
         // Route::get('/allitem', 'AllItem');
-        Route::post('/cart-update/{rowId}', 'CartUpdate');
+        // Route::post('/cart-update/{rowId}', 'CartUpdate');
         // Route::get('/cart-remove/{rowId}', 'CartRemove');
 
         Route::post('/create-invoice', 'CreateInvoice');
@@ -459,6 +463,3 @@ Route::get('/print-invoice/{id}', [POSController::class, 'PrintInvoice'])->name(
 
 
 
-
-//
-Route::get('/search-warehouse', [WareHouseController::class, 'searchWarehouse'])->name('search.warehouse');

@@ -282,30 +282,6 @@ class OrderController extends Controller
     }// End Method 
 
 
-    // public function OrderStatusUpdate(Request $request){
-    //     $order_id = $request->id;
-
-
-
-    //     $product = Orderdetails::where('order_id',$order_id)->get();
-    //     foreach($product as $item){
-    //        Product::where('id',$item->product_id)
-    //             ->update(['product_store' => DB::raw('product_store-'.$item->quantity) ]);
-    //     }
-
-        
-
-    //  Order::findOrFail($order_id)->update(['order_status' => 'complete']);
-
-    //      $notification = array(
-    //         'message' => 'Order Done Successfully',
-    //         'alert-type' => 'success'
-    //     ); 
-
-    //     return redirect()->route('pending.order')->with($notification);
-
-
-    // }// End Method 
 
     
     public function OrderStatusUpdate(Request $request){
@@ -466,13 +442,6 @@ class OrderController extends Controller
 
         $perPage = $request->perPage ?? 10; // ✅ Default = 10
         $isAll = $perPage === 'all';
-
-        // if ($isAll) {
-        //     // $orders = $query->get();
-        //     $orders = Order::where('order_status','pending')->get();;
-        // } else {
-        //     $orders = $query->paginate((int)$perPage);
-        // }
 
         if ($isAll) {
             $orders = $query->get(); // ✅ Use query result with filter

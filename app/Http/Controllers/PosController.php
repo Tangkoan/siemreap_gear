@@ -69,63 +69,111 @@ class PosController extends Controller
 
 
 
-    public function AddCart(Request $request){
+    // public function AddCart(Request $request){
 
-        Cart::add([
-            'id' => $request->id, 
-            'name' => $request->name, 
-            'qty' => $request->qty, 
-            'price' => $request->price, 
-            'weight' => 20, 
-            'options' => ['size' => 'large']]);
-
-
-         $notification = array(
-            'message' => 'Product Added Successfully',
-            'alert-type' => 'success'
-        );
-
-        // return redirect()->back()->with($notification);
-        return redirect()->back();
+    //     Cart::add([
+    //         'id' => $request->id, 
+    //         'name' => $request->name, 
+    //         'qty' => $request->qty, 
+    //         'price' => $request->price, 
+    //         'weight' => 20, 
+    //         'options' => ['size' => 'large']]);
 
 
-    } // End Method 
+    //      $notification = array(
+    //         'message' => 'Product Added Successfully',
+    //         'alert-type' => 'success'
+    //     );
+
+    //     // return redirect()->back()->with($notification);
+    //     return redirect()->back();
+
+
+    // } // End Method 
 
     
-    public function AllItem(){
+    // public function AllItem(){
 
-        $product_item = Cart::content();
+    //     $product_item = Cart::content();
 
-        return view('admin.pos.text_item',compact('product_item'));
+    //     return view('admin.pos.text_item',compact('product_item'));
 
-    } // End Method 
+    // } // End Method 
+
+    // public function CartRemove($rowId){
+    //     Cart::remove($rowId);
+    //     $notification = array(
+    //         'message' => 'Cart Remove Successfully',
+    //         'alert-type' => 'success'
+    //     );
+    //     // return redirect()->back()->with($notification);
+    //     return redirect()->back();
+    // } // End Method 
+
+    // public function CartUpdate(Request $request,$rowId){
+    //     $qty = $request->qty;
+    //     $update = Cart::update($rowId,$qty);
+         
+    //      $notification = array(
+    //         'message' => 'Cart Updated Successfully',
+    //         'alert-type' => 'success'
+    //     );
+
+    //     // return redirect()->back()->with($notification);
+    //     return redirect()->back();
+
+    // } // End Method 
+
+
+    
+    public function AddCart(Request $request){
+        Cart::add([
+            'id' => $request->id,
+            'name' => $request->name,
+            'qty' => $request->qty,
+            'price' => $request->price,
+            'weight' => 20,
+            'options' => ['size' => 'large']
+        ]);
+    
+        return response()->json([
+            // 'message' => 'Product Added Successfully',
+            'alert-type' => 'success',
+            'cart_content' => Cart::content(),
+            'cart_subtotal' => Cart::subtotal(),
+        ]);
+    }
+
+    // This method is probably not needed if you update the cart view via AJAX
+    // public function AllItem(){
+    //     $product_item = Cart::content();
+    //     return view('admin.pos.text_item',compact('product_item'));
+    // }
 
     public function CartRemove($rowId){
         Cart::remove($rowId);
-        $notification = array(
-            'message' => 'Cart Remove Successfully',
-            'alert-type' => 'success'
-        );
-        // return redirect()->back()->with($notification);
-        return redirect()->back();
-    } // End Method 
 
-    public function CartUpdate(Request $request,$rowId){
+        // Return JSON response instead of redirect
+        return response()->json([
+            // 'message' => 'Cart Item Removed Successfully',
+            'alert-type' => 'success',
+            'cart_content' => Cart::content(),
+            'cart_subtotal' => Cart::subtotal(),
+        ]);
+    }
+
+
+    public function CartUpdate(Request $request, $rowId){
         $qty = $request->qty;
-        $update = Cart::update($rowId,$qty);
-         
-         $notification = array(
-            'message' => 'Cart Updated Successfully',
-            'alert-type' => 'success'
-        );
+        Cart::update($rowId, $qty);
 
-        // return redirect()->back()->with($notification);
-        return redirect()->back();
-
-    } // End Method 
-
-
-    
+        return response()->json([
+            // 'message' => 'Cart Updated Successfully',
+            'alert-type' => 'success',
+            'cart_content' => Cart::content(),
+            'cart_subtotal' => Cart::subtotal(),
+        ]);
+    }
 
     public function CreateInvoice(Request $request){
 
@@ -249,7 +297,7 @@ public function PrintInvoice($id)
     $order = Order::with('customer')->findOrFail($id);
     $orderDetails = Orderdetails::with('product')->where('order_id', $id)->get();
 
-    return view('admin.invoice.print', compact('order', 'orderDetails'));
+return view('admin.invoice.print', compact('order', 'orderDetails'))->with("message", 'Successfully Order!!');
 }
 
 
