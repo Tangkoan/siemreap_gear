@@ -26,6 +26,11 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Str;
 
 
+// In your AdminController.php
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log; // For logging errors
+use RealRashid\SweetAlert\Facades\Alert; // If you use SweetAlert for notifications
+
 // Backup
 use File;
 use Illuminate\Support\Facades\Storage;
@@ -449,6 +454,38 @@ class AdminController extends Controller
 
 
 
+public function BackupNow()
+{
+    try {
+        // This command triggers the database backup process defined by Spatie/Laravel-Backup
+        Artisan::call('backup:run');
+
+        // Get the output (optional, for debugging)
+        $output = Artisan::output();
+        Log::info('Database backup initiated. Output: ' . $output);
+
+        // Assuming success, send a notification
+        $notification = [
+            'message' => 'Database Backup Successfully!',
+            'alert-type' => 'success'
+        ];
+        // If you use SweetAlert, you might do: Alert::success('Success', 'Database Backup Successfully!');
+        return redirect()->back()->with($notification);
+
+    } catch (\Exception $e) {
+        // Log the actual error for debugging
+        Log::error('Database Backup Failed: ' . $e->getMessage());
+
+        // Send an error notification
+        $notification = [
+            'message' => 'Database Backup Failed! ' . $e->getMessage(), // Show the error message to the user
+            'alert-type' => 'error'
+        ];
+        // If you use SweetAlert, you might do: Alert::error('Failed', 'Database Backup Failed: ' . $e->getMessage());
+        return redirect()->back()->with($notification);
+    }
+}
+
 public function DeleteBackup($getFilename)
 {
     $filePath = storage_path('SRGEAR/SRGEAR/' . $getFilename);
@@ -463,18 +500,18 @@ public function DeleteBackup($getFilename)
 
 
 
-    public function BackupNow(){
-        \Artisan::call('backup:run');
+    // public function BackupNow(){
+    //     \Artisan::call('backup:run');
 
-        $notification = array(
-            'message' => 'Database Backup Successfully',
-            'alert-type' => 'success'
-        );
+    //     $notification = array(
+    //         'message' => 'Database Backup Successfully',
+    //         'alert-type' => 'success'
+    //     );
 
-        return redirect()->back()->with($notification);
+    //     return redirect()->back()->with($notification);
 
 
-    }// End Method 
+    // }// End Method 
 
     public function DeleteDatabase($getFilename){
 

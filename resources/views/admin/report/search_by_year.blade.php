@@ -1,79 +1,148 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
-    <div class="page-content">
-        <div class="container-fluid">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">All Search By Month Order</h4>
+    <div class="container mx-auto p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-
-                            </ol>
-                        </div>
-
+            <div class="lg:col-span-full p-0">
+                <div class="flex justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-default flex items-center text-gray-800 dark:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                            class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                        </svg>
+                        <span class="px-2">Orders in Year:</span> <span class="px-2 text-black dark:text-blue-500"> {{ $year }}</span>
+                    </h2>
+                    <div>
+                        {{-- Make sure this route and parameter are correct for your export by year function --}}
+                        <a href="{{ route('sale.report.export.byyear', ['year' => $year]) }}"
+                            class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                            Export
+                        </a>
                     </div>
                 </div>
-            </div>
-            <!-- end page title -->
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-
-                        <div class="card-body">
-                            <h3 class="text-danger">Search By Year: {{ $years }}</h3>
-                            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>Sl</th>
-                                        <th>Date</th>
-                                        <th>Invoice</th>
-                                        <th>Amount</th>
-                                        <th>Payment</th>
-                                        <th>Status</th>
-                                        <th>Action </th>
-                                    </tr>
-                                </thead>
-
-
-                                <tbody>
-                                    @foreach ($orderYear as $key => $item)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->order_date }}</td>
-                                            <td>{{ $item->invoice_no }}</td>
-                                            <td>{{ $item->amount }}</td>
-                                            <td>{{ $item->payment_method }}</td>
-                                            <td><span class="badge bg-primary">{{ $item->status }}</span></td>
-
-
-                                            <td><a href="{{ route('admin.order.details', $item->id) }}"
-                                                    class="btn btn-info waves-effect waves-light"> <i class="fas fa-eye"></i>
-                                                </a>
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
-
+                <!-- Search + Per Page -->
+                <div class="flex flex-wrap justify-between items-center mb-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <label for="perPage" class="text-sm text-slate-600 dark:text-white">Show</label>
+                            <select id="perPage" name="perPage"
+                                class="h-10 border dark:bg-gray-800  dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                <option value="6">6</option>
+                                <option value="10" >10</option> <!-- ✅ Default -->
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="all"selected >All</option>
+                            </select>
                         </div>
                     </div>
-                </div> <!-- end col -->
-            </div> <!-- end row -->
+
+                    <div id="orderTableWrapper">
+                        <table class="w-full text-left table-auto min-w-max text-sm">
+                        </table>
+                        <div id="orderTableFooter"></div> {{-- <<< នៅក្រោម Table --}} </div>
+
+                            <div class="ml-3">
+                                <div class="w-full max-w-sm min-w-[200px] relative">
+                                    <div class="relative w-full max-w-sm min-w-[200px]">
+                                        <input
+                                            class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                                            placeholder="Search for invoice no. or customer name" id="search" name="search"
+                                            type="text" />
+                                        <button
+                                            class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                                            type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                                                stroke="currentColor" class="w-8 h-8 text-slate-600">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="table-wrapper overflow-y-auto max-h-[500px]">
+                        <table class="w-full text-left table-auto min-w-max text-sm">
+                            <thead>
+                                <tr class="sticky top-0 bg-slate-50 dark:bg-gray-800 border-b border-slate-200">
+                                <th class="p-4">N<sup>O</sup></th>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Invoice</th>
+                                <th class="p-4">Amount</th>
+                                <th class="p-4">Payment</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody" class="divide-y divide-slate-200 dark:divide-gray-600">
+                            {{-- Ajax Table Body will load here --}}
+                        </tbody>
+                        <tfoot id="orderTableFooter">
+                            {{-- Footer will be loaded here by AJAX --}}
+                        </tfoot>
+                    </table>
+                </div>
 
 
-        </div> <!-- container-fluid -->
+            </div>
+
+        </div>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            function fetchData(page = 1) {
+                let query = $('#search').val();
+                let perPage = $('#perPage').val();
+                let year = "{{ $year }}"; // Ensure the year is passed from the Blade view
 
+                $.ajax({
+                    url: "{{ url('/admin/search/byyear') }}?page=" + page, // Correct AJAX URL
+                    type: "GET",
+                    data: {
+                        search: query,
+                        perPage: perPage,
+                        year: year // Pass the year to the controller
+                    },
+                    beforeSend: function () {
+                        $('#orderTableBody').html('<tr><td colspan="7" class="text-center py-4 text-gray-500 dark:text-gray-400">Loading...</td></tr>');
+                        $('#paginationLinks').html(''); // Clear pagination
+                        $('#orderTableFooter').html(''); // Clear footer
+                    },
+                    success: function (data) {
+                        $('#orderTableBody').html(data.table);
+                        $('#orderTableFooter').html(data.footer);
+                        $('#paginationLinks').html(data.pagination);
+                    },
+                    error: function () {
+                        $('#orderTableBody').html('<tr><td colspan="7" class="text-center text-red-500 py-4">Error loading data.</td></tr>');
+                        $('#paginationLinks').html('');
+                        $('#orderTableFooter').html('');
+                    }
+                });
+            }
 
+            fetchData(); // Initial data fetch on page load
 
+            // Event listeners for search and perPage change
+            $('#search, #perPage').on('keyup change', function () {
+                fetchData();
+            });
+
+            // Event listener for pagination clicks
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                let page = $(this).attr('href').split('page=')[1];
+                fetchData(page);
+            });
+        });
+    </script>
 
 @endsection

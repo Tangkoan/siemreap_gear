@@ -15,7 +15,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\NotificationController;
 
 
 
@@ -39,6 +38,8 @@ require __DIR__ . '/auth.php';
 
 
 
+
+
 // ចំណុចចាប់ផ្ដើមបន្ថែម web ថ្មី ដែលក្នុងLaravel គេតែងហៅថា Route បើនិយាយទៅប្រៀបដូច URL ផងដែរ ដោយសារយើងសរសេរវាជា (/) ដើម្បីជាផ្លូវពីកន្ឡែងនេះទៅកន្លែងថ្មី
 Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
 
@@ -58,13 +59,13 @@ Route::middleware(['auth'])->group(callback: function () {
     // Report Route
     Route::controller(ReportController::class)->group(function () {
         Route::get('/all/reports', 'AllReports')->name('all.reports');
-        // Route::post('/admin/search/bydate', 'AdminSearchByDate')->name('admin.search.bydate');
         Route::match(['get', 'post'], '/admin/search/bydate', 'AdminSearchByDate')->name('admin.search.bydate');
-
-        // Route::post('/admin/search/bymonth', 'AminSearchByMonth')->name('admin.search.bymonth');
-        Route::match(['get', 'post'], 'AminSearchByYear')->name('admin.search.byyear');
-        Route::match(['get', 'post'], '/report/bymonth', 'AminSearchByMonth')->name('admin.search.bymonth');
-
+        Route::match(['get', 'post'], '/report/bymonth', 'AdminSearchByMonth')->name('admin.search.bymonth');
+        
+         // Uses 'match' to allow both GET and POST requests for flexibility (e.g., initial page load and AJAX)
+        Route::match(['get', 'post'], '/admin/search/byyear', 'AdminSearchByYear')->name('admin.search.byyear');
+        Route::get('/sale/report/export/byyear', 'exportByYear')->name('sale.report.export.byyear');
+      
         //  Export Sale(Order Report)
         Route::get('/report-order/export', 'SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')
 

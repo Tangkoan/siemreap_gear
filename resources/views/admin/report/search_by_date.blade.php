@@ -9,12 +9,12 @@
             <div class="lg:col-span-full p-0">
                 <div class="flex justify-between mb-6">
                     <h2 class="text-xl font-semibold text-default flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                            class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
+                                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                         </svg>
-                        Orders on: {{ $formattedDate }}
+                        <span class="px-2">Orders on :</span><span class="px-2 text-black dark:text-blue-500"> {{ $formattedDate }}</span>
                     </h2>
                     <div>
 
@@ -30,16 +30,19 @@
 
                 <!-- Search + Per Page -->
                 <div class="flex flex-wrap justify-between items-center mb-4">
-                    <div class="flex items-center gap-2">
-                        <label for="perPage" class="text-sm text-slate-600 dark:text-slate-300">Show:</label>
-                        <select id="perPage"
-                            class="w-28 border border-slate-300 rounded text-sm text-slate-700 h-9 dark:bg-gray-600 dark:text-white">
-                            <option value="10" selected>10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="all">All</option>
-                        </select>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <label for="perPage" class="text-sm text-slate-600 dark:text-white">Show</label>
+                            <select id="perPage" name="perPage"
+                                class="h-10 border dark:bg-gray-800  dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                <option value="6" >6</option>
+                                <option value="10">10</option> <!-- ✅ Default -->
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="all" selected>All</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div id="orderTableWrapper">
@@ -47,14 +50,24 @@
                         </table>
                         <div id="orderTableFooter"></div> {{-- <<< នៅក្រោម Table --}} </div>
 
-                    <div class="relative w-full sm:w-64 mt-2 sm:mt-0">
-                        <input type="text" id="search" placeholder="Search by Invoice / Name"
-                            class="w-full h-9 px-3 border border-slate-300 rounded text-sm dark:bg-gray-600 dark:text-white">
-                        <button type="button"
-                            class="absolute top-1 right-1 h-7 w-7 flex items-center justify-center rounded text-slate-600 dark:text-white">
-                            🔍
-                        </button>
-                    </div>
+                        <div class="ml-3">
+                            <div class="w-full max-w-sm min-w-[200px] relative">
+                                <div class="relative">
+                                    <input
+                                        class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                                        placeholder="Search for name" id="search" name="search" type="text" />
+                                    <button
+                                        class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                                        type="button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                                            stroke="currentColor" class="w-8 h-8 text-slate-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                 </div>
 
                 <!-- Table -->

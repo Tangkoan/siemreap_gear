@@ -153,7 +153,7 @@
         <div class="flex items-center space-x-4">
             @can('pos.menu')
                 <button
-                    class="color-primary text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200 hidden md:block">
+                    class="dark:bg-gray-700 dark:hover:bg-gray-800 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200 hidden md:block">
                     <a href="{{ route('pos') }}">POS</a>
                 </button>
             @else

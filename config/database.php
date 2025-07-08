@@ -49,7 +49,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'siemreap_gear'),
             'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', 'root'),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8', // ចាប់ប្តូរ character set ទៅ utf8
             'collation' => 'utf8_unicode_ci',
@@ -60,15 +60,17 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_command_path' => 'D:/phpstudy_pro/Extensions/MySQL5.7.26/bin/', // ឧទាហរណ៍ path ដែលមាន mysqldump.exe
+                'dump_binary_path' => 'D:\RunProgram\wamp64\bin\mysql\mysql8.3.0\bin', // Use forward slashes
+        
                 'use_single_transaction',
                 'timeout' => 60 * 5, // 5 minute timeout
             ],
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            // 'options' => extension_loaded('pdo_mysql') ? array_filter([
+            //     PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            // ]) : [],
         ],
 
+        
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
