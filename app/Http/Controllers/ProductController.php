@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Notification; 
+use App\Notifications\StockAlertNotification;
+
 
 use App\Models\Category;
 use App\Models\Supplier;
@@ -28,6 +32,26 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 
 {
+
+    public function getStockAlerts()
+    {
+        $products = Product::whereColumn('product_store', '<=', 'stock_alert')
+                           
+                           // Add the new condition: exclude if product_stock is 0 AND stock_alert is 0
+                           ->where(function ($query) {
+                               $query->where('product_store', '!=', 0)
+                                     ->orWhere('stock_alert', '!=', 0);
+                           })
+                           // Corrected select statement: product_stock instead of duplicate product_store
+                           ->select('product_name', 'product_store', 'product_store', 'stock_alert')
+                           ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'products' => $products,
+            'count' => $products->count()
+        ]);
+    }
 
 
     // ProductController.php

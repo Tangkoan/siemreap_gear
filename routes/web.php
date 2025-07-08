@@ -15,7 +15,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\WareHouseController;
+use App\Http\Controllers\NotificationController;
+
 
 
 
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
 
+   
 
 
     // Report Route
@@ -73,6 +75,10 @@ Route::middleware(['auth'])->group(callback: function () {
     // Start Product
     Route::controller(ProductController::class)->group(function () {
 
+
+        // Notification Stock Alert API
+        Route::get('/get-stock-alerts',  'getStockAlerts')->name('stock.alerts');
+        // End
 
         Route::get('/product/page', 'ProductPage')->name('all.product')->middleware('permission:product.all');
 
