@@ -197,12 +197,12 @@
                         </svg>
 
                         <span id="notificationCount"
-                            class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                            class=" absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
                             0 </span>
                     </button>
 
                     <div id="messageDropdown"
-                        class="hidden absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800">
+                        class="hidden absolute right-0 z-50 mt-2 w-64 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800">
                         <div class="py-2" id="notificationContent">
                             <p class="px-4 py-2 text-sm text-gray-700 dark:text-gray-200">Loading stock alerts...</p>
                         </div>
@@ -211,13 +211,13 @@
             </div>
 
             @php
-$id = Auth::user()->id;
-$adminData = App\Models\User::find($id);
+            $id = Auth::user()->id;
+            $adminData = App\Models\User::find($id);
             @endphp
 
             <div class="relative" x-data="{ open: false }" @click.outside="open = false">
                 <button @click="open = !open"
-                    class="flex items-center space-x-2  focus:outline-none text-black dark:text-white ">
+                    class="flex items-center space-x-2 focus:outline-none text-black dark:text-white ">
                     <img class="h-9 w-9 rounded-full border-2 border-white object-cover"
                         src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}"
                         alt="User Profile">

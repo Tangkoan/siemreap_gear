@@ -179,13 +179,6 @@ public function AdminSearchByMonth(Request $request)
             }
         }
         // ... (កូដខាងក្រោមគឺដូចមុន) ...
-        // $footer = '<tr>';
-        // $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Orders:</td>';
-        // $footer .= '<td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">' . $totalOrdersCount . '</td>';
-        // $footer .= '<td colspan="2" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Amount:</td>';
-        // $footer .= '<td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">$' . number_format($totalAmount, 2) . '</td>';
-        // $footer .= '</tr>';
-
         $footer = '<tr>';
         $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Orders:</td>';
         $footer .= '<td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">' . $orders->count() . '</td>';
