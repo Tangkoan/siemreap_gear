@@ -69,6 +69,14 @@ Route::middleware(['auth'])->group(callback: function () {
         //  Export Sale(Order Report)
         Route::get('/report-order/export', 'SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')
 
+
+        // Report Stock
+        Route::get('/all/stock/reports', 'AllStockReports')->name('all.report.stock');
+
+        Route::match(['get', 'post'], '/report/stock-by-day', 'stockReportByDay')->name('report.stock.by_day');
+
+
+        // End Report Stock
     });
     // End Report Route
 

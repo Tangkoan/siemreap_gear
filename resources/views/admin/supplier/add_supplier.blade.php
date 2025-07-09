@@ -18,7 +18,7 @@
                 </h2>
 
                 <div>
-                    <form method="post" action="{{ route('supplier.store') }}">
+                    <form method="post" action="{{ route('supplier.store') }}" id="myForm">
                         @csrf
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
@@ -26,7 +26,7 @@
                             {{-- Column 1 --}}
                             <div class="space-y-4">
                                 {{-- Supplier Name --}}
-                                <div>
+                                <div class="form-group">
                                     <label for="name"
                                         class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                         Supplier Name <span class="text-red-500">*</span>
@@ -67,7 +67,7 @@
                                         class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                         Supplier Phone <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="tel" id="phone" name="phone" required
+                                    <input type="tel" id="phone" name="phone" 
                                         class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
                             </div>
@@ -102,6 +102,40 @@
                 }
             });
         });
+
+
+
+
+        /// Requiert Fill
+        $(document).ready(function () {
+                $('#myForm').validate({
+                    rules: {
+                        name: {
+                            required: true,
+                        }
+                    },
+                    messages: {
+                        product_name: {
+                            required: 'Please Enter Name',
+                        }
+
+
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid');
+                    },
+                });
+            });
+
+
     </script>
 
 @endsection

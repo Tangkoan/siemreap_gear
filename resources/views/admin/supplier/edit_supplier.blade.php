@@ -67,7 +67,7 @@
                                         class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                         Supplier Phone <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="tel" id="phone" name="phone" required value="{{ $supplier->phone }}"
+                                    <input type="tel" id="phone" name="phone"  value="{{ $supplier->phone }}"
                                         class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
                             </div>

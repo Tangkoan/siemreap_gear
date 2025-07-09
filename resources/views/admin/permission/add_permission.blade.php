@@ -62,7 +62,6 @@
                                     <option value="user">User</option>
                                     <option value="permission">Permission</option>
                                     <option value="backup">Backup</option>
-                                    <option value="warehouse">Warehouse</option>
                                 </select>
                             </div>
                         </div>

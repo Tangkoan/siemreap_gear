@@ -37,11 +37,10 @@ class SupplierController extends Controller
             [
                 'name' => 'required|max:200',
                 'email' => 'nullable|unique:Suppliers|max:200',
-                'phone' => 'required|max:200',
+                'phone' => 'nullable|max:200',
             ],
             [
                 'name.required' => 'This Supplier Name Field Is Required',
-                'phone.required' => 'This Supplier phone Field Is Required',
             ]
         );
 
@@ -70,7 +69,7 @@ class SupplierController extends Controller
             [
                 'name' => 'required|max:200',
                 'email' => 'nullable|email|max:200|unique:suppliers,email,' . $supplier_id,
-                'phone' => 'required|max:200',
+                'phone' => 'nullable|max:200',
                 'notes' => 'nullable|max:200',
             ],
             [
@@ -238,7 +237,7 @@ class SupplierController extends Controller
             <td class="p-4 py-5">' . $item->name . '</td>
             <td class="p-4 py-5">' . ($item->email ?? 'null') . '</td>
 
-            <td class="p-4 py-5"> '  . $item->phone . '</td>
+            <td class="p-4 py-5"> '  . ($item->phone ?? 'null') . '</td>
             <td class="p-4 py-5"> '  . ($item->notes ?? 'null') . '</td>
 
             <td class="px-4 py-4 text-sm whitespace-nowrap">

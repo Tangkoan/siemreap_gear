@@ -131,16 +131,17 @@
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
-                            
+
                             {{-- Inventory --}}
                             <div>
                                 <label for="product_store"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                     Inventory <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" id="product_store" name="product_store" required
-                                    value="{{ $product->product_store }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <input type="text" id="product_store" name="product_store" 
+                                    value="{{ $product->product_store }}" readonly
+                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                           bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed">
                             </div>
                             {{-- Stock Alert --}}
                             <div>

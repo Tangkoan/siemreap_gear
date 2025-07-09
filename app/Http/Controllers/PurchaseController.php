@@ -261,10 +261,6 @@ class PurchaseController extends Controller
                         </span>
                 </td>
 
-
-                
-                
-                
             </tr>';
         }
 

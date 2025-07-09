@@ -140,11 +140,8 @@
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                     Inventory <span class="text-red-500">*</span>
                                 </label>
-                                <input type="number" min="0" step="0.01" id="product_store"
-                                    name="product_store"
-                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <input type="number" value="0" name="product_store" readonly class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                           bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed">
                             </div>
 
                             {{-- Stock Alert --}}
@@ -157,7 +154,7 @@
                                                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                                                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
-                            
+
                         </div>
                     </div>
 
