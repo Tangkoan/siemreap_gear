@@ -55,9 +55,10 @@ class PosController extends Controller
                 'id' => $product->id,
                 'name' => $product->product_name,
                 'price' => (float)$product->selling_price,
+                'code' => $product->product_code,
                 'category' => $product->category ? $product->category->category_name : 'No Category',
                 'imageUrl' => asset($product->product_image),
-                'stock' => (int) $product->product_store // ✅ Add this line
+                'stock' => (float) $product->product_store // ✅ Add this line
             ];
         });
 
@@ -65,6 +66,32 @@ class PosController extends Controller
             'products' => $products,
             'categories' => $categories
         ]);
+    }
+
+    // PosController.php
+
+    public function searchProducts(Request $request)
+    {
+        $keyword = $request->input('keyword');
+
+        $products = Product::where('product_name', 'LIKE', "%{$keyword}%")
+            ->orWhere('product_code', 'LIKE', "%{$keyword}%") // បន្ថែមលក្ខខណ្ឌ Search តាម Code ក៏បាន
+            ->latest()
+            ->get()
+            ->map(function($product) {
+                // ប្រើ .map() ដើម្បីរៀបចំទិន្នន័យឲ្យដូចគ្នា
+                return [
+                    'id' => $product->id,
+                    'name' => $product->product_name,
+                    'price' => (float)$product->selling_price,
+                    'code' => $product->product_code,
+                    'category' => $product->category ? $product->category->category_name : 'No Category',
+                    'imageUrl' => asset($product->product_image),
+                    'stock' => (float) $product->product_store
+                ];
+            });
+
+        return response()->json(['products' => $products]);
     }
 
 

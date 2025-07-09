@@ -361,6 +361,8 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/search-supplier', [SupplierController::class, 'searchSupplier'])->name('search.supplier');
 
     Route::get('/search-product', [ProductController::class, 'searchProduct'])->name('search.product');
+    Route::get('/search-pos-products', [PosController::class, 'searchProducts']);
+
 
     Route::get('/search-customer', [CustomerController::class, 'searchCustomer'])->name('search.customer');
 
@@ -377,10 +379,6 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/search-pending-due', [OrderController::class, 'searchPendingDue'])->name('search.pending_due');
 
 
-
-
-
-    Route::get('/search-products', [ProductController::class, 'search']);
     Route::get('/search-purchase', [PurchaseController::class, 'search']);
 
 
