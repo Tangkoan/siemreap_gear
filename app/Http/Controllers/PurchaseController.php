@@ -415,6 +415,7 @@ class PurchaseController extends Controller
         return response()->json(['products' => $products]);
     }
 
+
     // public function AddToCart(Request $request) {
     //     Cart::add([
     //         'id' => $request->id,
