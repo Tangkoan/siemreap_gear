@@ -70,7 +70,7 @@ public function AdminSearchByDate(Request $request)
                    
 
                     <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
-                                <a href="' . route('order.details', $item->id) . '" >
+                                <a href="' . route('order.details.due', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -167,7 +167,7 @@ public function AdminSearchByMonth(Request $request)
                 $table .= '<td class="px-4 py-3"><span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-blue-600 text-white">' . $item->order_status . '</span></td>';
                 $table .= '<td class="px-4 py-4 text-sm whitespace-nowrap">
                             <div class="flex items-center gap-x-6">
-                                <a href="' . route('order.details', $item->id) . '" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200 focus:outline-none">
+                                <a href="' . route('order.details.due', $item->id) . '" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200 focus:outline-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -236,7 +236,7 @@ public function AdminSearchByYear(Request $request){
             $table .= '<td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                     <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200 focus:outline-none">
-                        <a href="' . route('order.details', $item->id) . '" >
+                        <a href="' . route('order.details.due', $item->id) . '" >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"

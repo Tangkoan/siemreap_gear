@@ -171,6 +171,15 @@ class PurchaseController extends Controller
 
     }// End Method 
 
+    public function PurchaseViewDetails($purchase_id){
+
+        $purchase = Purchase::where('id',$purchase_id)->first();
+        $purchaseItem = purchase_details::with('product')->where('purchase_id',$purchase_id)->orderBy('id','DESC')->get();
+        
+        return view('admin.purchases.purchase_view_details',compact('purchase','purchaseItem'));
+
+    }// End Method 
+
     public function PurchaseStatusUpdate(Request $request)
     {
         $purchase_id = $request->id;
@@ -247,12 +256,13 @@ class PurchaseController extends Controller
                 
                 <td class="p-4 py-5 text-center align-middle">
                     
-                        <span class="inline-block px-3 py-1 rounded-md bg-green-500 text-white font-semibold shadow-sm">
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  font-semibold shadow-sm">
                             '. $item->purchase_status  .'
                         </span>
-                    
-                    
                 </td>
+
+
+                
                 
                 
             </tr>';
@@ -320,15 +330,15 @@ class PurchaseController extends Controller
                     
                     
                 </td>
-                
-                <td class="p-4 py-5">
-                    
-                        <span class="inline-block px-3 py-1 rounded-md bg-green-500 text-white font-semibold shadow-sm">
+
+                <td class="p-4 py-5 text-center align-middle">
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm
+                                     ">
                             '. $item->due  .' $
                         </span>
                     
                     
-                </td>
+                    </td>
                 
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
@@ -336,7 +346,7 @@ class PurchaseController extends Controller
                    
 
                     <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
-                                <a href="' . route('purchase.details', $item->id) . '" >
+                                <a href="' . route('purchase.view.details', $item->id) . '" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"

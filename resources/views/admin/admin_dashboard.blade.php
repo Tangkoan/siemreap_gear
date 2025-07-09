@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="km" class="dark">
 
 <head>
     <meta charset="UTF-8" />

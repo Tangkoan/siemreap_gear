@@ -191,8 +191,10 @@ Route::middleware(['auth'])->group(callback: function () {
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');
         Route::get('/pending/order', 'PendingOrder')->name('pending.order')->middleware('permission:order.pending');
+        
         Route::get('/order/details/{order_id}', 'OrderDetails')->name('order.details');
 
+        // សម្រាប់ View Details ដែលមិនមាន​Button Compleate Order
         Route::get('/order/details/due/{order_id}', 'OrderDetailsDue')->name('order.details.due');
 
         Route::post('/order/status/update', 'OrderStatusUpdate')->name('order.status.update');
@@ -228,6 +230,10 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/pending/purchase', 'PendingPurchase')->name('pending.purchase')->middleware('permission:purchase.pending');
 
         Route::get('/purchase/details/{purchase_id}', 'PurchaseDetails')->name('purchase.details');
+
+        // View Details for purchase page Don't have button complete purhcase
+        Route::get('/purchase/view/details/{purchase_id}', 'PurchaseViewDetails')->name('purchase.view.details');
+
 
         Route::post('/purchase/status/update', 'PurchaserStatusUpdate')->name('purchase.status.update');
 
