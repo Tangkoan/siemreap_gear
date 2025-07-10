@@ -75,14 +75,17 @@ Route::middleware(['auth'])->group(callback: function () {
 
         Route::match(['get', 'post'], '/report/stock-by-day', 'stockReportByDay')->name('report.stock.by_day');
         Route::get('/report/stock/details/day', 'getStockMovementDetailsByDay')->name('report.stock.details.day');
-
+        Route::get('/report/stock/by-day/export',  'exportStockByDay')->name('report.stock.export.day');
 
         Route::match(['get', 'post'], '/report/stock/by-month', 'stockReportByMonth')->name('report.stock.by_month');
         Route::get('/report/stock/details/month', 'getStockMovementDetailsByMonth')->name('report.stock.details.month');
+        Route::get('/report/stock/by-month/export', 'exportStockByMonth')->name('report.stock.export.month');
 
 
         Route::match(['get', 'post'], '/report/stock/by-year', 'stockReportByYear')->name('report.stock.by_year');
         Route::match(['get', 'post'], '/report/stock/details', 'getStockMovementDetails')->name('report.stock.details');
+        Route::get('/report/stock/by-year/export',  'exportStockByYear')->name('report.stock.export.year');
+
 
         
 

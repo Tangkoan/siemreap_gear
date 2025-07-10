@@ -18,8 +18,14 @@ use DateTime;
 
 
 use App\Exports\ProductExport;
-use Maatwebsite\Excel\Facades\Excel;
 
+
+// បន្ថែម use statement នេះនៅផ្នែកខាងលើនៃឯកសារ
+use App\Exports\StockByDayExport;
+use App\Exports\StockByMonthExport;
+use App\Exports\StockByYearExport;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -401,6 +407,17 @@ class ReportController extends Controller
         return response()->json($transactions);
     }
 
+    // បន្ថែម Method ថ្មីនេះទៅក្នុង ReportController
+    public function exportStockByDay(Request $request)
+    {
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+        $search = $request->input('search', null);
+
+        $fileName = 'stock-report-' . $date . '.xlsx';
+
+        return Excel::download(new StockByDayExport($date, $search), $fileName);
+    }
+
 
     public function stockReportByMonth(Request $request)
     {
@@ -518,6 +535,17 @@ class ReportController extends Controller
                                  ->get();
         
         return response()->json($transactions);
+    }
+
+    // បន្ថែម Method ថ្មីនេះទៅក្នុង ReportController
+    public function exportStockByMonth(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->format('Y-m'));
+        $search = $request->input('search', null);
+
+        $fileName = 'stock-report-' . $month . '.xlsx';
+
+        return Excel::download(new StockByMonthExport($month, $search), $fileName);
     }
 
     public function stockReportByYear(Request $request)
@@ -639,6 +667,15 @@ class ReportController extends Controller
                                  ->get();
         
         return response()->json($transactions);
+    }
+
+    // ✅ Method ថ្មីសម្រាប់ Export
+    public function exportStockByYear(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->format('Y'));
+        $search = $request->input('search', null);
+        $fileName = 'stock-report-' . $year . '.xlsx';
+        return Excel::download(new StockByYearExport($year, $search), $fileName);
     }
 
 

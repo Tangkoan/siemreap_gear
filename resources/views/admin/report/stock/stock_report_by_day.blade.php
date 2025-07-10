@@ -20,13 +20,18 @@
             </div>
 
             {{-- Filters: Date and Search --}}
+            {{-- Filters: Date, Search, and Export Button --}}
             <div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
-                <div class="flex items-center space-x-2">
-                    <input type="date" name="date" id="date"
-                        class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
-                        value="{{ $date }}">
-                </div>
-                <div class="ml-3">
+                {{-- Left side filters --}}
+                <div class="flex items-end gap-4">
+                    {{-- Date Picker --}}
+                    <div class="flex items-center space-x-2">
+                        <input type="date" name="date" id="date"
+                            class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
+                            value="{{ $date }}">
+                    </div>
+
+                    {{-- Search Input --}}
                     <div class="w-full max-w-sm min-w-[200px] relative">
                         <div class="relative">
                             <input
@@ -43,6 +48,20 @@
                             </button>
                         </div>
                     </div>
+                </div>
+
+                {{-- Right side button --}}
+                <div>
+                    {{-- ✅ ប៊ូតុង Export ថ្មី --}}
+                    <a id="exportBtn" href="{{ route('report.stock.export.day', ['date' => $date]) }}"
+                        class="h-10 inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Export to Excel
+                    </a>
                 </div>
             </div>
 
@@ -109,6 +128,32 @@
 
     {{-- ✅ JavaScript ដែលបានធ្វើបច្ចុប្បន្នភាព --}}
     <script>
+
+        // --- Function សម្រាប់ធ្វើបច្ចុប្បន្នភាព Link របស់ប៊ូតុង Export ---
+            function updateExportLink() {
+                let date = $('#date').val();
+                let search = $('#search').val();
+                let baseUrl = "{{ route('report.stock.export.day') }}";
+                let exportUrl = new URL(baseUrl);
+
+                exportUrl.searchParams.set('date', date);
+                if (search) {
+                    exportUrl.searchParams.set('search', search);
+                }
+
+                $('#exportBtn').attr('href', exportUrl.href);
+            }
+
+            // ហៅ function នេះនៅពេល Filter ផ្លាស់ប្តូរ
+            $('#date, #search').on('change keyup', function () {
+                updateExportLink();
+            });
+
+            // ហៅ function នេះពេលផ្ទុកទំព័រដំបូង
+            updateExportLink();
+
+        // End
+
         $(document).ready(function () {
             // --- Function សម្រាប់ទាញទិន្នន័យសរុប ---
             function fetchData(page = 1) {
@@ -198,6 +243,11 @@
             // --- ផ្ទុកទិន្នន័យដំបូងពេលបើកទំព័រ ---
             fetchData();
         });
+
+
+
+
+
     </script>
 
 @endsection

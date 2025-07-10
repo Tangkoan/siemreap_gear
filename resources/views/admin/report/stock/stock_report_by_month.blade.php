@@ -5,7 +5,6 @@
 
     <div class="container mx-auto p-6">
         <div class="container mx-auto p-4 md:p-1">
-
             {{-- Title --}}
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 flex items-center">
@@ -19,21 +18,21 @@
                 </h2>
             </div>
 
-            {{-- Filters: Month and Search --}}
+            {{-- ✅ Filters: Month, Search, and Export Button --}}
             <div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
-                <div class="flex items-center space-x-2">
-                    <input type="month" name="month" id="month"
-                        class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
-                        value="{{ $month }}">
-                </div>
-                <div class="ml-3">
+                <div class="flex items-end gap-4">
+                    <div class="flex items-center space-x-2">
+                        <input type="month" name="month" id="month"
+                            class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
+                            value="{{ date('Y-m') }}">
+                        </div>
                     <div class="w-full max-w-sm min-w-[200px] relative">
                         <div class="relative">
                             <input
-                                class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                                class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded"
                                 placeholder="Search for name" id="search" name="search" type="text" />
                             <button
-                                class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                                class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded"
                                 type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
                                     stroke="currentColor" class="w-8 h-8 text-slate-600">
@@ -44,7 +43,20 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                    <a id="exportBtn" href="{{ route('report.stock.export.month', ['month' => $month]) }}"
+                        class="h-10 inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Export to Excel
+                    </a>
+                </div>
             </div>
+
+
 
             {{-- Summary Report Table --}}
             <div class="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
@@ -197,6 +209,28 @@
 
             // --- ផ្ទុកទិន្នន័យដំបូងពេលបើកទំព័រ ---
             fetchData();
+            // ✅ Function សម្រាប់ធ្វើបច្ចុប្បន្នភាព Link របស់ប៊ូតុង Export
+            function updateExportLink() {
+                let month = $('#month').val();
+                let search = $('#search').val();
+                let baseUrl = "{{ route('report.stock.export.month') }}";
+                let exportUrl = new URL(baseUrl);
+
+                exportUrl.searchParams.set('month', month);
+                if (search) {
+                    exportUrl.searchParams.set('search', search);
+                }
+
+                $('#exportBtn').attr('href', exportUrl.href);
+            }
+
+            // ហៅ function នេះនៅពេល Filter ផ្លាស់ប្តូរ
+            $('#month, #search').on('change keyup', function () {
+                updateExportLink();
+            });
+
+            // ហៅ function នេះពេលផ្ទុកទំព័រដំបូង
+            updateExportLink();
         });
     </script>
 
