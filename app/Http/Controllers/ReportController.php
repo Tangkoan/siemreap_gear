@@ -291,94 +291,355 @@ class ReportController extends Controller
     // End Method
 
     public function stockReportByDay(Request $request)
-{
-    // For the initial page load, just return the view.
-    if (!$request->ajax()) {
-        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-        $formattedDate = Carbon::parse($date)->format('d F Y');
-        return view('admin.report.stock.stock_report_by_day', compact('date', 'formattedDate'));
-    }
-
-    // --- Handle AJAX Request ---
-    
-    $date = Carbon::parse($request->date)->startOfDay();
-    $search = $request->search;
-    $perPage = $request->perPage ?? 15;
-
-    $query = Product::query()
-        ->select('id', 'product_name', 'product_code')
-        ->addSelect([
-            'stock_in' => purchase_details::query()
-                ->selectRaw('COALESCE(SUM(quantity), 0)')
-                ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-                ->whereColumn('purchase_details.product_id', 'products.id')
-                ->whereDate('purchases.purchase_date', $date)
-                // ✅✅✅ NEW PURCHASE STATUS CONDITION ✅✅✅
-                // Only count purchases that have been marked as 'received'.
-                ->where('purchases.purchase_status', 'complete'),
-
-            'stock_out' => OrderDetails::query()
-                ->selectRaw('COALESCE(SUM(quantity), 0)')
-                ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-                ->whereColumn('orderdetails.product_id', 'products.id')
-                ->whereDate('orders.order_date', $date)
-                ->where('orders.order_status', 'complete'),
-
-            'total_purchased_before' => purchase_details::query()
-                ->selectRaw('COALESCE(SUM(quantity), 0)')
-                ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-                ->whereColumn('purchase_details.product_id', 'products.id')
-                ->where('purchases.purchase_date', '<', $date)
-                // ✅✅✅ MUST ADD THE SAME CONDITION HERE FOR ACCURACY ✅✅✅
-                ->where('purchases.purchase_status', 'pending'),
-
-            'total_sold_before' => OrderDetails::query()
-                ->selectRaw('COALESCE(SUM(quantity), 0)')
-                ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-                ->whereColumn('orderdetails.product_id', 'products.id')
-                ->where('orders.order_date', '<', $date)
-                ->where('orders.order_status', 'complete'),
-        ])
-        ->havingRaw('stock_in > 0 OR stock_out > 0');
-
-    if ($search) {
-        $query->where(function($q) use ($search) {
-            $q->where('product_name', 'like', "%{$search}%")
-              ->orWhere('product_code', 'like', "%{$search}%");
-        });
-    }
-    
-    $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-
-    $table = '';
-    if ($products->isEmpty()) {
-        $table .= '<tr><td colspan="5" class="text-center p-4">No product with stock movement found for this day.</td></tr>';
-    } else {
-        foreach ($products as $key => $product) {
-            $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
-            $stockIn = (int)$product->stock_in;
-            $stockOut = (int)$product->stock_out;
-            // $closingStock = $openingStock + $stockIn - $stockOut;
-            $closingStock =   $stockIn - $stockOut;
-
-            $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700">';
-            $table .= '<td class="p-2">'. $product->product_name .' <span class="text-xs text-gray-500">('.$product->product_code.')</span></td>';
-            $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
-            $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
-            $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
-            $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
-            $table .= '</tr>';
+    {
+        if (!$request->ajax()) {
+            $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+            $formattedDate = Carbon::parse($date)->format('d F Y');
+            return view('admin.report.stock.stock_report_by_day', compact('date', 'formattedDate'));
         }
-    }
-    
-    $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
-    return response()->json([
-        'table' => $table,
-        'pagination' => $pagination,
-        'formattedDate' => Carbon::parse($date)->format('d F Y')
-    ]);
-}
+        $date = Carbon::parse($request->date)->startOfDay();
+        $search = $request->search;
+        $perPage = $request->perPage ?? 15;
+
+        $query = Product::query()
+            ->select('id', 'product_name', 'product_code')
+            ->addSelect([
+                'stock_in' => purchase_details::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+                    ->whereColumn('purchase_details.product_id', 'products.id')
+                    ->whereDate('purchases.purchase_date', $date)
+                    ->where('purchases.purchase_status', 'complete'),
+                'stock_out' => OrderDetails::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+                    ->whereColumn('orderdetails.product_id', 'products.id')
+                    ->whereDate('orders.order_date', $date)
+                    ->where('orders.order_status', 'complete'),
+                'total_purchased_before' => purchase_details::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+                    ->whereColumn('purchase_details.product_id', 'products.id')
+                    ->where('purchases.purchase_date', '<', $date)
+                    ->where('purchases.purchase_status', 'complete'),
+                'total_sold_before' => OrderDetails::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+                    ->whereColumn('orderdetails.product_id', 'products.id')
+                    ->where('orders.order_date', '<', $date)
+                    ->where('orders.order_status', 'complete'),
+            ])
+            ->havingRaw('stock_in > 0 OR stock_out > 0');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('product_name', 'like', "%{$search}%")
+                  ->orWhere('product_code', 'like', "%{$search}%");
+            });
+        }
+
+        $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+        $table = '';
+        if ($products->isEmpty()) {
+            $table .= '<tr><td colspan="5" class="text-center p-4">No product movement found for this day.</td></tr>';
+        } else {
+            foreach ($products as $product) {
+                $openingStock = (int)$product->total_purchased_before ;
+                $stockIn = (int)$product->stock_in;
+                $stockOut = (int)$product->stock_out;
+                $closingStock = $openingStock + $stockIn - $stockOut;
+
+                // ✅ កែសម្រួលត្រង់នេះ៖ បន្ថែម data-attributes និង class សម្រាប់ JavaScript
+                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row" 
+                                data-product-id="'. $product->id .'" 
+                                data-product-name="'. htmlspecialchars($product->product_name) .'">';
+                $table .= '<td class="p-2">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
+                $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
+                $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
+                $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
+                $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
+                $table .= '</tr>';
+            }
+        }
+        
+        $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination,
+            'formattedDate' => Carbon::parse($date)->format('d F Y')
+        ]);
+    }
+
+    /**
+     * ✅ Method ថ្មី៖ សម្រាប់ទាញយកទិន្នន័យលម្អិតប្រចាំថ្ងៃ
+     */
+    public function getStockMovementDetailsByDay(Request $request)
+    {
+        $productId = $request->productId;
+        $date = Carbon::parse($request->date)->startOfDay();
+
+        $stockIn = \App\Models\purchase_details::join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->where('purchase_details.product_id', $productId)
+            ->whereDate('purchases.purchase_date', $date)
+            ->where('purchases.purchase_status', 'complete')
+            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
+            ->selectRaw("'Stock In' as transaction_type");
+
+        $stockOut = \App\Models\OrderDetails::join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orderdetails.product_id', $productId)
+            ->whereDate('orders.order_date', $date)
+            ->where('orders.order_status', 'complete')
+            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
+            ->selectRaw("'Stock Out' as transaction_type");
+
+        $transactions = $stockIn->unionAll($stockOut)
+                                 ->orderBy('transaction_date', 'asc')
+                                 ->get();
+        
+        return response()->json($transactions);
+    }
+
+
+    public function stockReportByMonth(Request $request)
+    {
+        if (!$request->ajax()) {
+            $month = $request->input('month', Carbon::now()->format('Y-m'));
+            $formattedDate = Carbon::parse($month)->format('F Y');
+            return view('admin.report.stock.stock_report_by_month', compact('month', 'formattedDate'));
+        }
+
+        $monthCarbon = Carbon::parse($request->month);
+        $startDate = $monthCarbon->copy()->startOfMonth();
+        $endDate = $monthCarbon->copy()->endOfMonth();
+        $search = $request->search;
+        $perPage = $request->perPage ?? 15;
+
+        $query = Product::query()
+            ->select('id', 'product_name', 'product_code')
+            ->addSelect([
+                'stock_in' => purchase_details::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+                    ->whereColumn('purchase_details.product_id', 'products.id')
+                    ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+                    ->where('purchases.purchase_status', 'complete'),
+                'stock_out' => OrderDetails::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+                    ->whereColumn('orderdetails.product_id', 'products.id')
+                    ->whereBetween('orders.order_date', [$startDate, $endDate])
+                    ->where('orders.order_status', 'complete'),
+                'total_purchased_before' => purchase_details::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+                    ->whereColumn('purchase_details.product_id', 'products.id')
+                    ->where('purchases.purchase_date', '<', $startDate)
+                    ->where('purchases.purchase_status', 'complete'),
+                'total_sold_before' => OrderDetails::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+                    ->whereColumn('orderdetails.product_id', 'products.id')
+                    ->where('orders.order_date', '<', $startDate)
+                    ->where('orders.order_status', 'complete'),
+            ])
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (total_purchased_before - total_sold_before) > 0');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('product_name', 'like', "%{$search}%")
+                  ->orWhere('product_code', 'like', "%{$search}%");
+            });
+        }
+
+        $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+
+        $table = '';
+        if ($products->isEmpty()) {
+            $table .= '<tr><td colspan="5" class="text-center p-4">No product movement found for this month.</td></tr>';
+        } else {
+            foreach ($products as $product) {
+                // $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
+                $openingStock = (int)$product->total_purchased_before;
+                $stockIn = (int)$product->stock_in;
+                $stockOut = (int)$product->stock_out;
+                $closingStock = $openingStock + $stockIn - $stockOut;
+
+                // ✅ កែសម្រួលត្រង់នេះ៖ បន្ថែម data-attributes សម្រាប់ JavaScript
+                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row" 
+                                data-product-id="'. $product->id .'" 
+                                data-product-name="'. htmlspecialchars($product->product_name) .'">';
+                $table .= '<td class="p-2">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
+                $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
+                $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
+                $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
+                $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
+                $table .= '</tr>';
+            }
+        }
+        
+        $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination,
+            'formattedDate' => $monthCarbon->format('F Y')
+        ]);
+    }
+
+    /**
+     * ✅ Method ថ្មី៖ សម្រាប់ទាញយកទិន្នន័យលម្អិតប្រចាំខែ
+     */
+    public function getStockMovementDetailsByMonth(Request $request)
+    {
+        $productId = $request->productId;
+        $month = $request->month; // e.g., "2025-07"
+
+        $startDate = Carbon::parse($month)->startOfMonth();
+        $endDate = Carbon::parse($month)->endOfMonth();
+
+        $stockIn = \App\Models\purchase_details::join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->where('purchase_details.product_id', $productId)
+            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+            ->where('purchases.purchase_status', 'complete')
+            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
+            ->selectRaw("'Stock In' as transaction_type");
+
+        $stockOut = \App\Models\OrderDetails::join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orderdetails.product_id', $productId)
+            ->whereBetween('orders.order_date', [$startDate, $endDate])
+            ->where('orders.order_status', 'complete')
+            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
+            ->selectRaw("'Stock Out' as transaction_type");
+
+        $transactions = $stockIn->unionAll($stockOut)
+                                 ->orderBy('transaction_date', 'asc')
+                                 ->get();
+        
+        return response()->json($transactions);
+    }
+
+    public function stockReportByYear(Request $request)
+    {
+        
+        if (!$request->ajax()) {
+            $year = $request->input('year', Carbon::now()->format('Y'));
+            $formattedDate = $year;
+            return view('admin.report.stock.stock_report_by_year', compact('year', 'formattedDate'));
+        }
+
+        // ---  AJAX  ---
+        $year = $request->year;
+        $search = $request->search;
+        $perPage = $request->perPage ?? 15;
+
+        $startDate = Carbon::create($year)->startOfYear();
+        $endDate = Carbon::create($year)->endOfYear();
+
+        $query = Product::query()
+            ->select('id', 'product_name', 'product_code')
+            ->addSelect([
+                'stock_in' => purchase_details::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+                    ->whereColumn('purchase_details.product_id', 'products.id')
+                    ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+                    ->where('purchases.purchase_status', 'complete'),
+                'stock_out' => OrderDetails::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+                    ->whereColumn('orderdetails.product_id', 'products.id')
+                    ->whereBetween('orders.order_date', [$startDate, $endDate])
+                    ->where('orders.order_status', 'complete'),
+                'total_purchased_before' => purchase_details::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+                    ->whereColumn('purchase_details.product_id', 'products.id')
+                    ->where('purchases.purchase_date', '<', $startDate)
+                    ->where('purchases.purchase_status', 'complete'),
+                'total_sold_before' => OrderDetails::query()
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+                    ->whereColumn('orderdetails.product_id', 'products.id')
+                    ->where('orders.order_date', '<', $startDate)
+                    ->where('orders.order_status', 'complete'),
+            ])
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (total_purchased_before - total_sold_before) > 0');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('product_name', 'like', "%{$search}%")
+                  ->orWhere('product_code', 'like', "%{$search}%");
+            });
+        }
+
+        $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+
+        $table = '';
+        if ($products->isEmpty()) {
+            $table .= '<tr><td colspan="5" class="text-center p-4">No product with stock movement found for this year.</td></tr>';
+        } else {
+            foreach ($products as $key => $product) {
+                $openingStock = (int)$product->total_purchased_before ;
+                // $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
+                $stockIn = (int)$product->stock_in;
+                $stockOut = (int)$product->stock_out;
+                $closingStock = $openingStock + $stockIn - $stockOut;
+
+                // បន្ថែម data-attributes សម្រាប់ JavaScript ប្រើ
+                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row" 
+                                data-product-id="'. $product->id .'" 
+                                data-product-name="'. htmlspecialchars($product->product_name) .'">';
+                $table .= '<td class="p-2">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
+                $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
+                $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
+                $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
+                $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
+                $table .= '</tr>';
+            }
+        }
+
+        $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination,
+            'formattedDate' => $year
+        ]);
+    }
+
+    /**
+     * Detsils Modal
+     */
+    public function getStockMovementDetails(Request $request)
+    {
+        $productId = $request->productId;
+        $year = $request->year;
+
+        $startDate = Carbon::create($year)->startOfYear();
+        $endDate = Carbon::create($year)->endOfYear();
+
+        $stockIn = \App\Models\purchase_details::join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->where('purchase_details.product_id', $productId)
+            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+            ->where('purchases.purchase_status', 'complete')
+            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
+            ->selectRaw("'Stock In' as transaction_type");
+
+        $stockOut = \App\Models\OrderDetails::join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orderdetails.product_id', $productId)
+            ->whereBetween('orders.order_date', [$startDate, $endDate])
+            ->where('orders.order_status', 'complete')
+            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
+            ->selectRaw("'Stock Out' as transaction_type");
+
+        $transactions = $stockIn->unionAll($stockOut)
+                                 ->orderBy('transaction_date', 'asc')
+                                 ->get();
+        
+        return response()->json($transactions);
+    }
 
 
 }

@@ -62,7 +62,7 @@
 
                             <!-- Search by Month -->
                             <div class="bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-6">
-                                <form action="{{ route('admin.search.bymonth') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('report.stock.by_month') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -112,7 +112,7 @@
 
                             <!-- Search by Year -->
                             <div class="bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-6">
-                                <form action="{{ route('admin.search.byyear') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('report.stock.by_year') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

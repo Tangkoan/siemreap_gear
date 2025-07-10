@@ -1,6 +1,7 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
+    {{-- ตรวจสอบให้แน่ใจว่าได้รวม jQuery ไว้ในโปรเจ็กต์ของคุณแล้ว --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <div class="container mx-auto p-6">
@@ -19,12 +20,12 @@
                 </h2>
             </div>
 
-            {{-- Filters: Date and Search --}}
+            {{-- Filters: Year and Search --}}
             <div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
                 <div class="flex items-center space-x-2">
-                    <input type="date" name="date" id="date"
+                    <input type="number" name="year" id="year"
                         class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
-                        value="{{ $date }}">
+                        value="{{ $year }}" placeholder="Enter Year" min="2000">
                 </div>
                 <div class="ml-3">
                     <div class="w-full max-w-sm min-w-[200px] relative">
@@ -69,16 +70,20 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="report-table-body" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm"></tbody>
+                        <tbody id="report-table-body" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                            {{-- AJAX results will be loaded here --}}
+                        </tbody>
                     </table>
                 </div>
                 <div id="pagination-links"
-                    class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"></div>
+                    class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                    {{-- AJAX pagination links will be loaded here --}}
+                </div>
             </div>
         </div>
     </div>
 
-    {{-- ✅ HTML សម្រាប់ Modal (Popup) --}}
+    {{-- Modal for Transaction Details --}}
     <div id="detailsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-3xl shadow-lg rounded-md bg-white dark:bg-gray-800">
             <div class="mt-3 text-center">
@@ -89,13 +94,15 @@
                         <table class="min-w-full text-left">
                             <thead class="sticky top-0 bg-slate-50 dark:bg-gray-700">
                                 <tr>
-                                    <th class="p-2">Time</th>
+                                    <th class="p-2">Date</th>
                                     <th class="p-2">Type</th>
                                     <th class="p-2">Quantity</th>
                                     <th class="p-2">Reference</th>
                                 </tr>
                             </thead>
-                            <tbody id="modal-table-body" class="divide-y divide-gray-200 dark:divide-gray-600"></tbody>
+                            <tbody id="modal-table-body" class="divide-y divide-gray-200 dark:divide-gray-600">
+                                {{-- Detailed rows will be loaded here by AJAX --}}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -107,18 +114,17 @@
         </div>
     </div>
 
-    {{-- ✅ JavaScript ដែលបានធ្វើបច្ចុប្បន្នភាព --}}
     <script>
         $(document).ready(function () {
-            // --- Function សម្រាប់ទាញទិន្នន័យសរុប ---
+            // --- Central Function to Fetch Summary Data ---
             function fetchData(page = 1) {
-                let date = $('#date').val();
+                let year = $('#year').val();
                 let search = $('#search').val();
 
                 $.ajax({
-                    url: "{{ route('report.stock.by_day') }}?page=" + page,
+                    url: "{{ route('report.stock.by_year') }}?page=" + page,
                     type: 'GET',
-                    data: { date: date, search: search, perPage: 15 },
+                    data: { year: year, search: search, perPage: 15 },
                     beforeSend: function () {
                         $('#report-table-body').html('<tr><td colspan="5" class="text-center p-6"><span>Loading...</span></td></tr>');
                         $('#pagination-links').empty();
@@ -134,8 +140,8 @@
                 });
             }
 
-            // --- Event Handlers ---
-            $('#date').on('change', function () { fetchData(1); });
+            // --- EVENT HANDLERS ---
+            $('#year').on('change', function () { fetchData(1); });
 
             let searchTimeout;
             $('#search').on('keyup', function () {
@@ -149,38 +155,37 @@
                 fetchData(page);
             });
 
-            // --- ចុចលើជួរដេកដើម្បីបង្ហាញ Modal ---
+            // --- CLICK ON A ROW TO SHOW DETAILS MODAL ---
             $(document).on('click', '.stock-row', function () {
                 let productId = $(this).data('product-id');
                 let productName = $(this).data('product-name');
-                let date = $('#date').val();
-                let dateText = $('#report-title-date').text();
+                let year = $('#year').val();
 
-                $('#modal-title').text('Details for: ' + productName + ' (' + dateText + ')');
+                $('#modal-title').text('Details for: ' + productName + ' (' + year + ')');
                 $('#modal-table-body').html('<tr><td colspan="4" class="text-center p-4">Loading details...</td></tr>');
                 $('#detailsModal').removeClass('hidden');
 
                 $.ajax({
-                    url: "{{ route('report.stock.details.day') }}",
+                    url: "{{ route('report.stock.details') }}",
                     type: 'GET',
-                    data: { productId: productId, date: date },
+                    data: { productId: productId, year: year },
                     success: function (transactions) {
                         let detailsHtml = '';
                         if (transactions.length > 0) {
                             transactions.forEach(function (trx) {
-                                let formattedTime = new Date(trx.transaction_date).toLocaleTimeString('en-US'); // បង្ហាញតែម៉ោង
+                                let formattedDate = new Date(trx.transaction_date).toLocaleDateString('en-GB'); // DD/MM/YYYY
                                 let quantityClass = trx.transaction_type === 'Stock In' ? 'text-green-600' : 'text-red-600';
                                 let quantityPrefix = trx.transaction_type === 'Stock In' ? '+' : '-';
 
                                 detailsHtml += '<tr>';
-                                detailsHtml += '<td class="p-2">' + formattedTime + '</td>';
+                                detailsHtml += '<td class="p-2">' + formattedDate + '</td>';
                                 detailsHtml += '<td class="p-2">' + trx.transaction_type + '</td>';
                                 detailsHtml += '<td class="p-2 font-semibold ' + quantityClass + '">' + quantityPrefix + trx.quantity + '</td>';
                                 detailsHtml += '<td class="p-2">' + (trx.reference || 'N/A') + '</td>';
                                 detailsHtml += '</tr>';
                             });
                         } else {
-                            detailsHtml = '<tr><td colspan="4" class="text-center p-4">No transactions found for this day.</td></tr>';
+                            detailsHtml = '<tr><td colspan="4" class="text-center p-4">No transactions found for this period.</td></tr>';
                         }
                         $('#modal-table-body').html(detailsHtml);
                     },
@@ -190,12 +195,12 @@
                 });
             });
 
-            // --- បិទ Modal ---
+            // --- CLOSE THE MODAL ---
             $('#closeModal').on('click', function () {
                 $('#detailsModal').addClass('hidden');
             });
 
-            // --- ផ្ទុកទិន្នន័យដំបូងពេលបើកទំព័រ ---
+            // --- Load initial data on page load ---
             fetchData();
         });
     </script>

@@ -74,7 +74,17 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/all/stock/reports', 'AllStockReports')->name('all.report.stock');
 
         Route::match(['get', 'post'], '/report/stock-by-day', 'stockReportByDay')->name('report.stock.by_day');
+        Route::get('/report/stock/details/day', 'getStockMovementDetailsByDay')->name('report.stock.details.day');
 
+
+        Route::match(['get', 'post'], '/report/stock/by-month', 'stockReportByMonth')->name('report.stock.by_month');
+        Route::get('/report/stock/details/month', 'getStockMovementDetailsByMonth')->name('report.stock.details.month');
+
+
+        Route::match(['get', 'post'], '/report/stock/by-year', 'stockReportByYear')->name('report.stock.by_year');
+        Route::match(['get', 'post'], '/report/stock/details', 'getStockMovementDetails')->name('report.stock.details');
+
+        
 
         // End Report Stock
     });
@@ -440,20 +450,6 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/api/products-for-pos', 'getProductsForPos')->name('api.products.pos');
     });
     // End
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Permission
     Route::get('/search-permission', [RoleController::class, 'searchPermission'])->name('search.permission');

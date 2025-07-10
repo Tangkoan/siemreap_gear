@@ -19,12 +19,12 @@
                 </h2>
             </div>
 
-            {{-- Filters: Date and Search --}}
+            {{-- Filters: Month and Search --}}
             <div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
                 <div class="flex items-center space-x-2">
-                    <input type="date" name="date" id="date"
+                    <input type="month" name="month" id="month"
                         class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
-                        value="{{ $date }}">
+                        value="{{ $month }}">
                 </div>
                 <div class="ml-3">
                     <div class="w-full max-w-sm min-w-[200px] relative">
@@ -89,7 +89,7 @@
                         <table class="min-w-full text-left">
                             <thead class="sticky top-0 bg-slate-50 dark:bg-gray-700">
                                 <tr>
-                                    <th class="p-2">Time</th>
+                                    <th class="p-2">Date</th>
                                     <th class="p-2">Type</th>
                                     <th class="p-2">Quantity</th>
                                     <th class="p-2">Reference</th>
@@ -112,13 +112,13 @@
         $(document).ready(function () {
             // --- Function សម្រាប់ទាញទិន្នន័យសរុប ---
             function fetchData(page = 1) {
-                let date = $('#date').val();
+                let month = $('#month').val();
                 let search = $('#search').val();
 
                 $.ajax({
-                    url: "{{ route('report.stock.by_day') }}?page=" + page,
+                    url: "{{ route('report.stock.by_month') }}?page=" + page,
                     type: 'GET',
-                    data: { date: date, search: search, perPage: 15 },
+                    data: { month: month, search: search, perPage: 15 },
                     beforeSend: function () {
                         $('#report-table-body').html('<tr><td colspan="5" class="text-center p-6"><span>Loading...</span></td></tr>');
                         $('#pagination-links').empty();
@@ -135,7 +135,7 @@
             }
 
             // --- Event Handlers ---
-            $('#date').on('change', function () { fetchData(1); });
+            $('#month').on('change', function () { fetchData(1); });
 
             let searchTimeout;
             $('#search').on('keyup', function () {
@@ -153,34 +153,34 @@
             $(document).on('click', '.stock-row', function () {
                 let productId = $(this).data('product-id');
                 let productName = $(this).data('product-name');
-                let date = $('#date').val();
-                let dateText = $('#report-title-date').text();
+                let month = $('#month').val();
+                let monthText = $('#report-title-date').text(); // Get formatted month name
 
-                $('#modal-title').text('Details for: ' + productName + ' (' + dateText + ')');
+                $('#modal-title').text('Details for: ' + productName + ' (' + monthText + ')');
                 $('#modal-table-body').html('<tr><td colspan="4" class="text-center p-4">Loading details...</td></tr>');
                 $('#detailsModal').removeClass('hidden');
 
                 $.ajax({
-                    url: "{{ route('report.stock.details.day') }}",
+                    url: "{{ route('report.stock.details.month') }}",
                     type: 'GET',
-                    data: { productId: productId, date: date },
+                    data: { productId: productId, month: month },
                     success: function (transactions) {
                         let detailsHtml = '';
                         if (transactions.length > 0) {
                             transactions.forEach(function (trx) {
-                                let formattedTime = new Date(trx.transaction_date).toLocaleTimeString('en-US'); // បង្ហាញតែម៉ោង
+                                let formattedDate = new Date(trx.transaction_date).toLocaleDateString('en-GB');
                                 let quantityClass = trx.transaction_type === 'Stock In' ? 'text-green-600' : 'text-red-600';
                                 let quantityPrefix = trx.transaction_type === 'Stock In' ? '+' : '-';
 
                                 detailsHtml += '<tr>';
-                                detailsHtml += '<td class="p-2">' + formattedTime + '</td>';
+                                detailsHtml += '<td class="p-2">' + formattedDate + '</td>';
                                 detailsHtml += '<td class="p-2">' + trx.transaction_type + '</td>';
                                 detailsHtml += '<td class="p-2 font-semibold ' + quantityClass + '">' + quantityPrefix + trx.quantity + '</td>';
                                 detailsHtml += '<td class="p-2">' + (trx.reference || 'N/A') + '</td>';
                                 detailsHtml += '</tr>';
                             });
                         } else {
-                            detailsHtml = '<tr><td colspan="4" class="text-center p-4">No transactions found for this day.</td></tr>';
+                            detailsHtml = '<tr><td colspan="4" class="text-center p-4">No transactions found for this period.</td></tr>';
                         }
                         $('#modal-table-body').html(detailsHtml);
                     },
