@@ -18,7 +18,13 @@ class purchase extends Model
         return $this->belongsTO(Product::class,'product_id','id');
     }
 
-    public function purchaseDetais(){
-        return $this->belongsTO(purchase_details::class,'purchase_id','id');
+    // public function purchaseDetais(){
+    //     return $this->belongsTO(purchase_details::class,'purchase_id','id');
+    // }
+
+    public function purchaseDetails()
+    {
+        return $this->hasMany(purchase_details::class, 'purchase_id');
     }
+    
 }

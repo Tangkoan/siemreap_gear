@@ -94,14 +94,21 @@ Route::middleware(['auth'])->group(callback: function () {
         // Purchase Report
 
         // --- Routes for Unified Purchase Report ---
-        Route::get('/report/purchases/unified', 'showUnifiedPurchaseReport')->name('report.purchases.unified');
-        Route::get('/report/purchases/by-date', 'purchaseReportByDate')->name('report.purchases.by_date');
-        Route::get('/report/purchases/by-month','purchaseReportByMonth')->name('report.purchases.by_month');
-        Route::get('/report/purchases/by-year',  'purchaseReportByYear')->name('report.purchases.by_year');
-        Route::get('/report/purchases/details-modal/{id}',  'getPurchaseDetailsForModal')->name('report.purchases.details_modal');
-        Route::get('/report/purchases/by-date/export',  'exportPurchaseByDate')->name('report.purchases.export.date');
-        Route::get('/report/purchases/by-month/export',  'exportPurchaseByMonth')->name('report.purchases.export.month');
-        Route::get('/report/purchases/by-year/export',  'exportPurchaseByYear')->name('report.purchases.export.year');
+        // Main view route
+        Route::get('/report/purchases', 'purchaseReportView')->name('report.purchases.view');
+        
+        // AJAX routes for fetching data by date, month, year
+        Route::get('/report/purchases/by-date', 'getPurchaseReportByDate')->name('report.purchases.by_date');
+        Route::get('/report/purchases/by-month', 'getPurchaseReportByMonth')->name('report.purchases.by_month');
+        Route::get('/report/purchases/by-year', 'getPurchaseReportByYear')->name('report.purchases.by_year');
+        
+        // AJAX route for fetching purchase details for the modal
+        Route::get('/report/purchases/details', 'getPurchaseDetails')->name('report.purchases.details');
+
+        // =================== Purchase Report Export Routes ===================
+            Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
+            Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
+            Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
     });// End Report Route
     
 
