@@ -52,10 +52,6 @@ Route::middleware(['auth'])->group(callback: function () {
 
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
-
-   
-
-
     // Report Route
     Route::controller(ReportController::class)->group(function () {
         Route::get('/all/reports', 'AllReports')->name('all.reports');
@@ -70,11 +66,10 @@ Route::middleware(['auth'])->group(callback: function () {
 
         // Year Order Report
         Route::match(['get', 'post'], '/report/orders/by-year', 'orderReportByYear')->name('report.orders.by_year');
-        Route::get('/report/orders/by-year/export', [ReportController::class, 'exportOrderByYear'])->name('report.orders.export.year');
+        Route::get('/report/orders/by-year/export', 'exportOrderByYear')->name('report.orders.export.year');
       
         //  Export Sale(Order Report)
         Route::get('/report-order/export', 'SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')
-
 
         // Report Stock
         Route::get('/all/stock/reports', 'AllStockReports')->name('all.report.stock');
@@ -92,12 +87,21 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::match(['get', 'post'], '/report/stock/details', 'getStockMovementDetails')->name('report.stock.details');
         Route::get('/report/stock/by-year/export',  'exportStockByYear')->name('report.stock.export.year');
 
-
-        
-
         // End Report Stock
-    });
-    // End Report Route
+
+        // Purchase Report
+
+        // --- Routes for Unified Purchase Report ---
+        Route::get('/report/purchases/unified', 'showUnifiedPurchaseReport')->name('report.purchases.unified');
+        Route::get('/report/purchases/by-date', 'purchaseReportByDate')->name('report.purchases.by_date');
+        Route::get('/report/purchases/by-month','purchaseReportByMonth')->name('report.purchases.by_month');
+        Route::get('/report/purchases/by-year',  'purchaseReportByYear')->name('report.purchases.by_year');
+        Route::get('/report/purchases/details-modal/{id}',  'getPurchaseDetailsForModal')->name('report.purchases.details_modal');
+        Route::get('/report/purchases/by-date/export',  'exportPurchaseByDate')->name('report.purchases.export.date');
+        Route::get('/report/purchases/by-month/export',  'exportPurchaseByMonth')->name('report.purchases.export.month');
+        Route::get('/report/purchases/by-year/export',  'exportPurchaseByYear')->name('report.purchases.export.year');
+    });// End Report Route
+    
 
 
     // Start Product
@@ -136,10 +140,8 @@ Route::middleware(['auth'])->group(callback: function () {
     });
     // End Product
 
+    // Category All Route 
 
-
-
-    ///Category All Route 
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/all/category', 'AllCategory')->name('all.category')->middleware('permission:category.all');
         Route::get('/add/category', 'AddCategory')->name('add.category')->middleware('permission:category.add');
@@ -151,8 +153,8 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('/category/update', 'CategoryUpdate')->name('category.update');
 
         Route::get('/delete/category/{id}', 'DeleteCategory')->name('delete.category')->middleware('permission:category.delete');
-    });
-    /// End Category Route
+    });/// End Category Route
+    
 
 
 
@@ -177,6 +179,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
     // Customer All Route 
+
     Route::controller(CustomerController::class)->group(function () {
         Route::get('/all/customer', 'CustomerPage')->name('all.customer')->middleware('permission:customer.all');
         Route::get('/add/customer', 'AddCustomer')->name('add.customer')->middleware('permission:customer.add');
@@ -187,8 +190,8 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('/customer/update', 'CustomerUpdate')->name('customer.update');
 
         Route::get('/delete/customer/{id}', 'DeleteCustomer')->name('delete.customer')->middleware('permission:customer.delete');
-    });
-    // End
+    });// End
+    
 
 
     ///Expense All Route 
@@ -207,13 +210,8 @@ Route::middleware(['auth'])->group(callback: function () {
     });
     // End
 
+    //Order All Route Add commentMore actions
 
-
-
-
-
-
-    ///Order All Route Add commentMore actions
     Route::controller(OrderController::class)->group(function () {
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');
@@ -250,6 +248,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
     ///Purchase All Route Add commentMore actions
+
     Route::controller(PurchaseController::class)->group(function () {
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:purchase.menu');
@@ -343,6 +342,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
     ///Admin User All Route 
+
     Route::controller(AdminController::class)->group(function () {
 
         Route::get('/all/admin', 'AllAdmin')->name('all.admin')->middleware('permission:user.menu');
@@ -358,22 +358,6 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/backup/now', 'BackupNow');
         Route::get('/delete/database/{getFilename}', 'DeleteDatabase');
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');

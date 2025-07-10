@@ -106,8 +106,9 @@
                                 </table>
                             </div>
 
-                            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700" id="totalPayable">
-                                Total Payable : $ {{ Cart::subtotal() }}
+                            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700">
+                                Subtotal: $<span id="subtotal">{{ Cart::subtotal() }}</span><br>
+                                Total Payable: $<span id="totalPayable">{{ Cart::subtotal() }}</span>
                             </div>
 
                             <form method="POST" action="{{ url('/purchase/store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -244,8 +245,9 @@
                             document.getElementById('totalPayable').innerText = `Total Payable : $ ${parseFloat(subtotal).toFixed(2)}`;
                             document.getElementById('orderTotalHidden').value = parseFloat(subtotal).toFixed(2);
                             document.getElementById('paidHidden').value = parseFloat(subtotal).toFixed(2);
-
-                            calculateDue();
+                    document.getElementById('subtotal').innerText = parseFloat(subtotal).toFixed(2);
+                    calculateDue();
+                            
                             attachCartEventListeners();
                         }
 
@@ -417,20 +419,27 @@
                         });
 
                         function calculateDue() {
-                            const totalPayableElement = document.getElementById('totalPayable');
-                            let totalPayableText = totalPayableElement.innerText.replace('Total Payable : $ ', '');
-                            const totalPayable = parseFloat(totalPayableText) || 0;
+    const subtotalEl = document.getElementById('subtotal');
+    const subtotal = parseFloat(subtotalEl.innerText) || 0;
+    let discount = parseFloat(document.getElementById('discount').value) || 0;
+    const payNow = parseFloat(document.getElementById('payNow').value) || 0;
 
-                            const payNow = parseFloat(document.getElementById('payNow').value) || 0;
-                            const discount = parseFloat(document.getElementById('discount').value) || 0;
+    // ❗ បង្ខាំង discount មិនឲ្យលើស subtotal
+    if (discount > subtotal) {
+        discount = subtotal;
+        document.getElementById('discount').value = subtotal.toFixed(2); // reset to max allowed
+        toastr.warning("Discount cannot exceed subtotal.");
+    }
 
-                            const finalTotal = totalPayable - discount;
-                            const dueAmount = finalTotal - payNow;
+    const finalTotal = subtotal - discount;
+    const dueAmount = finalTotal - payNow;
 
-                            document.getElementById('dueHidden').value = dueAmount.toFixed(2);
-                            totalPayableElement.innerText = `Total Payable : $ ${finalTotal.toFixed(2)}`;
-                            document.getElementById('orderTotalHidden').value = finalTotal.toFixed(2);
-                        }
+    document.getElementById('totalPayable').innerText = finalTotal.toFixed(2);
+    document.getElementById('orderTotalHidden').value = finalTotal.toFixed(2);
+    document.getElementById('paidHidden').value = payNow.toFixed(2);
+    document.getElementById('dueHidden').value = dueAmount.toFixed(2);
+}
+
 
                         @if (request('message'))
                                     < script >

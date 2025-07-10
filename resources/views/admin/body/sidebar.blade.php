@@ -418,7 +418,7 @@
                     @endif
 
                     @if ($reportPurchase)
-                        <a href="#"
+                    <a href="{{ route('report.purchases.unified') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Purchase</a>
                     @endif
 

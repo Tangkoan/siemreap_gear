@@ -496,81 +496,89 @@ class PurchaseController extends Controller
         ]);
     }
 
-public function StorePurchase(Request $request)
-{
-    // Validate input
-    $request->validate([
-        'supplier_id' => 'required',
-        'payment_status' => 'required',
-        'total' => 'required|numeric|min:0',
-        'discount' => 'nullable|numeric|min:0',
-        'pay' => 'required|numeric|min:0',
-    ]);
-
-    $cartItems = Cart::content();
-
-    if ($cartItems->isEmpty()) {
-        return redirect()->back()->with([
-            'message' => 'Please select product for purchase',
-            'alert-type' => 'error',
+    public function StorePurchase(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'supplier_id' => 'required',
+            'payment_status' => 'required',
+            'total' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
+            'pay' => 'required|numeric|min:0',
         ]);
-    }
-
-    // Subtotal from cart
-    $subTotal = $cartItems->sum(function ($item) {
-        return $item->price * $item->qty;
-    });
-
-    $total = floatval($request->total);
-    $discount = floatval($request->discount ?? 0);
-    $paid = floatval($request->pay);
-
-    // បន្ទាប់ពីបញ្ចុះថ្លៃ (final payable)
-    $finalTotal = $total - $discount;
-    $due = max($finalTotal - $paid, 0); // prevent negative due
-
-    $data = [
-        'supplier_id' => $request->supplier_id,
-        'purchase_date' => Carbon::now(),
-        'invoice_no' => 'PUR_' . mt_rand(10000000, 99999999),
-        'purchase_status' => 'pending',
-        'discount' => $discount,
-        'total_products' => $cartItems->count(),
-        'sub_total' => $subTotal,
-        'vat' => 0,
-        'total' => $total,
-        'payment_status' => $request->payment_status,
-        'pay' => $paid,
-        'due' => $due,
-        'created_at' => Carbon::now(),
-        'updated_at' => Carbon::now(),
-    ];
-
-    $purchase_id = Purchase::insertGetId($data);
-
-    foreach ($cartItems as $item) {
-        purchase_details::create([
-            'purchase_id' => $purchase_id,
-            'product_id' => $item->id,
-            'purchase_price' => $item->price,
-            'unitcost' => $item->price,
-            'quantity' => $item->qty,
-            'total' => $item->price * $item->qty,
+    
+        $cartItems = Cart::content();
+    
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with([
+                'message' => 'Please select product for purchase',
+                'alert-type' => 'error',
+            ]);
+        }
+    
+        // Subtotal from cart (total before any discount)
+        $subTotal = $cartItems->sum(function ($item) {
+            return $item->price * $item->qty;
+        });
+    
+        $discount = floatval($request->discount ?? 0);
+        $paid = floatval($request->pay);
+    
+        // ❗ Prevent discount from exceeding subtotal
+        if ($discount >= $subTotal) {
+            return redirect()->back()->withInput()->with([
+                'message' => 'Discount cannot exceed subtotal ($' . number_format($subTotal, 2) . ')',
+                'alert-type' => 'error',
+            ]);
+        }
+    
+        // Final total after discount
+        $finalTotal = $subTotal - $discount;
+        $due = max($finalTotal - $paid, 0);
+    
+        $data = [
+            'supplier_id' => $request->supplier_id,
+            'purchase_date' => Carbon::now(),
+            'invoice_no' => 'PUR_' . mt_rand(10000000, 99999999),
+            'purchase_status' => 'pending',
+            'discount' => $discount,
+            'total_products' => $cartItems->count(),
+            'sub_total' => $subTotal,
+            'vat' => 0,
+            'total' => $finalTotal,
+            'payment_status' => $request->payment_status,
+            'pay' => $paid,
+            'due' => $due,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+        ];
+    
+        $purchase_id = Purchase::insertGetId($data);
+    
+        foreach ($cartItems as $item) {
+            purchase_details::create([
+                'purchase_id' => $purchase_id,
+                'product_id' => $item->id,
+                'purchase_price' => $item->price,
+                'unitcost' => $item->price,
+                'quantity' => $item->qty,
+                'total' => $item->price * $item->qty,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+    
+            // Optional: Update stock
+            // Product::where('id', $item->id)->increment('product_store', $item->qty);
+        }
+    
+        Cart::destroy();
+    
+        return redirect()->route('purchase.page')->with([
+            'message' => 'Purchase completed successfully!',
+            'alert-type' => 'success',
         ]);
-
-        // កូដបន្ទាត់នេះគឺ Update ភ្លាមៗតែម្ដង
-        // Product::where('id', $item->id)->increment('product_store', $item->qty);
     }
-
-    Cart::destroy();
-
-    return redirect()->route('purchase.page')->with([
-        'message' => 'Purchase completed successfully!',
-        'alert-type' => 'success',
-    ]);
-}
+    
 
     public function payDueModel(Request $request, $id){
         $purchasepaydue = Purchase::findOrFail($id);

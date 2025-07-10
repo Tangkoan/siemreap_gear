@@ -25,6 +25,11 @@ use App\Exports\StockByDayExport;
 use App\Exports\StockByMonthExport;
 use App\Exports\StockByYearExport;
 
+// Report Purchase
+use App\Exports\PurchasesByDateExport;
+use App\Exports\PurchasesByMonthExport;
+use App\Exports\PurchasesByYearExport;
+
 
 // Export Sale(Order)
 use App\Exports\OrdersByDateExport;
@@ -35,6 +40,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
+    
     public function AllReports(){
         return view('admin.report.all_report');
     }
@@ -48,7 +54,7 @@ class ReportController extends Controller
         return Excel::download(new OrderReportExport($date, $month, $year), 'filtered_report.xlsx');
         // return Excel::download(new OrderReportExport,'sale_report.xlsx');
     }
-    // End Export
+    
     
     
     
@@ -275,8 +281,8 @@ class ReportController extends Controller
             $search = $request->input('search', null);
             $fileName = 'orders-report-' . $year . '.xlsx';
             return Excel::download(new OrdersByYearExport($year, $search), $fileName);
-        }
-    // End
+        }// End
+    
     
 
 
@@ -670,5 +676,99 @@ class ReportController extends Controller
         return Excel::download(new StockByYearExport($year, $search), $fileName);
     }
 
+    public function showUnifiedPurchaseReport()
+    {
+        // ✅ ត្រូវប្រាកដថា path នេះត្រឹមត្រូវ
+        return view('admin.report.purchase.unified_purchase_report'); 
+    }
+    private function getPurchaseQuery(Request $request)
+    {
+        $search = $request->input('search');
+        $query = Purchase::with('supplier')->orderBy('id', 'desc');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('invoice_no', 'like', "%{$search}%")
+                  ->orWhereHas('supplier', function ($q2) use ($search) {
+                      $q2->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        return $query;
+    }
+    private function formatPurchaseResponse($purchases, $query, $formattedDate)
+    {
+        $totalAmount = (clone $query)->sum('total');
+        $table = '';
+        if ($purchases->isEmpty()) {
+            $table = '<tr><td colspan="6" class="text-center p-4">No purchases found.</td></tr>';
+        } else {
+            foreach ($purchases as $key => $item) {
+                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
+                $table .= '<td class="p-4">' . ($key + 1) . '</td>';
+                $table .= '<td class="p-4">' . Carbon::parse($item->purchase_date)->format('d-m-Y') . '</td>';
+                $table .= '<td class="p-4">' . e($item->invoice_no) . '</td>';
+                $table .= '<td class="p-4">' . e($item->supplier->name ?? 'N/A') . '</td>';
+                $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
+                $table .= '<td class="p-4 text-center"><button type="button" class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold" data-purchase-id="' . $item->id . '">View</button></td>';
+                $table .= '</tr>';
+            }
+        }
+        $footer = '<tr>';
+        $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Purchases: ' . $purchases->count() . '</td>';
+        $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
+        $footer .= '</tr>';
+
+        return response()->json(['table' => $table, 'footer' => $footer, 'formattedDate' => $formattedDate]);
+    }
+
+    public function purchaseReportByDate(Request $request)
+    {
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+        $query = $this->getPurchaseQuery($request)->whereDate('purchase_date', $date);
+        return $this->formatPurchaseResponse($query->get(), $query, Carbon::parse($date)->format('d F Y'));
+    }
+
+    public function purchaseReportByMonth(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->format('Y-m'));
+        $startDate = Carbon::parse($month)->startOfMonth();
+        $endDate = Carbon::parse($month)->endOfMonth();
+        $query = $this->getPurchaseQuery($request)->whereBetween('purchase_date', [$startDate, $endDate]);
+        return $this->formatPurchaseResponse($query->get(), $query, Carbon::parse($month)->format('F Y'));
+    }
+
+    public function purchaseReportByYear(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->format('Y'));
+        $startDate = Carbon::create($year)->startOfYear();
+        $endDate = Carbon::create($year)->endOfYear();
+        $query = $this->getPurchaseQuery($request)->whereBetween('purchase_date', [$startDate, $endDate]);
+        return $this->formatPurchaseResponse($query->get(), $query, $year);
+    }
+    
+    public function getPurchaseDetailsForModal($id)
+    {
+        $purchase = Purchase::with('supplier', 'purchaseDetais.product')->findOrFail($id);
+        return response()->json($purchase);
+    }
+
+    public function exportPurchaseByDate(Request $request)
+    {
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+        return Excel::download(new PurchasesByDateExport($date, $request->search), 'purchases-'.$date.'.xlsx');
+    }
+
+    public function exportPurchaseByMonth(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->format('Y-m'));
+        return Excel::download(new PurchasesByMonthExport($month, $request->search), 'purchases-'.$month.'.xlsx');
+    }
+
+    public function exportPurchaseByYear(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->format('Y'));
+        return Excel::download(new PurchasesByYearExport($year, $request->search), 'purchases-'.$year.'.xlsx');
+    }
 
 }

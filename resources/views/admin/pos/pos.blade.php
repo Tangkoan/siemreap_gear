@@ -114,8 +114,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700" id="totalPayable">
-                                Total Payable : $ {{ Cart::subtotal() }}
+                            <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700">
+                                Subtotal: $<span id="subtotal">{{ Cart::subtotal() }}</span><br>
+                                Total Payable: $<span id="totalPayable">{{ Cart::subtotal() }}</span>
                             </div>
                             <br>
                             <form method="POST" action="{{ url('/store-sell') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -218,52 +219,55 @@
 
                         // Function to update the cart display
                         function updateCartDisplay(cartContent, subtotal) {
-                            const cartTableBody = document.getElementById('cart-table-body');
-                            cartTableBody.innerHTML = ''; // Clear existing items
+                        const cartTableBody = document.getElementById('cart-table-body');
+                        cartTableBody.innerHTML = '';
 
-                            if (Object.keys(cartContent).length === 0) {
-                                cartTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-gray-500 text-center">No items in cart.</td></tr>`;
-                            } else {
-                                for (const rowId in cartContent) {
-                                    const item = cartContent[rowId];
-                                    const row = `
-                                            <tr class="hover:bg-gray-50 transition duration-200 blcock dark:bg-gray-800 hover:dark:dark:bg-gray-500">
-                                                <td class="px-4">${item.name}</td>
-                                                <td class="px-4">${item.price}</td>
-                                                <td class="px-2">
-                                                    <div class="flex items-center space-x-2">
-                                                        <input name="qty" type="number" min="1" step="1" value="${item.qty}"
-                                                            data-rowid="${item.rowId}"
-                                                                        class="qty-input w-16 py-2.5 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
-                                                    </div>
-                                                </td>
-                                                <td class="px-4">
-                                                    <div class="flex flex-row space-x-4">
-                                                        <p>${(item.price * item.qty).toFixed(2)}</p>
-                                                    </div>
-                                                </td>
-                                                <td class="px-4">
-                                                    <button type="button" class="icon-delete  focus:outline-none"
-                                                        onclick="removeCartItem('${item.rowId}')">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        `;
-                                    cartTableBody.innerHTML += row;
-                                }
+                        // រក្សាទុកតម្លៃសរុបថ្មីទៅក្នុងអថេរ
+                        originalSubtotal = parseFloat(subtotal) || 0;
+
+                        if (Object.keys(cartContent).length === 0) {
+                            cartTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-gray-500 text-center">No items in cart.</td></tr>`;
+                        } else {
+                            for (const rowId in cartContent) {
+                                const item = cartContent[rowId];
+                                const row = `
+                                    <tr class="hover:bg-gray-50 transition duration-200 blcock dark:bg-gray-800 hover:dark:dark:bg-gray-500">
+                                        <td class="px-4">${item.name}</td>
+                                        <td class="px-4">${item.price}</td>
+                                        <td class="px-2">
+                                            <div class="flex items-center space-x-2">
+                                                <input name="qty" type="number" min="1" step="1" value="${item.qty}"
+                                                    data-rowid="${item.rowId}"
+                                                    class="qty-input w-16 py-2.5 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
+                                            </div>
+                                        </td>
+                                        <td class="px-4">
+                                            <div class="flex flex-row space-x-4">
+                                                <p>${(item.price * item.qty).toFixed(2)}</p>
+                                            </div>
+                                        </td>
+                                        <td class="px-4">
+                                            <button type="button" class="icon-delete focus:outline-none"
+                                                    onclick="removeCartItem('${item.rowId}')">
+                                                {{-- START: បន្ថែមកូដ SVG នៅត្រង់នេះ --}}
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                </svg>
+                                                {{-- END: បន្ថែមកូដ SVG នៅត្រង់នេះ --}}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                                cartTableBody.innerHTML += row;
                             }
-
-                            document.getElementById('totalPayable').innerText = `Total Payable : $ ${subtotal}`;
-                            document.getElementById('orderTotalHidden').value = subtotal; // Update hidden total field for final submission
-                            calculateDue(); // Recalculate due amount based on new total
-                            attachCartEventListeners(); // Re-attach event listeners for newly added rows
                         }
 
+                        // យើងលែង update total payable នៅទីនេះទៀតហើយ គឺទុកឲ្យ calculateDue ជាអ្នកធ្វើแทน
+                        calculateDue(); // ហៅ calculateDue ដើម្បីគណនា និងបង្ហាញតម្លៃសរុបថ្មី
+                        attachCartEventListeners();
+                    }
 
                         // Function to handle adding product to cart via AJAX
                         function addProductToCartAjax(id, name, qty, price) {
@@ -489,19 +493,20 @@
 
                         // Function to calculate due amount
                         function calculateDue() {
-                            const totalPayableElement = document.getElementById('totalPayable');
-                            let totalPayableText = totalPayableElement.innerText;
-                            const totalPayable = parseFloat(totalPayableText.replace('Total Payable : $ ', '')) || 0;
-
-                            const payNow = parseFloat(document.getElementById('payNow').value) || 0;
+                            // ប្រើអថេរ originalSubtotal ជាតម្លៃตั้งต้นសម្រាប់ការគណនា
+                            const subtotal = originalSubtotal;
                             const discount = parseFloat(document.getElementById('discount').value) || 0;
+                            const payNow = parseFloat(document.getElementById('payNow').value) || 0;
 
-                            const finalTotal = totalPayable - discount;
+                            const finalTotal = subtotal - discount;
                             const dueAmount = finalTotal - payNow;
 
-                            document.getElementById('dueHidden').value = dueAmount.toFixed(2);
-                            totalPayableElement.innerText = `Total Payable : $ ${finalTotal.toFixed(2)}`;
+                            // ធ្វើបច្ចុប្បន្នភាព Element ដែលបង្ហាញ
+                            document.getElementById('totalPayable').innerText = `Total Payable : $ ${finalTotal.toFixed(2)}`;
+
+                            // ធ្វើបច្ចុប្បន្នភាព Hidden Fields
                             document.getElementById('orderTotalHidden').value = finalTotal.toFixed(2);
+                            document.getElementById('dueHidden').value = dueAmount.toFixed(2);
                         }
 
 
