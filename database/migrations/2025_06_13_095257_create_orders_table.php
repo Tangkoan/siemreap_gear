@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('order_date');
             $table->string('order_status');
             $table->string('total_products');
+            $table->double('discount');
             $table->string('sub_total')->nullable();
             $table->string('vat')->nullable();
             $table->string('invoice_no')->nullable();

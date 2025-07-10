@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Exports;
+
+use App\Models\Order;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Carbon\Carbon;
+
+class OrdersByMonthExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
+{
+    protected $month;
+    protected $search;
+
+    public function __construct(string $month, ?string $search)
+    {
+        $this->month = $month; // Expects 'YYYY-MM' format
+        $this->search = $search;
+    }
+
+    public function collection()
+    {
+        $year = Carbon::parse($this->month)->year;
+        $monthNumber = Carbon::parse($this->month)->month;
+
+        $query = Order::with('customer')
+            ->whereYear('order_date', $year)
+            ->whereMonth('order_date', $monthNumber)
+            ->orderBy('id', 'desc');
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('invoice_no', 'like', "%{$this->search}%")
+                  ->orWhereHas('customer', function ($q2) {
+                      $q2->where('name', 'like', "%{$this->search}%");
+                  });
+            });
+        }
+        
+        return $query->get();
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Order Date',
+            'Invoice No',
+            'Customer Name',
+            'Amount',
+            'Payment Status',
+            'Order Status',
+        ];
+    }
+
+    public function map($order): array
+    {
+        return [
+            Carbon::parse($order->order_date)->format('d-m-Y'),
+            $order->invoice_no,
+            $order->customer->name ?? 'N/A',
+            $order->total,
+            $order->payment_status,
+            $order->order_status,
+        ];
+    }
+}

@@ -25,6 +25,12 @@ use App\Exports\StockByDayExport;
 use App\Exports\StockByMonthExport;
 use App\Exports\StockByYearExport;
 
+
+// Export Sale(Order)
+use App\Exports\OrdersByDateExport;
+use App\Exports\OrdersByMonthExport;
+use App\Exports\OrdersByYearExport; 
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
@@ -44,247 +50,233 @@ class ReportController extends Controller
     }
     // End Export
     
-    public function AdminSearchByMonth(Request $request)
-    {
-        // ... (កូដខាងដើមដូចមុន) ...
-        $monthName = $request->month;
-        $year = $request->year_name;
-        $monthNumber = date_parse($monthName)['month'];
-        $month = str_pad($monthNumber, 2, '0', STR_PAD_LEFT);
-        $search = $request->search;
-        $perPage = $request->perPage ?? 10;
+    
+    
 
-        $query = Order::with('customer')
-            ->whereRaw('DATE_FORMAT(order_date, "%Y") = ?', [$year])
-            ->whereRaw('DATE_FORMAT(order_date, "%m") = ?', [$month])
-            ->orderBy('id', 'desc');
+    // Order Report Function
+        public function orderReportByDate(Request $request)
+        {
+            // សម្រាប់ Initial page load
+            if (!$request->ajax() && !$request->has('export')) {
+                $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+                $formattedDate = Carbon::parse($date)->format('d F Y');
+                return view('admin.report.sale.order_report_by_date', compact('date', 'formattedDate'));
+            }
 
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('invoice_no', 'like', "%{$search}%")
-                    ->orWhereHas('customer', function ($q2) use ($search) {
-                        $q2->where('name', 'like', "%{$search}%");
-                    });
-            });
-        }
+            $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+            $search = $request->input('search');
+            $perPage = $request->input('perPage', 10);
 
-        // $totalQuery = clone $query;
-        // $totalAmount = $totalQuery->sum('total');
-        // $totalOrdersCount = $totalQuery->count();
+            $query = Order::with('customer')
+                ->whereDate('order_date', $date)
+                ->orderBy('id', 'desc');
 
-        if ($perPage === 'all') {
-            $orders = $query->get();
-            $paginationHtml = '';
-        } else {
-            $orders = $query->paginate((int)$perPage);
-            $paginationHtml = $orders->links()->toHtml();
-        }
-
-        if ($request->ajax()) {
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('invoice_no', 'like', "%{$search}%")
+                        ->orWhereHas('customer', function ($q2) use ($search) {
+                            $q2->where('name', 'like', "%{$search}%");
+                        });
+                });
+            }
+            
+            // --- AJAX Response ---
+            $orders = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+            
             $table = '';
             $totalAmount = 0;
+
             if ($orders->isEmpty()) {
-                $table .= '<tr><td colspan="7" class="text-center py-4">No data found.</td></tr>';
+                $table = '<tr><td colspan="7" class="text-center p-4">No orders found for this date.</td></tr>';
             } else {
                 foreach ($orders as $key => $item) {
-                    // ✅✅✅ កែតម្រូវចំណុចនេះ ✅✅✅
-                    // ពិនិត្យមើលថាតើត្រូវប្រើ
                     $totalAmount += $item->total;
-                    $rowNumber = ($perPage === 'all')
-                        ? ($key + 1) // សម្រាប់ 'all', លេខរៀងគឺ index + 1
-                        : ($orders->firstItem() + $key); // សម្រាប់ pagination, ប្រើ firstItem()
-
                     $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
-                    $table .= '<td class="px-4 py-3">' . $rowNumber . '</td>'; // ប្រើអញ្ញត្តិ $rowNumber ដែលបានគណនា
-                    $table .= '<td class="px-4 py-3">' . $item->order_date . '</td>';
-                    $table .= '<td class="px-4 py-3">' . $item->invoice_no . '</td>';
-                    $table .= '<td class="px-4 py-3">$' . number_format($item->total, 2) . '</td>';
-                    $table .= '<td class="px-4 py-3">' . $item->payment_status . '</td>';
-                    $table .= '<td class="px-4 py-3"><span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-blue-600 text-white">' . $item->order_status . '</span></td>';
-                    $table .= '<td class="px-4 py-4 text-sm whitespace-nowrap">
-                                <div class="flex items-center gap-x-6">
-                                    <a href="' . route('order.details.due', $item->id) . '" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200 focus:outline-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                    </a>
-                                </div>
+                    $table .= '<td class="p-4">' . ($orders instanceof \Illuminate\Pagination\LengthAwarePaginator ? $orders->firstItem() + $key : $key + 1) . '</td>';
+                    $table .= '<td class="p-4">' . Carbon::parse($item->order_date)->format('d-m-Y') . '</td>';
+                    $table .= '<td class="p-4">' . $item->invoice_no . '</td>';
+                    $table .= '<td class="p-4">' . ($item->customer->name ?? 'N/A') . '</td>';
+                    $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
+                    $table .= '<td class="p-4">' . $item->payment_status . '</td>';
+                    
+                    // ✅ កែសម្រួលត្រង់នេះ៖ ប្តូរពី <a> tag ទៅជា <button> សម្រាប់បើក Modal
+                    $table .= '<td class="p-4 text-center">
+                                <button type="button" 
+                                        class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold"
+                                        data-order-id="' . $item->id . '">
+                                    View
+                                </button>
                             </td>';
                     $table .= '</tr>';
                 }
             }
-            // ... (កូដខាងក្រោមគឺដូចមុន) ...
-            $footer = '<tr>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Orders:</td>';
-            $footer .= '<td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">' . $orders->count() . '</td>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
-            $footer .= '</tr>';
 
+            $footer = '<tr>';
+            $footer .= '<td colspan="4" class="px-4 py-3 text-right font-semibold">Total Orders: ' . $orders->total() . '</td>';
+            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
+            $footer .= '</tr>';
 
             return response()->json([
                 'table' => $table,
                 'footer' => $footer,
-                
+                'pagination' => ($perPage === 'all') ? '' : $orders->links()->toHtml(),
+                'formattedDate' => Carbon::parse($date)->format('d F Y')
             ]);
         }
+        // ✅ Method ថ្មីសម្រាប់ Export
+        public function exportOrderByDate(Request $request)
+        {
+            $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+            $search = $request->input('search', null);
+            $fileName = 'orders-report-' . $date . '.xlsx';
+            return Excel::download(new OrdersByDateExport($date, $search), $fileName);
+        }
+        public function getOrderDetailsForModal($id)
+        {
+            // Eager load a relations to get all data in one query
+            $order = Order::with('customer', 'orderDetails.product')
+                        ->findOrFail($id);
+            
+            return response()->json($order);
+        }
+        public function orderReportByMonth(Request $request)
+        {
+            // សម្រាប់ Initial page load
+            if (!$request->ajax()) {
+                $month = $request->input('month', Carbon::now()->format('Y-m'));
+                $formattedDate = Carbon::parse($month)->format('F Y');
+                return view('admin.report.sale.order_report_by_month', compact('month', 'formattedDate'));
+            }
 
-        return view('admin.report.search_by_month', compact('monthName', 'year'));
-    }
-    public function AdminSearchByYear(Request $request){ 
-        
-        $year = $request->year;
-        $search = $request->search;
-        $perPage = $request->perPage ?? 10;
+            // --- AJAX Response ---
+            $monthInput = $request->input('month', Carbon::now()->format('Y-m'));
+            $search = $request->input('search');
 
-        $query = Order::with('customer')
-            ->whereYear('order_date', $year)
-            ->orderBy('id', 'desc');
+            // ប្រើ whereBetween ដើម្បីឱ្យ Query លឿន
+            $startDate = Carbon::parse($monthInput)->startOfMonth();
+            $endDate = Carbon::parse($monthInput)->endOfMonth();
 
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('invoice_no', 'like', "%{$search}%")
-                ->orWhereHas('customer', function ($q2) use ($search) {
-                    $q2->where('name', 'like', "%{$search}%");
+            $query = Order::with('customer')
+                ->whereBetween('order_date', [$startDate, $endDate])
+                ->orderBy('id', 'desc');
+
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('invoice_no', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    });
                 });
-            });
-        }
+            }
 
-        if ($perPage === 'all') {
+            // គណនា Total Amount ពីទិន្នន័យដែលបាន filter
+            $totalAmountQuery = clone $query;
+            $totalAmount = $totalAmountQuery->sum('total');
+            
+            // ប្រើ get() ដើម្បីទាញយកទិន្នន័យទាំងអស់
             $orders = $query->get();
-        } else {
-            $orders = $query->paginate((int) $perPage);
+            
+            $table = '';
+            if ($orders->isEmpty()) {
+                $table = '<tr><td colspan="7" class="text-center p-4">No orders found for this month.</td></tr>';
+            } else {
+                foreach ($orders as $key => $item) {
+                    $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
+                    $table .= '<td class="p-4">' . ($key + 1) . '</td>';
+                    $table .= '<td class="p-4">' . Carbon::parse($item->order_date)->format('d-m-Y') . '</td>';
+                    $table .= '<td class="p-4">' . e($item->invoice_no) . '</td>';
+                    $table .= '<td class="p-4">' . e($item->customer->name ?? 'N/A') . '</td>';
+                    $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
+                    $table .= '<td class="p-4">' . e($item->payment_status) . '</td>';
+                    $table .= '<td class="p-4 text-center"><button type="button" class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold" data-order-id="' . $item->id . '">View</button></td>';
+                    $table .= '</tr>';
+                }
+            }
+
+            // បង្កើត Footer ឡើងវិញ
+            $footer = '<tr>';
+            $footer .= '<td colspan="4" class="px-4 py-3 text-right font-semibold">Total Orders: ' . $orders->count() . '</td>';
+            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
+            $footer .= '</tr>';
+
+            return response()->json([
+                'table' => $table,
+                'footer' => $footer,
+                'formattedDate' => Carbon::parse($monthInput)->format('F Y')
+            ]);
+        }
+        // ✅ Method ថ្មីសម្រាប់ Export
+        public function exportOrderByMonth(Request $request)
+        {
+            $month = $request->input('month', Carbon::now()->format('Y-m'));
+            $search = $request->input('search', null);
+            $fileName = 'orders-report-' . $month . '.xlsx';
+            return Excel::download(new OrdersByMonthExport($month, $search), $fileName);
         }
 
-        if ($request->ajax()) {
-            $table = '';
-            $totalAmount = 0;
+        public function orderReportByYear(Request $request)
+        {
+            if (!$request->ajax()) {
+                $year = $request->input('year', Carbon::now()->format('Y'));
+                return view('admin.report.sale.order_report_by_year', compact('year'));
+            }
 
-            foreach ($orders as $key => $item) {
-                $totalAmount += $item->total;
-                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
-                $table .= '<td class="px-4 py-3">' . ($key + 1) . '</td>';
-                $table .= '<td class="px-4 py-3">' . $item->order_date . '</td>';
-                $table .= '<td class="px-4 py-3">' . $item->invoice_no . '</td>';
-                $table .= '<td class="px-4 py-3">$' . number_format($item->total, 2) . '</td>';
-                $table .= '<td class="px-4 py-3">' . $item->payment_status . '</td>';
-                $table .= '<td class="px-4 py-3"><span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-blue-600 text-white">' . $item->order_status . '</span></td>';
-                $table .= '<td class="px-4 py-4 text-sm whitespace-nowrap">
-                        <div class="flex items-center gap-x-6">
-                        <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200 focus:outline-none">
-                            <a href="' . route('order.details.due', $item->id) . '" >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                            </a>
-                        </button>
-                        </div>
-                    </td>';
-                $table .= '</tr>';
+            $year = $request->input('year', Carbon::now()->format('Y'));
+            $search = $request->input('search');
+
+            $startDate = Carbon::createFromDate($year)->startOfYear();
+            $endDate = Carbon::createFromDate($year)->endOfYear();
+
+            $query = Order::with('customer')
+                ->whereBetween('order_date', [$startDate, $endDate])
+                ->orderBy('id', 'desc');
+
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('invoice_no', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    });
+                });
+            }
+
+            $totalAmountQuery = clone $query;
+            $totalAmount = $totalAmountQuery->sum('total');
+            $orders = $query->get();
+            
+            $table = '';
+            if ($orders->isEmpty()) {
+                $table = '<tr><td colspan="7" class="text-center p-4">No orders found for this year.</td></tr>';
+            } else {
+                foreach ($orders as $key => $item) {
+                    $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
+                    $table .= '<td class="p-4">' . ($key + 1) . '</td>';
+                    $table .= '<td class="p-4">' . Carbon::parse($item->order_date)->format('d-m-Y') . '</td>';
+                    $table .= '<td class="p-4">' . e($item->invoice_no) . '</td>';
+                    $table .= '<td class="p-4">' . e($item->customer->name ?? 'N/A') . '</td>';
+                    $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
+                    $table .= '<td class="p-4">' . e($item->payment_status) . '</td>';
+                    $table .= '<td class="p-4 text-center"><button type="button" class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold" data-order-id="' . $item->id . '">View</button></td>';
+                    $table .= '</tr>';
+                }
             }
 
             $footer = '<tr>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Orders:</td>';
-            $footer .= '<td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">' . $orders->count() . '</td>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
+            $footer .= '<td colspan="4" class="px-4 py-3 text-right font-semibold">Total Orders: ' . $orders->count() . '</td>';
+            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
             $footer .= '</tr>';
 
-        
-            return response()->json([
-                'table' => $table,
-                'footer' => $footer,
-                
-            ]);
+            return response()->json(['table' => $table, 'footer' => $footer, 'formattedDate' => $year]);
         }
 
-        return view('admin.report.search_by_year', compact('year'));
-    }
-
-    public function AdminSearchByDate(Request $request)
-    {
-        $date = $request->date;
-        $search = $request->search;
-        $perPage = $request->perPage ?? 10;
-
-        $query = Order::with('customer')
-            ->whereDate('order_date', $date)
-            ->orderBy('id', 'desc');
-
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('invoice_no', 'like', "%{$search}%")
-                ->orWhereHas('customer', function ($q2) use ($search) {
-                    $q2->where('name', 'like', "%{$search}%");
-                });
-            });
+        public function exportOrderByYear(Request $request)
+        {
+            $year = $request->input('year', Carbon::now()->format('Y'));
+            $search = $request->input('search', null);
+            $fileName = 'orders-report-' . $year . '.xlsx';
+            return Excel::download(new OrdersByYearExport($year, $search), $fileName);
         }
-
-        if ($perPage === 'all') {
-            $orders = $query->get();
-        } else {
-            $orders = $query->paginate((int) $perPage);
-        }
-
-        // Ajax response for JS
-        if ($request->ajax()) {
-            $table = '';
-            $totalAmount = 0;
-
-            foreach ($orders as $key => $item) {
-                $totalAmount += $item->total;
-                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
-                $table .= '<td class="px-4 py-3">' . ($key + 1) . '</td>';
-                $table .= '<td class="px-4 py-3">' . $item->order_date . '</td>';
-                $table .= '<td class="px-4 py-3">' . $item->invoice_no . '</td>';
-                $table .= '<td class="px-4 py-3">$' . number_format($item->total, 2) . '</td>';
-                $table .= '<td class="px-4 py-3">' . $item->payment_status . '</td>';
-                $table .= '<td class="px-4 py-3"><span class="inline-block px-2 py-1 text-xs font-semibold rounded bg-blue-600 text-white">' . $item->order_status . '</span></td>';
-                $table .= '<td class="px-4 py-4 text-sm whitespace-nowrap">
-                        <div class="flex items-center gap-x-6">
-                    
-                    
-
-                        <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
-                                    <a href="' . route('order.details.due', $item->id) . '" >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                        class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
-                                    </a>
-                        </button>
-                        
-                        </div>
-
-                        
-                    </td>';  // You can add action buttons here
-                $table .= '</tr>';
-            }
-
-            $footer = '<tr>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Orders:</td>';
-            $footer .= '<td class="px-4 py-3 font-semibold text-green-600 dark:text-green-400">' . $orders->count() . '</td>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
-            $footer .= '</tr>';
-
-            $pagination = $perPage === 'all' ? '<div class="text-sm text-slate-500">Showing all results</div>' : $orders->links('pagination::tailwind')->toHtml();
-
-            return response()->json([
-                'table' => $table,
-                'footer' => $footer,
-                'pagination' => $pagination
-            ]);
-        }
-
-        // First page load
-        $formattedDate = date('d F Y', strtotime($date));
-        return view('admin.report.search_by_date', compact('formattedDate', 'date'));
-    }
-
+    // End
     
 
 

@@ -59,12 +59,18 @@ Route::middleware(['auth'])->group(callback: function () {
     // Report Route
     Route::controller(ReportController::class)->group(function () {
         Route::get('/all/reports', 'AllReports')->name('all.reports');
-        Route::match(['get', 'post'], '/admin/search/bydate', 'AdminSearchByDate')->name('admin.search.bydate');
-        Route::match(['get', 'post'], '/report/bymonth', 'AdminSearchByMonth')->name('admin.search.bymonth');
-        
-         // Uses 'match' to allow both GET and POST requests for flexibility (e.g., initial page load and AJAX)
-        Route::match(['get', 'post'], '/admin/search/byyear', 'AdminSearchByYear')->name('admin.search.byyear');
-        Route::get('/sale/report/export/byyear', 'exportByYear')->name('sale.report.export.byyear');
+
+        Route::match(['get', 'post'], '/report/orders/by-date', 'orderReportByDate')->name('report.orders.by_date');
+        Route::get('/report/orders/by-date/export', [ReportController::class, 'exportOrderByDate'])->name('report.orders.export.date');
+        Route::get('/report/orders/details-modal/{id}', 'getOrderDetailsForModal')->name('report.orders.details_modal');
+
+        // ផ្លាស់ប្តូរ Route ចាស់របស់អ្នក ឬបន្ថែម Route ថ្មីទាំងពីរនេះ
+        Route::match(['get', 'post'], '/report/orders/by-month', 'orderReportByMonth')->name('report.orders.by_month');
+        Route::get('/report/orders/by-month/export',  'exportOrderByMonth')->name('report.orders.export.month');
+
+        // Year Order Report
+        Route::match(['get', 'post'], '/report/orders/by-year', 'orderReportByYear')->name('report.orders.by_year');
+        Route::get('/report/orders/by-year/export', [ReportController::class, 'exportOrderByYear'])->name('report.orders.export.year');
       
         //  Export Sale(Order Report)
         Route::get('/report-order/export', 'SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')

@@ -21,11 +21,14 @@
             {{-- ✅ Filters: Month, Search, and Export Button --}}
             <div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
                 <div class="flex items-end gap-4">
+                    @php
+                        $month = date('Y-m'); // ឧទាហរណ៍៖ លទ្ធផលគឺ '2025-07'
+                    @endphp
+
                     <div class="flex items-center space-x-2">
                         <input type="month" name="month" id="month"
-                            class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full"
-                            value="{{ date('Y-m') }}">
-                        </div>
+                            class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full" value="{{ $month }}">
+                    </div>
                     <div class="w-full max-w-sm min-w-[200px] relative">
                         <div class="relative">
                             <input

@@ -261,6 +261,7 @@ public function FinalInvoice(Request $request)
             'customer_id' => $request->customer_id,
             'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
             'order_status' => $orderStatus,
+            'discount' => $discount,
             'total_products' => Cart::count(),
             'sub_total' => $subTotal,
             'vat' => 0,
