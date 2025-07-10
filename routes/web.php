@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(callback: function () {
     // Report Route
     Route::controller(ReportController::class)->group(function () {
         Route::get('/all/reports', 'AllReports')->name('all.reports');
+        Route::get('/report/orders/details', 'getOrderDetails')->name('report.orders.details');
+
 
         Route::match(['get', 'post'], '/report/orders/by-date', 'orderReportByDate')->name('report.orders.by_date');
         Route::get('/report/orders/by-date/export', [ReportController::class, 'exportOrderByDate'])->name('report.orders.export.date');

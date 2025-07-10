@@ -13,6 +13,8 @@ use App\Models\purchase;
 use App\Models\purchase_details;
 
 
+
+
 use Carbon\Carbon;
 use DateTime;
 
@@ -42,9 +44,28 @@ class ReportController extends Controller
 {
     
     public function AllReports(){
-        return view('admin.report.all_report');
+        return view('admin.report.sale.order_report');
     }
     // End Method 
+
+    public function getOrderDetails(Request $request)
+    {
+        $orderId = $request->input('order_id');
+
+        // ✅ ទាញយកព័ត៌មាន Order ទាំងមូល រួមទាំង Customer និង orderDetails ជាមួយ Product
+        $order = Order::with(['customer', 'orderDetails.product'])
+                    ->find($orderId);
+
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // ✅ បញ្ជូនទិន្នន័យជា JSON ដែលមាន  order និង orderItems
+        return response()->json([
+            'order' => $order,
+            'orderDetails' => $order->orderDetails
+        ]);
+    }
 
     public function SaleReportExport(Request $request){
         $date = $request->date;

@@ -36,19 +36,19 @@
     {{-- #1. By Day Tab Content --}}
     <div class="tab-pane p-4 rounded-lg bg-gray-50 dark:bg-gray-900" id="day-tab-content" role="tabpanel">
         {{-- ✅ កូដដែលបានកែ --}}
-        @include('admin.partials._report_by_day')
+        @include('admin.report.stock.partials._report_by_day')
     </div>
 
     {{-- #2. By Month Tab Content --}}
     <div class="tab-pane hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-900" id="month-tab-content" role="tabpanel">
         {{-- ✅ កូដដែលបានកែ --}}
-        @include('admin.partials._report_by_month')
+        @include('admin.report.stock.partials._report_by_month')
     </div>
 
     {{-- #3. By Year Tab Content --}}
     <div class="tab-pane hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-900" id="year-tab-content" role="tabpanel">
          {{-- ✅ កូដដែលបានកែ --}}
-         @include('admin.partials._report_by_year')
+         @include('admin.report.stock.partials._report_by_year')
     </div>
 </div>
     </div>
