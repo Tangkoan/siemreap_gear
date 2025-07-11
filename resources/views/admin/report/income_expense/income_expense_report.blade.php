@@ -47,7 +47,7 @@
         </div>
         <div class="flex flex-col">
             <label for="monthly_end_date" class="text-xs mb-1">End Month</label>
-            <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" disabled>
+            <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
     </div>
 
@@ -58,7 +58,7 @@
         </div>
         <div class="flex flex-col">
             <label for="yearly_end_date" class="text-xs mb-1">End Year</label>
-            <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="YYYY" min="2000" disabled>
+            <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="YYYY" min="2000" >
         </div>
     </div>
 
@@ -93,9 +93,45 @@
             <div id="report-summary" class="text-center mb-8">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Report for: <span id="report-title-date" class="text-blue-500 font-bold"></span></h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300"><h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total Revenue</h3><p id="total-revenue" class="text-3xl font-bold mt-2 text-green-600">$0.00</p></div>
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300"><h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total Expenses</h3><p id="total-expenses" class="text-3xl font-bold mt-2 text-red-600">$0.00</p></div>
-                    <div id="profit-loss-card" class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 transform hover:scale-105 transition-all duration-300"><h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Profit / Loss</h3><p id="profit-loss" class="text-3xl font-bold mt-2">$0.00</p></div>
+                    
+                    <div class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
+    
+                        <div class="flex-shrink-0   p-6 rounded-full">
+                        {{-- <div class="flex-shrink-0 bg-green-100 dark:bg-green-500/20 p-6 rounded-full"> --}}
+                            <img src="{{ asset('images/icons/business-icon.png') }}" class="h-8 w-8" alt="Revenue Icon">
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total Revenue</h3>
+                            <p id="total-revenue" class="text-3xl font-bold mt-1 text-green-600">$0.00</p>
+                        </div>
+
+                    </div>
+                    
+                    {{-- Total Expense --}}
+                    <div class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex-shrink-0  p-6 rounded-full">
+                            <img src="{{ asset('images/icons/expense.png') }}" class="h-8 w-8" alt="Expense Icon">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total Expenses</h3>
+                            <p id="total-expenses" class="text-3xl font-bold mt-1 text-red-600">$0.00</p>
+                        </div>
+                    </div>
+
+                    {{-- Profit / Loss --}}
+                    <div class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
+                        {{-- <div class="flex-shrink-0 bg-red-100 dark:bg-red-500/20 p-6 rounded-full"> --}}
+                        <div class="flex-shrink-0  p-6 rounded-full">
+                            <img src="{{ asset('images/icons/money.png') }}" class="h-8 w-8" alt="Expense Icon">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Profit / Loss</h3>
+                            <p id="profit-loss" class="text-3xl font-bold mt-2">$0.00</p>
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
 

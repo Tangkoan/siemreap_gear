@@ -32,7 +32,7 @@
     {{-- Topbar --}}
     @include('admin.body.header')
 
-    <div class="flex flex-1 flex-col md:flex-row">
+    <div class="flex">
 
         {{-- Sidebar Navigation --}}
         @include('admin.body.sidebar')
