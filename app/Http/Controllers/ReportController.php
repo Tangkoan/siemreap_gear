@@ -11,6 +11,10 @@ use App\Models\Order;
 use App\Models\Orderdetails;
 use App\Models\purchase;
 use App\Models\purchase_details;
+use App\Models\Expense;
+
+
+
 
 
 
@@ -34,6 +38,13 @@ use App\Exports\PurchasesByYearExport;
 
 // New
 use App\Exports\PurchasesReportExport;
+
+// Report Income & Outcome
+use App\Exports\IncomeExpenseReportExport;
+
+
+use App\Exports\IncomeExpenseExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 // Export Sale(Order)
@@ -846,21 +857,241 @@ class ReportController extends Controller
 
     // End 
 
+    // ======================== Income & OutCome =======================
+        public function incomeExpenseReportView()
+        {
+            return view('admin.report.income_expense.income_expense_report');
+        }
 
+        /**
+         * Fetch and calculate income, expense, and profit data via AJAX.
+         */
+        // នៅក្នុងឯកសារ app/Http/Controllers/ReportController.php
 
+        // 3. បង្កើត Private Function ដើម្បីទាញទិន្នន័យ (Refactor)
+        private function getFilteredData(Request $request)
+        {
+            $type = $request->input('type', 'daily');
+            $startValue = $request->input('start_value');
+            $endValue = $request->input('end_value', $startValue);
+        
+            if (!$startValue) {
+                if ($type === 'monthly') {
+                    $startValue = $endValue = now()->format('Y-m');
+                } else if ($type === 'yearly') {
+                    $startValue = $endValue = now()->year;
+                } else {
+                    $startValue = $endValue = now()->format('Y-m-d');
+                }
+            }
+            
+            if (Carbon::parse($startValue)->gt(Carbon::parse($endValue))) {
+                [$startValue, $endValue] = [$endValue, $startValue];
+            }
+        
+            $salesQuery = OrderDetails::with('product', 'order');
+            $purchasesQuery = purchase_details::with('product', 'purchase.supplier');
+            $expensesQuery = Expense::query();
+        
+            $formattedDate = '';
+        
+            try {
+                switch ($type) {
+                    case 'monthly':
+                        $startMonth = Carbon::parse($startValue)->startOfMonth();
+                        $endMonth = Carbon::parse($endValue)->endOfMonth();
+                        // សម្រាប់ Monthly, whereBetween គឺត្រឹមត្រូវហើយ
+                        $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startMonth, $endMonth]));
+                        $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startMonth, $endMonth]));
+                        $expensesQuery->whereBetween('date', [$startMonth, $endMonth]);
+                        $formattedDate = $startMonth->isSameMonth($endMonth)
+                            ? $startMonth->format('F Y')
+                            : $startMonth->format('F Y') . ' to ' . $endMonth->format('F Y');
+                        break;
+        
+                    case 'yearly':
+                        $startYear = Carbon::createFromDate($startValue)->startOfYear();
+                        $endYear = Carbon::createFromDate($endValue)->endOfYear();
+                        // សម្រាប់ Yearly, whereBetween ក៏ត្រឹមត្រូវដែរ
+                        $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startYear, $endYear]));
+                        $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startYear, $endYear]));
+                        $expensesQuery->whereBetween('date', [$startYear, $endYear]);
+                        $formattedDate = $startYear->format('Y') . ($startYear->format('Y') != $endYear->format('Y') ? ' to ' . $endYear->format('Y') : '');
+                        break;
+        
+                    default: // daily
+                        $startDate = Carbon::parse($startValue);
+                        $endDate = Carbon::parse($endValue);
+        
+                        // ✅ កែប្រែនៅទីនេះ៖ ប្រើ whereDate សម្រាប់ความแม่นยำสูงสุด
+                        $salesQuery->whereHas('order', fn($q) => $q->whereDate('order_date', '>=', $startDate)->whereDate('order_date', '<=', $endDate));
+                        $purchasesQuery->whereHas('purchase', fn($q) => $q->whereDate('purchase_date', '>=', $startDate)->whereDate('purchase_date', '<=', $endDate));
+                        $expensesQuery->whereDate('date', '>=', $startDate)->whereDate('date', '<=', $endDate);
+                        
+                        $formattedDate = $startDate->isSameDay($endDate)
+                            ? $startDate->format('d F Y')
+                            : $startDate->format('d M Y') . ' to ' . $endDate->format('d M Y');
+                        break;
+                }
+            } catch (\Exception $e) {
+                \Log::error('Income Expense Report Error: ' . $e->getMessage());
+                return ['error' => 'An error occurred while processing dates.'];
+            }
+        
+            $sales_details = $salesQuery->get();
+            $purchase_details = $purchasesQuery->get();
+            $other_expenses = $expensesQuery->get();
+        
+            $total_revenue = $sales_details->sum('total');
+            $total_purchases = $purchase_details->sum('total');
+            $total_other_expenses_sum = $other_expenses->sum('amount');
+            $total_expenses = $total_purchases + $total_other_expenses_sum;
+            $profit_or_loss = $total_revenue - $total_expenses;
+        
+            return [
+                'sales_details' => $sales_details,
+                'purchase_details' => $purchase_details,
+                'other_expenses' => $other_expenses,
+                'summary' => [
+                    'total_revenue' => number_format($total_revenue, 2),
+                    'total_purchases' => number_format($total_purchases, 2),
+                    'total_other_expenses' => number_format($total_other_expenses_sum, 2),
+                    'total_expenses' => number_format($total_expenses, 2),
+                    'profit_or_loss' => number_format($profit_or_loss, 2),
+                    'is_profit' => $profit_or_loss >= 0,
+                    'formattedDate' => $formattedDate,
+                ]
+            ];
+        }
 
+    // កែប្រែ Function ចាស់ឲ្យប្រើ Private Function
+    public function getIncomeExpenseData(Request $request)
+    {
+        $data = $this->getFilteredData($request);
 
+        if (isset($data['error'])) {
+            return response()->json(['error' => $data['error']], 400);
+        }
 
+        $incomeTableHtml = view('admin.report.income_expense.partials._income_table', ['sales_details' => $data['sales_details']])->render();
+        $expenseTableHtml = view('admin.report.income_expense.partials._expense_table', [
+            'purchase_details' => $data['purchase_details'],
+            'other_expenses' => $data['other_expenses']
+        ])->render();
 
+        // បញ្ចូល HTML ទៅក្នុង Response
+        $response_data = array_merge($data['summary'], [
+            'income_table_html' => $incomeTableHtml,
+            'expense_table_html' => $expenseTableHtml,
+        ]);
+        
+        return response()->json($response_data);
+    }
+    
+    // 4. បង្កើត Function ថ្មីសម្រាប់ Export
+    public function exportIncomeExpense(Request $request)
+    {
+        // ប្រើ private function ដដែលដើម្បីទាញយកទិន្នន័យ
+        $data = $this->getFilteredData($request);
 
+        if (isset($data['error'])) {
+            // Handle error, maybe redirect back with a message
+            return redirect()->back()->with('error', $data['error']);
+        }
 
+        // បង្កើតឈ្មោះไฟล์ແບບ Dynamic
+        $fileName = 'Income-Expense-Report-' . str_replace(' ', '-', $data['summary']['formattedDate']) . '.xlsx';
 
+        // ហៅ Export class ហើយបញ្ជូនទិន្នន័យទៅឲ្យវា
+        return Excel::download(new IncomeExpenseExport(
+            $data['sales_details'],
+            $data['purchase_details'],
+            $data['other_expenses'],
+            $data['summary']
+        ), $fileName);
+    }
 
+public function exportReport(Request $request)
+    {
+        // 1. ទទួល Input ពី URL
+        $format = $request->query('format'); // 'excel' or 'pdf'
+        $type = $request->query('type');
+        $value = $request->query('value');
 
+        // 2. ទាញទិន្នន័យពី Database (កែសម្រួលส่วนนี้ឲ្យត្រូវនឹងโครงสร้างរបស់អ្នក)
+        $incomeQuery = Order::query();
+        $expenseQuery = Expense::query();
+        $formattedDate = '';
+        
 
+        switch ($type) {
+            case 'daily':
+                $incomeQuery->whereDate('created_at', $value);
+                $expenseQuery->whereDate('created_at', $value);
+                $formattedDate = Carbon::parse($value)->format('F j, Y');
+                break;
+            case 'monthly':
+                $year = substr($value, 0, 4);
+                $month = substr($value, 5, 2);
+                $incomeQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                $expenseQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                $formattedDate = Carbon::createFromFormat('Y-m', $value)->format('F Y');
+                break;
+            case 'yearly':
+                $incomeQuery->whereYear('created_at', $value);
+                $expenseQuery->whereYear('created_at', $value);
+                $formattedDate = 'Year ' . $value;
+                break;
+        }
 
+        $incomes = $incomeQuery->get();
+        $expenses = $expenseQuery->get();
+        
+        // 3. រៀបចំទិន្នន័យជា Array
+        $data = [
+            'incomes'       => $incomes,
+            'expenses'      => $expenses,
+            'totalRevenue'  => $incomes->sum('total_price'), // កែ field ឲ្យត្រូវ
+            'totalExpenses' => $expenses->sum('total_price'), // កែ field ឲ្យត្រូវ
+            'profitOrLoss'  => $incomes->sum('total_price') - $expenses->sum('total_price'),
+            'formattedDate' => $formattedDate,
+        ];
+        
+        $fileName = 'Report-' . str_replace([' ', ','], '-', strtolower($formattedDate));
 
+        // 4. ពិនិត្យ Format ហើយបង្កើតไฟล์
+        if ($format == 'excel') {
+            return Excel::download(new IncomeExpenseReportExport($data), $fileName . '.xlsx');
+        } 
+        
+        if ($format == 'pdf') {
+            // សម្រាប់ PDF យើង render view ដោយផ្ទាល់
+            $pdf = Pdf::loadView('admin.report.income_expense.export_template', ['data' => $data]);
+            
+            return $pdf->download($fileName . '.pdf');
+        }
 
+        return redirect()->back()->with('error', 'Invalid Format.');
+    }
 
+    // Function ថ្មីសម្រាប់ Export ជា PDF
+    public function exportIncomeExpensePdf(Request $request)
+    {
+        // 1. ប្រើ private function ដដែលដើម្បីទាញយកទិន្នន័យ
+        $data = $this->getFilteredData($request);
 
+        if (isset($data['error'])) {
+            return redirect()->back()->with('error', $data['error']);
+        }
+        
+        // 2. បង្កើតឈ្មោះไฟล์ແບບ Dynamic
+        $fileName = 'Income-Expense-Report-' . str_replace([' ', 'to'], ['-', ''], $data['summary']['formattedDate']) . '.pdf';
+
+        // 3. Load View សម្រាប់ PDF ហើយបញ្ជូនទិន្នន័យទៅឲ្យវា
+        $pdf = Pdf::loadView('admin.report.income_expense.income_expense_pdf', $data);
+        
+
+        // 4. បញ្ជាឲ្យ Browser ទាញយកไฟล์ PDF
+        return $pdf->download($fileName);
+    }
 }

@@ -109,6 +109,16 @@ Route::middleware(['auth'])->group(callback: function () {
             Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
             Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
             Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
+
+
+        // =================== Income Expense Report Routes =====================
+        Route::get('/report/income-expense', 'incomeExpenseReportView')->name('report.income_expense.view');
+        Route::get('/report/income-expense/data', 'getIncomeExpenseData')->name('report.income_expense.data');
+        Route::get('/report/export',  'exportReport')->name('report.export');
+        Route::get('/report/income-expense/export', 'exportIncomeExpense')->name('report.income_expense.export');
+        Route::get('/report/income-expense/export-pdf', 'exportIncomeExpensePdf')->name('report.income_expense.export_pdf');
+
+
     });// End Report Route
     
 

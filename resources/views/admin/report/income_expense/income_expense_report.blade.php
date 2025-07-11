@@ -1,0 +1,262 @@
+@extends('admin.admin_dashboard')
+@section('admin')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="page-content bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                <span>Income & Expense Report</span>
+            </h1>
+        </div>
+        
+
+        <div class="p-4 sm:p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="bg-gray-100 dark:bg-slate-700 p-1 rounded-lg flex items-center">
+                    <button class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300" data-type="daily">Daily</button>
+                    <button class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300" data-type="monthly">Monthly</button>
+                    <button class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300" data-type="yearly">Yearly</button>
+                </div>
+                {{-- <div id="filter-inputs" class="flex items-center">
+                    <input type="date" id="date_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <input type="month" id="month_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 hidden">
+                    <input type="number" id="year_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 hidden" placeholder="Enter Year" min="2000">
+                </div> --}}
+
+
+                {{-- START: កូដ HTML ថ្មីសម្រាប់ Filter Inputs --}}
+<div id="filter-container" class="flex items-center gap-4">
+    <div id="daily-filter-group" class="filter-group flex items-center gap-2 hidden">
+        <div class="flex flex-col">
+            <label for="daily_start_date" class="text-xs mb-1">Start Date</label>
+            <input type="date" id="daily_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="flex flex-col">
+            <label for="daily_end_date" class="text-xs mb-1">End Date</label>
+            <input type="date" id="daily_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" >
+        </div>
+    </div>
+
+    <div id="monthly-filter-group" class="filter-group flex items-center gap-2 hidden">
+         <div class="flex flex-col">
+            <label for="monthly_start_date" class="text-xs mb-1">Start Month</label>
+            <input type="month" id="monthly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="flex flex-col">
+            <label for="monthly_end_date" class="text-xs mb-1">End Month</label>
+            <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" disabled>
+        </div>
+    </div>
+
+    <div id="yearly-filter-group" class="filter-group flex items-center gap-2 hidden">
+        <div class="flex flex-col">
+            <label for="yearly_start_date" class="text-xs mb-1">Start Year</label>
+            <input type="number" id="yearly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="YYYY" min="2000">
+        </div>
+        <div class="flex flex-col">
+            <label for="yearly_end_date" class="text-xs mb-1">End Year</label>
+            <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="YYYY" min="2000" disabled>
+        </div>
+    </div>
+
+    {{-- <div class="flex items-center pt-5">
+        <input type="checkbox" id="range-toggle" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+        <label for="range-toggle" class="ml-2 text-sm">Select Range</label>
+    </div> --}}
+</div>
+{{-- END: កូដ HTML ថ្មីសម្រាប់ Filter Inputs --}}
+
+
+
+                <div class="flex items-center gap-2">
+                    <button id="export-excel-btn" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Excel
+                    </button>
+                    <button id="export-pdf-btn" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M10.29 13.71a2.43 2.43 0 0 1-2.43-2.43 2.43 2.43 0 0 1 2.43-2.43c1.34 0 2.43.95 2.43 2.1 0 .59-.22 1.16-.64 1.57"></path><path d="M14.71 13.71a2.43 2.43 0 0 1-2.43-2.43 2.43 2.43 0 0 1 2.43-2.43c1.34 0 2.43.95 2.43 2.1 0 .59-.22 1.16-.64 1.57"></path></svg>
+                        PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-spinner" class="text-center p-10">
+            <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <p class="mt-2 text-gray-500 dark:text-gray-400">Loading Report...</p>
+        </div>
+
+        <div id="report-content" style="display: none;">
+            <div id="report-summary" class="text-center mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Report for: <span id="report-title-date" class="text-blue-500 font-bold"></span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300"><h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total Revenue</h3><p id="total-revenue" class="text-3xl font-bold mt-2 text-green-600">$0.00</p></div>
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300"><h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total Expenses</h3><p id="total-expenses" class="text-3xl font-bold mt-2 text-red-600">$0.00</p></div>
+                    <div id="profit-loss-card" class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 transform hover:scale-105 transition-all duration-300"><h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Profit / Loss</h3><p id="profit-loss" class="text-3xl font-bold mt-2">$0.00</p></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-4 overflow-hidden"><h3 class="text-xl font-bold mb-4 text-green-500 px-2">Income Details (Sales)</h3><div class="overflow-y-auto max-h-[60vh]"><table class="w-full text-sm text-left"><thead class="sticky top-0 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 uppercase text-xs"><tr><th class="p-3">Date</th><th class="p-3">Details</th><th class="p-3 text-center">Qty</th><th class="p-3 text-right">Price</th><th class="p-3 text-right">Total</th></tr></thead><tbody id="income-details-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody></table></div></div>
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-4 overflow-hidden"><h3 class="text-xl font-bold mb-4 text-red-500 px-2">Expense Details</h3><div class="overflow-y-auto max-h-[60vh]"><table class="w-full text-sm text-left"><thead class="sticky top-0 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 uppercase text-xs"><tr><th class="p-3">Date</th><th class="p-3">Details</th><th class="p-3 text-center">Qty</th><th class="p-3 text-right">Price</th><th class="p-3 text-right">Total</th></tr></thead><tbody id="expense-details-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody></table></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom style for table rows for better readability */
+    #income-details-body tr:hover, #expense-details-body tr:hover {
+        background-color: #f9fafb; /* gray-50 */
+    }
+    .dark #income-details-body tr:hover, .dark #expense-details-body tr:hover {
+        background-color: #1e293b; /* slate-800 */
+    }
+    #income-details-body tr td, #expense-details-body tr td {
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        let currentReportType = 'daily';
+        const today = new Date().toISOString().slice(0, 10);
+        const todayMonth = today.slice(0, 7);
+        const todayYear = today.slice(0, 4);
+    
+        // --- Main function to fetch and display data ---
+        function fetchData() {
+            const activeGroup = `.filter-group:not(.hidden)`;
+            const startValue = $(activeGroup).find('.filter-input-start').val();
+            const endValue = $(activeGroup).find('.filter-input-end').val();
+    
+            // ចេញប្រសិនបើតម្លៃណាមួយមិនទាន់បានបំពេញ
+            if (!startValue || !endValue) {
+                return;
+            }
+    
+            $.ajax({
+                url: `{{ route('report.income_expense.data') }}`,
+                type: 'GET',
+                data: { 
+                    type: currentReportType, 
+                    start_value: startValue,
+                    end_value: endValue
+                },
+                beforeSend: () => {
+                    $('#report-content').hide();
+                    $('#loading-spinner').show();
+                },
+                success: function (response) {
+                    $('#report-title-date').text(response.formattedDate);
+                    $('#total-revenue').text(response.total_revenue);
+                    $('#total-expenses').text(response.total_expenses);
+                    $('#profit-loss').text(response.profit_or_loss);
+    
+                    const profitCard = $('#profit-loss-card');
+                    const profitText = $('#profit-loss');
+                    profitCard.removeClass('border-green-500 border-red-500');
+                    profitText.removeClass('text-green-600 text-red-600');
+                    
+                    if (response.is_profit) {
+                        profitCard.addClass('border-green-500');
+                        profitText.addClass('text-green-600');
+                    } else {
+                        profitCard.addClass('border-red-500');
+                        profitText.addClass('text-red-600');
+                    }
+    
+                    $('#income-details-body').html(response.income_table_html);
+                    $('#expense-details-body').html(response.expense_table_html);
+                    
+                    $('#loading-spinner').hide();
+                    $('#report-content').fadeIn(300);
+                },
+                error: (err) => {
+                    $('#loading-spinner').html('<p class="text-red-500 font-semibold">Error: Failed to load report data.</p>');
+                    console.error("AJAX Error:", err);
+                }
+            });
+        }
+    
+        // --- Function to handle tab switching ---
+        function switchTab(type) {
+            currentReportType = type;
+            
+            $('.report-tab').removeClass('bg-blue-500 text-white').addClass('text-gray-600 dark:text-gray-300');
+            $(`.report-tab[data-type="${type}"]`).removeClass('text-gray-600 dark:text-gray-300').addClass('bg-blue-500 text-white');
+            
+            $('.filter-group').addClass('hidden');
+            $(`#${type}-filter-group`).removeClass('hidden');
+            
+            fetchData(); // ហៅ fetchData ដោយផ្ទាល់
+        }
+    
+        // --- Initialize the page on load ---
+        function initializePage() {
+            // Set default values for start and end inputs
+            $('#daily_start_date').val(today);
+            $('#daily_end_date').val(today);
+    
+            $('#monthly_start_date').val(todayMonth);
+            $('#monthly_end_date').val(todayMonth);
+    
+            $('#yearly_start_date').val(todayYear);
+            $('#yearly_end_date').val(todayYear);
+            
+            switchTab('daily');
+        }
+        
+        // --- Event Listeners ---
+        $('.report-tab').on('click', function() {
+            switchTab($(this).data('type'));
+        });
+    
+        // Event listener សម្រាប់ input ទាំងអស់
+        $('#filter-container').on('change', 'input', function() {
+            fetchData();
+        });
+    
+        initializePage();
+    
+        // --- Export Event Listeners ---
+        function handleExport(format) {
+            const activeGroup = `.filter-group:not(.hidden)`;
+            const startValue = $(activeGroup).find('.filter-input-start').val();
+            const endValue = $(activeGroup).find('.filter-input-end').val();
+    
+            if (!startValue || !endValue) {
+                alert('Please select a start and end value first.');
+                return;
+            }
+    
+            let exportUrl;
+            if (format === 'excel') {
+                exportUrl = new URL("{{ route('report.income_expense.export') }}");
+            } else if (format === 'pdf') {
+                exportUrl = new URL("{{ route('report.income_expense.export_pdf') }}");
+            } else {
+                return;
+            }
+            
+            exportUrl.searchParams.append('type', currentReportType);
+            exportUrl.searchParams.append('start_value', startValue);
+            exportUrl.searchParams.append('end_value', endValue);
+    
+            window.location.href = exportUrl.href;
+        }
+    
+        $('#export-excel-btn').on('click', function() {
+            handleExport('excel');
+        });
+    
+        $('#export-pdf-btn').on('click', function() {
+            handleExport('pdf');
+        });
+    });
+    </script>
+@endsection

@@ -383,12 +383,15 @@
             $reportSale = Auth::user()->can('report.sale');
             $reportPurchase = Auth::user()->can('report.purchase');
             $reportStock = Auth::user()->can('report.stock');
+            $reportExpens = Auth::user()->can('report.expense');
+
+            
 
         @endphp
 
 
         {{-- Render Dropdown បើមានសិទ្ធណាមួយ --}}
-        @if ($reportMenu || $reportSale || $reportPurchase || $reportStock)
+        @if ($reportMenu || $reportSale || $reportPurchase || $reportStock || $reportExpens)
             <div id="orderDropdown" class="relative group">
                 {{-- Main Button --}}
                 @if ($reportMenu)
@@ -425,6 +428,11 @@
                     @if ($reportStock)
                         <a href="{{ route('all.report.stock') }}"
                             class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Stock</a>
+                    @endif
+
+                    @if ($reportExpens)
+                        <a href="{{ route('report.income_expense.view') }}"
+                            class="dark:text-white hover:dark:bg-gray-500 block px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white transition">Income & Outcome</a>
                     @endif
 
 
