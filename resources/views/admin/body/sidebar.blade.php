@@ -1,5 +1,5 @@
-<nav id="sidebar" 
-    class="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg w-56 p-4 md:block hidden transition-all duration-300 ease-in-out border-r border-slate-200 dark:border-slate-800">
+<nav id="sidebar"
+    class="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg w-56 p-4 md:block hidden border-r border-slate-200 dark:border-slate-800">
 
     <div id="sidebar-nav" class="space-y-1"> {{-- <-- បន្ថែម id នៅទីនេះ --}}
     <div id="nav-links" class="space-y-1">
@@ -329,39 +329,46 @@
 
     {{-- The original scripts are restored here for correct functionality --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // This script should be outside the nav-links div, but inside the main nav tag.
-            const sidebar = document.getElementById("sidebar");
-            const toggleBtn = document.getElementById("toggleSidebar");
-            const pxTexts = sidebar.querySelectorAll(".px-2");
+    document.addEventListener("DOMContentLoaded", function() {
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggleSidebar");
+        const pxTexts = sidebar.querySelectorAll(".px-2");
 
-            const sidebarState = localStorage.getItem("sidebarState");
+        // រក្សាទុក class transition ទុកក្នុងអថេរ
+        const transitionClasses = ["transition-all", "duration-300", "ease-in-out"];
 
-            function applySidebarState(state) {
-                if (state === "collapsed") {
-                    sidebar.classList.remove("w-56");
-                    sidebar.classList.add("w-[80px]");
-                    pxTexts.forEach(el => el.classList.add("hidden"));
-                } else {
-                    sidebar.classList.remove("w-[80px]");
-                    sidebar.classList.add("w-64");
-                    pxTexts.forEach(el => el.classList.remove("hidden"));
-                }
+        const sidebarState = localStorage.getItem("sidebarState");
+
+        function applySidebarState(state) {
+            if (state === "collapsed") {
+                sidebar.classList.remove("w-56");
+                sidebar.classList.add("w-[80px]");
+                pxTexts.forEach(el => el.classList.add("hidden"));
+            } else { // 'expanded' state
+                sidebar.classList.remove("w-[80px]");
+                sidebar.classList.add("w-56");
+                pxTexts.forEach(el => el.classList.remove("hidden"));
             }
-            // Check if toggleBtn exists before adding listener
-            if (toggleBtn) {
-               applySidebarState(sidebarState);
+        }
 
-                toggleBtn.addEventListener("click", () => {
-                    if (sidebar.classList.contains("w-64")) {
-                        localStorage.setItem("sidebarState", "collapsed");
-                        applySidebarState("collapsed");
-                    } else {
-                        localStorage.setItem("sidebarState", "expanded");
-                        applySidebarState("expanded");
-                    }
-                });
-            }
-        });
-    </script>
+        // ពិនិត្យមើល toggleBtn មុននឹងដំណើរការកូដ
+        if (toggleBtn) {
+            // ដំណើរការฟังก์ชันដើម្បីកំណត់ទំហំភ្លាមៗដោយគ្មាន animation
+            applySidebarState(sidebarState);
+
+            // បន្ថែម class transition ត្រឡប់មកវិញបន្ទាប់ពីពន្យារពេលបន្តិច
+            // ដើម្បីឱ្យ browser មិនចាប់យកការផ្លាស់ប្តូរទំហំដំបូង
+            setTimeout(() => {
+                sidebar.classList.add(...transitionClasses);
+            }, 50); // 50ms គឺគ្រប់គ្រាន់ហើយ
+
+            toggleBtn.addEventListener("click", () => {
+                const isExpanded = sidebar.classList.contains("w-56");
+                const newState = isExpanded ? "collapsed" : "expanded";
+                localStorage.setItem("sidebarState", newState);
+                applySidebarState(newState);
+            });
+        }
+    });
+</script>
 </nav>
