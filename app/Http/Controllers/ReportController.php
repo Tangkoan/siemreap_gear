@@ -600,151 +600,158 @@ class ReportController extends Controller
 
 
     // Start Purchase Function
+
         /**
          * Display the main view for the purchase report.
          */
-        public function purchaseReportView()
-        {
-            return view('admin.report.purchase.purchase_report');
+       public function purchaseReportView()
+    {
+        return view('admin.report.purchase.purchase_report');
+    }
+
+    /**
+     * Get details for a single purchase for the modal view.
+     */
+    public function getPurchaseDetails(Request $request)
+    {
+        $purchaseId = $request->input('purchase_id');
+        $purchase = Purchase::with(['supplier', 'purchaseDetails.product'])->find($purchaseId);
+
+        if (!$purchase) {
+            return response()->json(['error' => 'Purchase not found'], 404);
         }
 
-        /**
-         * Fetch purchase report data by a specific date.
-         */
-        public function getPurchaseReportByDate(Request $request)
-        {
-            $date = $request->input('date', now()->format('Y-m-d'));
-            $search = $request->input('search');
+        return response()->json([
+            'purchase' => $purchase,
+            'purchaseDetails' => $purchase->purchaseDetails
+        ]);
+    }
 
-            $query = Purchase::with('supplier')
-                ->whereDate('purchase_date', $date);
+    // --- Main Report Generation Methods ---
 
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('invoice_no', 'like', "%{$search}%")
-                    ->orWhereHas('supplier', function($subQ) use ($search) {
-                        $subQ->where('name', 'like', "%{$search}%");
-                    });
-                });
-            }
-            
-            $purchases = $query->latest()->get();
+    public function getPurchaseReportByDate(Request $request)
+    {
+        return $this->generatePurchaseReport($request, 'day');
+    }
 
-            $tableHtml = view('admin.report.purchase.partials._purchase_table_rows', ['purchases' => $purchases])->render();
-            $footerHtml = view('admin.report.purchase.partials._purchase_table_footer', ['purchases' => $purchases])->render();
+    public function getPurchaseReportByMonth(Request $request)
+    {
+        return $this->generatePurchaseReport($request, 'month');
+    }
 
-            return response()->json([
-                'table' => $tableHtml,
-                'footer' => $footerHtml,
-                'formattedDate' => Carbon::parse($date)->format('d F Y')
-            ]);
+    public function getPurchaseReportByYear(Request $request)
+    {
+        return $this->generatePurchaseReport($request, 'year');
+    }
+
+    /**
+     * Central private method to generate report data.
+     * This reduces code duplication significantly.
+     */
+    private function generatePurchaseReport(Request $request, string $period)
+    {
+        $query = $this->buildPurchaseQuery($request, $period);
+
+        // --- Calculate KPIs on the entire filtered dataset (before pagination) ---
+        $kpiQuery = clone $query;
+        $kpiData = $kpiQuery->get();
+
+        $totalSpending = $kpiData->sum('total');
+        $totalPurchases = $kpiData->count();
+        $purchaseIds = $kpiData->pluck('id');
+        $itemsPurchased = purchase_details::whereIn('purchase_id', $purchaseIds)->sum('quantity');
+        $avgPurchaseValue = ($totalPurchases > 0) ? $totalSpending / $totalPurchases : 0;
+        // --- End KPI Calculation ---
+
+        // Now, paginate the results for display
+        $purchases = $query->paginate(15);
+
+        // ✅ FIXED: Render the view ONCE and pass the entire collection
+        $tableHtml = view('admin.report.purchase.partials._purchase_table_rows', ['purchases' => $purchases])->render();
+        
+        $footerHtml = view('admin.report.purchase.partials._purchase_table_footer', ['totalAmount' => $totalSpending])->render();
+
+        // Return a complete JSON response
+        return response()->json([
+            'table' => $tableHtml,
+            'footer' => $footerHtml,
+            'pagination' => $purchases->links()->toHtml(),
+            'formattedDate' => $this->getFormattedDate($request, $period),
+            'kpis' => [
+                'spending' => '$' . number_format($totalSpending, 2),
+                'purchases' => number_format($totalPurchases),
+                'items' => number_format($itemsPurchased),
+                'avg' => '$' . number_format($avgPurchaseValue, 2),
+            ]
+        ]);
+    }
+
+    /**
+     * Helper method to build the base query with filters.
+     */
+    private function buildPurchaseQuery(Request $request, string $period)
+    {
+        $query = Purchase::with('supplier')->latest('purchase_date');
+        $search = $request->input('search');
+
+        switch ($period) {
+            case 'day':
+                $date = $request->input('date', now()->format('Y-m-d'));
+                $query->whereDate('purchase_date', $date);
+                break;
+            case 'month':
+                $monthInput = $request->input('month', now()->format('Y-m'));
+                $query->whereYear('purchase_date', Carbon::parse($monthInput)->year)
+                      ->whereMonth('purchase_date', Carbon::parse($monthInput)->month);
+                break;
+            case 'year':
+                $year = $request->input('year', now()->year);
+                $query->whereYear('purchase_date', $year);
+                break;
         }
 
-        /**
-         * Fetch purchase report data by a specific month.
-         */
-        public function getPurchaseReportByMonth(Request $request)
-        {
-            $month = $request->input('month', now()->format('Y-m'));
-            $carbonMonth = Carbon::parse($month);
-            $search = $request->input('search');
-
-            $query = Purchase::with('supplier')
-                ->whereYear('purchase_date', $carbonMonth->year)
-                ->whereMonth('purchase_date', $carbonMonth->month);
-
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('invoice_no', 'like', "%{$search}%")
-                    ->orWhereHas('supplier', function($subQ) use ($search) {
-                        $subQ->where('name', 'like', "%{$search}%");
-                    });
-                });
-            }
-            
-            $purchases = $query->latest()->get();
-
-            $tableHtml = view('admin.report.purchase.partials._purchase_table_rows', ['purchases' => $purchases])->render();
-            $footerHtml = view('admin.report.purchase.partials._purchase_table_footer', ['purchases' => $purchases])->render();
-
-            return response()->json([
-                'table' => $tableHtml,
-                'footer' => $footerHtml,
-                'formattedDate' => $carbonMonth->format('F Y')
-            ]);
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('invoice_no', 'like', "%{$search}%")
+                  ->orWhereHas('supplier', function($subQ) use ($search) {
+                      $subQ->where('name', 'like', "%{$search}%");
+                  });
+            });
         }
 
-        /**
-         * Fetch purchase report data by a specific year.
-         */
-        public function getPurchaseReportByYear(Request $request)
-        {
-            $year = $request->input('year', now()->year);
-            $search = $request->input('search');
-
-            $query = Purchase::with('supplier')
-                ->whereYear('purchase_date', $year);
-
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('invoice_no', 'like', "%{$search}%")
-                    ->orWhereHas('supplier', function($subQ) use ($search) {
-                        $subQ->where('name', 'like', "%{$search}%");
-                    });
-                });
-            }
-            
-            $purchases = $query->latest()->get();
-
-            $tableHtml = view('admin.report.purchase.partials._purchase_table_rows', ['purchases' => $purchases])->render();
-            $footerHtml = view('admin.report.purchase.partials._purchase_table_footer', ['purchases' => $purchases])->render();
-
-            return response()->json([
-                'table' => $tableHtml,
-                'footer' => $footerHtml,
-                'formattedDate' => $year
-            ]);
+        return $query;
+    }
+    
+    /**
+     * Helper method to get the formatted date string for the title.
+     */
+    private function getFormattedDatePurchase(Request $request, string $period)
+    {
+        switch ($period) {
+            case 'day':
+                return Carbon::parse($request->input('date', now()->format('Y-m-d')))->format('d F Y');
+            case 'month':
+                return Carbon::parse($request->input('month', now()->format('Y-m')))->format('F Y');
+            case 'year':
+                return $request->input('year', now()->year);
         }
+    }
 
-        /**
-         * Fetch details for a single purchase for the modal view.
-         */
-        public function getPurchaseDetails(Request $request)
-        {
-            $purchaseId = $request->input('purchase_id');
-            
-            $purchase = Purchase::with(['supplier', 'purchaseDetails.product'])->find($purchaseId);
+    // --- Export Methods ---
+    public function exportPurchasesByDate(Request $request)
+    {
+        return Excel::download(new PurchasesReportExport($request->only(['date', 'search'])), 'purchases-report-' . ($request->date ?? now()->format('Y-m-d')) . '.xlsx');
+    }
 
-            if (!$purchase) {
-                return response()->json(['error' => 'Purchase not found'], 404);
-            }
+    public function exportPurchasesByMonth(Request $request)
+    {
+        return Excel::download(new PurchasesReportExport($request->only(['month', 'search'])), 'purchases-report-' . ($request->month ?? now()->format('Y-m')) . '.xlsx');
+    }
 
-            return response()->json([
-                'purchase' => $purchase,
-                'purchaseDetails' => $purchase->purchaseDetails
-            ]);
-        }
-        // Export
-        public function exportPurchasesByDate(Request $request)
-        {
-            $filters = $request->only(['date', 'search']);
-            $filename = 'purchases-report-' . ($filters['date'] ?? now()->format('Y-m-d')) . '.xlsx';
-            return Excel::download(new PurchasesReportExport($filters), $filename);
-        }
-
-        public function exportPurchasesByMonth(Request $request)
-        {
-            $filters = $request->only(['month', 'search']);
-            $filename = 'purchases-report-' . ($filters['month'] ?? now()->format('Y-m')) . '.xlsx';
-            return Excel::download(new PurchasesReportExport($filters), $filename);
-        }
-
-        public function exportPurchasesByYear(Request $request)
-        {
-            $filters = $request->only(['year', 'search']);
-            $filename = 'purchases-report-' . ($filters['year'] ?? now()->format('Y')) . '.xlsx';
-            return Excel::download(new PurchasesReportExport($filters), $filename);
-        }
+    public function exportPurchasesByYear(Request $request)
+    {
+        return Excel::download(new PurchasesReportExport($request->only(['year', 'search'])), 'purchases-report-' . ($request->year ?? now()->year) . '.xlsx');
+    }
 
     // End 
 

@@ -106,10 +106,21 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/report/purchases/details', 'getPurchaseDetails')->name('report.purchases.details');
 
         // =================== Purchase Report Export Routes ===================
+            // Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
+            // Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
+            // Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
+            Route::get('/purchase/report/view', 'purchaseReportView')->name('purchase.report.view');
+                
+            // AJAX Routes for fetching data
+            Route::get('/report/purchases/by-date', 'getPurchaseReportByDate')->name('report.purchases.by_date');
+            Route::get('/report/purchases/by-month', 'getPurchaseReportByMonth')->name('report.purchases.by_month');
+            Route::get('/report/purchases/by-year', 'getPurchaseReportByYear')->name('report.purchases.by_year');
+            Route::get('/report/purchases/details', 'getPurchaseDetails')->name('report.purchases.details');
+
+            // Export Routes
             Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
             Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
             Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
-
 
         // =================== Income Expense Report Routes =====================
         Route::get('/report/income-expense', 'incomeExpenseReportView')->name('report.income_expense.view');

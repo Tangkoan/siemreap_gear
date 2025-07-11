@@ -1,33 +1,50 @@
-@php
-    $date = date('Y-m-d');
-    $formattedDate = \Carbon\Carbon::parse($date)->format('d F Y');
-@endphp
-
-<h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-6">
-    Report Date: <span id="report-title-day" class="text-blue-600 dark:text-blue-400">{{ $formattedDate }}</span>
-</h2>
-
-<div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
-    <div class="flex items-end gap-4">
-        <input type="date" id="date-day" class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm w-full" value="{{ $date }}">
-        <input class="h-10 dark:text-white dark:bg-gray-800 w-full pr-11 pl-3 placeholder:text-slate-400 border border-slate-200 rounded" placeholder="Search Invoice or Supplier..." id="search-purchase-day" type="text" />
+@php $date = date('Y-m-d'); @endphp
+<div class="space-y-6">
+    {{-- KPI Cards --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Spending</h3><p id="kpi-spending-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Purchases</h3><p id="kpi-purchases-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Items Purchased</h3><p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Avg. Purchase Value</h3><p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
     </div>
-    <div>
-        <a href="#" class="export-btn h-10 inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            Export
-        </a>
-    </div>
-</div>
 
-<div class="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-    <div class="table-wrapper overflow-y-auto max-h-[70vh]">
-        <table class="w-full text-left table-auto min-w-max">
-            <thead class="sticky top-0 bg-slate-200 dark:bg-slate-900"><tr><th class="p-3">No.</th><th class="p-3">Date</th><th class="p-3">Invoice</th><th class="p-3">Supplier</th><th class="p-3 text-right">Total</th><th class="p-3 text-center">Status</th><th class="p-3 text-center">Action</th></tr></thead>
-            <tbody id="report-table-body-day" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm"></tbody>
-            <tfoot id="report-table-footer-day" class="bg-slate-200 dark:bg-slate-900 font-bold"></tfoot>
-        </table>
+    {{-- Control Bar --}}
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
+            <input type="date" id="date-day" class="form-input" value="{{ $date }}">
+            <div class="relative w-full md:w-64">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                <input class="form-input w-full pl-10" placeholder="Search..." id="search-purchase-day" type="text" />
+            </div>
+        </div>
+        
+        <a id="exportBtn-day" 
+                href="{{ route('report.purchases.export.date', ['date' => $date]) }}" 
+                class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
+                        bg-gradient-to-r bg-green-600 to-green-700 text-white font-medium 
+                        shadow-md hover:shadow-lg hover:bg-green-700 hover:to-green-800 
+                        transition duration-300 ease-in-out w-full md:w-auto">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    
+                    <span>Export</span>
+            </a>
+    </div>
+
+    {{-- Table Container --}}
+    <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden">
+        <div class="overflow-x-auto"><table class="w-full text-sm">
+            <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
+                <tr><th class="px-6 py-4">#</th><th class="px-6 py-4">Date</th><th class="px-6 py-4">Invoice</th><th class="px-6 py-4">Supplier</th><th class="px-6 py-4 text-right">Total</th><th class="px-6 py-4 text-center">Status</th><th class="px-6 py-4 text-center">Action</th></tr>
+            </thead>
+            <tbody id="report-table-body-day"></tbody>
+            <tfoot id="report-table-footer-day" class="text-sm font-semibold text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700"></tfoot>
+        </table></div>
+        <div id="pagination-links-day" class="p-4 border-t border-slate-200 dark:border-slate-700"></div>
     </div>
 </div>
