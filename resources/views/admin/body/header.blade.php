@@ -153,7 +153,7 @@
             
             {{-- FIXED: POS Button is now a strong, solid blue for high visibility --}}
             @can('pos.menu')
-                <a href="{{ route('pos') }}" class="hidden sm:block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                <a href="{{ route('pos') }}" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     POS
                 </a>
             @else

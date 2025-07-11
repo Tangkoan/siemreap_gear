@@ -27,25 +27,31 @@
     <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
 </head>
 
-<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
+<body class="flex flex-col h-screen bg-gray-100 dark:bg-gray-800 overflow-hidden">
 
-    {{-- Topbar --}}
+    {{-- Topbar (Header) --}}
     @include('admin.body.header')
 
-    <div class="flex">
+    <div class="flex flex-1 overflow-hidden">
 
         {{-- Sidebar Navigation --}}
+        {{-- មិនចាំបាច់បន្ថែម h-full នៅទីនេះទេ ព្រោះ Flexbox នឹងจัดการให้เอง --}}
         @include('admin.body.sidebar')
 
-        {{-- Main Content --}}
-        @yield('admin')
+        {{-- Main Content Wrapper --}}
+        {{-- 
+            សំខាន់៖ ត្រូវរុំ @yield នៅក្នុង <main> ដែលមាន overflow-y-auto
+        --}}
+        <main class="flex-1 overflow-y-auto ">
+            @yield('admin')
+        </main>
 
     </div>
 
+
     {{-- Footer --}}
     {{-- @include('admin.body.footer') --}}
-
-    {{-- Scripts --}}
+{{-- Scripts --}}
     <script>
         const menuButton = document.getElementById('menu-button');
         const sidebar = document.getElementById('sidebar');
@@ -128,7 +134,39 @@
             }
         @endif
     </script>
+    
 
+
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarNav = document.getElementById('sidebar-nav');
+            if (!sidebarNav) return;
+
+            const dropdownGroups = sidebarNav.querySelectorAll('.relative.group');
+
+            dropdownGroups.forEach(group => {
+                const dropdownMenu = group.querySelector('.absolute');
+                if (!dropdownMenu) return;
+
+                group.addEventListener('mouseenter', () => {
+                    const rect = group.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - rect.bottom;
+
+                    // If not enough space below, pop up
+                    if (spaceBelow < dropdownMenu.offsetHeight) {
+                        dropdownMenu.classList.remove('top-0');
+                        dropdownMenu.classList.add('bottom-0');
+                    }
+                });
+
+                group.addEventListener('mouseleave', () => {
+                    // Reset to default state
+                    dropdownMenu.classList.remove('bottom-0');
+                    dropdownMenu.classList.add('top-0');
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
