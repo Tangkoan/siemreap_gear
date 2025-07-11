@@ -1,37 +1,57 @@
-@php
-    $year = $year ?? date('Y');
-    $formattedDate = $formattedDate ?? $year;
-@endphp
-
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">
-        Report Year: <span id="report-title-year" class="text-blue-600 dark:text-blue-400">{{ $formattedDate }}</span>
-    </h2>
-</div>
-
-<div class="w-full flex flex-wrap justify-between items-end gap-4 mb-4">
-    <div class="flex items-end gap-4">
-        <input type="number" name="year" id="year-year" class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm" value="{{ $year }}" placeholder="Enter Year" min="2000">
-        <input class="h-10 dark:text-white dark:bg-gray-800 bg-white w-full pr-11 pl-3 placeholder:text-slate-400 border border-slate-200 rounded" placeholder="Search..." id="search-year" type="text" />
+@php $year = date('Y'); @endphp
+<div class="space-y-6">
+    {{-- KPI Cards --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Revenue</h3><p id="kpi-revenue-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Orders</h3><p id="kpi-orders-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Items Sold</h3><p id="kpi-items-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Avg. Order Value</h3><p id="kpi-avg-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
     </div>
-    <div>
-        <a id="exportBtn-year" href="{{ route('report.orders.export.year', ['year' => $year]) }}" class="h-10 inline-flex items-center px-4 py-2 bg-green-600 border rounded-md font-semibold text-xs text-white uppercase hover:bg-green-700">
-            Export
-        </a>
-    </div>
-</div>
 
-<div class="w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-    <div class="table-wrapper overflow-y-auto max-h-[70vh]">
-        <table class="w-full text-left table-auto min-w-max">
-            <thead class="sticky top-0 bg-slate-50 dark:bg-gray-900">
-                 <tr>
-                    <th class="p-4">No.</th><th class="p-4">Date</th><th class="p-4">Invoice</th><th class="p-4">Customer</th><th class="p-4">Amount</th><th class="p-4">Payment</th><th class="p-4 text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody id="report-table-body-year" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm"></tbody>
-            <tfoot id="report-table-footer-year" class="bg-slate-50 dark:bg-gray-900 font-bold"></tfoot>
-        </table>
+    {{-- Control Bar --}}
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                 <input type="number" id="year-year" class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500" value="{{ $year }}" min="2020" max="2099">
+                <div class="relative w-full md:w-64">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                    <input class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." id="search-year" type="text" />
+                </div>
+            </div>
+            
+
+            <a id="exportBtn-year" 
+                href="{{ route('report.orders.export.year', ['year' => $year]) }}" 
+                class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
+                        bg-gradient-to-r bg-green-600 to-green-700 text-white font-medium 
+                        shadow-md hover:shadow-lg hover:bg-green-700 hover:to-green-800 
+                        transition duration-300 ease-in-out w-full md:w-auto">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    
+                    <span>Export</span>
+            </a>
+        </div>
     </div>
-    <div id="pagination-links-year" class="p-4 bg-white dark:bg-gray-800 border-t"></div>
+
+    {{-- Table Container --}}
+    <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+                <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
+                    <tr>
+                         <th scope="col" class="px-6 py-4">#</th><th scope="col" class="px-6 py-4">Date</th><th scope="col" class="px-6 py-4">Invoice</th><th scope="col" class="px-6 py-4">Customer</th><th scope="col" class="px-6 py-4 text-right">Amount</th><th scope="col" class="px-6 py-4 text-center">Payment</th><th scope="col" class="px-6 py-4 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="report-table-body-year"></tbody>
+                <tfoot id="report-table-footer-year" class="text-sm font-semibold text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700"></tfoot>
+            </table>
+        </div>
+        <div id="pagination-links-year" class="p-4 border-t border-slate-200 dark:border-slate-700"></div>
+    </div>
 </div>

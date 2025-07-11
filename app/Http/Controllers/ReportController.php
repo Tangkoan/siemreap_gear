@@ -57,268 +57,159 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReportController extends Controller
 {
     
-    public function AllReports(){
+    public function AllReports()
+    {
         return view('admin.report.sale.order_report');
     }
-    // End Method 
 
+    /**
+     * Get order details for the modal
+     */
     public function getOrderDetails(Request $request)
     {
         $orderId = $request->input('order_id');
-
-        // ✅ ទាញយកព័ត៌មាន Order ទាំងមូល រួមទាំង Customer និង orderDetails ជាមួយ Product
-        $order = Order::with(['customer', 'orderDetails.product'])
-                    ->find($orderId);
+        $order = Order::with(['customer', 'orderDetails.product'])->find($orderId);
 
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);
         }
 
-        // ✅ បញ្ជូនទិន្នន័យជា JSON ដែលមាន  order និង orderItems
         return response()->json([
             'order' => $order,
             'orderDetails' => $order->orderDetails
         ]);
     }
 
-    public function SaleReportExport(Request $request){
-        $date = $request->date;
-        $month = $request->month;
-        $year = $request->year;
-    
-        return Excel::download(new OrderReportExport($date, $month, $year), 'filtered_report.xlsx');
-        // return Excel::download(new OrderReportExport,'sale_report.xlsx');
+    // ===============================================
+    // ✨ NEW REFACTORED REPORT GENERATION METHODS
+    // ===============================================
+
+    public function orderReportByDate(Request $request)
+    {
+        return $this->generateReport($request, 'day');
+    }
+
+    public function orderReportByMonth(Request $request)
+    {
+        return $this->generateReport($request, 'month');
+    }
+
+    public function orderReportByYear(Request $request)
+    {
+        return $this->generateReport($request, 'year');
+    }
+
+    private function generateReport(Request $request, string $period)
+    {
+        $query = $this->buildReportQuery($request, $period);
+
+        // --- Calculate KPIs before pagination ---
+        $kpiQuery = clone $query;
+        $kpiData = $kpiQuery->get();
+
+        $totalRevenue = $kpiData->sum('total');
+        $totalOrders = $kpiData->count();
+        $orderIds = $kpiData->pluck('id');
+        $itemsSold = OrderDetails::whereIn('order_id', $orderIds)->sum('quantity');
+        $avgOrderValue = ($totalOrders > 0) ? $totalRevenue / $totalOrders : 0;
+        // --- End KPI Calculation ---
+
+        $orders = $query->paginate(15); // Show 15 items per page
+
+        $tableHtml = '';
+        if ($orders->isEmpty()) {
+            $tableHtml = '<tr><td colspan="7" class="text-center p-8 text-slate-500">No orders found for this period.</td></tr>';
+        } else {
+            foreach ($orders as $key => $item) {
+                $tableHtml .= view('admin.report.sale.partials._order_row', ['item' => $item, 'key' => $key, 'orders' => $orders])->render();
+            }
+        }
+
+        $footerHtml = view('admin.report.sale.partials._report_footer', ['totalOrders' => $orders->total(), 'totalAmount' => $totalRevenue])->render();
+
+        return response()->json([
+            'table' => $tableHtml,
+            'footer' => $footerHtml,
+            'pagination' => $orders->links()->toHtml(),
+            'formattedDate' => $this->getFormattedDate($request, $period),
+            'kpis' => [ // ✨ NEW: Sending KPI data to the frontend
+                'revenue' => '$' . number_format($totalRevenue, 2),
+                'orders' => number_format($totalOrders),
+                'items' => number_format($itemsSold),
+                'avg' => '$' . number_format($avgOrderValue, 2),
+            ]
+        ]);
+    }
+
+    private function buildReportQuery(Request $request, string $period)
+    {
+        $query = Order::with('customer')->latest();
+        $search = $request->input('search');
+
+        switch ($period) {
+            case 'day':
+                $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+                $query->whereDate('order_date', $date);
+                break;
+            case 'month':
+                $monthInput = $request->input('month', Carbon::now()->format('Y-m'));
+                $query->whereYear('order_date', Carbon::parse($monthInput)->year)
+                      ->whereMonth('order_date', Carbon::parse($monthInput)->month);
+                break;
+            case 'year':
+                $year = $request->input('year', Carbon::now()->format('Y'));
+                $query->whereYear('order_date', $year);
+                break;
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('invoice_no', 'like', "%{$search}%")
+                  ->orWhereHas('customer', function ($q2) use ($search) {
+                      $q2->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        return $query;
+    }
+
+    private function getFormattedDate(Request $request, string $period)
+    {
+        switch ($period) {
+            case 'day':
+                return Carbon::parse($request->input('date', Carbon::now()->format('Y-m-d')))->format('d F Y');
+            case 'month':
+                return Carbon::parse($request->input('month', Carbon::now()->format('Y-m')))->format('F Y');
+            case 'year':
+                return $request->input('year', Carbon::now()->format('Y'));
+        }
+    }
+
+    // ===============================================
+    // EXPORT METHODS (Unchanged)
+    // ===============================================
+    public function exportOrderByDate(Request $request)
+    {
+        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+        $search = $request->input('search', null);
+        return Excel::download(new OrdersByDateExport($date, $search), 'orders-report-' . $date . '.xlsx');
+    }
+
+    public function exportOrderByMonth(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->format('Y-m'));
+        $search = $request->input('search', null);
+        return Excel::download(new OrdersByMonthExport($month, $search), 'orders-report-' . $month . '.xlsx');
+    }
+
+    public function exportOrderByYear(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->format('Y'));
+        $search = $request->input('search', null);
+        return Excel::download(new OrdersByYearExport($year, $search), 'orders-report-' . $year . '.xlsx');
     }
     
-    // Order Report Function
-        public function orderReportByDate(Request $request)
-        {
-            // សម្រាប់ Initial page load
-            if (!$request->ajax() && !$request->has('export')) {
-                $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-                $formattedDate = Carbon::parse($date)->format('d F Y');
-                return view('admin.report.sale.order_report_by_date', compact('date', 'formattedDate'));
-            }
-
-            $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-            $search = $request->input('search');
-            $perPage = $request->input('perPage', 10);
-
-            $query = Order::with('customer')
-                ->whereDate('order_date', $date)
-                ->orderBy('id', 'desc');
-
-            if ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('invoice_no', 'like', "%{$search}%")
-                        ->orWhereHas('customer', function ($q2) use ($search) {
-                            $q2->where('name', 'like', "%{$search}%");
-                        });
-                });
-            }
-            
-            // --- AJAX Response ---
-            $orders = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-            
-            $table = '';
-            $totalAmount = 0;
-
-            if ($orders->isEmpty()) {
-                $table = '<tr><td colspan="7" class="text-center p-4">No orders found for this date.</td></tr>';
-            } else {
-                foreach ($orders as $key => $item) {
-                    $totalAmount += $item->total;
-                    $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
-                    $table .= '<td class="p-4">' . ($orders instanceof \Illuminate\Pagination\LengthAwarePaginator ? $orders->firstItem() + $key : $key + 1) . '</td>';
-                    $table .= '<td class="p-4">' . Carbon::parse($item->order_date)->format('d-m-Y') . '</td>';
-                    $table .= '<td class="p-4">' . $item->invoice_no . '</td>';
-                    $table .= '<td class="p-4">' . ($item->customer->name ?? 'N/A') . '</td>';
-                    $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
-                    $table .= '<td class="p-4">' . $item->payment_status . '</td>';
-                    
-                    // ✅ កែសម្រួលត្រង់នេះ៖ ប្តូរពី <a> tag ទៅជា <button> សម្រាប់បើក Modal
-                    $table .= '<td class="p-4 text-center">
-                                <button type="button" 
-                                        class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold"
-                                        data-order-id="' . $item->id . '">
-                                    View
-                                </button>
-                            </td>';
-                    $table .= '</tr>';
-                }
-            }
-
-            $footer = '<tr>';
-            $footer .= '<td colspan="4" class="px-4 py-3 text-right font-semibold">Total Orders: ' . $orders->total() . '</td>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
-            $footer .= '</tr>';
-
-            return response()->json([
-                'table' => $table,
-                'footer' => $footer,
-                'pagination' => ($perPage === 'all') ? '' : $orders->links()->toHtml(),
-                'formattedDate' => Carbon::parse($date)->format('d F Y')
-            ]);
-        }
-        // ✅ Method ថ្មីសម្រាប់ Export
-        public function exportOrderByDate(Request $request)
-        {
-            $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-            $search = $request->input('search', null);
-            $fileName = 'orders-report-' . $date . '.xlsx';
-            return Excel::download(new OrdersByDateExport($date, $search), $fileName);
-        }
-        public function getOrderDetailsForModal($id)
-        {
-            // Eager load a relations to get all data in one query
-            $order = Order::with('customer', 'orderDetails.product')
-                        ->findOrFail($id);
-            
-            return response()->json($order);
-        }
-        public function orderReportByMonth(Request $request)
-        {
-            // សម្រាប់ Initial page load
-            if (!$request->ajax()) {
-                $month = $request->input('month', Carbon::now()->format('Y-m'));
-                $formattedDate = Carbon::parse($month)->format('F Y');
-                return view('admin.report.sale.order_report_by_month', compact('month', 'formattedDate'));
-            }
-
-            // --- AJAX Response ---
-            $monthInput = $request->input('month', Carbon::now()->format('Y-m'));
-            $search = $request->input('search');
-
-            // ប្រើ whereBetween ដើម្បីឱ្យ Query លឿន
-            $startDate = Carbon::parse($monthInput)->startOfMonth();
-            $endDate = Carbon::parse($monthInput)->endOfMonth();
-
-            $query = Order::with('customer')
-                ->whereBetween('order_date', [$startDate, $endDate])
-                ->orderBy('id', 'desc');
-
-            if ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('invoice_no', 'like', "%{$search}%")
-                    ->orWhereHas('customer', function ($q2) use ($search) {
-                        $q2->where('name', 'like', "%{$search}%");
-                    });
-                });
-            }
-
-            // គណនា Total Amount ពីទិន្នន័យដែលបាន filter
-            $totalAmountQuery = clone $query;
-            $totalAmount = $totalAmountQuery->sum('total');
-            
-            // ប្រើ get() ដើម្បីទាញយកទិន្នន័យទាំងអស់
-            $orders = $query->get();
-            
-            $table = '';
-            if ($orders->isEmpty()) {
-                $table = '<tr><td colspan="7" class="text-center p-4">No orders found for this month.</td></tr>';
-            } else {
-                foreach ($orders as $key => $item) {
-                    $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
-                    $table .= '<td class="p-4">' . ($key + 1) . '</td>';
-                    $table .= '<td class="p-4">' . Carbon::parse($item->order_date)->format('d-m-Y') . '</td>';
-                    $table .= '<td class="p-4">' . e($item->invoice_no) . '</td>';
-                    $table .= '<td class="p-4">' . e($item->customer->name ?? 'N/A') . '</td>';
-                    $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
-                    $table .= '<td class="p-4">' . e($item->payment_status) . '</td>';
-                    $table .= '<td class="p-4 text-center"><button type="button" class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold" data-order-id="' . $item->id . '">View</button></td>';
-                    $table .= '</tr>';
-                }
-            }
-
-            // បង្កើត Footer ឡើងវិញ
-            $footer = '<tr>';
-            $footer .= '<td colspan="4" class="px-4 py-3 text-right font-semibold">Total Orders: ' . $orders->count() . '</td>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
-            $footer .= '</tr>';
-
-            return response()->json([
-                'table' => $table,
-                'footer' => $footer,
-                'formattedDate' => Carbon::parse($monthInput)->format('F Y')
-            ]);
-        }
-        // ✅ Method ថ្មីសម្រាប់ Export
-        public function exportOrderByMonth(Request $request)
-        {
-            $month = $request->input('month', Carbon::now()->format('Y-m'));
-            $search = $request->input('search', null);
-            $fileName = 'orders-report-' . $month . '.xlsx';
-            return Excel::download(new OrdersByMonthExport($month, $search), $fileName);
-        }
-
-        public function orderReportByYear(Request $request)
-        {
-            if (!$request->ajax()) {
-                $year = $request->input('year', Carbon::now()->format('Y'));
-                return view('admin.report.sale.order_report_by_year', compact('year'));
-            }
-
-            $year = $request->input('year', Carbon::now()->format('Y'));
-            $search = $request->input('search');
-
-            $startDate = Carbon::createFromDate($year)->startOfYear();
-            $endDate = Carbon::createFromDate($year)->endOfYear();
-
-            $query = Order::with('customer')
-                ->whereBetween('order_date', [$startDate, $endDate])
-                ->orderBy('id', 'desc');
-
-            if ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('invoice_no', 'like', "%{$search}%")
-                    ->orWhereHas('customer', function ($q2) use ($search) {
-                        $q2->where('name', 'like', "%{$search}%");
-                    });
-                });
-            }
-
-            $totalAmountQuery = clone $query;
-            $totalAmount = $totalAmountQuery->sum('total');
-            $orders = $query->get();
-            
-            $table = '';
-            if ($orders->isEmpty()) {
-                $table = '<tr><td colspan="7" class="text-center p-4">No orders found for this year.</td></tr>';
-            } else {
-                foreach ($orders as $key => $item) {
-                    $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">';
-                    $table .= '<td class="p-4">' . ($key + 1) . '</td>';
-                    $table .= '<td class="p-4">' . Carbon::parse($item->order_date)->format('d-m-Y') . '</td>';
-                    $table .= '<td class="p-4">' . e($item->invoice_no) . '</td>';
-                    $table .= '<td class="p-4">' . e($item->customer->name ?? 'N/A') . '</td>';
-                    $table .= '<td class="p-4">$' . number_format($item->total, 2) . '</td>';
-                    $table .= '<td class="p-4">' . e($item->payment_status) . '</td>';
-                    $table .= '<td class="p-4 text-center"><button type="button" class="view-details-btn text-blue-500 hover:text-blue-700 font-semibold" data-order-id="' . $item->id . '">View</button></td>';
-                    $table .= '</tr>';
-                }
-            }
-
-            $footer = '<tr>';
-            $footer .= '<td colspan="4" class="px-4 py-3 text-right font-semibold">Total Orders: ' . $orders->count() . '</td>';
-            $footer .= '<td colspan="3" class="px-4 py-3 text-right font-semibold">Total Amount: $' . number_format($totalAmount, 2) . '</td>';
-            $footer .= '</tr>';
-
-            return response()->json(['table' => $table, 'footer' => $footer, 'formattedDate' => $year]);
-        }
-
-        public function exportOrderByYear(Request $request)
-        {
-            $year = $request->input('year', Carbon::now()->format('Y'));
-            $search = $request->input('search', null);
-            $fileName = 'orders-report-' . $year . '.xlsx';
-            return Excel::download(new OrdersByYearExport($year, $search), $fileName);
-        }// End
-    
-    
-
-
-
-
 ////////////////////////////////////////// Stock ////////////////////////////////
     public function AllStockReports(){
         return view('admin.report.stock.all_stock_report');
