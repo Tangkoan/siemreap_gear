@@ -73,25 +73,26 @@ Route::middleware(['auth'])->group(callback: function () {
         //  Export Sale(Order Report)
         Route::get('/report-order/export', 'SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')
 
-        // Report Stock
-        Route::get('/all/stock/reports', 'AllStockReports')->name('all.report.stock');
+        // ============================= Report Stock ==================================================
+            Route::get('/stock/report', 'AllStockReports')->name('all.report.stock');
+            
+            // By Day
+            Route::get('/stock/report/by-day', 'stockReportByDay')->name('report.stock.by_day');
+            Route::get('/stock/report/details/by-day', 'getStockMovementDetailsByDay')->name('report.stock.details.day');
+            Route::get('/stock/report/export/by-day', 'exportStockByDay')->name('report.stock.export.day');
 
-        Route::match(['get', 'post'], '/report/stock-by-day', 'stockReportByDay')->name('report.stock.by_day');
-        Route::get('/report/stock/details/day', 'getStockMovementDetailsByDay')->name('report.stock.details.day');
-        Route::get('/report/stock/by-day/export',  'exportStockByDay')->name('report.stock.export.day');
+            // By Month
+            Route::get('/stock/report/by-month', 'stockReportByMonth')->name('report.stock.by_month');
+            Route::get('/stock/report/details/by-month', 'getStockMovementDetailsByMonth')->name('report.stock.details.month');
+            Route::get('/stock/report/export/by-month', 'exportStockByMonth')->name('report.stock.export.month');
 
-        Route::match(['get', 'post'], '/report/stock/by-month', 'stockReportByMonth')->name('report.stock.by_month');
-        Route::get('/report/stock/details/month', 'getStockMovementDetailsByMonth')->name('report.stock.details.month');
-        Route::get('/report/stock/by-month/export', 'exportStockByMonth')->name('report.stock.export.month');
-
-
-        Route::match(['get', 'post'], '/report/stock/by-year', 'stockReportByYear')->name('report.stock.by_year');
-        Route::match(['get', 'post'], '/report/stock/details', 'getStockMovementDetails')->name('report.stock.details');
-        Route::get('/report/stock/by-year/export',  'exportStockByYear')->name('report.stock.export.year');
-
+            // By Year
+            Route::get('/stock/report/by-year', 'stockReportByYear')->name('report.stock.by_year');
+            Route::get('/stock/report/details/by-year', 'getStockMovementDetailsYear')->name('report.stock.details'); // Using your existing details method
+            Route::get('/stock/report/export/by-year', 'exportStockByYear')->name('report.stock.export.year');
         // End Report Stock
 
-        // Purchase Report
+        // ​===================================== Purchase Report ===============================================
 
         // --- Routes for Unified Purchase Report ---
         // Main view route

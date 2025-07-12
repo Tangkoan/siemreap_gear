@@ -211,22 +211,44 @@ class ReportController extends Controller
     }
     
 ////////////////////////////////////////// Stock ////////////////////////////////
-    public function AllStockReports(){
+    public function AllStockReports()
+    {
         return view('admin.report.stock.all_stock_report');
     }
-    // End Method
 
+    /**
+     * Get stock report data by day.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
     public function stockReportByDay(Request $request)
     {
+        // If not an AJAX request, render the initial view
         if (!$request->ajax()) {
             $date = $request->input('date', Carbon::now()->format('Y-m-d'));
             $formattedDate = Carbon::parse($date)->format('d F Y');
             return view('admin.report.stock.stock_report_by_day', compact('date', 'formattedDate'));
         }
 
+        // Handle AJAX request for data
         $date = Carbon::parse($request->date)->startOfDay();
         $search = $request->search;
         $perPage = $request->perPage ?? 15;
+
+        // Calculate total stock in and stock out for the period
+        $totalStockIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->whereDate('purchases.purchase_date', $date)
+            ->where('purchases.purchase_status', 'complete')
+            ->sum('quantity');
+
+        $totalStockOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->whereDate('orders.order_date', $date)
+            ->where('orders.order_status', 'complete')
+            ->sum('quantity');
+
 
         $query = Product::query()
             ->select('id', 'product_name', 'product_code')
@@ -256,7 +278,7 @@ class ReportController extends Controller
                     ->where('orders.order_date', '<', $date)
                     ->where('orders.order_status', 'complete'),
             ])
-            ->havingRaw('stock_in > 0 OR stock_out > 0');
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before, 0) - COALESCE(total_sold_before, 0)) > 0'); // Include products with opening stock
 
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -266,54 +288,39 @@ class ReportController extends Controller
         }
 
         $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-        $table = '';
-        if ($products->isEmpty()) {
-            $table .= '<tr><td colspan="5" class="text-center p-4">No product movement found for this day.</td></tr>';
-        } else {
-            foreach ($products as $product) {
-                $openingStock = (int)$product->total_purchased_before ;
-                $stockIn = (int)$product->stock_in;
-                $stockOut = (int)$product->stock_out;
-                $closingStock = $openingStock + $stockIn - $stockOut;
-
-                // ✅ កែសម្រួលត្រង់នេះ៖ បន្ថែម data-attributes និង class សម្រាប់ JavaScript
-                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row" 
-                                data-product-id="'. $product->id .'" 
-                                data-product-name="'. htmlspecialchars($product->product_name) .'">';
-                $table .= '<td class="p-2">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
-                $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
-                $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
-                $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
-                $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
-                $table .= '</tr>';
-            }
-        }
-        
-        $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+        $tableHtml = $this->renderStockTableRows($products, 'day'); // Pass activeTab for date formatting
+        $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
         return response()->json([
-            'table' => $table,
-            'pagination' => $pagination,
-            'formattedDate' => Carbon::parse($date)->format('d F Y')
+            'table' => $tableHtml,
+            'pagination' => $paginationHtml,
+            'formattedDate' => Carbon::parse($date)->format('d F Y'),
+            'totalStockIn' => (int)$totalStockIn, // Return total stock in
+            'totalStockOut' => (int)$totalStockOut, // Return total stock out
         ]);
     }
 
     /**
-     * ✅ Method ថ្មី៖ សម្រាប់ទាញយកទិន្នន័យលម្អិតប្រចាំថ្ងៃ
+     * Get detailed stock movement for a product by day.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getStockMovementDetailsByDay(Request $request)
     {
         $productId = $request->productId;
         $date = Carbon::parse($request->date)->startOfDay();
 
-        $stockIn = \App\Models\purchase_details::join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+        $stockIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
             ->where('purchase_details.product_id', $productId)
             ->whereDate('purchases.purchase_date', $date)
             ->where('purchases.purchase_status', 'complete')
             ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
             ->selectRaw("'Stock In' as transaction_type");
 
-        $stockOut = \App\Models\OrderDetails::join('orders', 'orders.id', '=', 'orderdetails.order_id')
+        $stockOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
             ->where('orderdetails.product_id', $productId)
             ->whereDate('orders.order_date', $date)
             ->where('orders.order_status', 'complete')
@@ -321,24 +328,33 @@ class ReportController extends Controller
             ->selectRaw("'Stock Out' as transaction_type");
 
         $transactions = $stockIn->unionAll($stockOut)
-                                 ->orderBy('transaction_date', 'asc')
-                                 ->get();
+                               ->orderBy('transaction_date', 'asc')
+                               ->get();
         
         return response()->json($transactions);
     }
 
-    // បន្ថែម Method ថ្មីនេះទៅក្នុង ReportController
+    /**
+     * Export stock report by day to Excel.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function exportStockByDay(Request $request)
     {
         $date = $request->input('date', Carbon::now()->format('Y-m-d'));
         $search = $request->input('search', null);
-
-        $fileName = 'stock-report-' . $date . '.xlsx';
+        $fileName = 'stock-report-daily-' . Carbon::parse($date)->format('Ymd') . '.xlsx';
 
         return Excel::download(new StockByDayExport($date, $search), $fileName);
     }
 
-
+    /**
+     * Get stock report data by month.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
     public function stockReportByMonth(Request $request)
     {
         if (!$request->ajax()) {
@@ -353,6 +369,20 @@ class ReportController extends Controller
         $search = $request->search;
         $perPage = $request->perPage ?? 15;
 
+        // Calculate total stock in and stock out for the period
+        $totalStockIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+            ->where('purchases.purchase_status', 'complete')
+            ->sum('quantity');
+
+        $totalStockOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->whereBetween('orders.order_date', [$startDate, $endDate])
+            ->where('orders.order_status', 'complete')
+            ->sum('quantity');
+
+
         $query = Product::query()
             ->select('id', 'product_name', 'product_code')
             ->addSelect([
@@ -381,7 +411,7 @@ class ReportController extends Controller
                     ->where('orders.order_date', '<', $startDate)
                     ->where('orders.order_status', 'complete'),
             ])
-            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (total_purchased_before - total_sold_before) > 0');
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before, 0) - COALESCE(total_sold_before, 0)) > 0');
 
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -391,59 +421,42 @@ class ReportController extends Controller
         }
 
         $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-
-        $table = '';
-        if ($products->isEmpty()) {
-            $table .= '<tr><td colspan="5" class="text-center p-4">No product movement found for this month.</td></tr>';
-        } else {
-            foreach ($products as $product) {
-                // $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
-                $openingStock = (int)$product->total_purchased_before;
-                $stockIn = (int)$product->stock_in;
-                $stockOut = (int)$product->stock_out;
-                $closingStock = $openingStock + $stockIn - $stockOut;
-
-                // ✅ កែសម្រួលត្រង់នេះ៖ បន្ថែម data-attributes សម្រាប់ JavaScript
-                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row" 
-                                data-product-id="'. $product->id .'" 
-                                data-product-name="'. htmlspecialchars($product->product_name) .'">';
-                $table .= '<td class="p-2">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
-                $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
-                $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
-                $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
-                $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
-                $table .= '</tr>';
-            }
-        }
-        
-        $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+        $tableHtml = $this->renderStockTableRows($products, 'month'); // Pass activeTab for date formatting
+        $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
         return response()->json([
-            'table' => $table,
-            'pagination' => $pagination,
-            'formattedDate' => $monthCarbon->format('F Y')
+            'table' => $tableHtml,
+            'pagination' => $paginationHtml,
+            'formattedDate' => $monthCarbon->format('F Y'),
+            'totalStockIn' => (int)$totalStockIn, // Return total stock in
+            'totalStockOut' => (int)$totalStockOut, // Return total stock out
         ]);
     }
 
     /**
-     * ✅ Method ថ្មី៖ សម្រាប់ទាញយកទិន្នន័យលម្អិតប្រចាំខែ
+     * Get detailed stock movement for a product by month.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getStockMovementDetailsByMonth(Request $request)
     {
         $productId = $request->productId;
-        $month = $request->month; // e.g., "2025-07"
+        $month = $request->month;
 
         $startDate = Carbon::parse($month)->startOfMonth();
         $endDate = Carbon::parse($month)->endOfMonth();
 
-        $stockIn = \App\Models\purchase_details::join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+        $stockIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
             ->where('purchase_details.product_id', $productId)
             ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
             ->where('purchases.purchase_status', 'complete')
             ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
             ->selectRaw("'Stock In' as transaction_type");
 
-        $stockOut = \App\Models\OrderDetails::join('orders', 'orders.id', '=', 'orderdetails.order_id')
+        $stockOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
             ->where('orderdetails.product_id', $productId)
             ->whereBetween('orders.order_date', [$startDate, $endDate])
             ->where('orders.order_status', 'complete')
@@ -451,39 +464,61 @@ class ReportController extends Controller
             ->selectRaw("'Stock Out' as transaction_type");
 
         $transactions = $stockIn->unionAll($stockOut)
-                                 ->orderBy('transaction_date', 'asc')
-                                 ->get();
+                               ->orderBy('transaction_date', 'asc')
+                               ->get();
         
         return response()->json($transactions);
     }
 
-    // បន្ថែម Method ថ្មីនេះទៅក្នុង ReportController
+    /**
+     * Export stock report by month to Excel.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function exportStockByMonth(Request $request)
     {
         $month = $request->input('month', Carbon::now()->format('Y-m'));
         $search = $request->input('search', null);
-
-        $fileName = 'stock-report-' . $month . '.xlsx';
+        $fileName = 'stock-report-monthly-' . Carbon::parse($month)->format('Ym') . '.xlsx';
 
         return Excel::download(new StockByMonthExport($month, $search), $fileName);
     }
 
+    /**
+     * Get stock report data by year.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
     public function stockReportByYear(Request $request)
     {
-        
         if (!$request->ajax()) {
             $year = $request->input('year', Carbon::now()->format('Y'));
             $formattedDate = $year;
             return view('admin.report.stock.stock_report_by_year', compact('year', 'formattedDate'));
         }
 
-        // ---  AJAX  ---
         $year = $request->year;
         $search = $request->search;
         $perPage = $request->perPage ?? 15;
 
-        $startDate = Carbon::create($year)->startOfYear();
-        $endDate = Carbon::create($year)->endOfYear();
+        $startDate = Carbon::create($year, 1, 1)->startOfYear();
+        $endDate = Carbon::create($year, 12, 31)->endOfYear();
+
+        // Calculate total stock in and stock out for the period
+        $totalStockIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+            ->where('purchases.purchase_status', 'complete')
+            ->sum('quantity');
+
+        $totalStockOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->whereBetween('orders.order_date', [$startDate, $endDate])
+            ->where('orders.order_status', 'complete')
+            ->sum('quantity');
+
 
         $query = Product::query()
             ->select('id', 'product_name', 'product_code')
@@ -513,7 +548,7 @@ class ReportController extends Controller
                     ->where('orders.order_date', '<', $startDate)
                     ->where('orders.order_status', 'complete'),
             ])
-            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (total_purchased_before - total_sold_before) > 0');
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before, 0) - COALESCE(total_sold_before, 0)) > 0');
 
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -523,59 +558,43 @@ class ReportController extends Controller
         }
 
         $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-
-        $table = '';
-        if ($products->isEmpty()) {
-            $table .= '<tr><td colspan="5" class="text-center p-4">No product with stock movement found for this year.</td></tr>';
-        } else {
-            foreach ($products as $key => $product) {
-                $openingStock = (int)$product->total_purchased_before ;
-                // $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
-                $stockIn = (int)$product->stock_in;
-                $stockOut = (int)$product->stock_out;
-                $closingStock = $openingStock + $stockIn - $stockOut;
-
-                // បន្ថែម data-attributes សម្រាប់ JavaScript ប្រើ
-                $table .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row" 
-                                data-product-id="'. $product->id .'" 
-                                data-product-name="'. htmlspecialchars($product->product_name) .'">';
-                $table .= '<td class="p-2">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
-                $table .= '<td class="p-2 px-8">'. $openingStock .'</td>';
-                $table .= '<td class="p-2 px-8 text-green-600 font-semibold">+'. $stockIn .'</td>';
-                $table .= '<td class="p-2 px-8 text-red-600 font-semibold">-'. $stockOut .'</td>';
-                $table .= '<td class="p-2 px-8 font-bold text-blue-600">'. $closingStock .'</td>';
-                $table .= '</tr>';
-            }
-        }
-
-        $pagination = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+        $tableHtml = $this->renderStockTableRows($products, 'year'); // Pass activeTab for date formatting
+        $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
         return response()->json([
-            'table' => $table,
-            'pagination' => $pagination,
-            'formattedDate' => $year
+            'table' => $tableHtml,
+            'pagination' => $paginationHtml,
+            'formattedDate' => $year,
+            'totalStockIn' => (int)$totalStockIn, // Return total stock in
+            'totalStockOut' => (int)$totalStockOut, // Return total stock out
         ]);
     }
 
     /**
-     * Detsils Modal
+     * Get detailed stock movement for a product by year.
+     * This method is a general one for yearly details, but can be adapted if distinct logic is needed.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function getStockMovementDetails(Request $request)
+    public function getStockMovementDetailsYear(Request $request) // Renamed from getStockMovementDetailsByYear for clarity
     {
         $productId = $request->productId;
         $year = $request->year;
 
-        $startDate = Carbon::create($year)->startOfYear();
-        $endDate = Carbon::create($year)->endOfYear();
+        $startDate = Carbon::create($year, 1, 1)->startOfYear();
+        $endDate = Carbon::create($year, 12, 31)->endOfYear();
 
-        $stockIn = \App\Models\purchase_details::join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+        $stockIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
             ->where('purchase_details.product_id', $productId)
             ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
             ->where('purchases.purchase_status', 'complete')
             ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
             ->selectRaw("'Stock In' as transaction_type");
 
-        $stockOut = \App\Models\OrderDetails::join('orders', 'orders.id', '=', 'orderdetails.order_id')
+        $stockOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
             ->where('orderdetails.product_id', $productId)
             ->whereBetween('orders.order_date', [$startDate, $endDate])
             ->where('orders.order_status', 'complete')
@@ -583,19 +602,58 @@ class ReportController extends Controller
             ->selectRaw("'Stock Out' as transaction_type");
 
         $transactions = $stockIn->unionAll($stockOut)
-                                 ->orderBy('transaction_date', 'asc')
-                                 ->get();
+                               ->orderBy('transaction_date', 'asc')
+                               ->get();
         
         return response()->json($transactions);
     }
 
-    // ✅ Method ថ្មីសម្រាប់ Export
+    /**
+     * Export stock report by year to Excel.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function exportStockByYear(Request $request)
     {
         $year = $request->input('year', Carbon::now()->format('Y'));
         $search = $request->input('search', null);
-        $fileName = 'stock-report-' . $year . '.xlsx';
+        $fileName = 'stock-report-yearly-' . $year . '.xlsx';
         return Excel::download(new StockByYearExport($year, $search), $fileName);
+    }
+
+    /**
+     * Helper function to render stock table rows.
+     *
+     * @param  \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection $products
+     * @param string $activeTab
+     * @return string
+     */
+    protected function renderStockTableRows($products, string $activeTab): string
+    {
+        $tableHtml = '';
+        if ($products->isEmpty()) {
+            $tableHtml .= '<tr><td colspan="5" class="text-center p-4 text-gray-500 dark:text-gray-400">No product movement found for this period.</td></tr>';
+        } else {
+            foreach ($products as $product) {
+                $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
+                $stockIn = (int)$product->stock_in;
+                $stockOut = (int)$product->stock_out;
+                $closingStock = $openingStock + $stockIn - $stockOut;
+
+                $tableHtml .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row transition-colors duration-150"
+                                data-product-id="'. $product->id .'"
+                                data-product-name="'. htmlspecialchars($product->product_name) .'"
+                                data-active-tab="'. $activeTab .'">'; // Add activeTab to data-attribute
+                $tableHtml .= '<td class="p-2 text-gray-900 dark:text-white">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
+                $tableHtml .= '<td class="p-2 px-8 text-gray-700 dark:text-gray-300 text-center">'. $openingStock .'</td>';
+                $tableHtml .= '<td class="p-2 px-8 text-green-600 font-semibold text-center">+'. $stockIn .'</td>';
+                $tableHtml .= '<td class="p-2 px-8 text-red-600 font-semibold text-center">-'. $stockOut .'</td>';
+                $tableHtml .= '<td class="p-2 px-8 font-bold text-blue-600 dark:text-blue-400 text-center">'. $closingStock .'</td>';
+                $tableHtml .= '</tr>';
+            }
+        }
+        return $tableHtml;
     }
 
 
