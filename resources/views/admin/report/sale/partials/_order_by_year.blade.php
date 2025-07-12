@@ -12,10 +12,10 @@
     <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4 w-full md:w-auto">
-                 <input type="number" id="year-year" class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500" value="{{ $year }}" min="2020" max="2099">
+                 <input type="number" id="year-year" class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-red-500 focus:border-red-500" value="{{ $year }}" min="2020" max="2099">
                 <div class="relative w-full md:w-64">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                    <input class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." id="search-year" type="text" />
+                    <input class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-red-500 focus:border-red-500" placeholder="Search..." id="search-year" type="text" />
                 </div>
             </div>
             

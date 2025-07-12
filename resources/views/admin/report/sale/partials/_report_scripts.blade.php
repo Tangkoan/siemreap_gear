@@ -3,12 +3,12 @@ $(document).ready(function() {
     
     // --- SHARED VARIABLES ---
     let searchTimeout;
-    const activeTabClasses = 'bg-blue-600 text-white';
+    const activeTabClasses = 'bg-red-600 text-white';
     const inactiveTabClasses = 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700';
 
     // --- HELPER FUNCTIONS ---
     function showLoading(tableBody) {
-        tableBody.html(`<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-2 text-slate-500"><svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span></div></td></tr>`);
+        tableBody.html(`<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-2 text-slate-500"><svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span></div></td></tr>`);
     }
 
     function updateKPIs(period, kpis) {
