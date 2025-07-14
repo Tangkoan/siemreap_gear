@@ -402,8 +402,23 @@ Route::middleware(['auth'])->group(callback: function () {
             Route::get('/backup/delete/{getFilename}', 'DeleteBackup')->name('backup.delete');
             Route::get('/backup/download/{getFilename}', 'downloadBackup')->name('backup.download');
 
+            
     });
     // End
+
+    // ==================================== Backup Project ===========================================
+
+            // ✅ [ថ្មី] Route សម្រាប់ Backup Project
+            Route::get('/admin/backup/project', [BackupController::class, 'backupProject'])->name('admin.backup.project');
+            Route::get('/project-backup-status', [BackupController::class, 'getProjectBackupStatus'])->name('project.backup.status');
+
+
+            // --- ✅ [ថ្មី] Project Backup AJAX/Actions ---
+            Route::get('/project-backups/search', [BackupController::class, 'searchProjectBackups'])->name('backup.project.search');
+            Route::get('/project-backup/download/{filename}', [BackupController::class, 'downloadProjectBackup'])->name('backup.project.download');
+            Route::get('/project-backup/delete/{filename}', [BackupController::class, 'deleteProjectBackup'])->name('backup.project.delete');
+
+    // end
 
 
     Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');

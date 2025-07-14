@@ -2,148 +2,200 @@
 @section('admin')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<div class="container mx-auto p-6">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-full p-0">
+{{-- ✅ Style ថ្មីសម្រាប់ UI ដែលបាន Inspire ពីគំរូរបស់អ្នក --}}
+<style>
+    .pill-nav-container {
+        @apply inline-block bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl shadow-sm;
+    }
+    .pill-tab-button {
+        @apply px-6 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ease-in-out cursor-pointer;
+    }
+    .pill-tab-button.active {
+        @apply bg-red-600 text-white shadow-lg shadow-red-500/20;
+    }
+    .pill-tab-button:not(.active) {
+        @apply text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700/50;
+    }
+    .tab-panel {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-default flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                    </svg>
-                    All Backups
-                </h2>
-                <div>
-                    {{-- ✅ កែ URL ឱ្យប្រើ route() และ permission check ដែលត្រឹមត្រូវ --}}
-                    <a href="{{ route('admin.backup.now') }}" class="icon-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all">
-                        Backup Now
+    /* Loading Skeleton */
+    .skeleton-row td {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    .skeleton-item {
+        @apply h-4 bg-slate-200 dark:bg-gray-700 rounded-md;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+        50% { opacity: .5; }
+    }
+</style>
+
+<div class="container mx-auto p-4 md:p-6">
+    <div class="w-full bg-white dark:bg-gray-800/50 card-bg rounded-xl shadow-2xl shadow-slate-200/50 dark:shadow-black/20">
+        
+        <!-- ✅ Tab Navigation ថ្មី (Inspired by your image) -->
+        <div class="p-6 flex flex-col items-center border-b border-slate-200 dark:border-gray-700">
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-5">Backup Management</h2>
+            <div class="pill-nav-container">
+                <div class="flex items-center space-x-2">
+                    <button data-target="#db-panel" class="pill-tab-button active">
+                        Database
+                    </button>
+                    <button data-target="#project-panel" class="pill-tab-button">
+                        Project
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- ✅ Tab Content Panels -->
+        <div class="px-6 pb-6 pt-4">
+            <!-- Panel 1: Database Backups -->
+            <div id="db-panel" class="tab-panel">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">បញ្ជី Database Backup</h3>
+                    <a href="{{ route('admin.backup.now') }}" class="w-full md:w-auto icon-add py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
+                        Backup Database Now
                     </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <input class="dark:bg-gray-700 dark:text-white bg-white w-full max-w-xs mb-3 h-10 pl-3 pr-10 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Search Database Backups..." id="db_search" type="text" />
+                    <div class="table-wrapper overflow-y-auto max-h-[400px] border border-slate-200 dark:border-gray-700 rounded-lg">
+                        <table class="w-full text-left table-auto min-w-max">
+                            <thead class="bg-slate-50 dark:bg-gray-700/50"><tr><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">N<sup>0</sup></th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">File Name</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Size</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Path</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Action</th></tr></thead>
+                            <tbody id="db_backup_tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <label for="perPage" class="text-sm text-slate-600">Show</label>
-                            <select id="perPage" name="perPage" class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                <option value="10" selected>10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="all">All</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="ml-3">
-                        <div class="w-full max-w-sm min-w-[200px] relative">
-                            <input class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="Search for File Name" id="search" name="search" type="text" />
-                            <div class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-slate-500">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                </svg>
-                            </div>
+            <!-- Panel 2: Project Backups -->
+            <div id="project-panel" class="tab-panel" style="display: none;">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">បញ្ជី Project File Backup</h3>
+                    <a href="{{ route('admin.backup.project') }}" class="w-full md:w-auto icon-add py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all">
+                        Backup Project Files Now
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <input class="dark:bg-gray-700 dark:text-white bg-white w-full max-w-xs mb-3 h-10 pl-3 pr-10 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Search Project Backups..." id="project_search" type="text" />
+                    <div class="table-wrapper overflow-y-auto max-h-[400px] border border-slate-200 dark:border-gray-700 rounded-lg">
+                        <table class="w-full text-left table-auto min-w-max">
+                            <thead class="bg-slate-50 dark:bg-gray-700/50"><tr><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">N<sup>0</sup></th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">File Name</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Size</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Path</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Action</th></tr></thead>
+                                <tbody id="project_backup_tbody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <div class="table-wrapper overflow-y-auto max-h-[500px]">
-                    <table class="w-full text-left table-auto min-w-max">
-                        <thead class="bg-slate-50 dark:bg-gray-800">
-                            <tr>
-                                <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">N<sup>0</sup></th>
-                                <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">File Name</th>
-                                <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Size</th>
-                                <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Path</th>
-                                <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Action</th>
-                            </tr>
-                        </thead>
-                        {{-- ✅ លុប @foreach ចេញ។ AJAX នឹងបំពេញទិន្នន័យនៅទីនេះ --}}
-                        <tbody>
-                            <tr>
-                                <td colspan="5" class="text-center p-10 text-slate-500">
-                                    Loading data...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                {{-- ✅ បន្ថែម div សម្រាប់ pagination --}}
-                <div id="pagination-links" class="pt-4"></div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Script សម្រាប់ពិនិត្យមើលស្ថានភាព Backup --}}
+{{-- Scripts for Backup Status Polling --}}
 @if (session('start_backup_check'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            toastr.info('Backup process has started. The page will reload automatically when finished.');
-            let interval = setInterval(function() {
-                fetch("{{ route('backup.status') }}")
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'completed') {
-                            clearInterval(interval);
-                            toastr.success(data.message);
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 2000);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error checking backup status:', error);
-                        clearInterval(interval);
-                    });
-            }, 5000);
+            toastr.info('Database backup process has started...');
+            let interval = setInterval(() => fetch("{{ route('backup.status') }}").then(res => res.json()).then(data => {
+                if (data.status === 'completed') {
+                    clearInterval(interval);
+                    toastr.success(data.message);
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            }).catch(err => { console.error(err); clearInterval(interval); }), 5000);
+        });
+    </script>
+@endif
+@if (session('start_project_backup_check'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            toastr.info('Project backup started. This may take a moment...');
+            let interval = setInterval(() => fetch("{{ route('project.backup.status') }}").then(res => res.json()).then(data => {
+                if (data.status === 'completed') {
+                    clearInterval(interval);
+                    toastr.success(data.message);
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            }).catch(err => { console.error(err); clearInterval(interval); }), 10000);
         });
     </script>
 @endif
 
-{{-- Script សម្រាប់ Search និង Pagination --}}
+{{-- Scripts for AJAX Tables & Tab Switching --}}
 <script type="text/javascript">
     $(document).ready(function() {
-        function fetchData(page = 1) {
-            let query = $('#search').val();
-            let perPage = $('#perPage').val();
+        
+        const skeletonRow = `
+            <tr class="skeleton-row">
+                <td><div class="skeleton-item w-8"></div></td>
+                <td><div class="skeleton-item w-48"></div></td>
+                <td><div class="skeleton-item w-20"></div></td>
+                <td><div class="skeleton-item w-64"></div></td>
+                <td><div class="skeleton-item w-24"></div></td>
+            </tr>`.repeat(5);
 
+        // --- ✅ Tab Switching Logic ថ្មី ---
+        $('.pill-tab-button').on('click', function() {
+            const $this = $(this);
+            const targetPanel = $this.data('target');
+
+            $('.pill-tab-button').removeClass('active');
+            $this.addClass('active');
+            
+            $('.tab-panel').hide();
+            $(targetPanel).show();
+        });
+
+        // --- Function for Database Backup Table ---
+        function fetchDbData() {
+            $('#db_backup_tbody').html(skeletonRow); // Show skeleton
             $.ajax({
-                // ✅ កែ URL ឱ្យហៅទៅ Route ថ្មី
-                url: "{{ route('backup.search') }}?page=" + page,
+                url: "{{ route('backup.search') }}",
                 type: "GET",
-                data: {
-                    search: query,
-                    perPage: perPage
-                },
-                success: function(data) {
-                    $('tbody').html(data.table);
-                    $('#pagination-links').html(data.pagination);
-                },
-                error: function() {
-                     $('tbody').html('<tr><td colspan="5" class="text-center p-5 text-red-500">Failed to load data. Please check the console for errors.</td></tr>');
-                }
+                data: { search: $('#db_search').val() },
+                success: function(data) { $('#db_backup_tbody').html(data.table); },
+                error: function() { $('#db_backup_tbody').html('<tr><td colspan="5" class="text-center p-5 text-red-500">Failed to load data.</td></tr>'); }
             });
         }
 
-        fetchData();
+        // --- Function for Project Backup Table ---
+        function fetchProjectData() {
+            $('#project_backup_tbody').html(skeletonRow); // Show skeleton
+            $.ajax({
+                url: "{{ route('backup.project.search') }}",
+                type: "GET",
+                data: { search: $('#project_search').val() },
+                success: function(data) { $('#project_backup_tbody').html(data.table); },
+                error: function() { $('#project_backup_tbody').html('<tr><td colspan="5" class="text-center p-5 text-red-500">Failed to load data.</td></tr>'); }
+            });
+        }
 
-        // Debounce search input to avoid too many requests
-        let searchTimeout;
-        $('#search').on('keyup', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(function() {
-                fetchData(1);
-            }, 500); // Wait 500ms after user stops typing
+        // Initial data load
+        fetchDbData();
+        fetchProjectData();
+
+        // Search event listeners (with debounce)
+        let dbSearchTimeout;
+        $('#db_search').on('keyup', function() {
+            clearTimeout(dbSearchTimeout);
+            dbSearchTimeout = setTimeout(fetchDbData, 500);
         });
 
-        $('#perPage').on('change', function() {
-            fetchData(1);
+        let projectSearchTimeout;
+        $('#project_search').on('keyup', function() {
+            clearTimeout(projectSearchTimeout);
+            projectSearchTimeout = setTimeout(fetchProjectData, 500);
         });
-
-        // Note: Pagination links are not generated by this setup,
-        // as it's a simple info text. For full pagination links,
-        // you would need to use Laravel's Paginator instance and render it.
     });
 </script>
 @endsection
