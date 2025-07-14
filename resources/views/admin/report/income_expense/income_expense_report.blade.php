@@ -7,7 +7,14 @@
         
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                <span>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                        </svg>
+                    </div>
+                </span>
+
                 <span>Income & Expense Report</span>
             </h1>
         </div>
@@ -21,9 +28,9 @@
                     <button class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300" data-type="yearly">Yearly</button>
                 </div>
                 {{-- <div id="filter-inputs" class="flex items-center">
-                    <input type="date" id="date_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <input type="month" id="month_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 hidden">
-                    <input type="number" id="year_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 hidden" placeholder="Enter Year" min="2000">
+                    <input type="date" id="date_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
+                    <input type="month" id="month_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500 hidden">
+                    <input type="number" id="year_filter" class="filter-input w-full h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500 hidden" placeholder="Enter Year" min="2000">
                 </div> --}}
 
 
@@ -32,38 +39,38 @@
     <div id="daily-filter-group" class="filter-group flex items-center gap-2 hidden">
         <div class="flex flex-col">
             <label for="daily_start_date" class="text-xs mb-1">Start Date</label>
-            <input type="date" id="daily_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <input type="date" id="daily_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
         </div>
         <div class="flex flex-col">
             <label for="daily_end_date" class="text-xs mb-1">End Date</label>
-            <input type="date" id="daily_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" >
+            <input type="date" id="daily_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" >
         </div>
     </div>
 
     <div id="monthly-filter-group" class="filter-group flex items-center gap-2 hidden">
          <div class="flex flex-col">
             <label for="monthly_start_date" class="text-xs mb-1">Start Month</label>
-            <input type="month" id="monthly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <input type="month" id="monthly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
         </div>
         <div class="flex flex-col">
             <label for="monthly_end_date" class="text-xs mb-1">End Month</label>
-            <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
         </div>
     </div>
 
     <div id="yearly-filter-group" class="filter-group flex items-center gap-2 hidden">
         <div class="flex flex-col">
             <label for="yearly_start_date" class="text-xs mb-1">Start Year</label>
-            <input type="number" id="yearly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="YYYY" min="2000">
+            <input type="number" id="yearly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="YYYY" min="2000">
         </div>
         <div class="flex flex-col">
             <label for="yearly_end_date" class="text-xs mb-1">End Year</label>
-            <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="YYYY" min="2000" >
+            <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="YYYY" min="2000" >
         </div>
     </div>
 
     {{-- <div class="flex items-center pt-5">
-        <input type="checkbox" id="range-toggle" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+        <input type="checkbox" id="range-toggle" class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
         <label for="range-toggle" class="ml-2 text-sm">Select Range</label>
     </div> --}}
 </div>
@@ -85,13 +92,13 @@
         </div>
 
         <div id="loading-spinner" class="text-center p-10">
-            <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <svg class="animate-spin h-8 w-8 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <p class="mt-2 text-gray-500 dark:text-gray-400">Loading Report...</p>
         </div>
 
         <div id="report-content" style="display: none;">
             <div id="report-summary" class="text-center mb-8">
-                <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Report for: <span id="report-title-date" class="text-blue-500 font-bold"></span></h2>
+                <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Report for: <span id="report-title-date" class="text-red-500 font-bold"></span></h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
                     <div class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
@@ -223,8 +230,8 @@
         function switchTab(type) {
             currentReportType = type;
             
-            $('.report-tab').removeClass('bg-blue-500 text-white').addClass('text-gray-600 dark:text-gray-300');
-            $(`.report-tab[data-type="${type}"]`).removeClass('text-gray-600 dark:text-gray-300').addClass('bg-blue-500 text-white');
+            $('.report-tab').removeClass('bg-red-500 text-white').addClass('text-gray-600 dark:text-gray-300');
+            $(`.report-tab[data-type="${type}"]`).removeClass('text-gray-600 dark:text-gray-300').addClass('bg-red-500 text-white');
             
             $('.filter-group').addClass('hidden');
             $(`#${type}-filter-group`).removeClass('hidden');

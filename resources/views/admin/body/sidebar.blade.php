@@ -1,5 +1,5 @@
 <nav id="sidebar"
-    class="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg w-56 p-4 md:block hidden border-r border-slate-200 dark:border-slate-800">
+    class="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg w-56 p-4 md:block hidden border-r border-slate-200 dark:border-slate-800 z-30">
 
     <div id="sidebar-nav" class="space-y-1"> {{-- <-- បន្ថែម id នៅទីនេះ --}}
         
