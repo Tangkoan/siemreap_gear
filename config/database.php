@@ -44,7 +44,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('DB_URL'),
+            'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'siemreap_gear'),
@@ -60,7 +60,7 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_binary_path' => 'D:\RunProgram\wamp64\bin\mysql\mysql8.3.0\bin', // Use forward slashes
+                'dump_binary_path' => 'D:/RunProgram/wamp64/bin/mysql/mysql8.3.0/bin', // Use forward slashes
         
                 'use_single_transaction',
                 'timeout' => 60 * 5, // 5 minute timeout

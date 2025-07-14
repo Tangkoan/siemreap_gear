@@ -32,21 +32,26 @@ return [
 
         'local' => [
             'driver' => 'local',
-            // 'root' => storage_path('app/private'),
-            'root' => storage_path('app/SRGEAR'), // 📌 ទៅទីតាំង SRGEAR ដែលអ្នកចង់
-            'serve' => true,
-            'throw' => false,
-            'report' => false,
+            'root' => storage_path('app'),
+            
         ],
+
+        
 
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
-            'throw' => false,
-            'report' => false,
+            
         ],
+
+        'backups' => [
+            'driver' => 'local', // កំណត់ driver ជា 'local'
+            'root' => storage_path('app/backups'), // ទីតាំងសម្រាប់เก็บไฟล์
+        ],
+        
+        
 
         's3' => [
             'driver' => 's3',

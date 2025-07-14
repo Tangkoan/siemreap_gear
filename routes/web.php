@@ -16,6 +16,8 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 
+use App\Http\Controllers\BackupController;
+
 
 
 
@@ -45,12 +47,16 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
     Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.admin_profile_view');
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
     Route::get('/change/password', [AdminController::class, 'ChangePassword'])->name('change.password');
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
 
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
+
+
+    
 
     // Report Route
     Route::controller(ReportController::class)->group(function () {
@@ -382,13 +388,22 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin')->middleware('permission:user.edit');
         Route::post('/update/admin', 'UpdateAdmin')->name('admin.update');
         Route::get('/delete/admin/{id}', 'DeleteAdmin')->name('delete.admin')->middleware('permission:user.delete');
-
-
-
-        // backup
-        Route::get('/backup/now', 'BackupNow');
-        Route::get('/delete/database/{getFilename}', 'DeleteDatabase');
     });
+
+
+    // =============================== Backup ================================================
+        Route::controller(BackupController::class)->group(function () {
+            // backup
+            Route::get('/backup/now', 'backupNow')->name('admin.backup.now');
+            Route::get('/backups/search',  'searchBackups')->name('backup.search');
+            Route::get('/backup-status', action: 'getBackupStatus')->name('backup.status');
+            Route::get('/delete/database/{getFilename}', 'DeleteDatabase');
+            Route::get('/admin/backup',  'DatabaseBackup')->name('admin.backup');
+            Route::get('/backup/delete/{getFilename}', 'DeleteBackup')->name('backup.delete');
+            Route::get('/backup/download/{getFilename}', 'downloadBackup')->name('backup.download');
+
+    });
+    // End
 
 
     Route::get('/search-category', [CategoryController::class, 'searchCategory'])->name('search.category');
@@ -485,12 +500,7 @@ Route::middleware(['auth'])->group(callback: function () {
     // Admin Role ACC
     Route::get('/search-admin', [AdminController::class, 'searchAdmin'])->name('search.admin');
 
-    // Admin Role ACC
-    Route::get('/search-backup', [AdminController::class, 'searchBackup'])->name('search.backup');
-    Route::get('/admin/backup', [AdminController::class, 'DatabaseBackup'])->name('admin.backup');
 
-    Route::get('/backup/download/{getFilename}', [AdminController::class, 'DownloadDatabase'])->name('backup.download');
-    Route::get('/backup/delete/{getFilename}', [AdminController::class, 'DeleteBackup'])->name('backup.delete');
 }); // End User Middleware
 
 

@@ -15,7 +15,7 @@ return [
                  * The list of directories and files that will be included in the backup.
                  */
                 'include' => [
-                    // base_path(),
+                    base_path(), // Backup Project ទាំងមូល
                 ],
 
                 /*
@@ -32,18 +32,9 @@ return [
                  * Determines if symlinks should be followed.
                  */
                 'follow_links' => false,
-
-                /*
-                 * Determines if it should avoid unreadable folders.
-                 */
                 'ignore_unreadable_directories' => false,
-
-                /*
-                 * This path is used to make directories in resulting zip-file relative
-                 * Set to `null` to include complete absolute path
-                 * Example: base_path()
-                 */
                 'relative_path' => null,
+                
             ],
 
             /*
@@ -77,7 +68,8 @@ return [
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
             'databases' => [
-                env('DB_CONNECTION', 'mysql'),
+                // env('DB_CONNECTION', 'mysql'),
+                'mysql',
             ],
 
         ],
@@ -146,13 +138,13 @@ return [
             /*
              * The filename prefix used for the backup zip file.
              */
-            'filename_prefix' => 'SRGEAR_',
+            'filename_prefix' => config('app.name', 'laravel-backup') . '-',
 
             /*
              * The disk names on which the backups will be stored.
              */
             'disks' => [
-                'local',
+                'backups',
             ],
         ],
 
