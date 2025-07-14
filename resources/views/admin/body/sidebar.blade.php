@@ -2,7 +2,8 @@
     class="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg w-56 p-4 md:block hidden border-r border-slate-200 dark:border-slate-800">
 
     <div id="sidebar-nav" class="space-y-1"> {{-- <-- បន្ថែម id នៅទីនេះ --}}
-    <div id="nav-links" class="space-y-1">
+        
+        <div id="nav-links" class="space-y-1">
 
         {{-- Helper function for complex route checks --}}
         @php
@@ -92,21 +93,7 @@
         @endif
         {{-- End Supplier --}}
 
-        {{-- Stock --}}
-        @if (Auth::user()->can('stock.menu'))
-            <a href="{{ route('all.stock') }}"
-                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('all.stock') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                @if(request()->routeIs('all.stock'))
-                    <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
-                </svg>
-                <span class="px-2">Stock</span>
-            </a>
-        @endif
-        {{-- End Stock --}}
+       
 
         {{-- Purchase Dropdown --}}
         @php
@@ -146,43 +133,7 @@
         @endif
         {{-- End Purchase --}}
 
-        {{-- Expense Dropdown --}}
-        @php
-            $canAdd = Auth::user()->can('expense.menu');
-            $canToday = Auth::user()->can('expense.today');
-            $canMonth = Auth::user()->can('expense.month');
-            $canYear = Auth::user()->can('expense.year');
-            $isExpenseActive = isRouteActive(['add.expense', 'today.expense', 'month.expense', 'year.expense']);
-        @endphp
-        @if ($canAdd || $canToday || $canMonth || $canYear)
-            <div id="expenseDropdown" class="relative group">
-                @if ($canAdd)
-                    <a href="{{ route('add.expense') }}"
-                        class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                        {{ $isExpenseActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                        @if($isExpenseActive)
-                            <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                        @endif
-                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-                        </svg>
-                        <span class="px-2">Expense</span>
-                    </a>
-                @endif
-                <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
-                    @if ($canToday)
-                        <a href="{{ route('today.expense') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Today</a>
-                    @endif
-                    @if ($canMonth)
-                        <a href="{{ route('month.expense') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Month</a>
-                    @endif
-                    @if ($canYear)
-                        <a href="{{ route('year.expense') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Year</a>
-                    @endif
-                </div>
-            </div>
-        @endif
-        {{-- End Expense --}}
+        
 
         {{-- Order Dropdown --}}
         @php
@@ -249,6 +200,48 @@
         @endif
         {{-- End Permission --}}
 
+        {{-- Report Dropdown --}}
+            @php
+                $reportMenu = Auth::user()->can('report.menu');
+                $reportSale = Auth::user()->can('report.sale');
+                $reportPurchase = Auth::user()->can('report.purchase');
+                $reportStock = Auth::user()->can('report.stock');
+                $reportExpense = Auth::user()->can('report.expense');
+                $isReportActive = isRouteActive(['all.reports', 'report.purchases.view', 'all.report.stock', 'report.income_expense.view']);
+            @endphp
+            @if ($reportMenu || $reportSale || $reportPurchase || $reportStock || $reportExpense)
+                <div id="reportDropdown" class="relative group">
+                    @if ($reportMenu)
+                        <a href="{{ route('all.reports') }}"
+                            class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
+                            {{ $isReportActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                            @if($isReportActive)
+                                <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                            @endif
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                            </svg>
+                            <span class="px-2">Report</span>
+                        </a>
+                    @endif
+                    <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
+                        @if ($reportSale)
+                            <a href="{{ route('all.reports') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Sale</a>
+                        @endif
+                        @if ($reportPurchase)
+                            <a href="{{ route('report.purchases.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Purchase</a>
+                        @endif
+                        @if ($reportStock)
+                            <a href="{{ route('all.report.stock') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Stock</a>
+                        @endif
+                        @if ($reportExpense)
+                            <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Income & Outcome</a>
+                        @endif
+                    </div>
+                </div>
+            @endif  
+        {{-- End Report --}}
+
         {{-- User Menu --}}
         @if (Auth::user()->can('user.menu'))
             <a href="{{ route('all.admin') }}"
@@ -281,47 +274,7 @@
         @endif
         {{-- End Backup --}}
 
-        {{-- Report Dropdown --}}
-        @php
-            $reportMenu = Auth::user()->can('report.menu');
-            $reportSale = Auth::user()->can('report.sale');
-            $reportPurchase = Auth::user()->can('report.purchase');
-            $reportStock = Auth::user()->can('report.stock');
-            $reportExpense = Auth::user()->can('report.expense');
-            $isReportActive = isRouteActive(['all.reports', 'report.purchases.view', 'all.report.stock', 'report.income_expense.view']);
-        @endphp
-        @if ($reportMenu || $reportSale || $reportPurchase || $reportStock || $reportExpense)
-            <div id="reportDropdown" class="relative group">
-                @if ($reportMenu)
-                    <a href="{{ route('all.reports') }}"
-                        class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                        {{ $isReportActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                        @if($isReportActive)
-                            <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                        @endif
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-                        </svg>
-                        <span class="px-2">Report</span>
-                    </a>
-                @endif
-                <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
-                    @if ($reportSale)
-                        <a href="{{ route('all.reports') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Sale</a>
-                    @endif
-                    @if ($reportPurchase)
-                        <a href="{{ route('report.purchases.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Purchase</a>
-                    @endif
-                    @if ($reportStock)
-                        <a href="{{ route('all.report.stock') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Stock</a>
-                    @endif
-                    @if ($reportExpense)
-                        <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Income & Outcome</a>
-                    @endif
-                </div>
-            </div>
-        @endif
-        {{-- End Report --}}
+        
         
 
     </div>
