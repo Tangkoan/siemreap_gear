@@ -88,7 +88,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
             // By Year
             Route::get('/stock/report/by-year', 'stockReportByYear')->name('report.stock.by_year');
-            Route::get('/stock/report/details/by-year', 'getStockMovementDetailsYear')->name('report.stock.details'); // Using your existing details method
+            Route::get('/stock/report/details/by-year', 'getStockMovementDetailsYear')->name('report.stock.details.year'); // Using your existing details method
             Route::get('/stock/report/export/by-year', 'exportStockByYear')->name('report.stock.export.year');
         // End Report Stock
 

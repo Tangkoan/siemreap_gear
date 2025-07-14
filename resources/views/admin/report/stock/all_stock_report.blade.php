@@ -314,7 +314,7 @@
         title = `Details for: ${productName} (${$('#report-title-month').text()})`;
     } else if (activeTabForModal === 'year') {
         // Correctly target the year-specific details route and pass the year value
-        ajaxUrl = "{{ route('report.stock.details') }}"; // This is the route name you provided for year
+        ajaxUrl = "{{ route('report.stock.details.year') }}"; // This is the route name you provided for year
         data = { productId: productId, year: $('#year').val() };
         title = `Details for: ${productName} (${$('#report-title-year').text()})`;
     }
