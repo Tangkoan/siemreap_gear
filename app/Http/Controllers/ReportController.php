@@ -301,40 +301,6 @@ class ReportController extends Controller
     }
 
     /**
-     * Get detailed stock movement for a product by day.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getStockMovementDetailsByDay(Request $request)
-    {
-        $productId = $request->productId;
-        $date = Carbon::parse($request->date)->startOfDay();
-
-        $stockIn = purchase_details::query()
-            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-            ->where('purchase_details.product_id', $productId)
-            ->whereDate('purchases.purchase_date', $date)
-            ->where('purchases.purchase_status', 'complete')
-            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
-            ->selectRaw("'Stock In' as transaction_type");
-
-        $stockOut = OrderDetails::query()
-            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-            ->where('orderdetails.product_id', $productId)
-            ->whereDate('orders.order_date', $date)
-            ->where('orders.order_status', 'complete')
-            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
-            ->selectRaw("'Stock Out' as transaction_type");
-
-        $transactions = $stockIn->unionAll($stockOut)
-                               ->orderBy('transaction_date', 'asc')
-                               ->get();
-        
-        return response()->json($transactions);
-    }
-
-    /**
      * Export stock report by day to Excel.
      *
      * @param  \Illuminate\Http\Request $request
@@ -431,43 +397,6 @@ class ReportController extends Controller
             'totalStockIn' => (int)$totalStockIn, // Return total stock in
             'totalStockOut' => (int)$totalStockOut, // Return total stock out
         ]);
-    }
-
-    /**
-     * Get detailed stock movement for a product by month.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getStockMovementDetailsByMonth(Request $request)
-    {
-        $productId = $request->productId;
-        $month = $request->month;
-
-        $startDate = Carbon::parse($month)->startOfMonth();
-        $endDate = Carbon::parse($month)->endOfMonth();
-
-        $stockIn = purchase_details::query()
-            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-            ->where('purchase_details.product_id', $productId)
-            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
-            ->where('purchases.purchase_status', 'complete')
-            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
-            ->selectRaw("'Stock In' as transaction_type");
-
-        $stockOut = OrderDetails::query()
-            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-            ->where('orderdetails.product_id', $productId)
-            ->whereBetween('orders.order_date', [$startDate, $endDate])
-            ->where('orders.order_status', 'complete')
-            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
-            ->selectRaw("'Stock Out' as transaction_type");
-
-        $transactions = $stockIn->unionAll($stockOut)
-                               ->orderBy('transaction_date', 'asc')
-                               ->get();
-        
-        return response()->json($transactions);
     }
 
     /**
@@ -571,44 +500,6 @@ class ReportController extends Controller
     }
 
     /**
-     * Get detailed stock movement for a product by year.
-     * This method is a general one for yearly details, but can be adapted if distinct logic is needed.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getStockMovementDetailsYear(Request $request) // Renamed from getStockMovementDetailsByYear for clarity
-    {
-        $productId = $request->productId;
-        $year = $request->year;
-
-        $startDate = Carbon::create($year, 1, 1)->startOfYear();
-        $endDate = Carbon::create($year, 12, 31)->endOfYear();
-
-        $stockIn = purchase_details::query()
-            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-            ->where('purchase_details.product_id', $productId)
-            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
-            ->where('purchases.purchase_status', 'complete')
-            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
-            ->selectRaw("'Stock In' as transaction_type");
-
-        $stockOut = OrderDetails::query()
-            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-            ->where('orderdetails.product_id', $productId)
-            ->whereBetween('orders.order_date', [$startDate, $endDate])
-            ->where('orders.order_status', 'complete')
-            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
-            ->selectRaw("'Stock Out' as transaction_type");
-
-        $transactions = $stockIn->unionAll($stockOut)
-                               ->orderBy('transaction_date', 'asc')
-                               ->get();
-        
-        return response()->json($transactions);
-    }
-
-    /**
      * Export stock report by year to Excel.
      *
      * @param  \Illuminate\Http\Request $request
@@ -621,6 +512,76 @@ class ReportController extends Controller
         $fileName = 'stock-report-yearly-' . $year . '.xlsx';
         return Excel::download(new StockByYearExport($year, $search), $fileName);
     }
+
+    // ✅ ==================== START: CODE ដែលបានកែសម្រួល ====================
+
+    /**
+     * Get detailed stock movement for a product for a specific period (day, month, or year).
+     * This single method replaces the three separate methods for day, month, and year.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getStockMovementDetails(Request $request)
+    {
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'productId' => 'required|integer|exists:products,id',
+            'type'      => 'required|in:day,month,year',
+            'value'     => 'required|string',
+        ]);
+
+        $productId = $validated['productId'];
+        $type      = $validated['type'];
+        $value     = $validated['value'];
+
+        // Base query for Stock In
+        $stockInQuery = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->where('purchase_details.product_id', $productId)
+            ->where('purchases.purchase_status', 'complete')
+            ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
+            ->selectRaw("'Stock In' as transaction_type");
+
+        // Base query for Stock Out
+        $stockOutQuery = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orderdetails.product_id', $productId)
+            ->where('orders.order_status', 'complete')
+            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
+            ->selectRaw("'Stock Out' as transaction_type");
+
+        // Apply date conditions based on the type
+        if ($type === 'day') {
+            $date = Carbon::parse($value)->startOfDay();
+            $stockInQuery->whereDate('purchases.purchase_date', $date);
+            $stockOutQuery->whereDate('orders.order_date', $date);
+        } else {
+            if ($type === 'month') {
+                $carbonDate = Carbon::parse($value);
+                $startDate = $carbonDate->copy()->startOfMonth();
+                $endDate = $carbonDate->copy()->endOfMonth();
+            } else { // 'year'
+                $startDate = Carbon::create($value)->startOfYear();
+                $endDate = Carbon::create($value)->endOfYear();
+            }
+            $stockInQuery->whereBetween('purchases.purchase_date', [$startDate, $endDate]);
+            $stockOutQuery->whereBetween('orders.order_date', [$startDate, $endDate]);
+        }
+
+        // Combine the queries and fetch results
+        $transactions = $stockInQuery->unionAll($stockOutQuery)
+                                     ->orderBy('transaction_date', 'asc')
+                                     ->get();
+        
+        return response()->json($transactions);
+    }
+    
+    // ❌ ==================== END: CODE ដែលបានកែសម្រួល ======================
+    // หมายเหตุ: អ្នកអាចលុប Method ចាស់ៗទាំងបីនេះចោលបាន:
+    // - getStockMovementDetailsByDay()
+    // - getStockMovementDetailsByMonth()
+    // - getStockMovementDetailsYear()
 
     /**
      * Helper function to render stock table rows.
@@ -642,9 +603,9 @@ class ReportController extends Controller
                 $closingStock = $openingStock + $stockIn - $stockOut;
 
                 $tableHtml .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row transition-colors duration-150"
-                                data-product-id="'. $product->id .'"
-                                data-product-name="'. htmlspecialchars($product->product_name) .'"
-                                data-active-tab="'. $activeTab .'">'; // Add activeTab to data-attribute
+                                    data-product-id="'. $product->id .'"
+                                    data-product-name="'. htmlspecialchars($product->product_name) .'"
+                                    data-active-tab="'. $activeTab .'">'; // This data attribute is very important
                 $tableHtml .= '<td class="p-2 text-gray-900 dark:text-white">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
                 $tableHtml .= '<td class="p-2 px-8 text-gray-700 dark:text-gray-300 text-center">'. $openingStock .'</td>';
                 $tableHtml .= '<td class="p-2 px-8 text-green-600 font-semibold text-center">+'. $stockIn .'</td>';

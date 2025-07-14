@@ -124,29 +124,7 @@
 </div>
 
 {{-- Redesigned Modal --}}
-<div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="relative w-full max-w-3xl mx-auto"><div class="shadow-2xl rounded-2xl bg-white dark:bg-slate-800">
-        <div class="px-6 py-4 flex justify-between items-center border-b dark:border-slate-700">
-            <h3 class="text-lg font-semibold text-slate-800 dark:text-white" id="modal-title">Transaction Details</h3>
-            <button id="closeModal" class="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">&times;</button>
-        </div>
-        <div class="p-6">
-            <div class="overflow-y-auto max-h-[60vh] rounded-lg border dark:border-slate-700">
-                <table class="w-full text-sm text-left">
-                    <thead class="sticky top-0 bg-slate-100 dark:bg-slate-700 text-xs uppercase text-slate-500 dark:text-slate-400">
-                        <tr>
-                            <th class="px-4 py-3">Date/Time</th>
-                            <th class="px-4 py-3">Type</th>
-                            <th class="px-4 py-3 text-right">Quantity</th>
-                            <th class="px-4 py-3">Reference</th>
-                        </tr>
-                    </thead>
-                    <tbody id="modal-table-body" class="divide-y dark:divide-slate-700 text-slate-700 dark:text-slate-300"></tbody>
-                </table>
-            </div>
-        </div>
-    </div></div>
-</div>
+
 
 {{-- Helper Styles for the new design --}}
 <style>

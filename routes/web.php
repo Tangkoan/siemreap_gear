@@ -78,18 +78,18 @@ Route::middleware(['auth'])->group(callback: function () {
             
             // By Day
             Route::get('/stock/report/by-day', 'stockReportByDay')->name('report.stock.by_day');
-            Route::get('/stock/report/details/by-day', 'getStockMovementDetailsByDay')->name('report.stock.details.day');
             Route::get('/stock/report/export/by-day', 'exportStockByDay')->name('report.stock.export.day');
 
             // By Month
             Route::get('/stock/report/by-month', 'stockReportByMonth')->name('report.stock.by_month');
-            Route::get('/stock/report/details/by-month', 'getStockMovementDetailsByMonth')->name('report.stock.details.month');
             Route::get('/stock/report/export/by-month', 'exportStockByMonth')->name('report.stock.export.month');
 
             // By Year
             Route::get('/stock/report/by-year', 'stockReportByYear')->name('report.stock.by_year');
-            Route::get('/stock/report/details/by-year', 'getStockMovementDetailsYear')->name('report.stock.details.year'); // Using your existing details method
             Route::get('/stock/report/export/by-year', 'exportStockByYear')->name('report.stock.export.year');
+
+            // Route សម្រាប់ទាញយកទិន្នន័យលម្អិត (Details)
+            Route::get('/report/stock/details',  'getStockMovementDetails')->name('report.stock.details');
         // End Report Stock
 
         // ​===================================== Purchase Report ===============================================
