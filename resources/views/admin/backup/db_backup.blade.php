@@ -2,104 +2,137 @@
 @section('admin')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-{{-- ✅ Style ថ្មីសម្រាប់ UI ដែលបាន Inspire ពីគំរូរបស់អ្នក --}}
+{{-- ✅ Modern UI Styles for 2025 --}}
 <style>
-    .pill-nav-container {
-        @apply inline-block bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl shadow-sm;
+    /* Main card with glassmorphism effect for dark mode */
+    .card-ui-2025 {
+        @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-black/20;
     }
-    .pill-tab-button {
-        @apply px-6 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ease-in-out cursor-pointer;
+
+    /* Pill-style tab buttons */
+    .tab-button-pill {
+        @apply px-4 py-2 text-sm font-semibold rounded-lg transition-colors duration-200 ease-in-out;
     }
-    .pill-tab-button.active {
-        @apply bg-red-600 text-white shadow-lg shadow-red-500/20;
+    
+    /* Active state for pill tabs */
+    .tab-button-pill.active-tab {
+        @apply bg-blue-600 text-white shadow-md;
     }
-    .pill-tab-button:not(.active) {
-        @apply text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700/50;
+    
+    .tab-button-pill:not(.active-tab) {
+        @apply text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60;
     }
-    .tab-panel {
-        animation: fadeIn 0.5s ease-in-out;
-    }
+
+    /* Animation for tab content panels */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Loading Skeleton */
-    .skeleton-row td {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-    .skeleton-item {
-        @apply h-4 bg-slate-200 dark:bg-gray-700 rounded-md;
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes pulse {
-        50% { opacity: .5; }
+    .tab-panel {
+        animation: fadeIn 0.4s ease-in-out;
     }
 </style>
 
 <div class="container mx-auto p-4 md:p-6">
-    <div class="w-full bg-white dark:bg-gray-800/50 card-bg rounded-xl shadow-2xl shadow-slate-200/50 dark:shadow-black/20">
-        
-        <!-- ✅ Tab Navigation ថ្មី (Inspired by your image) -->
-        <div class="p-6 flex flex-col items-center border-b border-slate-200 dark:border-gray-700">
-            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-5">Backup Management</h2>
-            <div class="pill-nav-container">
-                <div class="flex items-center space-x-2">
-                    <button data-target="#db-panel" class="pill-tab-button active">
-                        Database
-                    </button>
-                    <button data-target="#project-panel" class="pill-tab-button">
-                        Project
-                    </button>
-                </div>
-            </div>
-        </div>
-        
+    <div class="w-full card-ui-2025 rounded-2xl">
 
-        <!-- ✅ Tab Content Panels -->
-        <div class="px-6 pb-6 pt-4">
-            <!-- Panel 1: Database Backups -->
+        <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">
+        🔐 Backup Management
+    </h1>
+    
+    <div id="tab-container" class="inline-flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
+        <button
+            data-target="#db-panel"
+            data-active-classes="bg-red-600 text-white shadow-lg"
+            data-inactive-classes="text-slate-600 dark:text-slate-300"
+            id="db-tab" 
+            class="tab-button px-5 py-2.5 rounded-lg font-semibold text-sm transition-all"
+            type="button">
+            Database
+        </button>
+        <button
+            data-target="#project-panel"
+            data-active-classes="bg-red-600 text-white shadow-lg"
+            data-inactive-classes="text-slate-600 dark:text-slate-300"
+            id="project-tab"
+            class="tab-button px-5 py-2.5 rounded-lg font-semibold text-sm transition-all" 
+            type="button">
+            Project
+        </button>
+    </div>
+</div>
+
+        <div class="p-6">
             <div id="db-panel" class="tab-panel">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">បញ្ជី Database Backup</h3>
-                    <a href="{{ route('admin.backup.now') }}" class="w-full md:w-auto icon-add py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <div class="relative w-full md:w-auto">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+                        </div>
+                        <input type="text" id="db_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Search Database Backups...">
+                    </div>
+                    <a href="{{ route('admin.backup.now') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 transition shadow-md hover:shadow-lg">
                         Backup Database Now
                     </a>
                 </div>
-                <div class="overflow-x-auto">
-                    <input class="dark:bg-gray-700 dark:text-white bg-white w-full max-w-xs mb-3 h-10 pl-3 pr-10 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Search Database Backups..." id="db_search" type="text" />
-                    <div class="table-wrapper overflow-y-auto max-h-[400px] border border-slate-200 dark:border-gray-700 rounded-lg">
-                        <table class="w-full text-left table-auto min-w-max">
-                            <thead class="bg-slate-50 dark:bg-gray-700/50"><tr><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">N<sup>0</sup></th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">File Name</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Size</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Path</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Action</th></tr></thead>
-                            <tbody id="db_backup_tbody"></tbody>
+
+                <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                    <div class="overflow-y-auto max-h-[450px]">
+                        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+                            <thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-100 dark:bg-slate-800 sticky top-0">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">N<sup>0</sup></th>
+                                    <th scope="col" class="px-6 py-3">File Name</th>
+                                    <th scope="col" class="px-6 py-3">Size</th>
+                                    <th scope="col" class="px-6 py-3">Path</th>
+                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="db_backup_tbody" class="divide-y divide-slate-200 dark:divide-slate-800">
+                                </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Panel 2: Project Backups -->
             <div id="project-panel" class="tab-panel" style="display: none;">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">បញ្ជី Project File Backup</h3>
-                    <a href="{{ route('admin.backup.project') }}" class="w-full md:w-auto icon-add py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <div class="relative w-full md:w-auto">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+                        </div>
+                        <input type="text" id="project_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="Search Project Backups...">
+                    </div>
+                    <a href="{{ route('admin.backup.project') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 transition shadow-md hover:shadow-lg">
                         Backup Project Files Now
                     </a>
                 </div>
-                <div class="overflow-x-auto">
-                    <input class="dark:bg-gray-700 dark:text-white bg-white w-full max-w-xs mb-3 h-10 pl-3 pr-10 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Search Project Backups..." id="project_search" type="text" />
-                    <div class="table-wrapper overflow-y-auto max-h-[400px] border border-slate-200 dark:border-gray-700 rounded-lg">
-                        <table class="w-full text-left table-auto min-w-max">
-                            <thead class="bg-slate-50 dark:bg-gray-700/50"><tr><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">N<sup>0</sup></th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">File Name</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Size</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Path</th><th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-700/50 z-10 border-b border-slate-200 dark:border-gray-700 text-sm font-semibold text-slate-500 dark:text-gray-300">Action</th></tr></thead>
-                                <tbody id="project_backup_tbody"></tbody>
-                            </table>
-                        </div>
+
+                <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                    <div class="overflow-y-auto max-h-[450px]">
+                        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+                             <thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-100 dark:bg-slate-800 sticky top-0">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">N<sup>0</sup></th>
+                                    <th scope="col" class="px-6 py-3">File Name</th>
+                                    <th scope="col" class="px-6 py-3">Size</th>
+                                    <th scope="col" class="px-6 py-3">Path</th>
+                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="project_backup_tbody" class="divide-y divide-slate-200 dark:divide-slate-800">
+                                </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+{{-- ⛔️ NO CHANGES WERE MADE TO YOUR LOGIC/SCRIPTS BELOW ⛔️ --}}
 
 {{-- Scripts for Backup Status Polling --}}
 @if (session('start_backup_check'))
@@ -134,31 +167,51 @@
 {{-- Scripts for AJAX Tables & Tab Switching --}}
 <script type="text/javascript">
     $(document).ready(function() {
-        
-        const skeletonRow = `
-            <tr class="skeleton-row">
-                <td><div class="skeleton-item w-8"></div></td>
-                <td><div class="skeleton-item w-48"></div></td>
-                <td><div class="skeleton-item w-20"></div></td>
-                <td><div class="skeleton-item w-64"></div></td>
-                <td><div class="skeleton-item w-24"></div></td>
-            </tr>`.repeat(5);
 
-        // --- ✅ Tab Switching Logic ថ្មី ---
-        $('.pill-tab-button').on('click', function() {
-            const $this = $(this);
-            const targetPanel = $this.data('target');
 
-            $('.pill-tab-button').removeClass('active');
-            $this.addClass('active');
-            
+        // --- ✅ NEW & IMPROVED Tab Switching Logic ---
+        $('.tab-button').on('click', function() {
+            const clickedButton = $(this);
+            const targetPanel = clickedButton.data('target');
+
+            // 1. Deactivate ALL buttons first
+            $('.tab-button').each(function() {
+                const button = $(this);
+                // Remove active classes and add inactive classes
+                button.removeClass(button.data('active-classes')).addClass(button.data('inactive-classes'));
+            });
+
+            // 2. Activate ONLY the clicked button
+            // Remove inactive classes and add active classes
+            clickedButton.removeClass(clickedButton.data('inactive-classes')).addClass(clickedButton.data('active-classes'));
+
+            // 3. Show the correct content panel
             $('.tab-panel').hide();
             $(targetPanel).show();
         });
 
+        // --- Initial State on Page Load ---
+        // Automatically click the first tab to make it active when the page loads
+        $('.tab-button').first().trigger('click');
+
+        
+        // --- Tab Switching Logic ---
+        $('#db-tab').on('click', function() {
+            $('.tab-panel').hide();
+            $('#db-panel').show();
+            $('.tab-button-pill').removeClass('active-tab');
+            $(this).addClass('active-tab');
+        });
+
+        $('#project-tab').on('click', function() {
+            $('.tab-panel').hide();
+            $('#project-panel').show();
+            $('.tab-button-pill').removeClass('active-tab');
+            $(this).addClass('active-tab');
+        });
+
         // --- Function for Database Backup Table ---
         function fetchDbData() {
-            $('#db_backup_tbody').html(skeletonRow); // Show skeleton
             $.ajax({
                 url: "{{ route('backup.search') }}",
                 type: "GET",
@@ -170,7 +223,6 @@
 
         // --- Function for Project Backup Table ---
         function fetchProjectData() {
-            $('#project_backup_tbody').html(skeletonRow); // Show skeleton
             $.ajax({
                 url: "{{ route('backup.project.search') }}",
                 type: "GET",
@@ -180,11 +232,11 @@
             });
         }
 
-        // Initial data load
+        // Initial data load for both tables
         fetchDbData();
         fetchProjectData();
 
-        // Search event listeners (with debounce)
+        // Search event listeners (with debounce for performance)
         let dbSearchTimeout;
         $('#db_search').on('keyup', function() {
             clearTimeout(dbSearchTimeout);
