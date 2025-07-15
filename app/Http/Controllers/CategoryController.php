@@ -45,7 +45,7 @@ class CategoryController extends Controller
 
     // Notification
     $notification = [
-        'message' => 'Category Inserted Successfully',
+        'message' => __('messages.category_inserted_successfully'),
         'alert-type' => 'success',
     ];
 
@@ -82,7 +82,7 @@ class CategoryController extends Controller
 
     // Notification
     $notification = [
-        'message' => 'Category Updated Successfully',
+        'message' => __('messages.category_updated_successfully'),
         'alert-type' => 'success',
     ];
 
@@ -97,7 +97,7 @@ class CategoryController extends Controller
         // Check if any product is using this category
         if ($category->products()->exists()) {
             $notification = array(
-                'message' => 'Cannot delete category. There are products associated with it.',
+                'message' => __('messages.category_delete_error_has_products'),
                 'alert-type' => 'error'
             );
             return redirect()->route('all.category')->with($notification);
@@ -107,7 +107,7 @@ class CategoryController extends Controller
         $category->delete();
 
         $notification = array(
-            'message' => 'Category Deleted Successfully',
+            'message' => __('messages.category_deleted_successfully'),
             'alert-type' => 'success'
         );
         return redirect()->route('all.category')->with($notification); 

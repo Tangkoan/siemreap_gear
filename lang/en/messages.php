@@ -42,7 +42,11 @@ return [
         // Add Category && Edit
         'category_name' => "Category Name",
         'edit_category' => 'Edit Category',
-
+    // Notification Messages
+    'category_inserted_successfully' => 'Category Inserted Successfully',
+    'category_updated_successfully' => 'Category Updated Successfully',
+    'category_deleted_successfully' => 'Category Deleted Successfully',
+    'category_delete_error_has_products' => 'Cannot delete category. There are products associated with it.',
     
 
 ];
