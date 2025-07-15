@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'pos' => 'POS',
+    'my_account' => 'My Account',
+    'change_password' => 'Change Password',
+    'logout' => 'Logout',
+    'signed_in_as' => 'Signed in as',
+    'administrator' => 'Administrator',
+    'no_stock_alerts' => 'No stock alerts at the moment. All good!',
+    'failed_to_load_notifications' => 'Failed to load notifications. Please try again later.',
+    'loading_alerts' => 'Loading alerts...',
+
+    // Sidebar Menu Keys
+    'dashboard' => 'Dashboard',
+    'category' => 'Category',
+    'product' => 'Product',
+    'customer' => 'Customer',
+    'supplier' => 'Supplier',
+    'purchase' => 'Purchase',
+    'order' => 'Order',
+    'permission' => 'Permission',
+    'report' => 'Report',
+    'user' => 'User',
+    'backup' => 'Backup',
+
+    // របស់ដែលប្រើរួម
+    'table_created' => 'Created',
+    'table_action' => 'Action',
+    'search' => 'Search',
+    'show' => 'Show',
+    'save'=> 'Save',
+
+
+    // Category page
+        'product_category' => 'Product Category',
+        'add_category' => 'Add Category',
+        'search_for_category' => 'Search for Category',
+        'table_no' => 'N<sup>o</sup>',
+        'table_category_name' => 'Category Name',
+        'table_category_slug' => 'Category Slug',
+        // Add Category && Edit
+        'category_name' => "Category Name",
+        'edit_category' => 'Edit Category',
+
+    
+
+];

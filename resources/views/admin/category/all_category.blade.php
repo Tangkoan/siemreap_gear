@@ -46,7 +46,7 @@
                                 d="m21 7.5-2.25-1.313M21 7.5v2.25m0-2.25-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3 2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75 2.25-1.313M12 21.75V19.5m0 2.25-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
                         </svg>
 
-                        <div class="px-2">Category</div>
+                        <div class="px-2">{{ __('messages.category') }}</div>
                     </h2>
                     <div>
 
@@ -56,7 +56,7 @@
                                 @if (!Auth::user()->can('category.add')) disabled @endif>
                                 <a href="{{ Auth::user()->can('category.add') ? route('add.category') : '#' }}"
                                     class="{{ !Auth::user()->can('category.add') ? 'pointer-events-none text-gray-400' : '' }}">
-                                    Add Category
+                                    {{ __('messages.product_category') }}
                                 </a>
                             </button>
                         </div>
@@ -71,7 +71,7 @@
                     <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="6" selected>6</option>
@@ -88,7 +88,7 @@
                                 <div class="relative">
                                     <input
                                         class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                        placeholder="Search for Category" id="search" name="search" type="text" />
+                                        placeholder="{{ __('messages.search_for_category') }}" id="search" name="search" type="text" />
 
 
 
@@ -113,31 +113,31 @@
                                     <th
                                         class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            N<sup>0</sup>
+                                            {!! __('messages.table_no') !!}
                                         </p>
                                     </th>
                                     <th
                                         class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            Category Name
+                                            {{ __('messages.table_category_name') }}
                                         </p>
                                     </th>
 
                                     <th class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            Category Slug
+                                            {{ __('messages.table_category_slug') }}
                                         </p>
                                     </th>
                                     <th
                                         class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            Created
+                                            {{ __('messages.table_created') }}
                                         </p>
                                     </th>
                                     <th
                                         class="p-4 sticky top-0 bg-slate-50 dark:bg-gray-800 z-10 border-b border-slate-200 dark:border-gray-700">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            Action
+                                            {{ __('messages.table_action') }}
                                         </p>
                                     </th>
                                 </tr>

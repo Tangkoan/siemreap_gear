@@ -28,12 +28,9 @@ class CategoryController extends Controller
 
     public function StoreCategory(Request $request)
 {
-    // Validate input
+    // លុប Array ទីពីរចេញ
     $request->validate([
         'category_name' => 'required|max:200|unique:categories,category_name',
-    ], [
-        'category_name.required' => 'This Category Name field is required.',
-        'category_name.unique' => 'This Category Name already exists.',
     ]);
 
     // Generate slug
@@ -68,12 +65,9 @@ class CategoryController extends Controller
 {
     $category_id = $request->id;
 
-    // Validate input (ignore current ID for uniqueness)
+    // លុប Array ទីពីរចេញ
     $request->validate([
         'category_name' => 'required|max:200|unique:categories,category_name,' . $category_id,
-    ], [
-        'category_name.required' => 'This Category Name field is required.',
-        'category_name.unique' => 'This Category Name already exists.',
     ]);
 
     // Generate new slug
