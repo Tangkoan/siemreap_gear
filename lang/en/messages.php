@@ -30,7 +30,7 @@ return [
     'search' => 'Search',
     'show' => 'Show',
     'save'=> 'Save',
-
+    'notes' => 'Notes',
 
     // Category page
         'product_category' => 'Product Category',
@@ -49,5 +49,16 @@ return [
     'category_deleted_successfully' => 'Category Deleted Successfully',
     'category_delete_error_has_products' => 'Cannot delete category. There are products associated with it.',
     
+    // ==================== Customer ============================
+        // List Customer
+        'add_customer' => 'Add Customer',
+        'table_customer_name' => 'Customer Name',
+        'table_customer_phone' => 'Customer Phone',
+        // Edit
+        'edit_customer' => 'Edit Customer',
+        
+        'customer_inserted_successfully' => 'Customer Inserted Successfully',
+        'customer_update_successfully' => 'Customer Update Successfully',
+        'customer_delete_error_has_related_records_exist' => 'Cannot delete Customer. There are orders associated with it.',
 
 ];

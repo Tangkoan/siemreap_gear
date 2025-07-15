@@ -61,20 +61,26 @@
         @endif
         {{-- End Product --}}
 
-        {{-- Customer --}}
-        @if (Auth::user()->can('customer.menu'))
-             <a href="{{ route('customer.all') }}"
+       {{-- Customer --}}
+            @if (Auth::user()->can('customer.menu'))
+                @php
+                    $isCustomerActive = request()->routeIs('customer.*','add.customer','edit.customer','delete.customer');
+                @endphp
+                <a href="{{ route('customer.all') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('customer.all') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                @if(request()->routeIs('customer.all'))
-                    <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>
-                <span class="px-2">{{ __('messages.customer') }}</span>
-            </a>
-        @endif
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    
+                    @if($isCustomerActive)
+                        {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
+                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                    @endif
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <span class="px-2">{{ __('messages.customer') }}</span>
+                </a>
+            @endif
         {{-- End Customer --}}
 
         {{-- Supplier --}}

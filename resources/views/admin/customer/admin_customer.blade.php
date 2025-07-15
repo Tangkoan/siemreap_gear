@@ -14,7 +14,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
-                        <div class="px-2">Customer</div>
+                        <div class="px-2">{{ __('messages.customer') }}</div>
                     </h2>
 
                     <div>
@@ -24,7 +24,7 @@
                                 @if (!Auth::user()->can('customer.add')) disabled @endif>
                                 <a href="{{ Auth::user()->can('customer.add') ? route('add.customer') : '#' }}"
                                     class="{{ !Auth::user()->can('customer.add') ? 'pointer-events-none text-gray-400' : '' }}">
-                                    Add Customer
+                                    {{ __('messages.add_customer') }}
                                 </a>
                             </button>
                         </div>
@@ -38,7 +38,7 @@
                     <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="6" selected>6</option>
@@ -55,7 +55,7 @@
                                 <div class="relative">
                                     <input
                                         class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                        placeholder=" Search for supplier" id="search" name="search" type="text" />
+                                        placeholder=" {{ __('messages.search') }}" id="search" name="search" type="text" />
                                     <button
                                         class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center dark:bg-gray-800 bg-white rounded "
                                         type="button">
@@ -77,36 +77,43 @@
                                     <th
                                         class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            N<sup>0</sup></p>
-                                    </th>
-                                    <th
-                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
-                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">Name
-                                        </p>
-                                    </th>
-                                    <th
-                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
-                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">Phone
-                                        </p>
-                                    </th>
-                                    <th
-                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
-                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">Notes
+                                            {!! __('messages.table_no') !!}
                                         </p>
                                     </th>
                                     <th
                                         class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                         <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
-                                            Address</p>
-                                    </th>
-                                    <th
-                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
-                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">Create
+                                            {{ __('messages.customer_name') }}
                                         </p>
                                     </th>
                                     <th
                                         class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
-                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">Action
+                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
+                                            {{ __('messages.customer_phone') }}
+                                        </p>
+                                    </th>
+                                    <th
+                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
+                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
+                                            {{ __('messages.notes') }}
+                                        </p>
+                                    </th>
+                                    <th
+                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
+                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
+                                            {{ __('messages.customer_address') }}
+                                        </p>
+                                    </th>
+                                    <th
+                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
+                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
+                                            {{ __('messages.table_created') }}
+                                        </p>
+                                    </th>
+                                    <th
+                                        class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
+                                        <p class="text-sm font-normal leading-none text-slate-500 dark:text-gray-300">
+                                            {{ __('messages.table_action') }}
                                         </p>
                                     </th>
                                 </tr>

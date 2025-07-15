@@ -32,16 +32,11 @@ class CustomerController extends Controller
 
     public function StoreCustomer(Request $request)
     {
-        $validateData = $request->validate([
-            'name' => 'required|max:200',
-            'phone' => 'nullable|max:200',
-            'notes' => 'nullable|max:200',
-            'address' => 'nullable|max:200',
-            ],
-            [
-                'name.required' => 'This customers Name Field Is Required',
-            ]
-        );
+        
+
+        $request->validate([
+            'name' => 'required|max:200|unique:customers,name',
+        ]);
 
 
         Customer::insert([
@@ -53,10 +48,12 @@ class CustomerController extends Controller
         ]);
        
 
-        $notification = array(
-            'message' => 'Customer Inserted Successfully',
-            'alert-type' => 'success'
-        );
+        
+        // Notification
+        $notification = [
+            'message' => __('messages.customer_inserted_successfully'),
+            'alert-type' => 'success',
+        ];
 
         return redirect()->route('all.customer')->with($notification);
        
@@ -65,16 +62,10 @@ class CustomerController extends Controller
 
     public function CustomerUpdate(Request $request){
         $customer_id = $request->id;
-        $validateData = $request->validate([
-            'name' => 'required|max:200',
-            'phone' => 'nullable|max:200',
-            'address' => 'nullable|max:200',
-            'notes' => 'nullable|max:200',
-            ],
-            [
-                'name.required' => 'This Customer Name Field Is Required',
-            ]
-        );
+
+        $request->validate([
+            'name' => 'required|max:200|unique:customers,name,'. $customer_id,
+        ]);
 
         Customer::findOrFail($customer_id)->update([
             'name' => $request->name,
@@ -85,10 +76,11 @@ class CustomerController extends Controller
         ]);
        
 
-        $notification = array(
-            'message' => 'Customer Update Successfully',
-            'alert-type' => 'success'
-        );
+        // Notification
+        $notification = [
+            'message' => __('messages.customer_update_successfully'),
+            'alert-type' => 'success',
+        ];
 
         return redirect()->route('all.customer')->with($notification);
        
@@ -106,10 +98,12 @@ class CustomerController extends Controller
     // $hasInvoices = $customer->invoices()->exists(); // ឧទាហរណ៍បើមាន table invoices
 
     if ($hasOrders) {
+        
         $notification = array(
-            'message' => 'Cannot delete customer. Related records exist.',
-            'alert-type' => 'error'
+                'message' => __('messages.customer_delete_error_has_related_records_exist'),
+                'alert-type' => 'error'
         );
+
         return redirect()->back()->with($notification);
     }
 
@@ -118,6 +112,11 @@ class CustomerController extends Controller
     $notification = array(
         'message' => 'Customer Deleted Successfully',
         'alert-type' => 'success'
+    );
+
+    $notification = array(
+                'message' => __('messages.customer_deleted_successfully'),
+                'alert-type' => 'success'
     );
     return redirect()->back()->with($notification);
 }

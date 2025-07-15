@@ -60,7 +60,6 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/change/password', [AdminController::class, 'ChangePassword'])->name('change.password');
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
 
-    Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
 
     
@@ -225,7 +224,8 @@ Route::middleware(['auth'])->group(callback: function () {
     // Customer All Route 
 
     Route::controller(CustomerController::class)->group(function () {
-        Route::get('/all/customer', 'CustomerPage')->name('all.customer')->middleware('permission:customer.all');
+        Route::get('/customer/page', action: 'CustomerPage')->name('customer.all')->middleware('permission:customer.all'); // ទាញមកបង្ហាញ
+        Route::get('/all/customer', 'CustomerPage')->name('all.customer')->middleware('permission:customer.all'); // For Insert Data
         Route::get('/add/customer', 'AddCustomer')->name('add.customer')->middleware('permission:customer.add');
         Route::post('/store/customer', 'StoreCustomer')->name('customer.store');
 
