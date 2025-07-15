@@ -17,6 +17,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\Admin\DashboardController;
 
 
 
@@ -56,6 +57,14 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/customer/page', [CustomerController::class, 'CustomerPage'])->name('customer.all')->middleware('permission:customer.all');
 
 
+    // ============================= Dashboard =========================================
+        Route::controller(DashboardController::class)->group(function () {
+            // Route សម្រាប់បង្ហាញหน้า Dashboard
+            Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
+
+            // Route សម្រាប់ឱ្យ JavaScript ទាញទិន្នន័យ (API Endpoint)
+            Route::get('/admin/dashboard/data', 'getDashboardData')->name('admin.dashboard.data');
+        });// End Report Route
     
 
     // Report Route

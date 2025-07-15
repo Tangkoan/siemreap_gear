@@ -462,7 +462,7 @@ class OrderController extends Controller
                 <td class="p-4 py-5">' . $item->order_date  . '</td>
                 <td class="p-4 py-5">' . $item->payment_status  . '</td>
                 <td class="p-4 py-5">
-                <span class="inline-block px-3 py-1 rounded-md bg-gray-400 text-white font-semibold shadow-sm">
+                <span class="inline-block px-3 py-1 rounded-md bg-gray-500 text-white font-semibold shadow-sm">
                             ' . $item->total  . ' $
                         </span>
                     
