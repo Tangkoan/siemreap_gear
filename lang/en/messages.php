@@ -39,8 +39,9 @@ return [
         'table_no' => 'N<sup>o</sup>',
         'table_category_name' => 'Category Name',
         'table_category_slug' => 'Category Slug',
-        // Add Category && Edit
+        // Add Category
         'category_name' => "Category Name",
+         // Edit Category
         'edit_category' => 'Edit Category',
     // Notification Messages
     'category_inserted_successfully' => 'Category Inserted Successfully',
