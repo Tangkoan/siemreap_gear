@@ -14,7 +14,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
                         </svg>
-                        <div class="px-2">Product</div>
+                        <div class="px-2">{{ __('messages.product') }}</div>
                     </h2>
                     <div>
 
@@ -22,13 +22,13 @@
                             <!-- បើមានសិទ្ធ -->
                             <button type="button"
                                 class="button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                                <a href="{{ route('import.product') }}">Import</a>
+                                <a href="{{ route('import.product') }}">{{ __('messages.import') }}</a>
                             </button>
                         @else
                             <!-- បើអត់មានសិទ្ធ -->
                             <button class="button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
                                 disabled title="You don't have permission to access Import">
-                                Import
+                                {{ __('messages.import') }}
                             </button>
                         @endcan
 
@@ -41,14 +41,14 @@
                             <!-- បើមានសិទ្ធ -->
                             <button type="button"
                                 class="button-export py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                                <a href="{{ route('export') }}">Export</a>
+                                <a href="{{ route('export') }}">{{ __('messages.export') }}</a>
                             </button>
                         @else
                             <!-- បើអត់មានសិទ្ធ -->
                             <button
                                 class="button-export   py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
                                 disabled title="You don't have permission to access Export">
-                                Export
+                                {{ __('messages.export') }}
                             </button>
                         @endcan
 
@@ -61,14 +61,14 @@
                             <!-- បើមានសិទ្ធ -->
                             <button type="button"
                                 class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                                <a href="{{ route('add.product') }}">Add Product</a>
+                                <a href="{{ route('add.product') }}">{{ __('messages.add_product') }}</a>
                             </button>
                         @else
                             <!-- បើអត់មានសិទ្ធ -->
                             <button 
                                 class="button-add   py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
                                 disabled title="You don't have permission to access Import">
-                                Add Product
+                                {{ __('messages.add_product') }}
                             </button>
                         @endcan
 
@@ -83,7 +83,7 @@
                     <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="6" selected>6</option>
@@ -101,7 +101,7 @@
                                 <div class="relative">
                                     <input
                                         class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                        placeholder="Search for name" id="search" name="search" type="text" />
+                                        placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                     <button
                                         class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                                         type="button">
@@ -123,48 +123,48 @@
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            N<sup>0</sup>
+                                           {!! __('messages.table_no') !!}
                                         </p>
                                     </th>
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Image
+                                            {{ __('messages.image') }}
                                         </p>
                                     </th>
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Product Code
+                                            {{ __('messages.product_code') }}
                                         </p>
                                     </th>
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Product Name
+                                            {{ __('messages.product_name') }}
                                         </p>
                                     </th>
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Category
+                                            {{ __('messages.category') }}
                                         </p>
                                     </th>
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Price
-                                        </p>
-                                    </th>
-
-
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
-                                        <p class="text-sm font-normal leading-none text-slate-500">
-                                            Supplier
+                                            {{ __('messages.price') }}
                                         </p>
                                     </th>
 
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Inventory
+                                            {{ __('messages.supplier') }}
+                                        </p>
+                                    </th>
+
+
+                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <p class="text-sm font-normal leading-none text-slate-500">
+                                            {{ __(key: 'messages.inventory') }}
                                         </p>
                                     </th>
 
@@ -172,7 +172,7 @@
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Action
+                                            {{ __('messages.table_action') }}
                                         </p>
                                     </th>
                                 </tr>

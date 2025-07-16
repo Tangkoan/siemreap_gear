@@ -405,7 +405,7 @@ class PurchaseController extends Controller
             return [
                 'id' => $product->id,
                 'name' => $product->product_name,
-                'price' => (float) $product->buying_price,
+                'buying_price' => (float) $product->buying_price,
                 'code' => $product->product_code,
                 'category' => $product->category ? $product->category->category_name : 'No Category',
                 'imageUrl' => asset($product->product_image),
@@ -416,28 +416,6 @@ class PurchaseController extends Controller
     }
 
 
-    // public function AddToCart(Request $request) {
-    //     Cart::add([
-    //         'id' => $request->id,
-    //         'name' => $request->name,
-    //         'qty' => $request->qty,
-    //         'price' => $request->price,
-    //         'weight' => 0,
-    //         'options' => [],
-    //     ]);
-
-    //     return redirect()->back()->with('message', 'Product added to purchase cart.');
-    // }
-
-    // public function RemoveCartItem($rowId) {
-    //     Cart::remove($rowId);
-    //     return redirect()->back()->with('message', 'Item removed from cart.');
-    // }
-
-    // public function UpdateCartItem(Request $request, $rowId) {
-    //     Cart::update($rowId, $request->qty);
-    //     return redirect()->back()->with('message', 'Cart updated successfully.');
-    // }
 
 
     public function AddToCart(Request $request) {

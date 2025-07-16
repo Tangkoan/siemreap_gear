@@ -350,7 +350,7 @@
                                         const card = `
                                                     <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
                                                         cursor-pointer hover:scale-105"
-                                                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.price});"
+                                                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
                                                         title="Click to add to purchase cart">
 
                                                         <div class="p-3" style="width:150px; height: 50px;">
@@ -361,7 +361,7 @@
 
                                                         <div class="p-4 px-3 text-center">
                                                             <h3 class="font-semibold mb-1">${product.name}</h3>
-                                                            <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
+                                                            <p class="text-blue-600 font-bold text-lg">$${product.buying_price}</p>
                                                             <p class="font-semibold mb-1">${product.code}</p>
                                                             <p class="text-sm text-gray-600 dark:text-gray-300">
                                                                 Qty: ${product.stock}
@@ -390,7 +390,7 @@
                                         const card = `
                                                     <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
                                                         cursor-pointer hover:scale-105"
-                                                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.price});"
+                                                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
                                                         title="Click to add to purchase cart">
 
                                                         <div class="p-3" style="width:150px; height: 50px;">
@@ -401,7 +401,7 @@
 
                                                         <div class="p-4 px-3 text-center">
                                                             <h3 class="font-semibold mb-1">${product.name}</h3>
-                                                            <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
+                                                            <p class="text-blue-600 font-bold text-lg">$${product.buying_price}</p>
                                                             <p class="font-semibold mb-1">${product.code}</p>
                                                             <p class="text-sm text-gray-600 dark:text-gray-300">
                                                                 Qty: ${product.stock}

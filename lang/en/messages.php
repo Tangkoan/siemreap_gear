@@ -34,6 +34,7 @@ return [
     'email' => 'Email',
     'phone' => 'Phone',
     'name' => 'Name',
+    'image' => 'Image',
 
     // Category page
         'product_category' => 'Product Category',
@@ -68,10 +69,29 @@ return [
         // List Supplier
         'add_supplier' => 'Add Supplier',
         'edit_supplier'=> 'Edit Supplier',
-
         // Notification
         'supplier_inserted_successfully'=> 'Supplier Inserted Successfully',
         'supplier_updated_successfully'=> 'Supplier Updated Successfully',
         'supplier_can_not_delete' => 'Cannot delete supplier. There are purchase associated with it.!',
         'supplier_delete_successfully' => 'Delete Supplier Successfully!',
+
+    // ===================== Product ========================================
+        // List Product
+            'product_code'=> 'Product Code',
+            'product_name'=> 'Product Name',
+            'price'=> 'Price',
+            'inventory'=> 'Inventory',
+            // Button List Product
+            'import'=>'Import',
+            'export'=>'Export',
+            'add_product'=>'Add Product',
+            'select_category'=> 'Select Category',
+            'select_supplier'=> 'Select Supplier',
+            'details'=> 'Details',
+            'choose_file' => 'Choose File',
+            'buy_price' => 'Buy Price',
+            'stock_alert' => 'Stock Alert',
+            
+            
+
 ];

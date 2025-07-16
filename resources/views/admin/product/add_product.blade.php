@@ -18,7 +18,7 @@
                     <div class="px-2">
                         <a href="{{ route('all.product') }}"
                             class="text-black hover:text-indigo-500 dark:text-white dark:hover:text-indigo-300 font-semibold">
-                            Add Product
+                            {{ __('messages.add_product') }}
                         </a>
                     </div>
                 </h2>
@@ -34,7 +34,7 @@
                             <div class="form-group">
                                 <label for="product_name"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Product Name <span class="text-red-500">*</span>
+                                    {{ __('messages.product_name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="product_name" name="product_name"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -46,13 +46,14 @@
                             <div class="form-group">
                                 <label for="Category"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Category <span class="text-red-500">*</span>
+                                    {{ __('messages.category') }} 
+                                    <span class="text-red-500">*</span>
                                 </label>
                                 <select name="category_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    <option selected disabled>Select Category</option>
+                                    <option selected disabled>{{ __('messages.select_category') }} </option>
                                     @foreach ($category as $cat)
                                         <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
                                     @endforeach
@@ -63,13 +64,13 @@
                             <div class="form-group">
                                 <label for="Supplier"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Supplier <span class="text-red-500">*</span>
+                                     {{ __('messages.supplier') }}  <span class="text-red-500">*</span>
                                 </label>
                                 <select name="supplier_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    <option selected disabled>Select Supplier</option>
+                                    <option selected disabled>{{ __('messages.select_supplier') }}</option>
                                     @foreach ($supplier as $cat)
                                         <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                     @endforeach
@@ -80,7 +81,7 @@
                             <div>
                                 <label for="product_detail"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Details <span class="text-red-500">*</span>
+                                    {{ __('messages.details') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="tel" id="product_detail" name="product_detail"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -94,7 +95,7 @@
                             <div class="mb-2">
                                 <label for="image"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                    Product Image <span class="text-red-500">*</span>
+                                    {{ __('messages.image') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="file" id="image" name="product_image"
                                     class="block w-full text-sm text-gray-600 dark:text-gray-300
@@ -113,7 +114,7 @@
                             <div class="form-group">
                                 <label for="selling_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Price
+                                    {{ __('messages.price') }}
                                 </label>
                                 <input type="number" min="0" step="0.01" id="selling_price" name="selling_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -125,7 +126,7 @@
                             <div class="form-group">
                                 <label for="buying_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Buy Price
+                                    {{ __('messages.buy_price') }}
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -138,7 +139,7 @@
                             <div class="form-group">
                                 <label for="product_store"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Inventory <span class="text-red-500">*</span>
+                                    {{ __('messages.inventory') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" value="0" name="product_store" readonly class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
                                            bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed">
@@ -147,7 +148,7 @@
                             {{-- Stock Alert --}}
                             <div class="form-group">
                                 <label for="stock_alert" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Stock Alert <span class="text-red-500">*</span>
+                                    {{ __('messages.stock_alert') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -161,7 +162,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md shadow-lg transition-colors duration-200">
-                            Save
+                            {{ __('messages.save') }}
                         </button>
                     </div>
                 </form>

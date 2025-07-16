@@ -55,6 +55,7 @@ class PosController extends Controller
                 'id' => $product->id,
                 'name' => $product->product_name,
                 'price' => (float)$product->selling_price,
+                'buying_price' => (float)$product->buying_price,
                 'code' => $product->product_code,
                 'category' => $product->category ? $product->category->category_name : 'No Category',
                 'imageUrl' => asset($product->product_image),
@@ -83,6 +84,7 @@ class PosController extends Controller
                 return [
                     'id' => $product->id,
                     'name' => $product->product_name,
+                    'buying_price' => (float)$product->buying_price,
                     'price' => (float)$product->selling_price,
                     'code' => $product->product_code,
                     'category' => $product->category ? $product->category->category_name : 'No Category',
