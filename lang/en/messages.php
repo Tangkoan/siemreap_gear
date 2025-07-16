@@ -31,6 +31,9 @@ return [
     'show' => 'Show',
     'save'=> 'Save',
     'notes' => 'Notes',
+    'email' => 'Email',
+    'phone' => 'Phone',
+    'name' => 'Name',
 
     // Category page
         'product_category' => 'Product Category',
@@ -61,4 +64,14 @@ return [
         'customer_update_successfully' => 'Customer Update Successfully',
         'customer_delete_error_has_related_records_exist' => 'Cannot delete Customer. There are orders associated with it.',
 
+    // ===================== Supplier =======================================
+        // List Supplier
+        'add_supplier' => 'Add Supplier',
+        'edit_supplier'=> 'Edit Supplier',
+
+        // Notification
+        'supplier_inserted_successfully'=> 'Supplier Inserted Successfully',
+        'supplier_updated_successfully'=> 'Supplier Updated Successfully',
+        'supplier_can_not_delete' => 'Cannot delete supplier. There are purchase associated with it.!',
+        'supplier_delete_successfully' => 'Delete Supplier Successfully!',
 ];

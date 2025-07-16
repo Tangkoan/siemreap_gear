@@ -27,7 +27,7 @@
                             <div class="space-y-4">
                                 {{-- Customer Name --}}
                                 <div>
-                                    <label for="name"
+                                    <label for="customer_name"
                                         class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                          {{ __('messages.customer_name') }}
                                         <span class="text-red-500">*</span>

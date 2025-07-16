@@ -33,16 +33,14 @@ class SupplierController extends Controller
 
     public function StoreSupplier(Request $request)
     {
-        $validateData = $request->validate(
-            [
-                'name' => 'required|max:200',
-                'email' => 'nullable|unique:Suppliers|max:200',
-                'phone' => 'nullable|max:200',
-            ],
-            [
-                'name.required' => 'This Supplier Name Field Is Required',
-            ]
-        );
+        
+
+        $request->validate([
+            'name' => 'required|max:200|unique:suppliers,name',
+            'email' => 'nullable|unique:suppliers|max:200',
+        ], [
+            'name.required' => 'ឈ្មោះអ្នកផ្គត់ផ្គង់ តម្រូវឲ្យបំពេញ!!!',
+        ]);
 
 
         Supplier::insert([
@@ -53,10 +51,11 @@ class SupplierController extends Controller
         ]);
 
 
-        $notification = array(
-            'message' => 'Supplier Inserted Successfully',
-            'alert-type' => 'success'
-        );
+        // Notification
+        $notification = [
+            'message' => __('messages.supplier_inserted_successfully'),
+            'alert-type' => 'success',
+        ];
 
         return redirect()->route('all.supplier')->with($notification);
     }
@@ -65,18 +64,13 @@ class SupplierController extends Controller
     public function SupplierUpdate(Request $request)
     {
         $supplier_id = $request->id;
-        $validateData = $request->validate(
-            [
-                'name' => 'required|max:200',
-                'email' => 'nullable|email|max:200|unique:suppliers,email,' . $supplier_id,
-                'phone' => 'nullable|max:200',
-                'notes' => 'nullable|max:200',
-            ],
-            [
-                'name.required' => 'This Supplier Name Field Is Required',
-                'phone.required' => 'This Supplier phone Field Is Required',
-            ]
-        );
+
+        $request->validate([
+            'name' => 'required|max:200|unique:suppliers,name,'. $supplier_id,
+        ], [
+            'name.required' => 'ឈ្មោះអ្នកផ្គត់ផ្គង់ តម្រូវឲ្យបំពេញ!!!',
+            
+        ]);
 
         Supplier::findOrFail($supplier_id)->update([
             'name' => $request->name,
@@ -87,10 +81,11 @@ class SupplierController extends Controller
         ]);
 
 
-        $notification = array(
-            'message' => 'Supplier Inserted Successfully',
-            'alert-type' => 'success'
-        );
+        // Notification
+        $notification = [
+            'message' => __('messages.supplier_updated_successfully'),
+            'alert-type' => 'success',
+        ];
 
         return redirect()->route('all.supplier')->with($notification);
     } // End Method
@@ -107,21 +102,22 @@ class SupplierController extends Controller
         $hasPurchases = $supplier->purchases()->exists();
 
         if ($hasProducts || $hasPurchases) {
-            $notification = array(
-                // 'message' => 'មិនអាចលុបបានទេ ព្រោះមានទិន្នន័យភ្ជាប់ជាមួយ Supplier នេះ!',
-                'message' => 'Cannot delete supplier. There are purchase associated with it.!',
+            // Notification
+            $notification = [
+                'message' => __('messages.supplier_can_not_delete'),
+                'alert-type' => 'error',
+            ];
 
-                'alert-type' => 'error'
-            );
             return redirect()->back()->with($notification);
         }
 
         $supplier->delete();
 
-        $notification = array(
-            'message' => 'Delete Supplier Successfully!',
-            'alert-type' => 'success'
-        );
+        // Notification
+            $notification = [
+                'message' => __('messages.supplier_delete_successfully'),
+                'alert-type' => 'success',
+            ];
         return redirect()->back()->with($notification);
     }
 

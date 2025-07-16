@@ -14,7 +14,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                             </svg>
-                            <div class="px-2">Suppler</div>
+                            <div class="px-2">{{ __('messages.supplier') }}</div>
                         </h2>
                         <div>
 
@@ -29,7 +29,7 @@
                                 @if (!Auth::user()->can('supplier.add')) disabled @endif>
                                 <a href="{{ Auth::user()->can('supplier.add') ? route('add.supplier') : '#' }}"
                                     class="{{ !Auth::user()->can('supplier.add') ? 'pointer-events-none text-gray-400' : '' }}">
-                                    Add Supplier
+                                    {{ __('messages.add_supplier') }}
                                 </a>
                             </button>
                         </div>
@@ -42,7 +42,7 @@
                             <div>
                                 <div>
                                     <div class="flex items-center space-x-2">
-                                        <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                        <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                         <select id="perPage" name="perPage"
                                             class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                             <option value="6" selected>6</option>
@@ -60,7 +60,7 @@
                                     <div class="relative">
                                         <input
                                             class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                            placeholder="Search for supplier" id="search" name="search" type="text" />
+                                            placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                         <button
                                             class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center dark:bg-gray-800  bg-white rounded "
                                             type="button">
@@ -83,36 +83,36 @@
                                     <tr>
                                         <th class="sticky top-0   p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                N<sup>0</sup>
+                                               {!! __('messages.table_no') !!}
                                             </p>
                                         </th>
 
                                         <th class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Name
+                                                 {{ __('messages.name') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Email
+                                                {{ __('messages.email') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Phone
+                                                {{ __('messages.phone') }}
                                             </p>
                                         </th>
 
                                         <th class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Notes
+                                                {{ __('messages.notes') }}
                                             </p>
                                         </th>
 
    
                                         <th class="sticky top-0 p-4 border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800">
                                             <p class="text-sm font-normal leading-none text-slate-500 ">
-                                                Action
+                                                {{ __('messages.table_action') }}
                                             </p>
                                         </th>
                                     </tr>
