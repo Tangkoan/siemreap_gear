@@ -11,10 +11,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
                     </svg>
-                    <div class="px-2">Edit Product</div>
+                    <div class="px-2">{{ __('messages.edit_product') }}</div>
                 </h2>
 
-                <form method="post" action="{{ route('product.update') }}" enctype="multipart/form-data">
+                <form id="myForm" method="post" action="{{ route('product.update') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="id" value="{{ $product->id }}">
 
@@ -27,12 +27,12 @@
                                 class="w-full py-2.5 px-4 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
 
                             {{-- Product Name --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="product_name"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Product Name <span class="text-red-500">*</span>
+                                    {{ __('messages.product_name') }} <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" id="product_name" name="product_name" required
+                                <input type="text" id="product_name" name="product_name" 
                                     value="{{ $product->product_name }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                 @error('product_name')
@@ -41,14 +41,14 @@
                             </div>
 
                             {{-- Category --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="Category"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Category <span class="text-red-500">*</span>
+                                    {{ __('messages.category') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="category_id"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option selected disabled>Select Category</option>
+                                    <option selected disabled>{{ __('messages.select_category') }}</option>
                                     @foreach ($category as $cat)
                                         <option value="{{ $cat->id }}"
                                             {{ $cat->id == $product->category_id ? 'selected' : '' }}>
@@ -59,14 +59,14 @@
                             </div>
 
                             {{-- Supplier --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="supplier"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Supplier <span class="text-red-500">*</span>
+                                    {{ __('messages.supplier') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="supplier_id"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option selected disabled>Select Supplier</option>
+                                    <option selected disabled>{{ __('messages.select_supplier') }}</option>
                                     @foreach ($supplier as $cat)
                                         <option value="{{ $cat->id }}"
                                             {{ $cat->id == $product->supplier_id ? 'selected' : '' }}>
@@ -77,10 +77,10 @@
                             </div>
 
                             {{-- Details --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="product_detail"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Details <span class="text-red-500">*</span>
+                                    {{ __('messages.details') }}
                                 </label>
                                 <input type="text" id="product_detail" name="product_detail"
                                     value="{{ $product->product_detail }}"
@@ -90,10 +90,10 @@
 
 
                             {{-- Image --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="image"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                    Product Image <span class="text-red-500">*</span>
+                                    {{ __('messages.image') }} 
                                 </label>
                                 <input type="file" id="image" name="product_image"
                                     class="block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
@@ -110,10 +110,10 @@
                             <input type="hidden" name="product_code" value="{{ $product->product_code }}">
 
                             {{-- Price --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="selling_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Price
+                                    {{ __('messages.price') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="selling_price" name="selling_price"
                                     value="{{ $product->selling_price }}"
@@ -121,10 +121,10 @@
                             </div>
 
                             {{-- Buy Price --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="buying_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Buy Price
+                                    {{ __('messages.buy_price') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
                                     value="{{ $product->buying_price }}"
@@ -133,10 +133,10 @@
 
 
                             {{-- Inventory --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="product_store"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Inventory <span class="text-red-500">*</span>
+                                    {{ __('messages.inventory') }} 
                                 </label>
                                 <input type="text" id="product_store" name="product_store" 
                                     value="{{ $product->product_store }}" readonly
@@ -144,9 +144,9 @@
                                            bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed">
                             </div>
                             {{-- Stock Alert --}}
-                            <div>
+                            <div class="form-group">
                                 <label for="stock_alert" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Stock Alert <span class="text-red-500">*</span>
+                                    {{ __('messages.stock_alert') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert" value="{{ $product->stock_alert }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -181,5 +181,72 @@
                 }
             });
         });
+
+         $(document).ready(function () {
+            $('#myForm').validate({
+                rules: {
+                    product_name: {
+                        required: true,
+                    },
+                    category_id: {
+                        required: true,
+                    },
+
+                    supplier_id: {
+                        required: true,
+                    },
+                    selling_price: {
+                        required: true,
+                    },
+                    product_store: {
+                        required: true,
+                    },
+                    stock_alert: {
+                        required: true,
+                    },
+                    buying_price: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    product_name: {
+                        required: '{{ __('messages.please_enter_product_name') }}',
+                    },
+                    category_id: {
+                        required: '{{ __('messages.please_select_category') }}',
+                    },
+
+                    supplier_id: {
+                        required: '{{ __('messages.please_select_supplier') }}',
+                    },
+                    selling_price: {
+                        required: '{{ __('messages.please_enter_price_selling_price') }}',
+                    },
+                    product_store: {
+                        required: '{{ __('messages.please_enter_inventory') }}',
+                    },
+
+                    stock_alert: {
+                        required: '{{ __('messages.please_enter_stock_alert') }}',
+                    },
+                    buying_price: {
+                        required: '{{ __('messages.please_enter_buying_price') }}',
+                    },
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+        });
+
     </script>
 @endsection

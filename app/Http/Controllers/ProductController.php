@@ -160,7 +160,7 @@ public function search(Request $request)
 
             // Success notification
              $notification = array(
-                'message' => 'Product Inserted Successfully',
+                'message' => __('messages.product_inserted_successfully'),
                 'alert-type' => 'success'
             );
             return redirect()->route('all.product')->with($notification); 
@@ -207,7 +207,7 @@ public function search(Request $request)
                     'updated_at' => Carbon::now(),
                 ]);
                 $notification = array(
-                    'message' => 'Product Updated Successfully',
+                    'message' => __('messages.product_updated_successfully'),
                     'alert-type' => 'success'
                 );
                 return redirect()->route('all.product')->with($notification); 
@@ -229,7 +229,7 @@ public function search(Request $request)
                     'updated_at' => Carbon::now(),
                 ]);
                 $notification = array(
-                    'message' => 'Product Updated Successfully',
+                    'message' => __('messages.product_updated_successfully'),
                     'alert-type' => 'success'
                 );
                 return redirect()->route('all.product')->with($notification); 
@@ -250,7 +250,7 @@ public function search(Request $request)
 
     if ($hasPurchaseDetails || $hasOrderDetails) {
         $notification = array(
-            'message' => 'Cannot delete product. It is used in Purchase or Orders.',
+            'message' => __('messages.cannot_delete_product'),
             'alert-type' => 'error'
         );
         return redirect()->route('all.product')->with($notification);
@@ -264,7 +264,7 @@ public function search(Request $request)
     $product->delete();
 
     $notification = array(
-        'message' => 'Product Deleted Successfully',
+        'message' => __('messages.product_deleted_successfully'),
         'alert-type' => 'success'
     );
     return redirect()->back()->with($notification);

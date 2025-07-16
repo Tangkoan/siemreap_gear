@@ -91,6 +91,23 @@ return [
             'choose_file' => 'Choose File',
             'buy_price' => 'Buy Price',
             'stock_alert' => 'Stock Alert',
+            // jQuery Validation Messages
+            'please_enter_product_name' => 'Please Enter Product Name',
+            'please_select_category' => 'Please Select Category',
+            'please_select_supplier' => 'Please Select Supplier',
+            'please_enter_price_selling_price' => 'Please Enter Price Selling Price',
+            'please_enter_inventory' => 'Please Enter Inventory',
+            'please_enter_stock_alert' => 'Please Enter Stock Alert',
+            'please_enter_buying_price' => 'Please Enter Buying Price',
+            // Message
+            'product_inserted_successfully' => 'Product Inserted Successfully',
+            'product_updated_successfully' => 'Product Updated Successfully',
+            'cannot_delete_product' => 'Cannot delete product. It is used in Purchase or Orders.',
+            'product_deleted_successfully' => 'Product Deleted Successfully',
+            // Edit Page
+            'eidt_product'=> 'Edit Product',
+            // BarCode
+            'barcode'=> 'Barcode',
             
             
 

@@ -12,7 +12,7 @@
                         </svg>
                         <div class="px-2">
                             <a href="{{ route('all.product') }}">
-                                Barcode
+                                 {{ __('messages.barcode') }} 
                             </a>
                         </div>
                     </h2>
@@ -21,7 +21,7 @@
                     <div class="overflow-x-auto">
                         <div class="text-xl font-semibold text-default mb-6 flex items-center">
 
-                            <label for="firstname" class="form-label text-gray-600">Product Code</label>
+                            <label for="firstname" class="form-label dark:text-white text-black"> {{ __('messages.product_code') }} </label>
                             <div class="px-2">
                                 <h3 class="font-medium">{{ $product->product_code }}</h3>
                             </div>

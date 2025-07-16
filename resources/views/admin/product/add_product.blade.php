@@ -114,7 +114,7 @@
                             <div class="form-group">
                                 <label for="selling_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.price') }}
+                                    {{ __('messages.price') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="selling_price" name="selling_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -126,7 +126,7 @@
                             <div class="form-group">
                                 <label for="buying_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.buy_price') }}
+                                    {{ __('messages.buy_price') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
@@ -139,7 +139,7 @@
                             <div class="form-group">
                                 <label for="product_store"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.inventory') }} <span class="text-red-500">*</span>
+                                    {{ __('messages.inventory') }} 
                                 </label>
                                 <input type="number" value="0" name="product_store" readonly class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
                                            bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed">
@@ -211,27 +211,33 @@
                     stock_alert: {
                         required: true,
                     },
+                    buying_price: {
+                        required: true,
+                    },
                 },
                 messages: {
                     product_name: {
-                        required: 'Please Enter Product Name',
+                        required: '{{ __('messages.please_enter_product_name') }}',
                     },
                     category_id: {
-                        required: 'Please Select Category Name',
+                        required: '{{ __('messages.please_select_category') }}',
                     },
 
                     supplier_id: {
-                        required: 'Please Select Supplier Name',
+                        required: '{{ __('messages.please_select_supplier') }}',
                     },
                     selling_price: {
-                        required: 'Please Enter Price Name',
+                        required: '{{ __('messages.please_enter_price_selling_price') }}',
                     },
                     product_store: {
-                        required: 'Please Enter Inventory Name',
+                        required: '{{ __('messages.please_enter_inventory') }}',
                     },
 
                     stock_alert: {
-                        required: 'Please Enter Stock Alert Name',
+                        required: '{{ __('messages.please_enter_stock_alert') }}',
+                    },
+                    buying_price: {
+                        required: '{{ __('messages.please_enter_buying_price') }}',
                     },
 
                 },
