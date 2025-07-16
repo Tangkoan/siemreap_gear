@@ -108,6 +108,13 @@ return [
             'eidt_product'=> 'Edit Product',
             // BarCode
             'barcode'=> 'Barcode',
+            // Product View
+            'product_details'=> 'Product Details',
+            'import_product'=> 'Import Product',
+            'download_excell'=> 'Download Excell',
+            'excell_file_import'=> 'Excell File Import',
+            'upload'=> 'Upload',
+            
             
             
 

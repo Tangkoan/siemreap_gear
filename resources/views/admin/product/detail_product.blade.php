@@ -3,7 +3,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div class="container mx-auto p-6  text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
 
             <div
@@ -16,7 +16,9 @@
                     </svg>
                     <div class="px-2">
                         <a href="{{ route('all.product') }}"
-                            class="hover:underline text-indigo-600 dark:text-indigo-400">Product Details</a>
+                            class="hover:underline ">
+                             {{ __('messages.product_details') }} 
+                            </a>
                     </div>
                 </h2>
 
@@ -34,7 +36,7 @@
                             {{-- Product Name --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Product Name <span class="text-red-500">*</span>
+                                    {{ __('messages.product_name') }}
                                 </label>
                                 <input type="text" name="product_name" required value="{{ $product->product_name }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -43,7 +45,7 @@
                             {{-- Category --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Category <span class="text-red-500">*</span>
+                                    {{ __('messages.category') }} 
                                 </label>
                                 <select name="category_id"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -59,11 +61,12 @@
                             {{-- Supplier --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Supplier <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.supplier') }}
+                                    <span class="text-red-500">*</span>
                                 </label>
                                 <select name="supplier_id"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option selected disabled>Select Supplier</option>
+                                    <option selected disabled>{{ __('messages.select_supplier') }} </option>
                                     @foreach($supplier as $cat)
                                         <option value="{{ $cat->id }}" {{ $cat->id == $product->supplier_id ? 'selected' : '' }}>
                                             {{ $cat->name }}
@@ -75,10 +78,9 @@
                             {{-- Image --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                    Product Image <span class="text-red-500">*</span>
+                                    {{ __('messages.image') }}  <span class="text-red-500">*</span>
                                 </label>
-                                <input type="file" name="product_image"
-                                    class="block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                
                                 <img id="image_preview" src="{{ asset($product->product_image) }}" alt="Image Preview"
                                     class="mt-2 rounded-md max-h-40 border border-gray-300 dark:border-gray-600" />
                             </div>
@@ -90,7 +92,7 @@
                             {{-- Selling Price --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Price
+                                    {{ __('messages.price') }} 
                                 </label>
                                 <input type="number" step="0.01" name="selling_price" value="{{ $product->selling_price }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -99,34 +101,17 @@
                             {{-- Buying Price --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Buy Price
+                                    {{ __('messages.buy_price') }} 
                                 </label>
                                 <input type="number" step="0.01" name="buying_price" value="{{ $product->buying_price }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
-                            {{-- Cost --}}
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Cost
-                                </label>
-                                <input type="number" step="0.01" name="cost" value="{{ $product->cost }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            </div>
-
-                            {{-- Buying Date --}}
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Buying Date
-                                </label>
-                                <input type="date" name="buying_date" value="{{ $product->buying_date }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            </div>
-
+                            
                             {{-- Inventory --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Inventory <span class="text-red-500">*</span>
+                                    {{ __('messages.inventory') }}  <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" name="product_store" value="{{ $product->product_store }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -135,7 +120,7 @@
                             {{-- Details --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Details <span class="text-red-500">*</span>
+                                    {{ __('messages.details') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" name="product_detail" value="{{ $product->product_detail }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">

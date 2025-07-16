@@ -157,7 +157,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Save
+                             {{ __('messages.save') }} 
                         </button>
                     </div>
                 </form>

@@ -20,7 +20,7 @@
                         </svg>
                         <div class="px-2">
                             <a href="{{ route('all.product') }}">
-                                Import Product
+                                {{ __('messages.import_product') }} 
                             </a>
                             </div>
                     </h2>
@@ -34,7 +34,7 @@
                             <!-- បើមានសិទ្ធ -->
                             <button type="button"
                                 class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                                <a href="{{ route('export') }}">Download Xisx</a>
+                                <a href="{{ route('export') }}">{{ __('messages.download_excell') }} </a>
                             </button>
                         @else
                             <!-- បើអត់មានសិទ្ធ -->
@@ -60,7 +60,7 @@
                                 {{-- Image --}}
                                 <div class="mb-2">
                                     <label for="file" class="block text-gray-400 text-sm font-medium mb-2">
-                                        Xisx file Import <span class="text-red-500">*</span>
+                                        {{ __('messages.excell_file_import') }}
                                     </label>
                                     <input type="file" name="import_file" required
                                         class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-500 file:text-white hover:file:bg-gray-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -87,7 +87,7 @@
                         <div class="flex justify-end mt-6">
                             <button type="submit"
                                 class="button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                                Upload
+                                {{ __('messages.upload') }}
                             </button>
                         </div>
                     </form>

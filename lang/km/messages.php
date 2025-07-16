@@ -116,5 +116,12 @@ return [
             'edit_product'=> 'កែប្រែផលិតផល',
             // BarCode
             'barcode'=> 'លេខកូដសម្គាល់',
+            // Product View
+            'product_details'=> 'ព័ត៌មានផលិតផល',
+            // Import Product Page
+            'import_product'=> 'ផលិតផលនាំចូល',
+            'download_excell'=> 'ទាញយកជាExcell',
+            'excell_file_import'=> 'នាំចូលជាឯកសាប្រភេទExcell',
+            'upload'=> 'ធ្វើការបញ្ជូន',
             
 ];
