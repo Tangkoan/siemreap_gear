@@ -15,7 +15,7 @@
                                     d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
                             </svg>
 
-                            <div class="px-2">Pending Orders</div>
+                            <div class="px-2">{{ __('messages.pending_orders') }}</div>
                         </h2>
                         <div>
 
@@ -28,7 +28,7 @@
                         <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                             <div>
                                 <div class="flex items-center space-x-2">
-                                    <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                    <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                     <select id="perPage" name="perPage"
                                         class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                         <option value="6" selected>6</option>
@@ -45,7 +45,7 @@
                                     <div class="relative">
                                         <input
                                             class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                            placeholder="Search for Name" id="search" name="search" type="text" />
+                                            placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
 
 
 
@@ -71,7 +71,7 @@
 
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                N<sup>0</sup>
+                                                {{ __('messages.table_no') }}
                                             </p>
                                         </th>
 
@@ -79,42 +79,42 @@
 
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Name
+                                                {{ __('messages.customer_name') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Order Date
+                                               {{ __('messages.order_date') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Payment
+                                                {{ __('messages.payment_method') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Invoice
-                                            </p>
-                                        </th>
-
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
-                                            <p class="text-sm font-normal leading-none text-slate-500">
-                                                Pay
-                                            </p>
-                                        </th>
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
-                                            <p class="text-sm font-normal leading-none text-slate-500">
-                                                Status
+                                                {{ __('messages.invoice') }}
                                             </p>
                                         </th>
 
+                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                            <p class="text-sm font-normal leading-none text-slate-500">
+                                                {{ __('messages.pay') }}
+                                            </p>
+                                        </th>
+                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                            <p class="text-sm font-normal leading-none text-slate-500">
+                                                {{ __('messages.status') }}
+                                            </p>
+                                        </th>
+
 
 
 
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Action
+                                                {{ __('messages.table_action') }}
                                             </p>
                                         </th>
                                     </tr>

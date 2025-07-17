@@ -157,6 +157,25 @@ return [
         'purchase_pending_due'=> 'Purchase Pending Due',
         'due'=>'Due',
         'purchase_pay_due_amount'=> 'Purchase Pay Due Amount',
+
+    // Order
+        // Pending Orders
+        'pending_orders'=> 'Pending Orders',
+        'order_date'=> 'Order Date',
+        'order_invoice'=> "Order Ivoice",
+        'complete_order'=> 'Complete Order',
+        'complete_orders'=> 'Complete Orders',
+        // Pending Due Page
+        'pending_due'=> 'Pending Due',
+        // pay_due_amount Page
+        'pay_due_amount'=> 'Pay Due Amount',
+        'order_details'=> 'Order Details',
+        // Notification 
+        'order_complete_successfully' => 'Order Complete Successfully',
+        'stock_not_enough_for_the_product' => 'Stock Not enough for the product :',
+        'order_done_successfully' => 'Order Done Successfully',
+
+
         
 
             

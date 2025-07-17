@@ -167,5 +167,20 @@ return [
         'purchase_pending_due'=> 'ប្រាក់ជំពាក់ក្នុងការបញ្ជាទិញ',
         'due'=>'ប្រាក់ជំពាក់',
         'purchase_pay_due_amount'=> 'ប្រាក់ដែលត្រូវបង់',
-            
+
+    // Order
+        // Pending Orders
+        'pending_orders'=> 'ការបញ្ជាទិញដែលមិនទាន់សម្រេច',
+        'order_date'=> 'ថ្ងៃបញ្ជាទិញ',
+        'order_invoice'=> "វិក័យប័ត្របញ្ជាទិញ",
+        'complete_order'=> 'បញ្ជាក់ការបញ្ជាទិញ',
+        'complete_orders'=> 'ការបញ្ជាទិញដែលជោគជ័យ',
+        // Pending Due Page
+        'pending_due'=> 'ការបញ្ជារទិញដែលមិនទាន់បង់ប្រាក់គ្រប់',
+        'pay_due_amount'=> 'ចំនួនទឹកប្រាក់ដែលត្រូវបង់',
+        'order_details'=> 'ព័ត៌មានលម្អិតនៃការបញ្ជាទិញ',
+        // Notification 
+        'order_complete_successfully' => 'ការបញ្ជាទិញជោគជ័យ',
+        'stock_not_enough_for_the_product' => 'ផលិតផលមានមិនគ្រប់គ្រាន់ដើម្បីលក់ទេ',
+        'order_done_successfully' => 'ការបញ្ជាទិញជោគជ័យ',
 ];

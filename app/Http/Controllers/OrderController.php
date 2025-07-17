@@ -126,7 +126,7 @@ class OrderController extends Controller
         }
     
         $notification = [
-            'message' => 'Order Complete Successfully',
+            'message' => __('messages.order_complete_successfully'),
             'alert-type' => 'success'
         ];
     
@@ -298,7 +298,7 @@ class OrderController extends Controller
             } else {
                 // Stock មិនគ្រប់គ្រាន់ -> បោះ message error
                 $notification = array(
-                    'message' => 'Stock Not enough for the product: ' . $product->product_name,
+                    'message' => __('messages.stock_not_enough_for_the_product'). $product->product_name,
                     'alert-type' => 'error'
                 );
                 return redirect()->route('pending.order')->with($notification);
@@ -309,7 +309,7 @@ class OrderController extends Controller
         Order::findOrFail($order_id)->update(['order_status' => 'complete']);
     
         $notification = array(
-            'message' => 'Order Done Successfully',
+            'message' => __('messages.order_done_successfully'),
             'alert-type' => 'success'
         );
     
@@ -560,7 +560,7 @@ class OrderController extends Controller
         ]);
 
          $notification = array(
-            'message' => 'Due Amount Updated Successfully',
+            'message' => __('messages.due_amount_updated_successfully'),
             'alert-type' => 'success'
         ); 
 
