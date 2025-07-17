@@ -71,19 +71,6 @@
 
                         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                         <div class="flex justify-end mt-6">
                             <button type="submit"
                                 class="button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">

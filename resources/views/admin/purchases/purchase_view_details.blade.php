@@ -13,8 +13,8 @@
                             d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
                     </svg>
                     <div class="px-2">
-                        <a href="{{ route('pending.purchase') }}" class="hover:underline text-blue-600 dark:text-blue-400">
-                            Purchase Details
+                        <a href="#" >
+                            {{ __('messages.purchase_details') }}
                         </a>
                     </div>
                 </h2>
@@ -28,32 +28,32 @@
                         {{-- Column 1 --}}
                         <div class="space-y-4">
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Supplier Name: <span class="font-semibold">{{ $purchase->supplier->name }}</span>
+                                {{ __('messages.supplier_name') }} : <span class="font-semibold">{{ $purchase->supplier->name }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Email: <span class="font-semibold">{{ $purchase->supplier->email ?? 'null' }}</span>
+                                {{ __('messages.email') }} : <span class="font-semibold">{{ $purchase->supplier->email ?? 'null' }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Phone: <span class="font-semibold">{{ $purchase->supplier->phone }}</span>
+                                {{ __('messages.phone') }} : <span class="font-semibold">{{ $purchase->supplier->phone }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Purchase Date: <span class="font-semibold">{{ $purchase->purchase_date }}</span>
+                                {{ __('messages.purchase_date') }} : <span class="font-semibold">{{ $purchase->purchase_date }}</span>
                             </label>
                         </div>
 
                         {{-- Column 2 --}}
                         <div class="space-y-4">
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Purchase Invoice: <span class="font-semibold">{{ $purchase->invoice_no }}</span>
+                                {{ __('messages.invoice') }} : <span class="font-semibold">{{ $purchase->invoice_no }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Payment Status: <span class="font-semibold">{{ $purchase->payment_status }}</span>
+                                {{ __('messages.payment_status') }} ​: <span class="font-semibold">{{ $purchase->payment_status }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Paid Amount: <span class="font-semibold">{{ $purchase->pay }}</span>
+                                {{ __('messages.paid_amount') }} ​: <span class="font-semibold">{{ $purchase->pay }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                Due Amount: <span class="font-semibold">{{ $purchase->due }}</span>
+                                {{ __('messages.due_amount') }} ​: <span class="font-semibold">{{ $purchase->due }}</span>
                             </label>
                         </div>
                     </div>
@@ -63,22 +63,21 @@
                         <table class="w-full text-sm border-collapse border border-gray-300 dark:border-gray-600 shadow-sm">
                             <thead>
                                 <tr class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">No</th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">Image</th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">Product & Description
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.no') }}</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.image') }}</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.product') }}
                                     </th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">Product Code</th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">QTY</th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">Subtotal</th>
-                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">Total</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.product_code') }}</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.qty') }}</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.subtotal') }}</th>
+                                    <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.total') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($purchaseItem as $key => $item)
                                     <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
-                                            {{ $loop->iteration }}
-                                        </td>
+                                            {{ $loop->iteration }}</td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
                                             @if($item->product)
                                                 <img src="{{ asset($item->product->product_image) }}"
@@ -109,7 +108,7 @@
                         </table>
                     </div>
 
-                    
+                   
                 </form>
             </div>
         </div>

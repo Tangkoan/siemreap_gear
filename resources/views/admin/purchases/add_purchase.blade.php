@@ -31,9 +31,9 @@
                         <div class="flex-2 bg-white p-4 rounded shadow flex flex-col max-h-[88vh] dark:bg-gray-900">
                             <div class="mb-4">
                                 <div class="flex justify-between items-center mb-4">
-                                    <h2 class="text-2xl font-bold mb-2 dark:text-white">Purchase</h2>
+                                    <h2 class="text-2xl font-bold mb-2 dark:text-white">{{ __('messages.purchase') }}</h2>
                                     <div class="w-64 mb-4">
-                                        <input type="text" placeholder="Search Product by Name" id="searchBox"
+                                        <input type="text" placeholder="{{ __('messages.search') }}" id="searchBox"
                                             class="dark:bg-gray-800 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
                                     </div>
                                 </div>
@@ -43,7 +43,7 @@
                                     id="category-buttons">
                                     <button onclick="loadProducts('all')"
                                         class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
-                                        All Category
+                                        {{ __('messages.all_category') }}
                                     </button>
                                     @foreach ($categories as $category)
                                         <button onclick="loadProducts({{ $category->id }})"
@@ -62,16 +62,16 @@
                         </div>
 
                         <div class="dark:bg-gray-900 flex-1 bg-white p-4 rounded shadow overflow-hidden max-h-[88vh]">
-                            <h2 class="text-xl font-bold mb-4">Purchase Cart</h2>
+                            <h2 class="text-xl font-bold mb-4">{{ __('messages.purchase_cart') }}</h2>
                             <div class="dark:bg-gray-800 mt-4 overflow-auto max-h-64 border rounded-lg shadow-sm">
                                 <table class="w-full text-auto border-collapse">
                                     <thead class="bg-gray-100 sticky top-0 z-10">
                                         <tr class="text-left dark:bg-gray-800">
-                                            <th class="p-2">Product</th>
-                                            <th class="p-2">Price</th>
-                                            <th class="p-2">Qty</th>
-                                            <th class="p-2">Subtotal</th>
-                                            <th class="p-2">Action</th>
+                                            <th class="p-2">{{ __('messages.product') }}</th>
+                                            <th class="p-2">{{ __('messages.price') }}</th>
+                                            <th class="p-2">{{ __('messages.qty') }}</th>
+                                            <th class="p-2">{{ __('messages.subtotal') }}</th>
+                                            <th class="p-2">{{ __('messages.table_action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody id="cart-table-body">
@@ -107,47 +107,48 @@
                             </div>
 
                             <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700">
-                                Subtotal: $<span id="subtotal">{{ Cart::subtotal() }}</span><br>
-                                Total Payable: $<span id="totalPayable">{{ Cart::subtotal() }}</span>
+                                {{ __('messages.subtotal') }} : $<span id="subtotal">{{ Cart::subtotal() }}</span><br>
+                                {{ __('messages.total_payable') }} : $<span id="totalPayable">{{ Cart::subtotal() }}</span>
                             </div>
 
-                            <form method="POST" action="{{ url('/purchase/store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <form method="POST" id="myForm" action="{{ url('/purchase/store') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 @csrf
 
-                                <div>
-                                    <label for="supplier_id" class="block mb-1 font-medium text-gray-800 dark:text-white">Supplier</label>
-                                    <select name="supplier_id" id="supplier_id" required
+                                <div class="form-group">
+                                    <label for="supplier_id" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.supplier_name') }}</label>
+                                    <select name="supplier_id" id="supplier_id" 
                                         class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white">
-                                        <option value="" disabled selected>Select Supplier</option>
+                                        <option value="" disabled selected>{{ __('messages.select_supplier') }}</option>
                                         @foreach ($supplier as $sup)
                                             <option value="{{ $sup->id }}">{{ $sup->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">Payment
-                                        Method</label>
-                                    <select name="payment_status" id="payment_status" required
+                                <div class="form-group">
+                                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.payment_method') }}</label>
+                                    <select name="payment_status" id="payment_status"
                                         class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white">
-                                        <option value="" disabled selected>Select Payment</option>
+                                        <option value="" disabled selected>
+                                            {{ __('messages.select_payment') }}
+                                        </option>
                                         <option value="HandCash">HandCash</option>
                                         <option value="Cheque">Cheque</option>
                                         <option value="Due">Due</option>
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label for="payNow" class="block mb-1 font-medium text-gray-800 dark:text-white">Pay Now ($)</label>
-                                    <input type="number" name="pay" id="payNow" placeholder="Pay Now" min="0"
+                                <div class="form-group">
+                                    <label for="payNow" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.pay_now') }} ($)</label>
+                                    <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay') }}" min="0"
                                         class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white">
                                 </div>
 
-                                <div>
-                                    <label for="discount" class="block mb-1 font-medium text-gray-800 dark:text-white">Discount ($)</label>
+                                <div class="form-group">
+                                    <label for="discount" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __(key: 'messages.discount') }} ($)</label>
                                     <input type="number" name="discount" id="discount" placeholder="Discount"
                                         class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
-                                        oninput="calculateDue()" min="0" value="0" required>
+                                        oninput="calculateDue()" min="0" value="0">
                                 </div>
 
                                 <input type="hidden" name="paid" id="paidHidden" value="{{ Cart::subtotal() }}">
@@ -157,7 +158,7 @@
                                 <div class="md:col-span-2">
                                     <button type="submit"
                                         class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-200">
-                                        Complete Purchase
+                                        {{ __('messages.complete_purchase') }}
                                     </button>
                                 </div>
                             </form>
@@ -180,30 +181,48 @@
                         });
 
                         $(document).ready(function () {
-                            $('#myForm').validate({
-                                rules: {
-                                    supplier_id: {
-                                        required: true,
-                                    },
-                                },
-                                messages: {
-                                    supplier_id: {
-                                        required: 'Please Select Supplier',
-                                    },
-                                },
-                                errorElement: 'span',
-                                errorPlacement: function (error, element) {
-                                    error.addClass('invalid-feedback');
-                                    element.closest('div').append(error);
-                                },
-                                highlight: function (element, errorClass, validClass) {
-                                    $(element).addClass('is-invalid');
-                                },
-                                unhighlight: function (element, errorClass, validClass) {
-                                    $(element).removeClass('is-invalid');
-                                },
-                            });
-                        });
+            $('#myForm').validate({
+                rules: {
+                    supplier_id: {
+                        required: true,
+                    },
+                    payment_status: {
+                        required: true,
+                    },
+
+                    pay: {
+                        required: true,
+                    },
+                    
+                },
+                messages: {
+                    supplier_id: {
+                        required: '{{ __('messages.please_select_supplier') }}',
+                    },
+                    payment_status: {
+                        required: '{{ __('messages.please_select_payment_status') }}',
+                    },
+
+                    pay: {
+                        required: '{{ __('messages.input_pay_now') }}',
+                    },
+                    
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+        });
+
 
                         function updateCartDisplay(cartContent, subtotal) {
                             const cartTableBody = document.getElementById('cart-table-body');
@@ -428,7 +447,8 @@
     if (discount > subtotal) {
         discount = subtotal;
         document.getElementById('discount').value = subtotal.toFixed(2); // reset to max allowed
-        toastr.warning("Discount cannot exceed subtotal.");
+       toastr.warning("{{ __('messages.discount_cannot_exceed_subtotal') }}");
+
     }
 
     const finalTotal = subtotal - discount;

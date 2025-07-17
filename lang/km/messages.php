@@ -123,5 +123,49 @@ return [
             'download_excell'=> 'ទាញយកជាExcell',
             'excell_file_import'=> 'នាំចូលជាឯកសាប្រភេទExcell',
             'upload'=> 'ធ្វើការបញ្ជូន',
+
+
+    // ===================== Purchase ========================================
+        // Purchase Pending
+        'pending_purchase_orders'=> 'ការបញ្ជាទិញដែលមិនទាន់សម្រេច',
+        'create_purchase'=>'បង្កើតការបញ្ជាទិញ',
+        'supplier_name'=>'ឈ្មោះអ្នកផ្គត់ផ្គង់',
+        'purchase_date'=>'ថ្ងៃបញ្ជាទិញ',
+        'payment'=>'ការទូទាត់',
+        'invoice'=>'វិក្កយបត្រ',
+        'pay'=>'ទឹកប្រាក់ដែលបង់',
+        'status'=>'ស្ថានភាព',
+        // Purchase Details
+        'purchase_details'=>'ព័ត៌មានលម្អិតនៃការបញ្ជាទិញ',
+        'payment_status'=> 'បង់ប្រាក់តាមរយៈ',
+        'paid_amount'=> 'ចំនួនទឹកប្រាក់ដែលបានបង់',
+        'due_amount'=> 'ចំនួនទឹកប្រាក់ដែលនៅសល់មិនទាន់បង់',
+        'no'=>'ល.រ',
+        'qty'=>'ចំនួន',
+        'subtotal'=>'តម្លៃ',
+        'total'=>'តម្លៃសរុប',
+        'complete_purchase'=>'បញ្ជាក់ការបញ្ជារទិញ',
+        // Create Purchase
+        'all_category' => 'ប្រភេទនៃផលិតផលទាំងអស់',
+        'purchase_cart' => 'ផលិតផលដែលបំរុងទុកក្នុងការបញ្ជាទិញ',
+        'total_payable'=> 'ប្រាក់ដែលត្រូវបង់ចំនួន',
+        'payment_method'=> 'បង់ប្រាក់តាមរយៈ',
+        'pay_now'=> 'ចំនួនទឹកប្រាក់ដែលត្រូវបង់',
+        'discount'=> 'បញ្ចុះតម្លៃ',
+        'select_payment'=> 'ជ្រើសរើសប្រភេទនៃការបង់ប្រាក់',
+        'please_select_payment_status'=>'សូមជ្រើសរើសវិធីបង់ប្រាក់',
+        'input_pay_now'=>'សូមបញ្ចូលចំនួនទឹកប្រាក់ដែលត្រូវបង់',
+        // Notification
+        'please_select_product_for_purchase' => 'សូមជ្រើសរើសផលិតផលមុនធ្វើការបញ្ជាទិញ',
+        'purchase_completed_successfully' => 'ការបញ្ជាទិញជោគជ័យ',
+        'purchase_done_successfully' => 'ការបញ្ជាក់ការបញ្ជារទិញជោគជ័យ',
+        'due_amount_updated_successfully' => 'ប្រាក់ជំពាក់បានកែប្រែជោគជ័យ',
+        'discount_cannot_exceed_subtotal' => 'អ្នកមិនអាចធ្វើការបញ្ចុះតម្លៃស្នើឬសើសតម្លៃសរុបបានទេ',
+        // Purchase Complete Page
+        'complete_purchases'=>'ការបញ្ជាទិញដែលជោគជ័យ',
+        // Purchase Due Page
+        'purchase_pending_due'=> 'ប្រាក់ជំពាក់ក្នុងការបញ្ជាទិញ',
+        'due'=>'ប្រាក់ជំពាក់',
+        'purchase_pay_due_amount'=> 'ប្រាក់ដែលត្រូវបង់',
             
 ];

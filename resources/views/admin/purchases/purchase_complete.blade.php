@@ -15,7 +15,7 @@
                                     d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                             </svg>
 
-                            <div class="px-2">Complete Purchase</div>
+                            <div class="px-2">{{ __('messages.complete_purchases') }}</div>
                         </h2>
                         <div>
                             {{--
@@ -43,7 +43,7 @@
                         <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                             <div>
                                 <div class="flex items-center space-x-2">
-                                    <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                    <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                     <select id="perPage" name="perPage"
                                         class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                         <option value="6" selected>6</option>
@@ -60,7 +60,7 @@
                                     <div class="relative">
                                         <input
                                             class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                            placeholder="Search for Name" id="search" name="search" type="text" />
+                                            placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
 
 
 
@@ -85,7 +85,7 @@
 
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                N<sup>0</sup>
+                                                {{ __('messages.table_no') }}
                                             </p>
                                         </th>
 
@@ -93,33 +93,33 @@
 
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Supplier Name
+                                                {{ __('messages.supplier_name') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Purchase Date
+                                                {{ __('messages.purchase_date') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Payment
+                                                {{ __(key: 'messages.payment_method') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Invoice
+                                                {{ __(key: 'messages.invoice') }}
                                             </p>
                                         </th>
 
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Pay
+                                                {{ __(key: 'messages.pay') }}
                                             </p>
                                         </th>
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
-                                                Status
+                                                {{ __(key: 'messages.status') }}
                                             </p>
                                         </th>
 

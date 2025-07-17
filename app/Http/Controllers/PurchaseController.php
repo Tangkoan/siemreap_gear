@@ -197,7 +197,7 @@ class PurchaseController extends Controller
         Purchase::findOrFail($purchase_id)->update(['purchase_status' => 'complete']);
 
         $notification = [
-            'message' => 'Purchase Done Successfully',
+            'message' => __('messages.purchase_done_successfully'),
             'alert-type' => 'success'
         ];
 
@@ -489,7 +489,7 @@ class PurchaseController extends Controller
     
         if ($cartItems->isEmpty()) {
             return redirect()->back()->with([
-                'message' => 'Please select product for purchase',
+                'message' => __('messages.please_select_product_for_purchase'),
                 'alert-type' => 'error',
             ]);
         }
@@ -505,7 +505,7 @@ class PurchaseController extends Controller
         // ❗ Prevent discount from exceeding subtotal
         if ($discount >= $subTotal) {
             return redirect()->back()->withInput()->with([
-                'message' => 'Discount cannot exceed subtotal ($' . number_format($subTotal, 2) . ')',
+            'message' => __('messages.discount_cannot_exceed_subtotal') . ' (' . number_format($subTotal, 2) . ')',
                 'alert-type' => 'error',
             ]);
         }
@@ -552,7 +552,7 @@ class PurchaseController extends Controller
         Cart::destroy();
     
         return redirect()->route('purchase.page')->with([
-            'message' => 'Purchase completed successfully!',
+            'message' => __('messages.purchase_completed_successfully'),
             'alert-type' => 'success',
         ]);
     }
@@ -582,7 +582,7 @@ class PurchaseController extends Controller
         ]);
 
          $notification = array(
-            'message' => 'Due Amount Updated Successfully',
+            'message' => __('messages.due_amount_updated_successfully'),
             'alert-type' => 'success'
         ); 
 

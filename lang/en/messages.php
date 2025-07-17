@@ -114,7 +114,51 @@ return [
             'download_excell'=> 'Download Excell',
             'excell_file_import'=> 'Excell File Import',
             'upload'=> 'Upload',
+
             
+    // ===================== Purchase ========================================
+        // Purchase Pending
+        'pending_purchase_orders'=> 'Pending Purchase Orders',
+        'create_purchase'=>'Create Purchase',
+        'supplier_name'=>'Supplier Name',
+        'purchase_date'=>'Purchase Date',
+        'payment'=>'Payment',
+        'invoice'=>'Invoice',
+        'pay'=>'Pay',
+        'status'=>'Status',
+        // Purchase Details
+        'purchase_details'=>'Purchase Details',
+        'payment_status'=> 'Payment Status',
+        'paid_amount'=> 'Paid Amount',
+        'due_amount'=> 'Due Amount',
+        'no'=>'No',
+        'qty'=>'QTY',
+        'subtotal'=>'Subtotal',
+        'total'=>'Total',
+        'complete_purchase'=>'Complete Purchase',
+        // Create Purchase
+        'all_category' => 'All Category',
+        'purchase_cart' => 'Purchase Cart',
+        'total_payable'=> 'Total Payable',
+        'payment_method'=> 'Payment Method',
+        'pay_now'=> 'Pay Now',
+        'discount'=> 'Discount',
+        'select_payment'=> 'Select Payment',
+        'please_select_payment_status'=>'Please Select Payment Method',
+        'input_pay_now'=>'Please Endter Customer Pay',
+        // Notification
+        'purchase_completed_successfully' => 'Purchase Complete Successfully',
+        'purchase_done_successfully' => 'Purchase Done Successfully',
+        'due_amount_updated_successfully' => 'Due Amount Updated Successfully',
+        'discount_cannot_exceed_subtotal' => 'Discount cannot exceed subtotal',
+        // Purchase Complete Page
+        'complete_purchases'=>'Complete Purchase',
+        // Purchase Due Page
+        'purchase_pending_due'=> 'Purchase Pending Due',
+        'due'=>'Due',
+        'purchase_pay_due_amount'=> 'Purchase Pay Due Amount',
+        
+
             
             
 
