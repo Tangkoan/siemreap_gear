@@ -16,7 +16,7 @@
                     <span class="px-2">
                         <a href="{{ route('all.permission') }}"
                             >
-                            Add Permission
+                            {{ __(key: 'messages.add_permission') }}
                         </a>
                     </span>
                 </h2>
@@ -30,7 +30,7 @@
                         <div class="space-y-4">
                             <div class="form-group">
                                 <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Permission Name
+                                    {{ __(key: 'messages.permission_name') }}
                                 </label>
                                 <input type="text" id="name" name="name" required class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
                                     @error('name') is-invalid @enderror">
@@ -43,11 +43,11 @@
                             <div class="form-group">
                                 <label for="group_name"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Group Name
+                                    {{ __(key: 'messages.group_name') }}
                                 </label>
                                 <select name="group_name" id="example-select" required
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    <option value="" selected disabled>Select Group Name</option>
+                                    <option value="" selected disabled>{{ __(key: 'messages.select_group_name') }}</option>
                                     <option value="pos">Pos</option>
                                     <option value="customer">Customer</option>
                                     <option value="supplier">Supplier</option>
@@ -70,7 +70,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Save
+                            {{ __(key: 'messages.save') }}
                         </button>
                     </div>
                 </form>
@@ -82,26 +82,37 @@
         $(document).ready(function () {
             $('#myForm').validate({
                 rules: {
-                    name: { required: true },
-                    group_name: { required: true }
+                    name: {
+                        required: true,
+                    },
+                    group_name: {
+                        required: true,
+                    },
+
                 },
                 messages: {
-                    name: { required: 'Please Enter Permission Name' },
-                    group_name: { required: 'Please Select Group Name' }
+                    name: {
+                        required: '{{ __('messages.please_enter_permission_name') }}',
+                    },
+                    group_name: {
+                        required: '{{ __('messages.please_select_group_name') }}',
+                    },
+
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
-                    error.addClass('text-red-500 text-sm');
+                    error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
-                highlight: function (element) {
-                    $(element).addClass('border-red-500');
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
                 },
-                unhighlight: function (element) {
-                    $(element).removeClass('border-red-500');
-                }
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
             });
         });
+
     </script>
 
 @endsection

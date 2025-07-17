@@ -17,6 +17,7 @@
                         <a href="{{ route('all.permission') }}"
                             class="">
                             Edit Permission
+                            {{ __('messages.edit_permission') }}
                         </a>
                     </span>
                 </h2>
@@ -30,9 +31,9 @@
                         <div class="space-y-4">
                             <div class="form-group">
                                 <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Permission Name
+                                    {{ __('messages.permission_name') }}
                                 </label>
-                                <input value="{{ $permission->name }}" type="text" id="name" name="name" required
+                                <input value="{{ $permission->name }}" type="text" id="name" name="name" 
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('name') is-invalid @enderror">
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
                             </div>
@@ -43,11 +44,11 @@
                             <div class="form-group">
                                 <label for="group_name"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Group Name
+                                    {{ __(key: 'messages.group_name') }}
                                 </label>
-                                <select name="group_name" id="example-select" required
+                                <select name="group_name" id="example-select" 
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    <option value="" disabled>Select Group Name</option>
+                                    <option value="" disabled>{{ __(key: 'messages.select_group_name') }}</option>
                                     @foreach([
                                             'pos',
                                             'customer',
@@ -76,7 +77,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Save
+                            {{ __('messages.save') }}
                         </button>
                     </div>
                 </form>
@@ -91,9 +92,21 @@
                     name: { required: true },
                     group_name: { required: true }
                 },
+                 name: {
+                        required: '{{ __('messages.please_enter_permission_name') }}',
+                    },
+                    group_name: {
+                        required: '{{ __('messages.please_select_group_name') }}',
+                    },
+
+                // កន្លែងនេះត្រឹមត្រូវ
                 messages: {
-                    name: { required: 'Please Enter Permission Name' },
-                    group_name: { required: 'Please Select Group Name' }
+                    name: {
+                        required: '{{ __('messages.please_enter_permission_name') }}',
+                    },
+                    group_name: {
+                        required: '{{ __('messages.please_select_group_name') }}',
+                    },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {

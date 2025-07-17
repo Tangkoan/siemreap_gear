@@ -327,7 +327,7 @@ public function FinalInvoice(Request $request)
 
     if ($cartItems->isEmpty()) {
         return back()->with([
-            'message' => 'You must add product to cart!',
+            'message' => __('messages.you_mout_add_product_to_cart'),
             'alert-type' => 'error'
         ]);
     }
@@ -337,7 +337,7 @@ public function FinalInvoice(Request $request)
         $product = Product::find($item->id);
         if (!$product || $product->product_store < $item->qty) {
             return back()->with([
-                'message' => "Not enough stock for product: {$product->product_name}",
+                'message' => __('messages.not_enough_stock_for_product') . ' ' . $product->product_name,
                 'alert-type' => 'error'
             ]);
         }
@@ -349,7 +349,10 @@ public function FinalInvoice(Request $request)
     // ❗ Prevent discount from exceeding subtotal
     if ($discount > $subTotal) {
         return back()->with([
-            'message' => 'Discount cannot exceed subtotal ($' . number_format($subTotal, 2) . ')',
+            'message' => __('messages.discount_cannot_exceed_subtotal', [
+                'subtotal' => number_format($subTotal, 2)
+            ]),
+
             'alert-type' => 'error'
         ])->withInput();
     }
@@ -389,7 +392,10 @@ public function FinalInvoice(Request $request)
             if (!$product || $product->product_store < $item->qty) {
                 DB::rollBack();
                 return back()->with([
-                    'message' => "Not enough stock for product: {$product->product_name}",
+                    'message' => __('messages.not_enough_stock_for_product', [
+                        'product' => $product->product_name
+                    ]),
+
                     'alert-type' => 'error'
                 ]);
             }
@@ -413,14 +419,14 @@ public function FinalInvoice(Request $request)
         Cart::destroy();
 
         return redirect()->route('print.invoice', $order_id)->with([
-            'message' => 'Order completed successfully',
+            'message' => __('messages.order_completed_successfully'),
             'alert-type' => 'success'
         ]);
     } catch (\Exception $e) {
         DB::rollBack();
 
         return back()->with([
-            'message' => 'Something went wrong! ' . $e->getMessage(),
+            'message' => __('messages.something_went_wrong'). $e->getMessage(),
             'alert-type' => 'error'
         ]);
     }

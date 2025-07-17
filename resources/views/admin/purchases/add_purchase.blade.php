@@ -181,47 +181,47 @@
                         });
 
                         $(document).ready(function () {
-            $('#myForm').validate({
-                rules: {
-                    supplier_id: {
-                        required: true,
-                    },
-                    payment_status: {
-                        required: true,
-                    },
+                            $('#myForm').validate({
+                                rules: {
+                                    supplier_id: {
+                                        required: true,
+                                    },
+                                    payment_status: {
+                                        required: true,
+                                    },
 
-                    pay: {
-                        required: true,
-                    },
-                    
-                },
-                messages: {
-                    supplier_id: {
-                        required: '{{ __('messages.please_select_supplier') }}',
-                    },
-                    payment_status: {
-                        required: '{{ __('messages.please_select_payment_status') }}',
-                    },
+                                    pay: {
+                                        required: true,
+                                    },
+                                    
+                                },
+                                messages: {
+                                    supplier_id: {
+                                        required: '{{ __('messages.please_select_supplier') }}',
+                                    },
+                                    payment_status: {
+                                        required: '{{ __('messages.please_select_payment_status') }}',
+                                    },
 
-                    pay: {
-                        required: '{{ __('messages.input_pay_now') }}',
-                    },
-                    
+                                    pay: {
+                                        required: '{{ __('messages.input_pay_now') }}',
+                                    },
+                                    
 
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                },
-            });
-        });
+                                },
+                                errorElement: 'span',
+                                errorPlacement: function (error, element) {
+                                    error.addClass('invalid-feedback');
+                                    element.closest('.form-group').append(error);
+                                },
+                                highlight: function (element, errorClass, validClass) {
+                                    $(element).addClass('is-invalid');
+                                },
+                                unhighlight: function (element, errorClass, validClass) {
+                                    $(element).removeClass('is-invalid');
+                                },
+                            });
+                        });
 
 
                         function updateCartDisplay(cartContent, subtotal) {

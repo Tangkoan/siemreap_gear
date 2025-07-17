@@ -56,6 +56,7 @@ return [
     // ==================== Customer ============================
         // List Customer
         'add_customer' => 'Add Customer',
+        'customer_name' => 'Customer Name',
         'table_customer_name' => 'Customer Name',
         'table_customer_phone' => 'Customer Phone',
         // Edit
@@ -174,11 +175,45 @@ return [
         'order_complete_successfully' => 'Order Complete Successfully',
         'stock_not_enough_for_the_product' => 'Stock Not enough for the product :',
         'order_done_successfully' => 'Order Done Successfully',
+        
+    // POS
+        // Pos page
+        'product_items'=>'Product Items',
+        'pay_nows'=> 'Pay Now',
+        'no_items_in_cart'=>'No items in cart.',
+        'select_customer'=>'Select Customer',
+        'please_select_customer'=> 'Please Select Customer',
+        // Notification
+        'you_mout_add_product_to_cart' => 'You must add product to cart!',
+        'not_enough_stock_for_product'=>'Not Enough Stock For Product',
+        'something_went_wrong'=>'Something Went Wrong!',
+    
+    // Permision
+        // Pemision Page
+        'permissions'=>'Permission',
+        'permission_name'=>'Permission Name',
+        'group_name'=>'Group Name',
+        'add_permission'=> 'Add Permission',
+        'select_group_name'=> 'Select Group Name',
+        // Validateion
+        'please_enter_permission_name'=>'Please Enter Permission Name',
+        'please_select_group_name'=>'Please Select Group Name',
+        // Notification
+        'permission_added_successfully' => 'Permission Added Successfully',
+        'permission_updated_successfully' => 'Permission Updated Successfully',
+        'permission_deleted_successfully' => 'Permission Deleted Successfully',
+        'permission_name_already_exists'=>'Pemission Name Already',
+
+
+        // 'message' => 'Role Updated Successfully',
+        // 'message' => 'Role Deleted Successfully',
+        // 'message' => 'Role Added Successfully',
+        // 'message' => 'Role Permission Added Successfully',
+        // 'message' => 'Role Permission Updated Successfully',
+        // 'message' => 'Role Permission Deleted Successfully',
+
 
 
         
-
-            
-            
 
 ];

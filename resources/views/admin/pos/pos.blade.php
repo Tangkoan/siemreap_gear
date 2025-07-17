@@ -31,9 +31,9 @@
                         <div class="flex-2 bg-white p-4 rounded shadow flex flex-col max-h-[88vh] dark:bg-gray-900">
                             <div class="mb-4">
                                 <div class="flex justify-between items-center mb-4">
-                                    <h2 class="text-2xl font-bold mb-2 dark:text-white">POS</h2>
+                                    <h2 class="text-2xl font-bold mb-2 dark:text-white">{{ __('messages.pos') }}</h2>
                                     <div class="w-64 mb-4">
-                                        <input type="text" placeholder="Search Product by Name"
+                                        <input type="text" placeholder="{{ __('messages.search') }}"
                                             class="dark:bg-gray-900 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                                             id="searchBox" />
                                     </div>
@@ -44,7 +44,7 @@
                                     id="category-buttons">
                                     <button onclick="loadProducts('all')"
                                         class="dark:bg-gray-800 m-1 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
-                                        All Category
+                                        {{ __('messages.all_category') }}
                                     </button>
                                     @foreach ($categories as $category)
                                         <button onclick="loadProducts({{ $category->id }})"
@@ -63,16 +63,16 @@
                         </div>
 
                         <div class="dark:bg-gray-900 flex-1 bg-white p-4 rounded shadow overflow-y-auto h-full" id="detailSection">
-                            <h2 class="text-xl font-bold mb-4">Product Items</h2>
+                            <h2 class="text-xl font-bold mb-4">{{ __('messages.product_items') }}</h2>
                             <div class="dark:bg-gray-800 mt-4 overflow-auto max-h-64 border rounded-lg shadow-sm">
                                 <table class="w-full text-auto border-collapse">
                                     <thead class="bg-gray-100 sticky top-0 z-10">
                                         <tr class="text-left dark:bg-gray-800 hover:dark:dark:bg-gray-500">
-                                            <th class="p-2">Product</th>
-                                            <th class="p-2">Price</th>
-                                            <th class="p-2">Qty</th>
-                                            <th class="p-2">Subtotal</th>
-                                            <th class="p-2">Action</th>
+                                            <th class="p-2">{{ __('messages.product') }}</th>
+                                            <th class="p-2">{{ __('messages.price') }}</th>
+                                            <th class="p-2">{{ __('messages.qty') }}</th>
+                                            <th class="p-2">{{ __('messages.subtotal') }}</th>
+                                            <th class="p-2">{{ __('messages.table_action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody id="cart-table-body">
@@ -115,49 +115,48 @@
                                 </table>
                             </div>
                             <div class="mt-4 text-center text-lg font-semibold bg-teal-300 py-2 rounded dark:bg-gray-700">
-                                Subtotal: $<span id="subtotal">{{ Cart::subtotal() }}</span><br>
-                                Total Payable: $<span id="totalPayable">{{ Cart::subtotal() }}</span>
+                                {{ __('messages.subtotal') }}: $<span id="subtotal">{{ Cart::subtotal() }}</span><br>
+                                {{ __('messages.total_payable') }} : <span id="totalPayable">{{ Cart::subtotal() }}</span>
                             </div>
                             <br>
-                            <form method="POST" action="{{ url('/store-sell') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <form method="POST" id="myForm" action="{{ url('/store-sell') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @csrf
 
-                                <div>
-                                    <label for="customer_id" class="block mb-1 font-medium text-gray-800 dark:text-white">Customer</label>
-                                    <select name="customer_id" id="customer_id" required
+                                <div class="form-group">
+                                    <label for="customer_id" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.customer_name') }}</label>
+                                    <select name="customer_id" id="customer_id"
                                         class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="" disabled selected>Select Customer</option>
+                                        <option value="" disabled selected>{{ __('messages.select_customer') }}</option>
                                         @foreach ($customers as $cus)
                                             <option value="{{ $cus->id }}">{{ $cus->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">Payment
-                                        Method</label>
-                                    <select name="payment_status" id="payment_status" required
+                                <div class="form-group">
+                                    <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.payment_method') }}</label>
+                                    <select name="payment_status" id="payment_status"
                                         class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="" disabled selected>Select Payment</option>
+                                        <option value="" disabled selected>{{ __('messages.select_payment') }}</option>
+                                        <option value="QrScan">Qr Scan</option>
                                         <option value="HandCash">HandCash</option>
-                                        <option value="Cheque">Cheque</option>
                                         <option value="Due">Due</option>
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label for="payNow" class="block mb-1 font-medium text-gray-800 dark:text-white">Pay Now ($)</label>
-                                    <input type="number" name="pay" id="payNow" placeholder="Pay Now" min="0"
+                                <div class="form-group">
+                                    <label for="payNow" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.pay') }} ($)</label>
+                                    <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay_now') }}" min="0"
                                         class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        oninput="calculateDue()" required>
+                                        oninput="calculateDue()" >
                                 </div>
 
-                                <div>
-                                    <label for="discount" class="block mb-1 font-medium text-gray-800 dark:text-white">Discount
+                                <div class="form-group">
+                                    <label for="discount" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.discount') }}
                                         ($)</label>
                                     <input type="number" name="discount" id="discount" placeholder="Discount"
                                         class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        oninput="calculateDue()" min="0" value="0" required>
+                                        oninput="calculateDue()" min="0" value="0">
                                 </div>
 
                                 <input type="hidden" name="order_date" id="order_date" value="{{ date('Y-m-d') }}">
@@ -167,7 +166,7 @@
                                 <div class="md:col-span-2">
                                     <button type="submit"
                                         class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-200">
-                                        Pay Now
+                                        {{ __('messages.pay_nows') }}
                                     </button>
                                 </div>
                             </form>
@@ -190,31 +189,7 @@
                             updateCartDisplay({{ Js::from(Cart::content()) }}, {{ Cart::subtotal() }});
                         });
 
-                        $(document).ready(function () {
-                            $('#myForm').validate({
-                                rules: {
-                                    customer_id: {
-                                        required: true,
-                                    },
-                                },
-                                messages: {
-                                    customer_id: {
-                                        required: 'Please Select Customer',
-                                    },
-                                },
-                                errorElement: 'span',
-                                errorPlacement: function (error, element) {
-                                    error.addClass('invalid-feedback');
-                                    element.closest('.form-group').append(error);
-                                },
-                                highlight: function (element, errorClass, validClass) {
-                                    $(element).addClass('is-invalid');
-                                },
-                                unhighlight: function (element, errorClass, validClass) {
-                                    $(element).removeClass('is-invalid');
-                                },
-                            });
-                        });
+                        
 
 
                         // Function to update the cart display
@@ -226,7 +201,7 @@
                         originalSubtotal = parseFloat(subtotal) || 0;
 
                         if (Object.keys(cartContent).length === 0) {
-                            cartTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-gray-500 text-center">No items in cart.</td></tr>`;
+                            cartTableBody.innerHTML = `<tr><td colspan="5" class="py-4 text-gray-500 text-center">{{ __('messages.no_items_in_cart') }}</td></tr>`;
                         } else {
                             for (const rowId in cartContent) {
                                 const item = cartContent[rowId];
@@ -432,7 +407,7 @@
                                         <h3 class="font-semibold mb-1">${product.name}</h3>
                                         <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
                                         <p class="text-sm text-gray-600 dark:text-gray-300">
-                                            Qty: ${product.stock}
+                                            {{ __('messages.qty') }}: ${product.stock}
                                         </p>
                                     </div>
                                 </div>
@@ -502,7 +477,7 @@
                             const dueAmount = finalTotal - payNow;
 
                             // ធ្វើបច្ចុប្បន្នភាព Element ដែលបង្ហាញ
-                            document.getElementById('totalPayable').innerText = `Total Payable : $ ${finalTotal.toFixed(2)}`;
+                            document.getElementById('totalPayable').innerText = `$${finalTotal.toFixed(2)}`;
 
                             // ធ្វើបច្ចុប្បន្នភាព Hidden Fields
                             document.getElementById('orderTotalHidden').value = finalTotal.toFixed(2);
@@ -516,6 +491,48 @@
                         document.getElementById('payNow').addEventListener('input', calculateDue);
                         document.getElementById('discount').addEventListener('input', calculateDue);
 
+                        $(document).ready(function () {
+                            $('#myForm').validate({
+                                rules: {
+                                    customer_id: {
+                                        required: true,
+                                    },
+                                    payment_status: {
+                                        required: true,
+                                    },
+
+                                    pay: {
+                                        required: true,
+                                    },
+                                    
+                                },
+                                messages: {
+                                    customer_id: {
+                                        required: '{{ __('messages.please_select_customer') }}',
+                                    },
+                                    payment_status: {
+                                        required: '{{ __('messages.please_select_payment_status') }}',
+                                    },
+
+                                    pay: {
+                                        required: '{{ __('messages.input_pay_now') }}',
+                                    },
+                                    
+
+                                },
+                                errorElement: 'span',
+                                errorPlacement: function (error, element) {
+                                    error.addClass('invalid-feedback');
+                                    element.closest('.form-group').append(error);
+                                },
+                                highlight: function (element, errorClass, validClass) {
+                                    $(element).addClass('is-invalid');
+                                },
+                                unhighlight: function (element, errorClass, validClass) {
+                                    $(element).removeClass('is-invalid');
+                                },
+                            });
+                        });
 
                     </script>
 

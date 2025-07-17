@@ -34,11 +34,13 @@ class RoleController extends Controller
                 'group_name' => 'required',
             ],
             [
-                'name.unique' => 'Permission Name has Already!!!',
-                'name.required' => 'Please Enter Permission',
-                'group_name.required' => 'Enter Group Name',
+                'name.required' => __('messages.please_enter_permission_name'),
+                'name.unique' => __('messages.permission_name_already_exists'),
+                'group_name.required' => __('messages.please_select_group_name'),
             ]
         );
+
+
 
         $role = Permission::create([
             'name' => $request->name,
@@ -46,7 +48,7 @@ class RoleController extends Controller
         ]);
 
         $notification = array(
-            'message' => 'Permission Added Successfully',
+            'message' => __('messages.permission_added_successfully'),
             'alert-type' => 'success'
         );
 
@@ -63,22 +65,35 @@ class RoleController extends Controller
 
     public function UpdatePermission(Request $request)
     {
-
         $per_id = $request->id;
+
+        $request->validate(
+            [
+                'name' => 'required|unique:permissions,name,' . $per_id,
+                'group_name' => 'required',
+            ],
+            [
+                'name.required' => __('messages.please_enter_permission_name'),
+                'name.unique' => __('messages.permission_name_already_exists'),
+                'group_name.required' => __('messages.please_select_group_name'),
+            ]
+        );
+
+         
 
         Permission::findOrFail($per_id)->update([
             'name' => $request->name,
             'group_name' => $request->group_name,
-
         ]);
 
-        $notification = array(
-            'message' => 'Permission Updated Successfully',
+        $notification = [
+            'message' => __('messages.permission_updated_successfully'),
             'alert-type' => 'success'
-        );
+        ];
 
         return redirect()->route('all.permission')->with($notification);
-    } // End Method 
+    }
+
 
 
     public function DeletePermission($id)
@@ -87,7 +102,7 @@ class RoleController extends Controller
         Permission::findOrFail($id)->delete();
 
         $notification = array(
-            'message' => 'Permission Deleted Successfully',
+            'message' => __('messages.permission_deleted_successfully'),
             'alert-type' => 'success'
         );
 
@@ -532,6 +547,7 @@ class RoleController extends Controller
 
         $notification = array(
             'message' => 'Role Permission Deleted Successfully',
+            
             'alert-type' => 'success'
         );
 

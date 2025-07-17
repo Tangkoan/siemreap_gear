@@ -183,4 +183,33 @@ return [
         'order_complete_successfully' => 'ការបញ្ជាទិញជោគជ័យ',
         'stock_not_enough_for_the_product' => 'ផលិតផលមានមិនគ្រប់គ្រាន់ដើម្បីលក់ទេ',
         'order_done_successfully' => 'ការបញ្ជាទិញជោគជ័យ',
+
+    // POS
+        // Pos page
+        'product_items'=>'ផលិតផលបំរុងនឹងលក់ជូនអតិថិជន',
+        'pay_nows'=> 'បញ្ជូនការលក់',
+        'no_items_in_cart'=>'អ្នកមិនទាន់បានជ្រើសរើសផលិតផល',
+        'select_customer'=>'សូមជ្រើសរើសឈ្មោះអតិថិជន',
+        'please_select_customer'=> 'សូមជ្រើសរើសឈ្មោះអតិថិជន',
+
+        // Notification
+        'you_mout_add_product_to_cart' => 'សូមជ្រើសរើសផលិតផលមុនបញ្ជាទិញ',
+        'not_enough_stock_for_product'=>'ចំនួនផលិតផលក្នុងឃ្លាំងមិនគ្រប់គ្រាន់ដើម្បីលក់ឡើយ',
+        'something_went_wrong'=>'មានអ្វីមួយមិនដំណើរការបាន',
+
+    // Permision
+        // Pemision Page
+        'permissions'=>'ការផ្ដល់សិទ្ធដល់អ្នកប្រើប្រាស់',
+        'permission_name'=>'សិទ្ធអាចចូលប្រើចំណុចណាមួយ',
+        'group_name'=>'ក្រុមនៃបណ្ដុំនៃសិទ្ធ',
+        'add_permission'=> 'បន្ថែមមុខងារនៃសិទ្ធ',
+        'select_group_name'=> 'ជ្រើសរើសបណ្ដុំនៃសិទ្ធ',
+        // Validateion
+        'please_enter_permission_name'=>'សូមបញ្ចូលសិទ្ធ',
+        'please_select_group_name'=>'សូមជ្រើសរើសបណ្ដុំនៃសិទ្ធ',
+        // Notification
+        'permission_added_successfully' => 'បន្ថែមសិទ្ធថ្មីបានជោគជ័យ',
+        'permission_updated_successfully' => 'ការកែប្រែសិទ្ធបានជោគជ័យ',
+        'permission_deleted_successfully' => 'ការលុបសិទ្ធបានជោគជ័យ',
+        'permission_name_already_exists'=>'សិទ្ធនេះអ្នកបានបញ្ចូលម្ដងហើយ សូមបញ្ចូលម្ដងទៀតកុំអោយដូចសិទ្ធចាស់',
 ];
