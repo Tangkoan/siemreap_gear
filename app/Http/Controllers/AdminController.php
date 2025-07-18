@@ -253,7 +253,7 @@ class AdminController extends Controller
             'email'    => 'required|email|unique:users,email',
             'phone'    => 'required|string|max:20',
             'password' => 'required|string|min:6',
-            'roles'    => 'required',
+            'roles'    => 'required|string', // Ensure a role name is submitted
         ]);
 
         $user = new User();
@@ -263,9 +263,10 @@ class AdminController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        $role = Role::find($request->roles);
-        if ($role) {
-            $user->assignRole($role->name);
+        // ✅ ដំណោះស្រាយ៖ ប្រើឈ្មោះ Role ដោយផ្ទាល់ពី Request
+        // មិនចាំបាច់ស្វែងរក Role ជាមុនទេ ព្រោះ Form បានបញ្ជូនឈ្មោះមកស្រាប់
+        if ($request->has('roles')) {
+            $user->assignRole($request->roles);
         }
 
         return redirect()->route('all.admin')->with([

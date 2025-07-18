@@ -1,29 +1,29 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-
-export default defineConfig({
-    plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-    ],
-});
-
-
-
-// import { defineConfig } from "vite";
-// import laravel from "laravel-vite-plugin";
+// import { defineConfig } from 'vite';
+// import laravel from 'laravel-vite-plugin';
 
 // export default defineConfig({
-//     server: {
-//         host: "127.20.10.12", // ✅ អនុញ្ញាតអោយអាច run តាម IP
-//         port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
-//     },
 //     plugins: [
 //         laravel({
-//             input: ["resources/css/app.css", "resources/js/app.js"],
+//             input: ['resources/css/app.css', 'resources/js/app.js'],
 //             refresh: true,
 //         }),
 //     ],
 // });
+
+
+
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+
+export default defineConfig({
+    server: {
+        host: "172.20.10.12", // ✅ អនុញ្ញាតអោយអាច run តាម IP
+        port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
+    },
+    plugins: [
+        laravel({
+            input: ["resources/css/app.css", "resources/js/app.js"],
+            refresh: true,
+        }),
+    ],
+});

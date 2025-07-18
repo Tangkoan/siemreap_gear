@@ -11,7 +11,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                   </svg>
-                  <div class="px-2">Change Password</div>
+                  <div class="px-2">{{ __('messages.change_password') }}</div>
                 
             </h2>
 
@@ -20,9 +20,9 @@
                 {{-- Old Password --}}
                 <div class="mb-4 relative"> {{-- Added relative for positioning the icon --}}
                     <label for="current_password" class="block text-gray-400 text-sm font-medium mb-2">
-                        Old Password
+                        {{ __('messages.old_password') }}
                     </label>
-                    <input type="password" id="current_password" name="old_password" required
+                    <input type="password" id="current_password" name="old_password" 
                            class="input-field-custom w-full pr-10 py-3 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('old_password') is-invalid @enderror">
                     {{-- Eye icon for show/hide --}}
                     <span class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center cursor-pointer toggle-password" data-target="current_password">
@@ -39,9 +39,9 @@
                 {{-- New Password --}}
                 <div class="mb-4 relative">
                     <label for="new_password" class="block text-gray-400 text-sm font-medium mb-2">
-                        New Password
+                        {{ __('messages.new_password') }}
                     </label>
-                    <input type="password" id="new_password" name="new_password" required
+                    <input type="password" id="new_password" name="new_password" 
                            class="input-field-custom w-full pr-10 py-3 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('new_password') is-invalid @enderror">
                     {{-- Eye icon for show/hide --}}
                     <span class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center cursor-pointer toggle-password" data-target="new_password">
@@ -58,9 +58,9 @@
                 {{-- Confirm Password --}}
                 <div class="mb-6 relative">
                     <label for="new_password_confirmation" class="block text-gray-400 text-sm font-medium mb-2">
-                        Confirm Password
+                        {{ __('messages.confirm_password') }}
                     </label>
-                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" required
+                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" 
                            class="input-field-custom w-full pr-10 py-3 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     {{-- Eye icon for show/hide --}}
                     <span class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center cursor-pointer toggle-password" data-target="new_password_confirmation">
@@ -73,7 +73,7 @@
 
                 <div class="flex justify-end">
                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                        Update
+                       {{ __('messages.edit') }}
                     </button>
                 </div>
             </form>

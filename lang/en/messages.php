@@ -404,7 +404,21 @@ return [
         'backup_project_file_now'=>'Backup Project File Now',
         'project'=>'Project',
         			
-        
+// ==================== Stock Alert =====================
+        'in_stock'=>'In Stock',
+        'alert_threshold'=>'Alert Threshold',
+
+     
+// ================== Profile ============================
+        'personal_info'=> 'Personal Info',
+        'user_profile_image'=> 'User Profile Image',
+        'no_file_chosse'=> 'No File Chosse',
+        'chosse_file'=> 'Chosse File',
+        'edit'=> 'Edit',
+// =============== Change Password =======================
+        'old_password'=>'Old Password',
+        'new_password'=>'New Password',
+        'confirm_password'=>'Confirm Password',
 
 
 

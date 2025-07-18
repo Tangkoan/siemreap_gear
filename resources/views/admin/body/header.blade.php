@@ -86,9 +86,9 @@
                                 </div>
                                 <div class="ml-3 flex-1">
                                     <p class="text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">
-                                        Product Name: <span class="text-indigo-600 dark:text-indigo-400">${product.product_name || 'N/A'}</span> </p>
+                                        {{ __('messages.product_name') }}: <span class="text-indigo-600 dark:text-indigo-400">${product.product_name || 'N/A'}</span> </p>
                                     <p class="text-xs text-gray-600 dark:text-gray-300">
-                                        In Stock: <strong>${product.product_store}</strong> (Alert Threshold: ${product.stock_alert})
+                                        {{ __('messages.in_stock') }}: <strong>${product.product_store}</strong> ({{ __('messages.alert_threshold') }}: ${product.stock_alert})
                                     </p>
                                     
                                 </div>

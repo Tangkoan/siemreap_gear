@@ -14,19 +14,12 @@
                 {{-- <p class="text-gray-400">{{ old('name', Auth::user()->email) }}</p> --}}
                 <p class="text-gray-400">{{ $adminData->email }}</p>
 
-                <div class="flex space-x-3 mt-4">
-                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-200 shadow-md">
-                        Follow
-                    </button>
-                    <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-200 shadow-md">
-                        Message
-                    </button>
-                </div>
+                
 
                 <div class="mt-6 w-full text-left space-y-2">
-                    <p class="text-default text-lg font-medium">Name: <span class="font-normal text-gray-400">{{ old('name', Auth::user()->name) }}</span></p>
-                    <p class="text-default text-lg font-medium">Phone: <span class="font-normal text-gray-400">{{ old('name', Auth::user()->phone) }}</span></p>
-                    <p class="text-default text-lg font-medium">Email: <span class="font-normal text-gray-400">{{ old('name', Auth::user()->email) }}</span></p>
+                    <p class="text-default text-lg font-medium">{{ __('messages.name') }}: <span class="font-normal text-gray-400">{{ old('name', Auth::user()->name) }}</span></p>
+                    <p class="text-default text-lg font-medium">{{ __('messages.phone') }}: <span class="font-normal text-gray-400">{{ old('name', Auth::user()->phone) }}</span></p>
+                    <p class="text-default text-lg font-medium">{{ __('messages.email') }}: <span class="font-normal text-gray-400">{{ old('name', Auth::user()->email) }}</span></p>
                 </div>
 
                 <div class="flex space-x-4 mt-6">
@@ -48,7 +41,7 @@
                         class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />  </svg>
-                    PERSONAL INFO
+                    {{ __('messages.personal_info') }}
                 </h2>
 
 
@@ -57,21 +50,21 @@
                         @csrf
                     <div>
                         <label for="name" class="block text-gray-400 text-sm font-medium mb-2">
-                             Name
+                             {{ __('messages.name') }}
                         </label>
                         <input type="text" id="name"  name="name" required class="input-field-custom w-full px-4 py-3 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" value=" {{ $adminData->name }}">
                     </div>
 
                     <div class="py-2">
                         <label for="email" class="block text-gray-400 text-sm font-medium mb-2">
-                            Email
+                            {{ __('messages.email') }}
                         </label>
                         <input type="email" id="email" name="email" required class="input-field-custom w-full px-4 py-3 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" value="{{ $adminData->email }}">
                     </div>
 
                     <div class="py-2">
                         <label for="phone" class="block text-gray-400 text-sm font-medium mb-2">
-                            Phone Number
+                            {{ __('messages.phone') }}
                         </label>
                         <input type="tel" name="phone" id="phone" required class="input-field-custom w-full px-4 py-3 border border-gray-700 rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" value="{{ $adminData->phone }}">
                     </div>
@@ -80,14 +73,14 @@
 
                     <div class="md:col-span-2">
                         <label for="image" class="block text-gray-400 text-sm font-medium mb-2">
-                            Admin Profile Image
+                            {{ __('messages.user_profile_image') }}
                         </label>
                         <div class="flex items-center space-x-2">
                             <input type="file" name="photo" id="image" class="hidden">
                             <label for="image" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 shadow-md">
-                                Choose File
+                                {{ __('messages.chosse_file') }}
                             </label>
-                            <span id="file-name" class="text-gray-400 px-2">No file chosen</span>
+                            <span id="file-name" class="text-gray-400 px-2">{{ __('messages.no_file_chosse') }}</span>
                         </div>
                         <div class="relative inline-block mt-4"> <img class="h-20 w-20 rounded-full object-cover border-2 border-indigo-700"  id="showImage"
                                  src="{{ (!empty($adminData->photo)) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}"
@@ -104,7 +97,7 @@
 
                     <div class="md:col-span-2 flex justify-end">
                         <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Update Profile
+                            {{ __('messages.edit') }}
                         </button>
                     </div>
                 </form>
