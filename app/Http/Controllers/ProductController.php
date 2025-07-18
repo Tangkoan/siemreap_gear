@@ -165,24 +165,7 @@ public function search(Request $request)
             );
             return redirect()->route('all.product')->with($notification); 
         } // End Method 
-    
-        public function EditProduct($id){
-                $product = Product::findOrFail($id);
-                $category = Category::latest()->get();
-                $supplier = Supplier::latest()->get();
                 
-                return view('admin.product.edit_product',compact('product','category','supplier'));
-            } // End Method 
-            
-
-        public function DetailProduct($id){
-                $product = Product::findOrFail($id);
-                $category = Category::latest()->get();
-                $supplier = Supplier::latest()->get();
-                return view('admin.product.detail_product',compact('product','category','supplier',));
-            } // End Method 
-
-            
         public function UpdateProduct(Request $request){
                 $product_id = $request->id;
                 if ($request->file('product_image')) {

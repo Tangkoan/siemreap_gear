@@ -167,6 +167,10 @@ return [
         'purchase_pending_due'=> 'ប្រាក់ជំពាក់ក្នុងការបញ្ជាទិញ',
         'due'=>'ប្រាក់ជំពាក់',
         'purchase_pay_due_amount'=> 'ប្រាក់ដែលត្រូវបង់',
+        // Purchase Modal
+        'add_new_supplier'=> 'បន្ថែមអ្នកផ្គត់ផ្គង់ថ្មី',
+        'cancel'=> 'បោះបង់',
+        'errors'=> 'មានបញ្ហា',
 
 // ============== Order ==================================
         // Pending Orders

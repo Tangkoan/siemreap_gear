@@ -10,9 +10,69 @@ use App\Models\Purchase;
 use App\Models\purchase_details;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Validator; //  <-- ត្រូវ Import ថែម
 
 class PurchaseController extends Controller
 {
+
+    /**
+     * Store a new supplier via AJAX and return it as JSON.
+     */
+   /**
+ * នេះជាកូដដែលកែប្រែពី StoreSupplier របស់អ្នក ឱ្យទៅជា AJAX Standard
+ */
+public function storeSupplierAjax(Request $request)
+{
+    // === ផ្នែកទី១៖ ការធ្វើ Validation ===
+    // យើងប្រើ Validator::make() ជំនួសឱ្យ $request->validate() ដើម្បីគ្រប់គ្រង Response ដោយខ្លួនឯង
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255|unique:suppliers,name',
+        'email' => 'nullable|email|max:255|unique:suppliers,email',
+        'phone' => 'nullable|string|max:20',
+        'address' => 'nullable|string|max:500', 
+    ], [
+        // អ្នកអាចដាក់ Custom Message នៅទីនេះបានដូចគ្នា
+        'name.required' => __('validation.required', ['attribute' => __('validation.attributes.name')]),
+        'name.unique'   => __('validation.unique', ['attribute' => __('validation.attributes.name')]),
+    ]);
+
+    // ពិនិត្យមើលបើ Validation Fails
+    if ($validator->fails()) {
+        // បញ្ជូន Error กลับไปให้ JavaScript ជា JSON ជាមួយ Status Code 422
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+
+    // === ផ្នែកទី២៖ ការរក្សាទុកទិន្នន័យ និង Response ពេលជោគជ័យ ===
+    // យើងប្រើ try...catch ដើម្បីចាប់ Error ពី Database
+    try {
+        // ប្រើ Supplier::create() ជំនួសឱ្យ insert() ព្រោះវាជា Eloquent best practice
+        $supplier = Supplier::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            // create() នឹងបំពេញ created_at ដោយស្វ័យប្រវត្តិ មិនចាំបាច់reload page
+        ]);
+        
+        // ប្តូរពី redirect() ទៅជា response()->json()
+        return response()->json([
+            'message' => __('messages.supplier_inserted_successfully'),
+            'newSupplier' => [ // ត្រូវបញ្ជូនទិន្នន័យនេះ JS
+                'id' => $supplier->id,
+                'name' => $supplier->name,
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        // === ផ្នែកទី៣៖ ការដោះស្រាយ Exception ===
+        \Log::error('Error saving supplier: ' . $e->getMessage()); 
+        
+        return response()->json([
+            'errors' => ['database' => __('messages.supplier_insert_failed')]
+        ], 500);
+    }
+}
 
 
     // Purchases All List Complter Purchase & Pending Purchase & Due Purchase

@@ -158,6 +158,11 @@ return [
         'purchase_pending_due'=> 'Purchase Pending Due',
         'due'=>'Due',
         'purchase_pay_due_amount'=> 'Purchase Pay Due Amount',
+        // Purchase Modal
+        'add_new_supplier'=> 'Add New Supplier',
+        'cancel'=> 'Cancel',
+        'errors'=> 'Error',
+        
 
 // =========================== Order ===========================
         // Pending Orders
@@ -420,6 +425,8 @@ return [
         'new_password'=>'New Password',
         'confirm_password'=>'Confirm Password',
         'no_stock_alert'=>'No stock alerts at the moment. All good!',
+
+
 
 
 

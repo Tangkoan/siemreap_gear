@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Supplier extends Model
 {
    
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'notes',
+    ];
 
  // ទំនាក់ទំនងទៅ products
     public function products()
