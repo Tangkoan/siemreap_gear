@@ -132,8 +132,8 @@
                                         <option value="" disabled selected>
                                             {{ __('messages.select_payment') }}
                                         </option>
+                                        <option value="QrScan">Qr Scan</option>
                                         <option value="HandCash">HandCash</option>
-                                        <option value="Cheque">Cheque</option>
                                         <option value="Due">Due</option>
                                     </select>
                                 </div>

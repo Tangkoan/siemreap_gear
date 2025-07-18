@@ -29,6 +29,11 @@
 </head>
 <body class="bg-gradient-to-r min-h-screen flex items-center justify-center p-4">
     <div class=" shadow-lg border border-gray-200 bg-white rounded-xl p-8 max-w-md w-full relative transform hover:scale-105 transition-transform duration-300 ease-in-out">
+        
+        {{-- បន្ថែម Logo នៅទីនេះ --}}
+        <img class="rounded-full mx-auto h-32 w-auto mb-4" src="{{ asset('image/logo.jpg') }}" alt="Siem Reap Gear Logo">
+
+        
         <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-6">
             <span >Siem Reap</span>
             <span >Gear</span>
@@ -38,8 +43,8 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="mb-6">
-                <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Email/Name/Phone</label>
-                <input type="text" id="login" name="login"  placeholder="Please Enter your email" required
+                <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
+                <input type="text" id="login" name="login"  placeholder="Please Enter your email" 
                        class="@error('login') is-invalid @enderror
                        input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
                 @error('login')
@@ -48,9 +53,9 @@
             </div>
 
             <div class="mb-6 relative">
-                <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password:</label>
+                <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
                 
-                <input type="password" id="password" name="password" placeholder="Please enter your password" required
+                <input type="password" id="password" name="password" placeholder="Please enter your password"
                        class="@error('password') is-invalid @enderror
                              input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 pr-10">
                 @error('password')
@@ -64,13 +69,13 @@
 
 
             
-            <div class="flex items-center justify-between mb-6">
+            {{-- <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center">
                     <input type="checkbox" id="remember_me" name="remember_me" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                     <label for="remember_me" class="ml-2 block text-sm text-gray-900">Remember</label>
                 </div>
                 <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition duration-200">Forgot Password?</a>
-            </div>
+            </div> --}}
 
             <button type="submit"
                     class="w-full bg-red-500 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition duration-300 ease-in-out transform hover:-translate-y-1">

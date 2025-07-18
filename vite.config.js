@@ -17,7 +17,7 @@ import laravel from "laravel-vite-plugin";
 
 export default defineConfig({
     server: {
-        host: "172.20.10.12", // ✅ អនុញ្ញាតអោយអាច run តាម IP
+        host: "192.168.1.7", // ✅ អនុញ្ញាតអោយអាច run តាម IP
         port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
     },
     plugins: [

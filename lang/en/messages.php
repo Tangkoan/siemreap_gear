@@ -419,6 +419,7 @@ return [
         'old_password'=>'Old Password',
         'new_password'=>'New Password',
         'confirm_password'=>'Confirm Password',
+        'no_stock_alert'=>'No stock alerts at the moment. All good!',
 
 
 

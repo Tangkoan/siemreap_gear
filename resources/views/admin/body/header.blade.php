@@ -98,7 +98,7 @@
                     } else {
                         const noAlertsMessage = document.createElement('p');
                         noAlertsMessage.classList.add('px-4', 'py-2', 'text-sm', 'text-gray-700', 'dark:text-gray-200', 'text-center', 'italic');
-                        noAlertsMessage.textContent = "No stock alerts at the moment. All good!";
+                        noAlertsMessage.textContent = "{{ __('messages.no_stock_alert') }}";
                         notificationContentDiv.appendChild(noAlertsMessage);
                     }
                 }
@@ -136,6 +136,10 @@
             
             {{-- FIXED: Logo is now clearly visible with a solid color --}}
             <a href="{{ route('dashboard') }}" class="flex items-center">
+                {{-- ជំនួសអក្សរដោយ Logo --}}
+                <span class="px-2">
+                    <img class="rounded-full h-10 w-auto" src="{{ asset('image/logo.jpg') }}" alt="Siem Reap Gear Logo">
+                </span>
                 <span class="text-2xl font-bold text-slate-800 dark:text-slate-100">
                     Siem Reap Gear
                 </span>
@@ -172,30 +176,50 @@
             
 
             {{-- Language Switcher --}}
-                <div class="relative" x-data="{ open: false }" @click.outside="open = false">
-                    <button @click="open = !open" class="flex items-center justify-center p-2 rounded-full text-slate-600  dark:text-slate-300  transition-colors focus:outline-none">
-                        
-                        {{-- បន្ថែមលក្ខខណ្ឌ @if ដើម្បីបង្ហាញទង់ជាតិតាមភាសាដែលកំពុងប្រើ --}}
-                        @if(app()->getLocale() == 'km')
-                            <img src="https://flagcdn.com/w20/kh.png" srcset="https://flagcdn.com/w40/kh.png 2x" width="30" alt="Khmer">
-                        @else
-                            <img src="https://flagcdn.com/w20/gb.png" srcset="https://flagcdn.com/w40/gb.png 2x" width="30" alt="English">
-                        @endif
+            <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+                <button @click="open = !open" class="flex items-center justify-center p-2 rounded-full text-slate-600 dark:text-slate-300 transition-colors focus:outline-none">
 
-                        <span class="ml-2 text-xs font-semibold">{{ strtoupper(app()->getLocale()) }}</span>
-                    </button>
+                    @if(app()->getLocale() == 'km')
+                        <img src="https://flagcdn.com/w20/kh.png" 
+                            srcset="https://flagcdn.com/w40/kh.png 2x" 
+                            width="30" 
+                            alt="Khmer" 
+                            class="dark:ring-1 dark:ring-white rounded-sm">
+                    @else
+                        {{-- បានប្តូរទៅជាទង់ជាតិ USA --}}
+                        <img src="https://flagcdn.com/w20/us.png" 
+                            srcset="https://flagcdn.com/w40/us.png 2x" 
+                            width="30" 
+                            alt="English"
+                            class="dark:ring-1 dark:ring-white rounded-sm">
+                    @endif
 
-                    <div x-show="open" x-transition class="absolute right-0 mt-2 w-40 rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
-                        <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
-                            <img src="https://flagcdn.com/w20/gb.png" srcset="https://flagcdn.com/w40/gb.png 2x" width="20" alt="English">
-                            <span>English</span>
-                        </a>
-                        <a href="{{ route('language.switch', 'km') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
-                            <img src="https://flagcdn.com/w20/kh.png" srcset="https://flagcdn.com/w40/kh.png 2x" width="20" alt="Khmer">
-                            <span>ភាសាខ្មែរ</span>
-                        </a>
-                    </div>
+                    <span class="ml-2 text-xs font-semibold">{{ strtoupper(app()->getLocale()) }}</span>
+                </button>
+
+                <div x-show="open" x-transition class="absolute right-0 mt-2 w-40 rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
+                    
+                    <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+                        {{-- បានបន្ថែម Class និងប្តូរទៅជាទង់ជាតិ USA --}}
+                        <img src="https://flagcdn.com/w20/us.png" 
+                            srcset="https://flagcdn.com/w40/us.png 2x" 
+                            width="20" 
+                            alt="English"
+                            class="dark:ring-1 dark:ring-white rounded-sm">
+                        <span>English</span>
+                    </a>
+
+                    <a href="{{ route('language.switch', 'km') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+                        {{-- បានកែទំហំ និងបន្ថែម Class ឲ្យស៊ីគ្នា --}}
+                        <img src="https://flagcdn.com/w20/kh.png" 
+                            srcset="https://flagcdn.com/w40/kh.png 2x" 
+                            width="20" 
+                            alt="Khmer" 
+                            class="dark:ring-1 dark:ring-white rounded-sm">
+                        <span>ភាសាខ្មែរ</span>
+                    </a>
                 </div>
+            </div>
             {{-- End Language --}}
 
 
