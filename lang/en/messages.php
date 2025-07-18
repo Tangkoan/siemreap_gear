@@ -308,6 +308,34 @@ return [
         'reporte.sale' => 'reporte.sale',
         'reporte.stock' => 'reporte.stock',
         
+        // Role And Permission
+        'permission_roler_already' => 'This role already has permissions assigned. Please edit it instead.',
+        'role_permission_added_successfully' => 'Role Permission Added Successfully',
+        'role_permission_updated_successfully'=> 'Role Permission Updated Successfylly',
+        'cannot_delete_this_role' => 'Cannot delete this role. It is assigned to',
+        'all_roles_permission'=> 'All Roles Permission',
+        'add_role_in_permission'=> 'Add Role In Permission',
+
+// ========================= Report ====================================================
+        // Order Report
+        'orders_report'=>'Orders Report',
+        'by_day'=>'By Day',
+        'by_month'=>'By Month',
+        'by_year'=> 'By Year',
+        'total_revenue'=>'Total Revenue',
+        'total_orders'=>'Total Orders',
+        'items_sold'=>'Items Sold',
+        'avg_order_value'=>'Avg. Order Value',
+        'date'=>'date',
+        'amount'=>'Amount',
+        'total_amount'=>'Total Amount',
+
+        // Purchase Report
+        'purchase_report'=> 'Purchase Report',
+        'total_spending'=>'Total Spending',
+        'total_purchases'=>'Total Purchases',
+        'items_purchased'=>'Items Purchased',
+        'avg_purchase_value'=>'Avg. Purchase Value',
         
 
 

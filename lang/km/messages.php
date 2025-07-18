@@ -311,4 +311,31 @@ return [
         'report.sale' => 'របាយការណ៍ការលក់',
         'report.stock' => 'របាយការណ៍ឃ្លាំង',
 
+        // Role And Permission
+        'permission_roler_already' => 'សិទ្ធក្នុងតួនាទីនេះមានរួចហើយ',
+        'role_permission_added_successfully' => 'ការបន្ថែមសិទ្ធដល់តួនាទីជោគជ័យ',
+        'role_permission_updated_successfully'=> 'ការកែប្រែសិទ្ធដល់តួនាទីជោគជ័យ',
+        'cannot_delete_this_role' => 'មិនអាចលុបតួនាទីមួយនេះទេ ព្រោះមានអ្នកប្រើប្រាស់កំពុងស្ថិតក្នុងតួនាទីនេះ!! ដោយមាន',
+        'all_roles_permission'=> 'សិទ្ធនឹងតួនាទី',
+        'add_role_in_permission'=> 'បន្ថែមសិទ្ធដល់តួនាទី',
+
+// ========================= Report ====================================================
+        // Order Report
+        'orders_report' => 'របាយការណ៍ការបញ្ជាទិញ',
+        'by_day' => 'តាមថ្ងៃ',
+        'by_month' => 'តាមខែ',
+        'by_year' => 'តាមឆ្នាំ',
+        'total_revenue' => 'ប្រាក់ចំណូលសរុប',
+        'total_orders' => 'បញ្ជាទិញសរុប',
+        'items_sold' => 'ផលិតផលដែលបានលក់',
+        'avg_order_value' => 'តម្លៃបញ្ជាទិញមធ្យម',
+        'date' => 'កាលបរិច្ឆេទ',
+        'amount' => 'ចំនួនទឹកប្រាក់',
+        'total_amount' => 'ចំនួនទឹកប្រាក់សរុប',
+        // របាយការណ៍ការទិញ
+        'purchase_report' => 'របាយការណ៍ការបញ្ជាទិញផលិតផលចូលឃ្លាំង',
+        'total_spending' => 'ចំណាយសរុប',
+        'total_purchases' => 'ការទិញសរុប',
+        'items_purchased' => 'ផលិតផលដែលបានទិញ',
+        'avg_purchase_value' => 'តម្លៃទិញមធ្យម',
 ];

@@ -2,10 +2,10 @@
 <div class="space-y-6">
     {{-- KPI Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Revenue</h3><p id="kpi-revenue-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Orders</h3><p id="kpi-orders-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Items Sold</h3><p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Avg. Order Value</h3><p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_revenue') }}</h3><p id="kpi-revenue-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_orders') }}</h3><p id="kpi-orders-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.items_sold') }}</h3><p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.avg_order_value') }}</h3><p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
     </div>
 
     {{-- Control Bar --}}
@@ -32,7 +32,7 @@
                             d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
                     
-                    <span>Export</span>
+                    <span>{{ __('messages.export') }}</span>
             </a>
 
         </div>
@@ -44,13 +44,13 @@
             <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
                 <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
                     <tr>
-                        <th scope="col" class="px-6 py-4">#</th>
-                        <th scope="col" class="px-6 py-4">Date</th>
-                        <th scope="col" class="px-6 py-4">Invoice</th>
-                        <th scope="col" class="px-6 py-4">Customer</th>
-                        <th scope="col" class="px-6 py-4 text-right">Amount</th>
-                        <th scope="col" class="px-6 py-4 text-center">Payment</th>
-                        <th scope="col" class="px-6 py-4 text-center">Action</th>
+                        <th scope="col" class="px-6 py-4">{{ __('messages.no') }}</th>
+                        <th scope="col" class="px-6 py-4">{{ __('messages.date') }}</th>
+                        <th scope="col" class="px-6 py-4">{{ __('messages.invoice') }}</th>
+                        <th scope="col" class="px-6 py-4">{{ __('messages.customer_name') }}</th>
+                        <th scope="col" class="px-6 py-4 text-right">{{ __('messages.amount') }}</th>
+                        <th scope="col" class="px-6 py-4 text-center">{{ __('messages.payment') }}</th>
+                        <th scope="col" class="px-6 py-4 text-center">{{ __('messages.table_action') }}</th>
                     </tr>
                 </thead>
                 <tbody id="report-table-body-day"></tbody>

@@ -1,4 +1,4 @@
-<script>
+{{-- <script>
 $(document).ready(function() {
     let searchTimeout;
     const activeTabClasses = 'bg-cyan-600 text-white';
@@ -108,4 +108,4 @@ $(document).ready(function() {
 .form-input { @apply h-10 border dark:bg-slate-700 dark:text-white border-slate-300 dark:border-slate-600 rounded-lg text-sm w-full focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500; }
 .badge-success { @apply inline-block px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300; }
 .badge-danger { @apply inline-block px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300; }
-</style>
+</style> --}}

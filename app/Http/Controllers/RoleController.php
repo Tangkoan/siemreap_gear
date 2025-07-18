@@ -386,9 +386,8 @@ class RoleController extends Controller
 
 
 
-    //////////////// Add Roles Permission All Method ////////////
-
-
+// ========================================== Add Roles Permission All Method ========================================== 
+    
     public function AddRolesPermission()
     {
 
@@ -401,7 +400,21 @@ class RoleController extends Controller
 
     public function StoreRolesPermission(Request $request)
     {
+        // ពិនិត្យមើលថាតើ Role ID នេះមាន role_has_permissions ហើយឬនៅ
+        $exists = DB::table('role_has_permissions')->where('role_id', $request->role_id)->exists();
 
+        if ($exists) {
+            $notification = array(
+                'message' => __('messages.permission_roler_already'),
+                'alert-type' => 'error'
+            );
+
+            
+
+            return redirect()->back()->with($notification);
+        }
+
+        // បើមិនទាន់មានទេ ទើបអនុញ្ញាតឱ្យបញ្ចូលទិន្នន័យ
         $data = array();
         $permissions = $request->permission;
 
@@ -413,11 +426,13 @@ class RoleController extends Controller
         }
 
         $notification = array(
-            'message' => 'Role Permission Added Successfully',
+            'message' => __('messages.role_permission_added_successfully'),
+            
             'alert-type' => 'success'
         );
 
         return redirect()->route('all.roles.permission')->with($notification);
+
     } // End Method 
 
     public function AllRolesPermission()
@@ -510,45 +525,6 @@ class RoleController extends Controller
         return view('admin.role.edit_roles_permission', compact('role', 'permissions', 'permission_groups'));
     } // End Method 
 
-
-    // អត់ដើរ
-    // public function RolePermissionUpdate(Request $request,$id){
-
-    //     $role = Role::findOrFail($id);
-    //     $permissions = $request->permission;
-
-    //     if (!empty($permissions)) {
-    //         $role->syncPermissions($permissions);
-    //     }
-
-    //      $notification = array(
-    //         'message' => 'Role Permission Updated Successfully',
-    //         'alert-type' => 'success'
-    //     );
-
-    //     return redirect()->route('all.roles.permission')->with($notification);
-
-    // }// End Method 
-
-
-    /// ដើរ តែបើករណី គេមិនបញ្ចូល Role វាមិនដំណើរការទៅលោតសារ Error
-    // public function RolePermissionUpdate(Request $request, $id){
-    //     $role = Role::findOrFail($id);
-    //     $permissions = Permission::whereIn('id', $request->permission)->pluck('name')->toArray();
-
-    //     if (!empty($permissions)) {
-    //         $role->syncPermissions($permissions);
-    //     }
-
-    //     $notification = array(
-    //         'message' => 'Role Permission Updated Successfully',
-    //         'alert-type' => 'success'
-    //     );
-
-    //     return redirect()->route('all.roles.permission')->with($notification);
-    // }
-
-
     // ដើរ ពេលEdit ទោះមិនបញ្ចូល Role ក៏ Success
     public function RolePermissionUpdate(Request $request, $id)
     {
@@ -561,7 +537,7 @@ class RoleController extends Controller
         $role->syncPermissions($permissions);
 
         $notification = [
-            'message' => 'Role Permission Updated Successfully',
+            'message' => __('messages.role_permission_updated_successfully'),
             'alert-type' => 'success'
         ];
 
@@ -570,19 +546,33 @@ class RoleController extends Controller
 
     public function AdminDeleteRoles($id)
     {
+        // ស្វែងរក Role នោះ
         $role = Role::findOrFail($id);
-        if (!is_null($role)) {
-            $role->delete();
+
+        // ពិនិត្យមើលថាតើ Role នេះមាន User ប្រើឬអត់
+        // $role->users->count() គឺដំណើរការដោយសារ Relationship ដែល Spatie បានបង្កើត
+        if ($role->users->count() > 0) {
+            
+            // បើមាន User កំពុងប្រើ Roleមួយហ្នឹង, បង្កើតសារ Error ហើយត្រឡប់ទៅវិញ
+            $notification = array(
+                'message' => __('messages.cannot_delete_this_role'). $role->users->count() . ' user(s).',
+                'alert-type' => 'error' // ប្រភេទ Alert គឺ error
+            );
+
+            return redirect()->back()->with($notification);
         }
 
+        // បើគ្មាន User ប្រើRoleហ្នឹងទេ, ទើបអនុញ្ញាតឱ្យលុប
+        $role->delete();
+
         $notification = array(
-            'message' => 'Role Permission Deleted Successfully',
-            
+            'message' => __('messages.role_deleted_successfully'),
             'alert-type' => 'success'
         );
 
         return redirect()->back()->with($notification);
-    } // End Method 
+
+    } // End Method
 
 
 

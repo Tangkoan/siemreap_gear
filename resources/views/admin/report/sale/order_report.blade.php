@@ -13,7 +13,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
                 </svg>
-                Orders Report
+                {{ __('messages.orders_report') }}
             </h1>
         </div>
 
@@ -22,13 +22,13 @@
             <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
                 <ul class="flex items-center space-x-2" id="reportTab" role="tablist">
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#day-tab-content">By Day</button>
+                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#day-tab-content">{{ __('messages.by_day') }}</button>
                     </li>
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#month-tab-content">By Month</button>
+                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#month-tab-content">{{ __('messages.by_month') }}</button>
                     </li>
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#year-tab-content">By Year</button>
+                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#year-tab-content">{{ __('messages.by_year') }}</button>
                     </li>
                 </ul>
             </div>
