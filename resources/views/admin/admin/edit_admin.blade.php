@@ -15,7 +15,7 @@
                     </svg>
                     <span class="px-2">
                         <a href="{{ route('all.admin') }}" >
-                            Edit User
+                            {{ __(key: 'messages.edit_user') }}
                         </a>
                     </span>
                 </h2>
@@ -30,7 +30,7 @@
                             {{-- Name --}}
                             <div class="form-group">
                                 <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Name <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="name" name="name" value="{{ $adminuser->name }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -39,11 +39,11 @@
                             {{-- Role --}}
                             <div class="form-group">
                                 <label for="roles" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Role <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.roles') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="roles" id="roles"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option disabled>Select Role</option>
+                                    <option disabled>{{ __(key: 'messages.select_roles') }}</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}" {{ $adminuser->hasRole($role->name) ? 'selected' : '' }}>
                                             {{ $role->name }}
@@ -58,7 +58,7 @@
                             {{-- Email --}}
                             <div class="form-group">
                                 <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Email
+                                    {{ __(key: 'messages.email') }}
                                 </label>
                                 <input type="email" id="email" name="email" value="{{ $adminuser->email }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -67,7 +67,7 @@
                             {{-- Phone --}}
                             <div class="form-group">
                                 <label for="phone" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Phone <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.phone') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="phone" name="phone" value="{{ $adminuser->phone }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -78,7 +78,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Save
+                            {{ __(key: 'messages.save') }}
                         </button>
                     </div>
                 </form>
@@ -96,10 +96,10 @@
                     roles: { required: true }
                 },
                 messages: {
-                    name: { required: 'Please enter user name' },
-                    email: { required: 'Please enter email' },
-                    phone: { required: 'Please enter phone number' },
-                    roles: { required: 'Please select a role' }
+                    name: { required: '{{ __('messages.user_name') }}', },
+                    email: { required: '{{ __('messages.please_enter_email') }}' },
+                    phone: { required: '{{ __('messages.please_enter_phone') }}' },
+                    roles: { required: '{{ __('messages.please_enter_rolesl') }}' },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {

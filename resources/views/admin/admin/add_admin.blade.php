@@ -15,7 +15,7 @@
                     </svg>
                     <span class="px-2">
                         <a href="{{ route('all.admin') }}">
-                            Add User
+                            {{ __(key: 'messages.add_user') }}
                         </a>
                     </span>
                 </h2>
@@ -31,7 +31,7 @@
                             {{-- Name --}}
                             <div class="form-group">
                                 <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Name <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="name" name="name"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -40,11 +40,11 @@
                             {{-- Role --}}
                             <div class="form-group">
                                 <label for="roles" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Role <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.roles') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="roles" id="roles"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option selected disabled>Select Role</option>
+                                    <option selected disabled>{{ __(key: 'messages.select_roles') }}</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                                     @endforeach
@@ -54,7 +54,7 @@
                             {{-- Phone --}}
                             <div class="form-group">
                                 <label for="phone" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Phone <span class="text-red-500">*</span>
+                                    {{ __(key: 'messages.phone') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="phone" name="phone"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -69,7 +69,7 @@
                             <div class="form-group relative mb-4">
                                 <label for="current_password"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Password
+                                    {{ __(key: 'messages.password') }}
                                 </label>
                                 <input type="password" id="current_password" name="password"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('password') is-invalid @enderror">
@@ -94,13 +94,17 @@
                             {{-- Email --}}
                             <div class="form-group">
                                 <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Email
+                                    {{ __(key: 'messages.email') }}
                                 </label>
                                 <input type="email" id="email" name="email"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('email') border-red-500 @enderror">
+                                
+                                {{-- ✅ THIS IS THE FIX ✅ --}}
+                                @error('email')
+                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                @enderror
+
                             </div>
-
-
 
                         </div>
                     </div>
@@ -108,7 +112,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Save
+                            {{ __(key: 'messages.save') }}
                         </button>
                     </div>
                 </form>
@@ -116,7 +120,7 @@
         </div>
     </div>
 
-    {{-- Image Preview --}}
+    {{-- Image Preview & Validation Script (No changes needed here) --}}
     <script>
         $(document).ready(function () {
             $('#photo').on('change', function (event) {
@@ -149,17 +153,15 @@
                     name: { required: true },
                     email: { required: true },
                     phone: { required: true },
-                    photo: { required: true },
                     password: { required: true },
                     roles: { required: true }
                 },
                 messages: {
-                    name: { required: 'Please enter user name' },
-                    email: { required: 'Please enter email' },
-                    phone: { required: 'Please enter phone' },
-                    photo: { required: 'Please select photo' },
-                    password: { required: 'Please enter password' },
-                    roles: { required: 'Please select role' }
+                    name: { required: '{{ __('messages.user_name') }}', },
+                    email: { required: '{{ __('messages.please_enter_email') }}' },
+                    phone: { required: '{{ __('messages.please_enter_phone') }}' },
+                    password: { required: '{{ __('messages.please_enter_password') }}' },
+                    roles: { required: '{{ __('messages.please_enter_rolesl') }}' },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {

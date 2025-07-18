@@ -336,6 +336,41 @@ return [
         'total_purchases'=>'Total Purchases',
         'items_purchased'=>'Items Purchased',
         'avg_purchase_value'=>'Avg. Purchase Value',
+
+        // Stock Report
+        'stock_movement_report'=>'Stock Movement Report',
+        'stock_movement_for'=>'Stock Movement for',
+        'total_stock_in'=>'Total Stock In',
+        'total_stock_out'=>'Total Stock Out',
+        'opening_stock'=>'Opening Stock',
+        'stock_in'=>'Stock In',
+        'stock_out'=>'Stock Out',
+        'closing_stock'=>'Closing Stock',
+        'type_stock'=>'Type',
+
+// ====================== User =======================
+        // List user
+        'all_user'=>'All User',
+        'add_user'=>'Add User',
+        // Add User
+        'password'=>'Password',
+        'edit_user'=>'Edit User',
+        'user_updated_successfully' => 'User Updated Successfully',
+        'logout_successfully' => 'Logout Successfully',
+        'login_successfully' => 'Login Successfully',
+        'profile_updated_successfully' => 'Profile Updated Successfully',
+        'old_password_doest_match' => 'Old Password Donest Match!!!',
+        'password_change_success' => 'Password Change Success',
+        'new_user_created_successfully'    => 'New User Created Successfully',
+        'user_delete_successfully' => 'User Deleted Successfully',
+
+        // Validate add & edit
+        'user_name'=>'Please Enter Username',
+        'please_enter_password'=>'Please Enter Password',
+        'please_enter_rolesl'=>'Please Select Roles',
+        'please_enter_email'=>'Please Enter Email',
+        'please_enter_phone'=>'Please Enter Phone',    
+        			
         
 
 

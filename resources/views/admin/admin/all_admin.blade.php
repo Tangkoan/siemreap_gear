@@ -14,7 +14,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
-                        <div class="px-2">All Admin</div>
+                        <div class="px-2"> {{ __(key: 'messages.all_user') }}</div>
                         <div class="text-xl text-red-500">{{ count($alladminuser) }}</div>
                     </h2>
                     <div>
@@ -23,7 +23,7 @@
 
                         <button type="button"
                             class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                            <a href="{{ route('add.admin') }}">Add Admin</a>
+                            <a href="{{ route('add.admin') }}"> {{ __(key: 'messages.add_user') }}</a>
                         </button>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                     <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <label for="perPage" class="text-sm text-slate-600">Show</label>
+                                <label for="perPage" class="text-sm text-slate-600"> {{ __(key: 'messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="6" selected>6</option>
@@ -52,7 +52,7 @@
                                 <div class="relative">
                                     <input
                                         class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                                        placeholder="Search for name" id="search" name="search" type="text" />
+                                        placeholder=" {{ __(key: 'messages.search') }}" id="search" name="search" type="text" />
                                     <button
                                         class="dark:bg-gray-800 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                                         type="button">
@@ -74,45 +74,41 @@
 
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            N<sup>0</sup>
+                                            {{ __(key: 'messages.table_no') }}
                                         </p>
                                     </th>
 
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Image
+                                             {{ __(key: 'messages.image') }}
                                         </p>
                                     </th>
 
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Name
+                                             {{ __(key: 'messages.name') }}
                                         </p>
                                     </th>
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Email
+                                             {{ __(key: 'messages.email') }}
                                         </p>
                                     </th>
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Phone
+                                             {{ __(key: 'messages.phone') }}
                                         </p>
                                     </th>
 
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Role
+                                             {{ __(key: 'messages.roles') }}
                                         </p>
                                     </th>
 
-
-
-
-
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            Action
+                                             {{ __(key: 'messages.table_action') }}
                                         </p>
                                     </th>
                                 </tr>

@@ -6,7 +6,7 @@
 {{-- Report Title --}}
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-slate-800 dark:text-white">
-        Stock Movement for: 
+        {{ __('messages.stock_movement_for') }} : 
         <span id="report-title-year" class="text-emerald-600 dark:text-emerald-400">{{ $formattedDate }}</span>
     </h2>
 </div>
@@ -33,7 +33,7 @@
         </div>
         {{-- Text Content --}}
         <div class="flex-grow">
-            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Stock In</p>
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_stock_in') }}</p>
             <p id="total-stock-in-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-1">0</p>
         </div>
     </div>
@@ -56,7 +56,7 @@
         </div>
         {{-- Text Content --}}
         <div class="flex-grow">
-            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Stock Out</p>
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_stock_out') }}</p>
             <p id="total-stock-out-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-1">0</p>
         </div>
     </div>
@@ -95,7 +95,7 @@
                          d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
                 
-                <span>Export</span>
+                <span>{{ __('messages.export') }}</span>
         </a>
     </div>
 </div>
@@ -106,11 +106,11 @@
         <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
             <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
                 <tr>
-                    <th scope="col" class="px-6 py-4">Product Name</th>
-                    <th scope="col" class="px-6 py-4 text-center">Opening Stock</th>
-                    <th scope="col" class="px-6 py-4 text-center text-emerald-600 dark:text-emerald-400">Stock In</th>
-                    <th scope="col" class="px-6 py-4 text-center text-rose-600 dark:text-rose-400">Stock Out</th>
-                    <th scope="col" class="px-6 py-4 text-center">Closing Stock</th>
+                    <th scope="col" class="px-6 py-4">{{ __('messages.product_name') }}</th>
+                    <th scope="col" class="px-6 py-4 text-center">{{ __('messages.opening_stock') }}</th>
+                    <th scope="col" class="px-6 py-4 text-center text-emerald-600 dark:text-emerald-400">{{ __('messages.stock_in') }}</th>
+                    <th scope="col" class="px-6 py-4 text-center text-rose-600 dark:text-rose-400">{{ __('messages.stock_out') }}</th>
+                    <th scope="col" class="px-6 py-4 text-center">{{ __('messages.closing_stock') }}</th>
                 </tr>
             </thead>
             <tbody id="report-table-body-year" class="divide-y divide-slate-200 dark:divide-slate-700"></tbody>

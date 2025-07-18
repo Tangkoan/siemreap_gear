@@ -46,7 +46,7 @@ class AdminController extends Controller
         $request->session()->regenerateToken();
 
         $notification = array(
-            'message' => 'Admin Logout Successfully',
+            'message' => __('messages.logout_successfully'),
             'alert-type' => 'info'
         );
 
@@ -61,7 +61,7 @@ class AdminController extends Controller
     {
 
         $notification = array(
-            'message' => 'Login Successfully',
+            'message' => __('messages.login_successfully'),
             'alert-type' => 'info'
         );
 
@@ -99,7 +99,7 @@ class AdminController extends Controller
         $data->save();
 
         $notification = array(
-            'message' => 'Admin Profile Updated Successfully',
+            'message' => __('messages.profile_updated_successfully'),
             'alert-type' => 'success'
         );
 
@@ -125,7 +125,7 @@ class AdminController extends Controller
         if (!Hash::check($request->old_password, auth::user()->password)) {
 
             $notification = array(
-                'message' => 'Old Password Donest Match!!!',
+                'message' => __('messages.old_password_doest_match'),
                 'alert-type' => 'error'
             );
 
@@ -137,7 +137,7 @@ class AdminController extends Controller
             'password' => Hash::make($request->new_password)
         ]);
         $notification = array(
-            'message' => 'Password Change Success',
+            'message' => __('messages.password_change_success'),
             'alert-type' => 'success'
         );
 
@@ -247,42 +247,33 @@ class AdminController extends Controller
     }// End Method 
 
     public function StoreAdmin(Request $request)
-{
-    // ✅ Validate input including unique email
-    $request->validate([
-        'name'     => 'required|string|max:255',
-        'email'    => 'required|email|unique:users,email', // check duplicate
-        'phone'    => 'required|string|max:20',
-        'password' => 'required|string|min:6',
-        'roles'    => 'required',
-    ]);
+    {
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'phone'    => 'required|string|max:20',
+            'password' => 'required|string|min:6',
+            'roles'    => 'required',
+        ]);
 
-    // ✅ Create new user
-    $user = new User();
-    $user->name     = $request->name;
-    $user->email    = $request->email;
-    $user->phone    = $request->phone;
-    $user->assignRole($request->roles); // ✅ This works now
-    $user->password = Hash::make($request->password);
-    $user->save();
+        $user = new User();
+        $user->name     = $request->name;
+        $user->email    = $request->email;
+        $user->phone    = $request->phone;
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-    // ✅ Assign Role
-    // if ($request->roles) {
-    //     $user->assignRole($request->roles);
-    // }
+        $role = Role::find($request->roles);
+        if ($role) {
+            $user->assignRole($role->name);
+        }
 
-    $role = Role::find($request->roles);
-    if ($role) {
-        $user->assignRole($role->name);
+        return redirect()->route('all.admin')->with([
+            'message' => __('messages.new_user_created_successfully'),
+            'alert-type' => 'success'
+        ]);
     }
-    // ✅ Notification
-    $notification = [
-        'message'    => 'New Admin User Created Successfully',
-        'alert-type' => 'success'
-    ];
 
-    return redirect()->route('all.admin')->with($notification);
-}
 
 
     public function EditAdmin($id){
@@ -292,9 +283,6 @@ class AdminController extends Controller
         return view('admin.admin.edit_admin',compact('roles','adminuser'));
 
     }// End Method 
-
-
-    
 
     public function UpdateAdmin(Request $request)
     {
@@ -316,7 +304,7 @@ class AdminController extends Controller
         }
     
         $notification = array(
-            'message' => 'Admin User Updated Successfully',
+            'message' => __('messages.user_updated_successfully'),
             'alert-type' => 'success'
         );
     
@@ -334,7 +322,7 @@ class AdminController extends Controller
         }
 
         $notification = array(
-            'message' => 'Admin User Deleted Successfully',
+            'message' => __('messages.user_delete_successfully'),
             'alert-type' => 'success'
         );
 
@@ -344,26 +332,8 @@ class AdminController extends Controller
 
 
 
+// ============================= Admin Dashboard ============================= 
 
-
-
-
-
-
-
-    //////////////// Database Backup Method //////////////////Add commentMore actions
-
-    
-
-
-
-
-
-
-
-
-
-    ///////////////////////////////////////////////////////////////////////////////////
     public function dashboard()
     {
         $currentMonth = Carbon::now()->format('F Y');

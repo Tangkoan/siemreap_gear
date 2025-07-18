@@ -338,4 +338,39 @@ return [
         'total_purchases' => 'ការទិញសរុប',
         'items_purchased' => 'ផលិតផលដែលបានទិញ',
         'avg_purchase_value' => 'តម្លៃទិញមធ្យម',
+        // របាយការណ៍ស្តុក
+        'stock_movement_report' => 'របាយការណ៍ឃ្លាំងផលិតផលចេញចូល',
+        'stock_movement_for' => 'ដំណើរការឃ្លាំងសម្រាប់',
+        'total_stock_in' => 'ចំនួនផលិតផលចូលឃ្លាំងសរុប',
+        'total_stock_out' => 'ចំនួនផលិតផលចេញឃ្លាំងសរុប',
+        'opening_stock' => 'ចំនួនផលិតផលឃ្លាំងដើម',
+        
+        'stock_in' => 'ផលិតផលឃ្លាំងចូល',
+        'stock_out' => 'ផលិតផលឃ្លាំងចេញ',
+        'closing_stock' => 'បិទឃ្លាំងបញ្ចប់',
+        'type_stock'=>'ផលិតផលចេញឬចូល',
+
+// ====================== User =======================
+        // List user
+        'all_user'=>'អ្នកប្រើប្រាស់ចំនួន',
+        'add_user'=>'បន្ថែមអ្នកប្រើប្រាស់',
+        // Add User
+        'password'=>'ពាក្យសម្ងាត់',
+        'edit_user'=>'កែប្រែពត៌មានអ្នកប្រើប្រាស់',
+        // Notification
+        'user_updated_successfully' => 'កែប្រែពត៌មានអ្នកប្រើប្រាស់បានជោកជ័យ',
+        'logout_successfully' => 'ចេញប្រព័ន្ធដំណើរការជោគជ័យ',
+        'login_successfully' => 'ចូលប្រព័ន្ធដំណើរការជោគជ័យ',
+        'profile_updated_successfully' => 'ពត៌មានអ្នកកែប្រែដោយជោគជ័យ',
+        'old_password_doest_match' => 'លេខសម្ងាត់នេះមិនត្រូវលេខសម្ងាត់ចាស់របស់អ្នកឡើយ',
+        'password_change_success' => 'ពាក្យសម្ងាត់ត្រូវបានផ្លាស់ប្ដូរជោគជ័យ',
+        'new_user_created_successfully'    => 'ការបង្កើតអ្នកប្រើប្រាស់ថ្មីជោគជ័យ',
+        'user_delete_successfully' => 'អ្នកបានលុបគណនីអ្នកប្រើប្រាស់ជោគជ័យ',
+
+        // Validate add & edit
+        'user_name'=>'សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់',
+        'please_enter_password'=>'សូមបញ្ចូលពាក្យសម្ងាត់',
+        'please_enter_rolesl'=>'សូមបញ្ជូលតួនាទីរបស់អ្នកប្រើប្រាស់',
+        'please_enter_email'=>'សូមបញ្ចូលអ៊ីមែល',
+        'please_enter_phone'=>'សូមបញ្ចូលលេខទូរស័ព្ទ',    
 ];
