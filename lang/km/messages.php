@@ -321,34 +321,58 @@ return [
 
 // ========================= Report ====================================================
         // Order Report
-        'orders_report' => 'របាយការណ៍ការបញ្ជាទិញ',
-        'by_day' => 'តាមថ្ងៃ',
-        'by_month' => 'តាមខែ',
-        'by_year' => 'តាមឆ្នាំ',
-        'total_revenue' => 'ប្រាក់ចំណូលសរុប',
-        'total_orders' => 'បញ្ជាទិញសរុប',
-        'items_sold' => 'ផលិតផលដែលបានលក់',
-        'avg_order_value' => 'តម្លៃបញ្ជាទិញមធ្យម',
-        'date' => 'កាលបរិច្ឆេទ',
-        'amount' => 'ចំនួនទឹកប្រាក់',
-        'total_amount' => 'ចំនួនទឹកប្រាក់សរុប',
+                'orders_report' => 'របាយការណ៍ការបញ្ជាទិញ',
+                'by_day' => 'តាមថ្ងៃ',
+                'by_month' => 'តាមខែ',
+                'by_year' => 'តាមឆ្នាំ',
+                'total_revenue' => 'ប្រាក់ចំណូលសរុប',
+                'total_orders' => 'បញ្ជាទិញសរុប',
+                'items_sold' => 'ផលិតផលដែលបានលក់',
+                'avg_order_value' => 'តម្លៃបញ្ជាទិញមធ្យម',
+                'date' => 'កាលបរិច្ឆេទ',
+                'amount' => 'ចំនួនទឹកប្រាក់',
+                'total_amount' => 'ចំនួនទឹកប្រាក់សរុប',
         // របាយការណ៍ការទិញ
-        'purchase_report' => 'របាយការណ៍ការបញ្ជាទិញផលិតផលចូលឃ្លាំង',
-        'total_spending' => 'ចំណាយសរុប',
-        'total_purchases' => 'ការទិញសរុប',
-        'items_purchased' => 'ផលិតផលដែលបានទិញ',
-        'avg_purchase_value' => 'តម្លៃទិញមធ្យម',
+                'purchase_report' => 'របាយការណ៍ការបញ្ជាទិញផលិតផលចូលឃ្លាំង',
+                'total_spending' => 'ចំណាយសរុប',
+                'total_purchases' => 'ការទិញសរុប',
+                'items_purchased' => 'ផលិតផលដែលបានទិញ',
+                'avg_purchase_value' => 'តម្លៃទិញមធ្យម',
         // របាយការណ៍ស្តុក
-        'stock_movement_report' => 'របាយការណ៍ឃ្លាំងផលិតផលចេញចូល',
-        'stock_movement_for' => 'ដំណើរការឃ្លាំងសម្រាប់',
-        'total_stock_in' => 'ចំនួនផលិតផលចូលឃ្លាំងសរុប',
-        'total_stock_out' => 'ចំនួនផលិតផលចេញឃ្លាំងសរុប',
-        'opening_stock' => 'ចំនួនផលិតផលឃ្លាំងដើម',
+                'stock_movement_report' => 'របាយការណ៍ឃ្លាំងផលិតផលចេញចូល',
+                'stock_movement_for' => 'ដំណើរការឃ្លាំងសម្រាប់',
+                'total_stock_in' => 'ចំនួនផលិតផលចូលឃ្លាំងសរុប',
+                'total_stock_out' => 'ចំនួនផលិតផលចេញឃ្លាំងសរុប',
+                'opening_stock' => 'ចំនួនផលិតផលឃ្លាំងដើម',
+                
+                'stock_in' => 'ផលិតផលឃ្លាំងចូល',
+                'stock_out' => 'ផលិតផលឃ្លាំងចេញ',
+                'closing_stock' => 'បិទឃ្លាំងបញ្ចប់',
+                'type_stock'=>'ផលិតផលចេញឬចូល',
+
+        // Income & Outcome
+        'income_expense_report' => 'របាយការណ៍ប្រាក់ចំណូល និងចំណាយ',
+        'start_date' => 'ថ្ងៃចាប់ផ្ដើម',
+        'end_date' => 'ថ្ងៃបញ្ចប់',
+        'total_expenses' => 'ចំណាយសរុប',
+        'profit_loss' => 'ប្រាក់ចំណេញ/ខាត',
+        'income_details' => 'ព័ត៌មានលម្អិតអំពីប្រាក់ចំណូល',
+        'expense_details' => 'ព័ត៌មានលម្អិតអំពីចំណាយ',
+
+        // Month
+        'start_month' => 'ខែចាប់ផ្ដើម',
+        'end_month' => 'ខែបញ្ចប់',
+
+        // Year
+        'start_year' => 'ឆ្នាំចាប់ផ្ដើម',
+        'end_year' => 'ឆ្នាំបញ្ចប់',
+        'day'=> 'ថ្ងៃ',
+        'month'=> 'ខែ',
+        'year'=> 'ឆ្នាំ',     
+        'total_expense'=>'ប្រាក់ចំណាយសរុប',  
+        'report_for'=>'របាយការណ៏សម្រាប់', 
         
-        'stock_in' => 'ផលិតផលឃ្លាំងចូល',
-        'stock_out' => 'ផលិតផលឃ្លាំងចេញ',
-        'closing_stock' => 'បិទឃ្លាំងបញ្ចប់',
-        'type_stock'=>'ផលិតផលចេញឬចូល',
+
 
 // ====================== User =======================
         // List user
@@ -372,5 +396,17 @@ return [
         'please_enter_password'=>'សូមបញ្ចូលពាក្យសម្ងាត់',
         'please_enter_rolesl'=>'សូមបញ្ជូលតួនាទីរបស់អ្នកប្រើប្រាស់',
         'please_enter_email'=>'សូមបញ្ចូលអ៊ីមែល',
-        'please_enter_phone'=>'សូមបញ្ចូលលេខទូរស័ព្ទ',    
+        'please_enter_phone'=>'សូមបញ្ចូលលេខទូរស័ព្ទ', 
+        
+// ================== Bakcup Page ======================
+        // Backup DB
+        'backup_management'=>'ការគ្រប់គ្រងលើការបំរុងទុក',
+        'file_name'=>'ឈ្មោះឯកសា',
+        'size'=>'ទំហំ',
+        'path'=>'ទីតាំង',
+        'action'=>'សកម្មភាព',
+        'backup_database_now'=>'ធ្វើការបំរុងទុកទិន្នន័យដាតាបេស',
+        'database'=>'ដាតាបេស',
+        'backup_project_file_now'=>'បំរុងទុកលើឯកសារនៃគម្រោង',
+        'project'=>'គម្រោង',
 ];

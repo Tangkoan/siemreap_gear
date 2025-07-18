@@ -38,7 +38,7 @@
 
         <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
     <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">
-        🔐 Backup Management
+        🔐 {{ __(key: 'messages.backup_management') }}
     </h1>
     
     <div id="tab-container" class="inline-flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
@@ -49,7 +49,7 @@
             id="db-tab" 
             class="tab-button px-5 py-2.5 rounded-lg font-semibold text-sm transition-all"
             type="button">
-            Database
+            {{ __(key: 'messages.database') }}
         </button>
         <button
             data-target="#project-panel"
@@ -58,7 +58,7 @@
             id="project-tab"
             class="tab-button px-5 py-2.5 rounded-lg font-semibold text-sm transition-all" 
             type="button">
-            Project
+            {{ __(key: 'messages.project') }}
         </button>
     </div>
 </div>
@@ -70,10 +70,10 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-5 h-5 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
                         </div>
-                        <input type="text" id="db_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Search Database Backups...">
+                        <input type="text" id="db_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="{{ __(key: 'messages.search') }}">
                     </div>
                     <a href="{{ route('admin.backup.now') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 transition shadow-md hover:shadow-lg">
-                        Backup Database Now
+                        {{ __(key: 'messages.backup_database_now') }}
                     </a>
                 </div>
 
@@ -82,11 +82,11 @@
                         <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
                             <thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-100 dark:bg-slate-800 sticky top-0">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">N<sup>0</sup></th>
-                                    <th scope="col" class="px-6 py-3">File Name</th>
-                                    <th scope="col" class="px-6 py-3">Size</th>
-                                    <th scope="col" class="px-6 py-3">Path</th>
-                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.no') }}</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.file_name') }}</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.size') }}</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.path') }}</th>
+                                    <th scope="col" class="px-6 py-3 text-center">{{ __(key: 'messages.action   ') }}</th>
                                 </tr>
                             </thead>
                             <tbody id="db_backup_tbody" class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -102,10 +102,10 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-5 h-5 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
                         </div>
-                        <input type="text" id="project_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="Search Project Backups...">
+                        <input type="text" id="project_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="{{ __(key: 'messages.search') }}">
                     </div>
                     <a href="{{ route('admin.backup.project') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 transition shadow-md hover:shadow-lg">
-                        Backup Project Files Now
+                        {{ __(key: 'messages.backup_project_file_now') }}
                     </a>
                 </div>
 
@@ -114,11 +114,11 @@
                         <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
                              <thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-100 dark:bg-slate-800 sticky top-0">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">N<sup>0</sup></th>
-                                    <th scope="col" class="px-6 py-3">File Name</th>
-                                    <th scope="col" class="px-6 py-3">Size</th>
-                                    <th scope="col" class="px-6 py-3">Path</th>
-                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.no') }}</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.file_name') }}</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.size') }}</th>
+                                    <th scope="col" class="px-6 py-3">{{ __(key: 'messages.path') }}</th>
+                                    <th scope="col" class="px-6 py-3 text-center">{{ __(key: 'messages.action') }}</th>
                                 </tr>
                             </thead>
                             <tbody id="project_backup_tbody" class="divide-y divide-slate-200 dark:divide-slate-800">

@@ -348,6 +348,27 @@ return [
         'closing_stock'=>'Closing Stock',
         'type_stock'=>'Type',
 
+        // Income & Outcome
+        'income_expense_report'=>'Income & Expense Report',
+        'start_date'=>'Start Date',
+        'end_date'=>'End Date',
+                // Month
+                'start_month'=>'Start Month',
+                'end_month'=>'End Month',
+                // year
+                'start_year'=>'Start Year',
+                'end_year'=>'End Year',
+        'total_expenses'=>'Total Expenses',
+        'profit_loss'=>'Profit / Loss',
+        'income_details'=>'Income Details (Sales)',
+        'expense_details'=>'Expense Details',
+        'day'=> 'Day',
+        'month'=> 'Month',
+        'year'=> 'Year',        
+        'total_expense'=>'Total Expense',
+        'report_for'=>'Report for',
+        
+
 // ====================== User =======================
         // List user
         'all_user'=>'All User',
@@ -369,7 +390,19 @@ return [
         'please_enter_password'=>'Please Enter Password',
         'please_enter_rolesl'=>'Please Select Roles',
         'please_enter_email'=>'Please Enter Email',
-        'please_enter_phone'=>'Please Enter Phone',    
+        'please_enter_phone'=>'Please Enter Phone',
+        
+// ================== Bakcup Page ======================
+        // Backup DB
+        'backup_management'=>'Backup Management',
+        'file_name'=>'File Name',
+        'size'=>'SIZE',
+        'path'=>'PATH',
+        'action'=>'Action',
+        'backup_database_now'=>'Backup Database Now',
+        'database'=>'Database',
+        'backup_project_file_now'=>'Backup Project File Now',
+        'project'=>'Project',
         			
         
 
