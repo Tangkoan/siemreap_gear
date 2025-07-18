@@ -15,7 +15,7 @@
                     </svg>
                     <span class="px-2">
                         <a href="{{ route('all.roles') }}" >
-                            Add Roles
+                            {{ __(key: 'messages.add_roles') }}
                         </a>
                     </span>
                 </h2>
@@ -28,9 +28,9 @@
                         <div class="space-y-4">
                             <div class="form-group">
                                 <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    Role Name
+                                    {{ __(key: 'messages.roles') }}
                                 </label>
-                                <input type="text" id="name" name="name" required class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                                <input type="text" id="name" name="name"  class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
                                     @error('name') is-invalid @enderror">
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
                             </div>
@@ -45,7 +45,7 @@
                     <div class="flex justify-end mt-6">
                         <button type="submit"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
-                            Save
+                            {{ __(key: 'messages.save') }}
                         </button>
                     </div>
                 </form>
@@ -63,7 +63,7 @@
                 },
                 messages: {
                     name: {
-                        required: 'Please enter a role name',
+                        required: '{{ __(key: 'messages.please_enter_a_role_name') }}',
                     }
                 },
                 errorElement: 'span',

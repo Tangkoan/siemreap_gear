@@ -16,7 +16,7 @@
                     <span class="px-2">
                         <a href="{{ route('all.permission') }}"
                             class="">
-                            Edit Permission
+                            
                             {{ __('messages.edit_permission') }}
                         </a>
                     </span>
@@ -55,10 +55,10 @@
                                             'supplier',
                                             'category',
                                             'product',
-                                            'expense',
+                                            
                                             'orders',
                                             'purchases',
-                                            'stock',
+                                            
                                             'roles',
                                             'report',
                                             'user',
@@ -119,7 +119,8 @@
                 unhighlight: function (element) {
                     $(element).removeClass('border-red-500');
                 }
-            });    });
+            });   
+        });
     </script>
 
 @endsection

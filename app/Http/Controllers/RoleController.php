@@ -79,8 +79,6 @@ class RoleController extends Controller
             ]
         );
 
-         
-
         Permission::findOrFail($per_id)->update([
             'name' => $request->name,
             'group_name' => $request->group_name,
@@ -93,8 +91,6 @@ class RoleController extends Controller
 
         return redirect()->route('all.permission')->with($notification);
     }
-
-
 
     public function DeletePermission($id)
     {
@@ -228,13 +224,22 @@ class RoleController extends Controller
 
         $role_id = $request->id;
 
+        $request->validate(
+            [
+                'name' => 'required|unique:roles,name,' . $role_id,
+            ],
+            [
+                'name.required' => __('messages.please_enter_permission_name'),
+                'name.unique' => __('messages.roles_name_already_exists'),
+            ]
+        );
+
         Role::findOrFail($role_id)->update([
             'name' => $request->name,
-
         ]);
 
         $notification = array(
-            'message' => 'Role Updated Successfully',
+            'message' => __('messages.role_updated_successfully'),
             'alert-type' => 'success'
         );
 
@@ -244,11 +249,25 @@ class RoleController extends Controller
 
     public function DeleteRoles($id)
     {
+        // 1. ស្វែងរក Role នោះ
+        $role = Role::findOrFail($id);
 
-        Role::findOrFail($id)->delete();
+        // 2. ពិនិត្យមើលថាតើ Role នេះមាន User ប្រើប្រាស់ដែរឬទេ
+        // យើងប្រើ ->users()->count() ដើម្បីរាប់ចំនួន User ដែលមាន Role នេះ
+        if ($role->users()->count() > 0) {
+
+            // ប្រសិនបើមាន User ប្រើប្រាស់ សូមកុំលុប និងបង្ហាញសារ Error
+            $notification = array(
+                'message' => __('messages.cannot_delete_this_roles_have_user_use_this_role'),
+                'alert-type' => 'error' // ប្រើ 'error' ឬ 'warning'
+            );
+            return redirect()->back()->with($notification);
+        }
+        // 3. ប្រសិនបើគ្មាន User ប្រើប្រាស់ទេ ទើបអនុញ្ញាតឲ្យលុប
+        $role->delete();
 
         $notification = array(
-            'message' => 'Role Deleted Successfully',
+            'message' => __('messages.role_deleted_successfully'),
             'alert-type' => 'success'
         );
 
@@ -259,13 +278,24 @@ class RoleController extends Controller
     public function StoreRoles(Request $request)
     {
 
+        
+
+        $request->validate(
+            [
+                'name' => 'required|unique:roles,name',
+            ],
+            [
+                'name.required' => __('messages.please_enter_permission_name'),
+                'name.unique' => __('messages.roles_name_already_exists'),
+            ]
+        );
+
         $role = Role::create([
             'name' => $request->name,
-
         ]);
 
         $notification = array(
-            'message' => 'Role Added Successfully',
+            'message' => __('messages.role_added_successfully'),
             'alert-type' => 'success'
         );
 

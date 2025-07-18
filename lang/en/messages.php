@@ -53,7 +53,7 @@ return [
     'category_deleted_successfully' => 'Category Deleted Successfully',
     'category_delete_error_has_products' => 'Cannot delete category. There are products associated with it.',
     
-    // ==================== Customer ============================
+// ==================== Customer ============================
         // List Customer
         'add_customer' => 'Add Customer',
         'customer_name' => 'Customer Name',
@@ -66,7 +66,7 @@ return [
         'customer_update_successfully' => 'Customer Update Successfully',
         'customer_delete_error_has_related_records_exist' => 'Cannot delete Customer. There are orders associated with it.',
 
-    // ===================== Supplier =======================================
+// ===================== Supplier =======================================
         // List Supplier
         'add_supplier' => 'Add Supplier',
         'edit_supplier'=> 'Edit Supplier',
@@ -76,7 +76,7 @@ return [
         'supplier_can_not_delete' => 'Cannot delete supplier. There are purchase associated with it.!',
         'supplier_delete_successfully' => 'Delete Supplier Successfully!',
 
-    // ===================== Product ========================================
+// ===================== Product ========================================
         // List Product
             'product_code'=> 'Product Code',
             'product_name'=> 'Product Name',
@@ -117,7 +117,7 @@ return [
             'upload'=> 'Upload',
 
             
-    // ===================== Purchase ========================================
+// ===================== Purchase ========================================
         // Purchase Pending
         'pending_purchase_orders'=> 'Pending Purchase Orders',
         'create_purchase'=>'Create Purchase',
@@ -159,7 +159,7 @@ return [
         'due'=>'Due',
         'purchase_pay_due_amount'=> 'Purchase Pay Due Amount',
 
-    // Order
+// =========================== Order ===========================
         // Pending Orders
         'pending_orders'=> 'Pending Orders',
         'order_date'=> 'Order Date',
@@ -176,7 +176,7 @@ return [
         'stock_not_enough_for_the_product' => 'Stock Not enough for the product :',
         'order_done_successfully' => 'Order Done Successfully',
         
-    // POS
+// ============================= POS =========================================
         // Pos page
         'product_items'=>'Product Items',
         'pay_nows'=> 'Pay Now',
@@ -188,13 +188,14 @@ return [
         'not_enough_stock_for_product'=>'Not Enough Stock For Product',
         'something_went_wrong'=>'Something Went Wrong!',
     
-    // Permision
+// ============ Permision =========================================
         // Pemision Page
         'permissions'=>'Permission',
         'permission_name'=>'Permission Name',
         'group_name'=>'Group Name',
         'add_permission'=> 'Add Permission',
         'select_group_name'=> 'Select Group Name',
+        'edit_permission'=>'Edit Permission',
         // Validateion
         'please_enter_permission_name'=>'Please Enter Permission Name',
         'please_select_group_name'=>'Please Select Group Name',
@@ -211,6 +212,104 @@ return [
         // 'message' => 'Role Permission Added Successfully',
         // 'message' => 'Role Permission Updated Successfully',
         // 'message' => 'Role Permission Deleted Successfully',
+    
+// ======================= Role ===========================
+        // List Role
+        'roles'=> 'Roles',
+        'add_roles'=>'Add Roles',
+        'roles_name'=>'Role Name',
+        // Validation
+        'please_enter_a_role_name'=>'Please enter a role name',
+        'roles_name_already_exists'=> 'Roles Name Already Exists',
+        // Edit Roles Page
+        'edit_roles'=>'Edit Roles',
+        // Notification
+        'role_updated_successfully' => 'Role Updated Successfully',
+        'cannot_delete_this_roles_have_user_use_this_role' => 'Cannot Delete This Roles, Have User Use This Role!!!',
+        'role_deleted_successfully' => 'Role Deleted Successfully',
+        'role_added_successfully' => 'Role Added Successfully',
+
+// =================== Add Roles Permission ================================
+        // Add Roles Permission Page
+        'add_roles_permission'=>'Add Roles Permission',
+        'all_permission'=>'All Permissions',
+        'select_roles'=> 'Select Roles',
+        'please_select_role_name'=> 'Please Select Role Name',
+        'purchases'=> 'Purchases',
+        'orders'=> 'Orders',
+        // Customer
+        'customer.menu' => 'customer.menu',
+        'customer.all' => 'customer.all',
+        'customer.add' => 'customer.add',
+        'customer.edit' => 'customer.edit',
+        'customer.delete' => 'customer.delete',
+
+        // pos
+        'pos.menu' => 'pos.menu',
+
+        // supplier
+        'supplier.menu' => 'supplier.menu',
+        'supplier.all' => 'supplier.all',
+        'supplier.add' => 'supplier.add',
+        'supplier.edit' => 'supplier.edit',
+        'supplier.delete' => 'supplier.delete',
+
+        // category
+        'category.menu' => 'category.menu',
+        'category.all' => 'category.all',
+        'category.add' => 'category.add',
+        'category.edit' => 'category.edit',
+        'category.delete' => 'category.delete',
+
+        // product
+        'product.menu' => 'product.menu',
+        'product.all' => 'product.all',
+        'product.add' => 'product.add',
+        'product.edit' => 'product.edit',
+        'product.delete' => 'product.delete',
+        'product.import' => 'product.import',
+        'product.export' => 'product.export',
+        'product.details' => 'product.details',
+        'product.barcode' => 'product.barcode',
+
+        // order
+        'order.menu' => 'order.menu',
+        'order.complete' => 'order.complete',
+        'order.pending' => 'order.pending',
+        'order.pending.due' => 'order.pending.due',
+
+        // role
+        'role.menu' => 'role.menu',
+
+        // purchase
+        'purchase.menu' => 'purchase.menu',
+        'purchase.complete' => 'purchase.complete',
+        'purchase.pending.due' => 'purchase.pending.due',
+        'purchase.pending' => 'purchase.pending',
+        'purchase.add' => 'purchase.add',
+
+        // user
+        'user.menu' => 'user.menu',
+        'user.all' => 'user.all',
+        'user.add' => 'user.add',
+        'user.edit' => 'user.edit',
+        'user.delete' => 'user.delete',
+
+        // permission
+        'permission.menu' => 'permission.menu',
+
+        // backup
+        'backup.menu' => 'backup.menu',
+
+        // reporte
+        'reporte.menu' => 'reporte.menu',
+        'reporte.purchase' => 'reporte.purchase',
+        'reporte.expense' => 'reporte.expense',
+        'reporte.sale' => 'reporte.sale',
+        'reporte.stock' => 'reporte.stock',
+        
+        
+
 
 
 

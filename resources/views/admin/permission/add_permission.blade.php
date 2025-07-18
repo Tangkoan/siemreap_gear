@@ -53,9 +53,7 @@
                                     <option value="supplier">Supplier</option>
                                     <option value="category">Category</option>
                                     <option value="product">Product</option>
-                                    <option value="expense">Expense</option>
                                     <option value="orders">Orders</option>
-                                    <option value="stock">Stock</option>
                                     <option value="roles">Roles</option>
                                     <option value="purchases">Purchases</option>
                                     <option value="report">Report</option>
