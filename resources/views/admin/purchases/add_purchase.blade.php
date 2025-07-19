@@ -38,19 +38,19 @@
                 </div>
 
                 {{-- Category Get --}}
-                <div class="w-full sm:w-[200px] md:w-[400px] lg:w-[500px] overflow-x-auto whitespace-nowrap mb-4"
-                    id="category-buttons">
-                    <button onclick="loadProducts('all')"
-                        class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
-                        {{ __('messages.all_category') }}
-                    </button>
-                    @foreach ($categories as $category)
-                        <button onclick="loadProducts({{ $category->id }})"
-                            class="dark:bg-gray-800 inline-block bg-gray-200 px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
-                            {{ $category->category_name }}
-                        </button>
-                    @endforeach
-                </div>
+<div class="w-full sm:w-[200px] md:w-[400px] lg:w-[800px] overflow-x-auto whitespace-nowrap mb-4"
+    id="category-buttons">
+    <button onclick="loadProducts('all', this)"
+        class="dark:bg-gray-800 bg-gray-200 inline-block px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+        {{ __('messages.all_category') }}
+    </button>
+    @foreach ($categories as $category)
+        <button onclick="loadProducts({{ $category->id }}, this)"
+            class="dark:bg-gray-800 bg-gray-200 inline-block px-3 py-1 mr-2 rounded hover:bg-gray-300 text-sm">
+            {{ $category->category_name }}
+        </button>
+    @endforeach
+</div>
             </div>
 
             <div class="flex-1 overflow-y-auto ">
@@ -526,8 +526,71 @@
             });
         }
 
-        function loadProducts(categoryId = 'all') {
-            fetch(`/get-products?category_id=${categoryId}`)
+        function loadProducts(categoryId = 'all', clickedButton = null) {
+    // 💡 ជំហានទី១៖ ដក style 'active' ចេញពីប៊ូតុងទាំងអស់
+    const categoryButtonsContainer = document.getElementById('category-buttons');
+    const allButtons = categoryButtonsContainer.querySelectorAll('button');
+    allButtons.forEach(button => {
+        button.classList.remove('bg-red-500', 'text-white', 'dark:bg-red-600'); // ដក class active
+        button.classList.add('bg-gray-200', 'dark:bg-gray-800'); // បន្ថែម class ដើមវិញ
+    });
+
+    // 💡 ជំហានទី២៖ បន្ថែម style 'active' ទៅប៊ូតុងដែលបានចុច
+    if (clickedButton) {
+        // ប្រសិនបើមានប៊ូតុងត្រូវបានចុច
+        clickedButton.classList.add('bg-red-500', 'text-white', 'dark:bg-red-600');
+        clickedButton.classList.remove('bg-gray-200', 'dark:bg-gray-800');
+    } else {
+        // ករណីពិសេស៖ ពេលបើកទំព័រដំបូង (មិនមានការចុច) ដាក់ active លើ 'All Category'
+        const firstButton = categoryButtonsContainer.querySelector('button:first-child');
+        if (firstButton) {
+            firstButton.classList.add('bg-red-500', 'text-white', 'dark:bg-red-600');
+            firstButton.classList.remove('bg-gray-200', 'dark:bg-gray-800');
+        }
+    }
+    
+    // កូដ Fetch data របស់អ្នក (រក្សាទុកដដែល)
+    fetch(`/get-products?category_id=${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = '';
+
+            data.products.forEach(product => {
+                const card = `
+                    <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
+                        cursor-pointer hover:scale-[1.02]"
+                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
+                        title="Click to add to purchase cart">
+
+                        <div class="p-2 w-full" >
+                            <img class="w-full h-32 rounded-md object-fill" src="${product.imageUrl}" alt="${product.name}">
+                        </div>
+                        <br>
+
+                        <div class="p-4 px-3 text-center">
+                            <div class="w-40">
+                                <h3 class="font-semibold mb-1">${product.name}</h3>
+                            </div>
+                            <p class="text-blue-600 font-bold text-lg">$${product.buying_price}</p>
+                            <p class="font-semibold mb-1">${product.code}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                Qty: ${product.stock}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                productGrid.innerHTML += card;
+            });
+        })
+        .catch(error => {
+            console.error('Error loading products:', error);
+            toastr["error"]("Failed to load products.");
+        });
+}
+        document.getElementById('searchBox').addEventListener('input', function() {
+            const keyword = this.value;
+            fetch(`/search-pos-products?keyword=${keyword}`)
                 .then(response => response.json())
                 .then(data => {
                     const productGrid = document.getElementById('product-grid');
@@ -549,46 +612,6 @@
                                                             <div class="w-40">
                                                                 <h3 class="font-semibold mb-1">${product.name}</h3>
                                                             </div>
-                                                            <p class="text-blue-600 font-bold text-lg">$${product.buying_price}</p>
-                                                            <p class="font-semibold mb-1">${product.code}</p>
-                                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                                Qty: ${product.stock}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                `;
-                        productGrid.innerHTML += card;
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading products:', error);
-                    toastr["error"]("Failed to load products.");
-                });
-        }
-
-        document.getElementById('searchBox').addEventListener('input', function() {
-            const keyword = this.value;
-            fetch(`/search-pos-products?keyword=${keyword}`)
-                .then(response => response.json())
-                .then(data => {
-                    const productGrid = document.getElementById('product-grid');
-                    productGrid.innerHTML = '';
-
-                    data.products.forEach(product => {
-                        const card = `
-                                                    <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
-                                                        cursor-pointer hover:scale-105"
-                                                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
-                                                        title="Click to add to purchase cart">
-
-                                                        <div class="p-3" style="width:150px; height: 50px;">
-                                                            <img class="w-full h-24 rounded-md object-cover" src="${product.imageUrl}" alt="${product.name}">
-                                                        </div>
-
-                                                        <br><br><br>
-
-                                                        <div class="p-4 px-3 text-center">
-                                                            <h3 class="font-semibold mb-1">${product.name}</h3>
                                                             <p class="text-blue-600 font-bold text-lg">$${product.buying_price}</p>
                                                             <p class="font-semibold mb-1">${product.code}</p>
                                                             <p class="text-sm text-gray-600 dark:text-gray-300">
@@ -631,8 +654,7 @@
 
 
         @if (request('message'))
-            <
-            script >
+        <script >
                 toastr["{{ request('alert-type') ?? 'success' }}"]("{{ request('message') }}");
     </script>
     @endif

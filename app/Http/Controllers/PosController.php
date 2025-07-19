@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Validator; //  <-- ត្រូវ Import ថែ�
 
 class PosController extends Controller
 {
-    //
-    /**
+        //
+        /**
          * នេះជាកូដដែលកែប្រែពី StoreCustomer របស់អ្នក ឱ្យទៅជា AJAX Standard
          */
         public function storeCustomerAjax(Request $request)
@@ -212,133 +212,127 @@ class PosController extends Controller
     $customer = Customer::where('id',$cust_id)->first();
     return view('admin.pos.pos',compact('contents','customer'));
 
-} // End Method 
+    } // End Method 
 
 
 
-public function FinalInvoice(Request $request)
-{
-    $cartItems = Cart::content();
+    public function FinalInvoice(Request $request)
+    {
+        $cartItems = Cart::content();
 
-    if ($cartItems->isEmpty()) {
-        return back()->with([
-            'message' => __('messages.you_mout_add_product_to_cart'),
-            'alert-type' => 'error'
-        ]);
-    }
-
-    // Pre-check stock before transaction
-    foreach ($cartItems as $item) {
-        $product = Product::find($item->id);
-        if (!$product || $product->product_store < $item->qty) {
+        if ($cartItems->isEmpty()) {
             return back()->with([
-                'message' => __('messages.not_enough_stock_for_product') . ' ' . $product->product_name,
+                'message' => __('messages.you_mout_add_product_to_cart'),
+                'alert-type' => 'error'
+            ]);
+        }
+
+        // Pre-check stock before transaction
+        foreach ($cartItems as $item) {
+            $product = Product::find($item->id);
+            if (!$product || $product->product_store < $item->qty) {
+                return back()->with([
+                    'message' => __('messages.not_enough_stock_for_product') . ' ' . $product->product_name,
+                    'alert-type' => 'error'
+                ]);
+            }
+        }
+
+        $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+        $discount = floatval($request->discount ?? 0);
+
+        // ❗ Prevent discount from exceeding subtotal
+        if ($discount > $subTotal) {
+            return back()->with([
+                'message' => __('messages.discount_cannot_exceed_subtotal', [
+                    'subtotal' => number_format($subTotal, 2)
+                ]),
+
+                'alert-type' => 'error'
+            ])->withInput();
+        }
+
+        $pay = floatval($request->pay);
+        $total = $subTotal - $discount;
+        $due = $total - $pay;
+
+        // ✅ Logic: Check if paid in full (considering discount)
+        $orderStatus = $due <= 0 ? 'complete' : 'pending';
+
+        DB::beginTransaction();
+
+        try {
+            $data = [
+                'customer_id' => $request->customer_id,
+                'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+                'order_status' => $orderStatus,
+                'discount' => $discount,
+                'total_products' => Cart::count(),
+                'sub_total' => $subTotal,
+                'vat' => 0,
+                'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+                'total' => $total,
+                'payment_status' => $request->payment_status,
+                'pay' => $pay,
+                'due' => max(0, $due),
+                'created_at' => Carbon::now(),
+            ];
+
+            $order_id = Order::insertGetId($data);
+
+            foreach ($cartItems as $item) {
+                $product = Product::find($item->id);
+
+                // Final stock check again for safety
+                if (!$product || $product->product_store < $item->qty) {
+                    DB::rollBack();
+                    return back()->with([
+                        'message' => __('messages.not_enough_stock_for_product', [
+                            'product' => $product->product_name
+                        ]),
+
+                        'alert-type' => 'error'
+                    ]);
+                }
+
+                // Save order details
+                Orderdetails::insert([
+                    'order_id' => $order_id,
+                    'product_id' => $item->id,
+                    'quantity' => $item->qty,
+                    'unitcost' => $item->price,
+                    'total' => $item->qty * $item->price,
+                ]);
+
+                // ✅ Only deduct stock if order is complete
+                if ($orderStatus === 'complete') {
+                    $product->decrement('product_store', $item->qty);
+                }
+            }
+
+            DB::commit();
+            Cart::destroy();
+
+            return redirect()->route('print.invoice', $order_id)->with([
+                'message' => __('messages.order_completed_successfully'),
+                'alert-type' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->with([
+                'message' => __('messages.something_went_wrong'). $e->getMessage(),
                 'alert-type' => 'error'
             ]);
         }
     }
 
-    $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
-    $discount = floatval($request->discount ?? 0);
+    public function PrintInvoice($id)
+    {
+        $order = Order::with('customer')->findOrFail($id);
+        $orderDetails = Orderdetails::with('product')->where('order_id', $id)->get();
 
-    // ❗ Prevent discount from exceeding subtotal
-    if ($discount > $subTotal) {
-        return back()->with([
-            'message' => __('messages.discount_cannot_exceed_subtotal', [
-                'subtotal' => number_format($subTotal, 2)
-            ]),
-
-            'alert-type' => 'error'
-        ])->withInput();
+    return view('admin.invoice.print', compact('order', 'orderDetails'))->with("message", 'Successfully Order!!');
     }
-
-    $pay = floatval($request->pay);
-    $total = $subTotal - $discount;
-    $due = $total - $pay;
-
-    // ✅ Logic: Check if paid in full (considering discount)
-    $orderStatus = $due <= 0 ? 'complete' : 'pending';
-
-    DB::beginTransaction();
-
-    try {
-        $data = [
-            'customer_id' => $request->customer_id,
-            'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
-            'order_status' => $orderStatus,
-            'discount' => $discount,
-            'total_products' => Cart::count(),
-            'sub_total' => $subTotal,
-            'vat' => 0,
-            'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
-            'total' => $total,
-            'payment_status' => $request->payment_status,
-            'pay' => $pay,
-            'due' => max(0, $due),
-            'created_at' => Carbon::now(),
-        ];
-
-        $order_id = Order::insertGetId($data);
-
-        foreach ($cartItems as $item) {
-            $product = Product::find($item->id);
-
-            // Final stock check again for safety
-            if (!$product || $product->product_store < $item->qty) {
-                DB::rollBack();
-                return back()->with([
-                    'message' => __('messages.not_enough_stock_for_product', [
-                        'product' => $product->product_name
-                    ]),
-
-                    'alert-type' => 'error'
-                ]);
-            }
-
-            // Save order details
-            Orderdetails::insert([
-                'order_id' => $order_id,
-                'product_id' => $item->id,
-                'quantity' => $item->qty,
-                'unitcost' => $item->price,
-                'total' => $item->qty * $item->price,
-            ]);
-
-            // ✅ Only deduct stock if order is complete
-            if ($orderStatus === 'complete') {
-                $product->decrement('product_store', $item->qty);
-            }
-        }
-
-        DB::commit();
-        Cart::destroy();
-
-        return redirect()->route('print.invoice', $order_id)->with([
-            'message' => __('messages.order_completed_successfully'),
-            'alert-type' => 'success'
-        ]);
-    } catch (\Exception $e) {
-        DB::rollBack();
-
-        return back()->with([
-            'message' => __('messages.something_went_wrong'). $e->getMessage(),
-            'alert-type' => 'error'
-        ]);
-    }
-}
-
-public function PrintInvoice($id)
-{
-    $order = Order::with('customer')->findOrFail($id);
-    $orderDetails = Orderdetails::with('product')->where('order_id', $id)->get();
-
-return view('admin.invoice.print', compact('order', 'orderDetails'))->with("message", 'Successfully Order!!');
-}
-
-
-
-
-
-
-   
+ 
 }
