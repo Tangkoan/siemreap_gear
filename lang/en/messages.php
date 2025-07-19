@@ -192,6 +192,9 @@ return [
         'you_mout_add_product_to_cart' => 'You must add product to cart!',
         'not_enough_stock_for_product'=>'Not Enough Stock For Product',
         'something_went_wrong'=>'Something Went Wrong!',
+        // Modal Add New Customer
+        'add_new_customer' => 'Add New Customer',
+        'address'=> 'Address',
     
 // ============ Permision =========================================
         // Pemision Page

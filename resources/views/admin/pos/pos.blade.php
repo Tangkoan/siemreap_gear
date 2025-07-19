@@ -122,16 +122,36 @@
                             <form method="POST" id="myForm" action="{{ url('/store-sell') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @csrf
 
+                                
+
                                 <div class="form-group">
-                                    <label for="customer_id" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.customer_name') }}</label>
-                                    <select name="customer_id" id="customer_id"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="" disabled selected>{{ __('messages.select_customer') }}</option>
-                                        @foreach ($customers as $cus)
-                                            <option value="{{ $cus->id }}">{{ $cus->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="customer_id" class="block mb-1 font-medium text-gray-800 dark:text-white">
+                                        {{ __('messages.customer_name') }}
+                                    </label>
+                                    
+                                    {{-- ចាប់ផ្តើមចម្លង មកដាក់នៅត្រង់នេះ --}}
+                                    <div class="group relative flex items-center rounded-lg border border-gray-300 bg-white transition-all duration-200 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:focus-within:border-indigo-500">
+                                        
+                                        <select name="customer_id" id="customer_id" 
+                                                class="w-full appearance-none border-none rounded-lg bg-transparent px-4 py-2 pr-14 focus:outline-none focus:ring-0 dark:text-white dark:bg-gray-700">
+                                            <option value="" disabled selected>{{ __('messages.select_customer') }}</option>
+                                            @foreach ($customers as $cus)
+                                                <option value="{{ $cus->id }}">{{ $cus->name }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        {{-- ប៊ូតុង Add Customer ប្រើ Icon ដូច Supplier --}}
+                                        <button type="button" id="add-customer-btn" 
+                                                title="Add New Customer"
+                                                class="absolute inset-y-0 right-5 flex items-center rounded-r-lg px-4 text-gray-500 transition hover:text-red-600 focus:outline-none dark:text-gray-400 dark:hover:text-red-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </button>
+                                        
+                                    </div>
                                 </div>
+
 
                                 <div class="form-group">
                                     <label for="payment_status" class="block mb-1 font-medium text-gray-800 dark:text-white">{{ __('messages.payment_method') }}</label>
@@ -173,6 +193,65 @@
                         </div>
                     </div>
 
+                    {{-- Modal Customer --}}
+                    <div id="add-customer-modal" 
+                    class="hidden fixed inset-0 z-50 overflow-y-auto 
+                            bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
+                        <div class="relative top-20 mx-auto w-full max-w-lg transform rounded-xl border border-slate-200/50 
+                            bg-white/80 p-6 shadow-2xl transition-all duration-300 
+                            dark:border-slate-700/50 dark:bg-slate-900/80">
+                    
+                            <div class="mt-3 text-center">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                                    {{ __('messages.add_new_customer') }}</h3>
+
+                                <form id="addCustomerForm" class="mt-4 text-left space-y-4">
+                                    @csrf
+                                    <div>
+                                        <label for="customer_name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            {{ __('messages.customer_name') }} <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="name" id="customer_name"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600">
+                                        <div id="name_error" class="text-red-500 text-sm mt-1"></div>
+                                    </div>
+
+                                    <div>
+                                        <label for="address"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-200">{{ __('messages.address') }}</label>
+                                        <input type="text" name="address" id="customer_address"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600">
+                                        <div id="address_error" class="text-red-500 text-sm mt-1"></div>
+                                    </div>
+
+                                    <div>
+                                        <label for="customer_phone"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-200">{{ __('messages.phone') }}</label>
+                                        <input type="text" name="phone" id="customer_phone"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600">
+                                    </div>
+                                    <div>
+                                        <label for="notes"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-200">{{ __('messages.notes') }}</label>
+                                        <textarea name="notes" id="notes" rows="2"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600"></textarea>
+                                    </div>
+
+                                    <div class="items-center px-4 py-3 flex justify-end gap-x-3">
+                                        <button id="cancel-add-customer" type="button"
+                                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none">
+                                            {{ __('messages.cancel') }}
+                                        </button>
+                                        <button id="save-customer-btn" type="submit"
+                                            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none">
+                                            {{ __('messages.save') }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
                     <script src="{{ asset('backend/assets/js/jquery.validate.min.js') }}"></script>
@@ -187,7 +266,97 @@
                             loadProducts();
                             // Initial load of cart items
                             updateCartDisplay({{ Js::from(Cart::content()) }}, {{ Cart::subtotal() }});
+                        
+                        
+                            // customer JS
+                            const modal = document.getElementById('add-customer-modal');
+                            const addCustomerBtn = document.getElementById('add-customer-btn');
+                            const cancelBtn = document.getElementById('cancel-add-customer');
+                            const addCustomerForm = document.getElementById('addCustomerForm');
+
+                            // បើក Modal
+                            addCustomerBtn.addEventListener('click', () => {
+                                modal.classList.remove('hidden');
+                            });
+
+                            // បិទ Modal
+                            cancelBtn.addEventListener('click', () => {
+                                modal.classList.add('hidden');
+                                clearFormErrors(); // សម្អាត error messages ចាស់ៗ
+                                addCustomerForm.reset(); // សម្អាត input fields
+                            });
+
+                            // បិទ Modal ពេលចុចក្រៅ
+                            window.addEventListener('click', (e) => {
+                                if (e.target == modal) {
+                                    modal.classList.add('hidden');
+                                }
+                            });
+
+                            // AJAX function to save new Customer
+                            addCustomerForm.addEventListener('submit', function (e) {
+                                e.preventDefault();
+                                clearFormErrors();
+
+                                const formData = new FormData(this);
+
+                                fetch("{{ route('store.customer.ajax') }}", {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        // FIX: បន្ថែម CSRF Token ទៅក្នុង Header
+                                        'X-CSRF-TOKEN': formData.get('_token') 
+                                    }
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        return response.json().then(data => Promise.reject(data));
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    // Success case
+                                    toastr.success(data.message);
+
+                                    const customerSelect = document.getElementById('customer_id');
+                                    const newOption = new Option(data.newCustomer.name, data.newCustomer.id, true, true);
+                                    customerSelect.add(newOption, null);
+                                    
+                                    // Close and reset the modal
+                                    modal.classList.add('hidden');
+                                    addCustomerForm.reset();
+                                })
+                                .catch(errorData => {
+                                    // Error case (e.g., validation failed)
+                                    if (errorData.errors) {
+                                        Object.keys(errorData.errors).forEach(key => {
+                                            const errorElement = document.getElementById(`${key}_error`);
+                                            if (errorElement) {
+                                                errorElement.textContent = errorData.errors[key][0];
+                                            }
+                                        });
+                                        toastr.warning('{{ __('messages.errors') }}');
+                                    } else {
+                                        toastr.error('An unexpected error occurred.');
+                                        console.error('Submission error:', errorData);
+                                    }
+                                });
+                            });
+                            function clearFormErrors() {
+                                document.querySelectorAll('#addCustomerForm [id$="_error"]').forEach(el => {
+                                    el.textContent = '';
+                                });
+                            }
                         });
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                      
 
                         
 
@@ -344,42 +513,7 @@
                         }
 
 
-                        // function loadProducts(categoryId = 'all') {
-                        //     fetch(`/get-products?category_id=${categoryId}`)
-                        //         .then(response => response.json())
-                        //         .then(data => {
-                        //             const productGrid = document.getElementById('product-grid');
-                        //             productGrid.innerHTML = '';
-
-                        //             data.products.forEach(product => {
-                        //                 const disabled = product.stock === 0;
-
-                        //                 const card = `
-                        //                         <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
-                        //                             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-105'}"
-                        //                             ${disabled ? '' : `onclick="addProductToCartAjax(${product.id}, '${product.name}', 1, ${product.price});"`}
-                        //                             title="${disabled ? 'Out of Stock' : 'Click to add to cart'}">
-
-                        //                             <div class="p-3" style="width:150px; height: 50px;">
-                        //                                 <img class="w-full h-24 rounded-md object-cover" src="${product.imageUrl}" alt="${product.name}">
-                        //                             </div>
-
-                        //                             <br><br><br>
-
-                        //                             <div class="p-4 px-3 text-center">
-                        //                                 <h3 class="font-semibold mb-1">${product.name}</h3>
-                        //                                 <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
-                        //                                 <p class="text-sm ${disabled ? 'text-red-500 font-semibold' : 'text-gray-600 dark:text-gray-300'}">
-                        //                                     ${disabled ? 'Out of Stock' : 'Qty: ' + product.stock}
-                        //                                 </p>
-                        //                             </div>
-                        //                         </div>
-                        //                     `;
-
-                        //                 productGrid.innerHTML += card;
-                        //             });
-                        //         });
-                        // }
+                        
 
                         function loadProducts(categoryId = 'all') {
                 fetch(`/get-products?category_id=${categoryId}`)

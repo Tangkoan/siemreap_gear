@@ -12,11 +12,67 @@ use App\Models\Orderdetails;
 use App\Models\Category;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator; //  <-- ត្រូវ Import ថែម
 
 
 class PosController extends Controller
 {
     //
+    /**
+         * នេះជាកូដដែលកែប្រែពី StoreCustomer របស់អ្នក ឱ្យទៅជា AJAX Standard
+         */
+        public function storeCustomerAjax(Request $request)
+        {
+            // === ផ្នែកទី១៖ ការធ្វើ Validation ===
+            // យើងប្រើ Validator::make() ជំនួសឱ្យ $request->validate() ដើម្បីគ្រប់គ្រង Response ដោយខ្លួនឯង
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255|unique:customers,name',
+                'notes' => 'nullable|string|max:255',
+                'phone' => 'nullable|string|max:20',
+                'address' => 'nullable|string|max:500', 
+            ], [
+                // អ្នកអាចដាក់ Custom Message នៅទីនេះបានដូចគ្នា
+                'name.required' => __('validation.required', ['attribute' => __('validation.attributes.name')]),
+                'name.unique'   => __('validation.unique', ['attribute' => __('validation.attributes.name')]),
+            ]);
+
+            // ពិនិត្យមើលបើ Validation Fails
+            if ($validator->fails()) {
+                // បញ្ជូន Error JavaScript ជា JSON ជាមួយ Status Code 422
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+
+            // === ផ្នែកទី២៖ ការរក្សាទុកទិន្នន័យ និង Response ពេលជោគជ័យ ===
+            // យើងប្រើ try...catch ដើម្បីចាប់ Error ពី Database
+            try {
+                // ប្រើ customer::create() ជំនួសឱ្យ insert() ព្រោះវាជា Eloquent best practice
+                $customer = Customer::create([
+                    'name' => $request->name,
+                    'notes' => $request->notes,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    // create() នឹងបំពេញ created_at ដោយស្វ័យប្រវត្តិ មិនចាំបាច់reload page
+                ]);
+                
+                // ប្តូរពី redirect() ទៅជា response()->json()
+                return response()->json([
+                    'message' => __('messages.customer_inserted_successfully'),
+                    'newCustomer' => [ // ត្រូវបញ្ជូនទិន្នន័យនេះ JS
+                        'id' => $customer->id,
+                        'name' => $customer->name,
+                    ]
+                ], 200);
+
+            } catch (\Exception $e) {
+                // === ផ្នែកទី៣៖ ការដោះស្រាយ Exception ===
+                \Log::error('Error saving Customer: ' . $e->getMessage()); 
+                
+                return response()->json([
+                    'errors' => ['database' => __('messages.customer_insert_failed')]
+                ], 500);
+            }
+        }
 
     
 

@@ -122,7 +122,7 @@
                     <div class="group relative flex items-center rounded-lg border border-gray-300 bg-white  transition-all duration-200 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:focus-within:border-indigo-500">
                         
                         <select name="supplier_id" id="supplier_id" 
-                                class="w-full appearance-none border-none bg-transparent px-4 py-2 pr-14 focus:outline-none focus:ring-0 dark:text-white dark:bg-gray-700">
+                                class="w-full appearance-none rounded-lg border-none bg-transparent px-4 py-2 pr-14 focus:outline-none focus:ring-0 dark:text-white dark:bg-gray-700">
                             <option value="" disabled selected>{{ __('messages.select_supplier') }}</option>
                             @foreach ($supplier as $sup)
                                 <option value="{{ $sup->id }}">{{ $sup->name }}</option>

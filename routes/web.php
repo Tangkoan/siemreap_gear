@@ -302,7 +302,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
 
-    ///Purchase All Route Add commentMore actions
+//===================================================== Purchase ==================================================================
 
     Route::controller(PurchaseController::class)->group(function () {
 
@@ -348,9 +348,6 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('/purchase/add-to-cart', 'AddToCart');
 
         Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
-
-        // Route::get('/purchase/cart/remove/{rowId}', 'RemoveCartItem');
-        // Route::post('/purchase/cart/update/{rowId}', 'UpdateCartItem');
 
         Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
         Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
@@ -519,6 +516,10 @@ Route::middleware(['auth'])->group(callback: function () {
         //
         Route::post('/final-invoice', 'FinalInvoice');
         Route::get('/api/products-for-pos', 'getProductsForPos')->name('api.products.pos');
+
+        // ===== Create Customer in Page POS =====
+        Route::post('/pos/store-customer', 'storeCustomerAjax')->name('store.customer.ajax');
+
     });
     // End
 

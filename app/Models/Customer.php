@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'phone',
+        'address',
+        'notes',
+    ];
 
     public function orders()
     {
