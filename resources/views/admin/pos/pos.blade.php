@@ -393,25 +393,27 @@
 
                             const card = `
                                 <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
-                                    cursor-pointer hover:scale-105"
-                                    onclick="addProductToCartAjax(${product.id}, '${product.name}', 1, ${product.price});"
-                                    title="Click to add to cart">
+                                                        cursor-pointer hover:scale-[1.02]"
+                                                        onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
+                                                        title="Click to add to purchase cart">
 
-                                    <div class="p-3" style="width:150px; height: 50px;">
-                                        <img class="w-full h-24 rounded-md object-cover" src="${product.imageUrl}" alt="${product.name}">
-                                    </div>
+                                                        <div class="p-2 w-full" >
+                                                            <img class="w-full h-32 rounded-md object-fill" src="${product.imageUrl}" alt="${product.name}">
+                                                        </div>
+                                                        <br>
 
-                                    <br><br><br>
-
-                                    <div class="p-4 px-3 text-center">
-                                        <h3 class="font-semibold mb-1">${product.name}</h3>
-                                        <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">
-                                            {{ __('messages.qty') }}: ${product.stock}
-                                        </p>
-                                    </div>
-                                </div>
-                            `;
+                                                        <div class="p-4 px-3 text-center">
+                                                            <div class="w-40">
+                                                                <h3 class="font-semibold mb-1">${product.name}</h3>
+                                                            </div>
+                                                            <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
+                                                            <p class="font-semibold mb-1">${product.code}</p>
+                                                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                                                Qty: ${product.stock}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                `;
 
                             productGrid.innerHTML += card;
                         });

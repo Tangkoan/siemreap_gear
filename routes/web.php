@@ -19,6 +19,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\LanguageController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('language/{locale}', function ($locale) {
     app()->setLocale($locale);
@@ -28,8 +29,18 @@ Route::get('language/{locale}', function ($locale) {
 
 
 
+// Route::get('/', function () {
+//     // return view('welcome');
+//     return view('auth/login');
+// });
+
 Route::get('/', function () {
-    // return view('welcome');
+    // ត្រួតពិនិត្យប្រសិនបើអ្នកប្រើប្រាស់បាន Login រួចហើយ
+    if (Auth::check()) {
+        // បញ្ជូនបន្តទៅកាន់ Route ឈ្មោះ 'dashboard'
+        return redirect('/dashboard');
+    }
+    // ប្រសិនបើមិនទាន់ Login បង្ហាញទំព័រ Login
     return view('auth/login');
 });
 

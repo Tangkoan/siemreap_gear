@@ -55,7 +55,7 @@
 
             <div class="flex-1 overflow-y-auto ">
                 <div id="product-grid"
-                    class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-2">
+                    class="p-4 dark:bg-gray-800 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-2">
                 </div>
             </div>
         </div>
@@ -536,18 +536,19 @@
                     data.products.forEach(product => {
                         const card = `
                                                     <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200
-                                                        cursor-pointer hover:scale-105"
+                                                        cursor-pointer hover:scale-[1.02]"
                                                         onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
                                                         title="Click to add to purchase cart">
 
-                                                        <div class="p-3" style="width:150px; height: 50px;">
-                                                            <img class="w-full h-24 rounded-md object-cover" src="${product.imageUrl}" alt="${product.name}">
+                                                        <div class="p-2 w-full" >
+                                                            <img class="w-full h-32 rounded-md object-fill" src="${product.imageUrl}" alt="${product.name}">
                                                         </div>
-
-                                                        <br><br><br>
+                                                        <br>
 
                                                         <div class="p-4 px-3 text-center">
-                                                            <h3 class="font-semibold mb-1">${product.name}</h3>
+                                                            <div class="w-40">
+                                                                <h3 class="font-semibold mb-1">${product.name}</h3>
+                                                            </div>
                                                             <p class="text-blue-600 font-bold text-lg">$${product.buying_price}</p>
                                                             <p class="font-semibold mb-1">${product.code}</p>
                                                             <p class="text-sm text-gray-600 dark:text-gray-300">
