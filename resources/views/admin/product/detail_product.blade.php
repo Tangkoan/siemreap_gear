@@ -75,6 +75,27 @@
                                 </select>
                             </div>
 
+                            {{-- Condition Name --}}
+                            <div class="form-group">
+                                <label for="condition_id"
+                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                     {{ __('messages.condition_name') }}  <span class="text-red-500">*</span>
+                                </label>
+                                <select name="condition_id" id="example-select"
+                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    <option selected disabled>{{ __('messages.select_condition') }}</option>
+                                    @foreach ($condition as $con)
+                                        <option value="{{ $cat->id }}"
+                                            {{ $con->id == $product->condition_id ? 'selected' : '' }}>
+                                            {{ $con->condition_name }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
                             {{-- Image --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
@@ -88,6 +109,7 @@
 
                         {{-- Column 2 --}}
                         <div class="space-y-4">
+                            <div></div>
 
                             {{-- Selling Price --}}
                             <div>

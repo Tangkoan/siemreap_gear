@@ -442,6 +442,9 @@ return [
         'condition_inserted_successfully' => 'Condition Inserted Successfully',
         'condition_delete_error_has_products' => 'Condition Delete Can Not Delete, have Product Use This Condition',
         'condition_deleted_successfully'=> 'Condition Deleted Successfully',
+        'please_select_condition'=> 'Please Select Condition',
+        // Validate
+        'select_condition'=> 'Select Condition',
        
 
 

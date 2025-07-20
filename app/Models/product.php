@@ -25,6 +25,10 @@ class product extends Model
         return $this->belongsTO(Supplier::class,'supplier_id','id');
     }
 
+    public function condition(){
+        return $this->belongsTO(Condition::class,'condition_id','id');
+    }
+
 
     public function orderDetails()
     {

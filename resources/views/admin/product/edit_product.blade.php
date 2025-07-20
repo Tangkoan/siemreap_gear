@@ -76,17 +76,28 @@
                                 </select>
                             </div>
 
-                            {{-- Details --}}
+                            {{-- Condition Name --}}
                             <div class="form-group">
-                                <label for="product_detail"
+                                <label for="condition_id"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.details') }}
+                                     {{ __('messages.condition_name') }}  <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" id="product_detail" name="product_detail"
-                                    value="{{ $product->product_detail }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <select name="condition_id" id="example-select"
+                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    <option selected disabled>{{ __('messages.select_condition') }}</option>
+                                    @foreach ($condition as $con)
+                                        <option value="{{ $cat->id }}"
+                                            {{ $con->id == $product->condition_id ? 'selected' : '' }}>
+                                            {{ $con->condition_name }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
                             </div>
 
+                            
 
 
                             {{-- Image --}}
@@ -151,6 +162,18 @@
                                 <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert" value="{{ $product->stock_alert }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
+
+                            {{-- Details --}}
+                            <div class="form-group">
+                                <label for="product_detail"
+                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    {{ __('messages.details') }}
+                                </label>
+                                <input type="text" id="product_detail" name="product_detail"
+                                    value="{{ $product->product_detail }}"
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+
                         </div>
                     </div>
 
@@ -195,6 +218,11 @@
                     supplier_id: {
                         required: true,
                     },
+
+                    condition_id: {
+                        required: true,
+                    },
+
                     selling_price: {
                         required: true,
                     },
@@ -219,6 +247,11 @@
                     supplier_id: {
                         required: '{{ __('messages.please_select_supplier') }}',
                     },
+
+                    condition_id: {
+                        required: '{{ __('messages.please_select_condition') }}',
+                    },
+
                     selling_price: {
                         required: '{{ __('messages.please_enter_price_selling_price') }}',
                     },

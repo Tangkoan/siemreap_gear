@@ -77,19 +77,22 @@
                                 </select>
                             </div>
 
-                            {{-- Details --}}
-                            <div>
-                                <label for="product_detail"
+                            {{-- Condition Name --}}
+                            <div class="form-group">
+                                <label for="condition_id"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.details') }} <span class="text-red-500">*</span>
+                                     {{ __('messages.condition_name') }}  <span class="text-red-500">*</span>
                                 </label>
-                                <input type="tel" id="product_detail" name="product_detail"
+                                <select name="condition_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    <option selected disabled>{{ __('messages.select_condition') }}</option>
+                                    @foreach ($condition as $con)
+                                        <option value="{{ $con->id }}">{{ $con->condition_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-
-
 
                             {{-- Image --}}
                             <div class="mb-2">
@@ -155,6 +158,18 @@
                                                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                                                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
+                            
+                            {{-- Details --}}
+                            <div>
+                                <label for="product_detail"
+                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    {{ __('messages.details') }} <span class="text-red-500">*</span>
+                                </label>
+                                <input type="tel" id="product_detail" name="product_detail"
+                                    class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
+                                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
 
                         </div>
                     </div>
@@ -199,6 +214,10 @@
                         required: true,
                     },
 
+                    condition_id: {
+                        required: true,
+                    },
+
                     supplier_id: {
                         required: true,
                     },
@@ -226,6 +245,11 @@
                     supplier_id: {
                         required: '{{ __('messages.please_select_supplier') }}',
                     },
+
+                    condition_id: {
+                        required: '{{ __('messages.please_select_condition') }}',
+                    },
+
                     selling_price: {
                         required: '{{ __('messages.please_enter_price_selling_price') }}',
                     },

@@ -18,6 +18,7 @@ use App\Notifications\StockAlertNotification;
 
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\Condition;
 
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
@@ -55,26 +56,26 @@ class ProductController extends Controller
 
 
     // ProductController.php
-public function search(Request $request)
-{
-    $keyword = $request->input('keyword');
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
 
-    $products = Product::where('product_name', 'like', "%$keyword%")->get();
+        $products = Product::where('product_name', 'like', "%$keyword%")->get();
 
-    // Convert image path to URL
-    $products = $products->map(function ($product) {
-        return [
-            'id' => $product->id,
-            'name' => $product->product_name,
-            'price' => $product->selling_price,
-            'imageUrl' => asset($product->product_image),
-        ];
-    });
+        // Convert image path to URL
+        $products = $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->product_name,
+                'price' => $product->selling_price,
+                'imageUrl' => asset($product->product_image),
+            ];
+        });
 
-    return response()->json([
-        'products' => $products
-    ]);
-}
+        return response()->json([
+            'products' => $products
+        ]);
+    }
 
 
     //
@@ -94,8 +95,9 @@ public function search(Request $request)
 
         $category = Category::orderBy('category_name', 'asc')->get();
         $supplier = Supplier::orderBy('name', 'asc')->get();
+        $condition = Condition::orderBy('condition_name', 'asc')->get();
 
-        return view('admin.product.add_product',compact('category','supplier'));
+        return view('admin.product.add_product',compact('category','supplier','condition'));
        }// End Method 
     
     
@@ -141,17 +143,15 @@ public function search(Request $request)
             // $save_url = 'upload/product/'.$name_gen;
             Product::insert([
                 'product_name' => $request->product_name,
-
                 'stock_alert' => $request->stock_alert,
                 'category_id' => $request->category_id,
                 'supplier_id' => $request->supplier_id,
+                'condition_id' => $request->condition_id,
                 'product_code' => $pcode,
                 'product_store' => $request->product_store,
-               
                 'product_detail' => $request->product_detail,
                 'buying_price' => $request->buying_price,
                 'selling_price' => $request->selling_price,
-                
                 'product_image' => $image_path,
                 'created_at' => Carbon::now(), 
             ]);
@@ -177,6 +177,7 @@ public function search(Request $request)
                     'stock_alert' => $request->stock_alert,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
+                    'condition_id' => $request->condition_id,
                     'product_detail' => $request->product_detail,
                     'product_code' => $request->product_code,
                     'product_store' => $request->product_store,
@@ -200,9 +201,9 @@ public function search(Request $request)
                     'stock_alert' => $request->stock_alert,
                     'category_id' => $request->category_id,
                     'supplier_id' => $request->supplier_id,
+                    'condition_id' => $request->condition_id,
                     'product_code' => $request->product_code,
                     'product_store' => $request->product_store,
-                    
                     'product_detail' => $request->product_detail,
                     'buying_price' => $request->buying_price,
                     'selling_price' => $request->selling_price,
@@ -219,39 +220,57 @@ public function search(Request $request)
         
 
         public function DeleteProduct($id)
-{
-    $product = Product::findOrFail($id);
-    $img = $product->product_image;
+        {
+            $product = Product::findOrFail($id);
+            $img = $product->product_image;
 
-    // បញ្ហា: ត្រូវពិនិត្យទាំង purchase_details (PurchaseItem)
-    $hasPurchaseDetails = \App\Models\purchase_details::where('product_id', $id)->exists();
+            // បញ្ហា: ត្រូវពិនិត្យទាំង purchase_details (PurchaseItem)
+            $hasPurchaseDetails = \App\Models\purchase_details::where('product_id', $id)->exists();
 
-    // បញ្ហា: ត្រូវពិនិត្យទាំង orderDetails ប្រសិនបើវាដូចជា Sale Detail
-    $hasOrderDetails = $product->orderDetails()->exists();
+            // បញ្ហា: ត្រូវពិនិត្យទាំង orderDetails ប្រសិនបើវាដូចជា Sale Detail
+            $hasOrderDetails = $product->orderDetails()->exists();
 
-    if ($hasPurchaseDetails || $hasOrderDetails) {
-        $notification = array(
-            'message' => __('messages.cannot_delete_product'),
-            'alert-type' => 'error'
-        );
-        return redirect()->route('all.product')->with($notification);
-    }
+            if ($hasPurchaseDetails || $hasOrderDetails) {
+                $notification = array(
+                    'message' => __('messages.cannot_delete_product'),
+                    'alert-type' => 'error'
+                );
+                return redirect()->route('all.product')->with($notification);
+            }
 
-    // Delete image if it exists
-    if ($img && file_exists($img)) {
-        unlink($img);
-    }
+            // Delete image if it exists
+            if ($img && file_exists($img)) {
+                unlink($img);
+            }
 
-    $product->delete();
+            $product->delete();
 
-    $notification = array(
-        'message' => __('messages.product_deleted_successfully'),
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification);
-}
+            $notification = array(
+                'message' => __('messages.product_deleted_successfully'),
+                'alert-type' => 'success'
+            );
+            return redirect()->back()->with($notification);
+        }
 
-        
+         public function EditProduct($id){
+                $product = Product::findOrFail($id);
+                $category = Category::orderBy('category_name', 'asc')->get();
+                $supplier = Supplier::orderBy('name', 'asc')->get();
+                $condition = Condition::orderBy('condition_name', 'asc')->get();
+
+                return view('admin.product.edit_product',compact('product','category','supplier','condition'));
+        } // End Method
+
+
+        public function DetailProduct($id){
+                $product = Product::findOrFail($id);
+                $category = Category::orderBy('category_name', 'asc')->get();
+                $supplier = Supplier::orderBy('name', 'asc')->get();
+                $condition = Condition::orderBy('condition_name', 'asc')->get();
+
+                return view('admin.product.detail_product', compact('product', 'category', 'supplier','condition'));
+
+        } // End Method
     
 
 
@@ -414,34 +433,22 @@ public function search(Request $request)
                     </button>';
                 }
 
-                
-
-
-
-
-
-
-
-
-
-
-
                 $table .= '
                 <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                    <td class="p-4 py-5">' . ($key + 1) . '</td>
+                    <td class="p-2 py-5">' . ($key + 1) . '</td>
                     
-                    <td class="p-4 py-5">
+                    <td class="p-2 py-5">
                         <img src="' . asset($item->product_image) . '" alt="Product Image" class="rounded-md" style="width: 40px; height: 40px; object-fit: cover; object-position: center;" />
                     </td>
 
-                    <td class="p-4 py-5">' . $item->product_code . '</td>
-                    <td class="p-4 py-5">' . $item->product_name . '</td>
-                    <td class="p-4 py-5">' . $item['category']['category_name'] . '</td>
+                    <td class="p-2 py-5">' . $item->product_code . '</td>
+                    <td class="p-2 py-5">' . $item->product_name . '</td>
+                    <td class="p-2 py-5">' . $item['category']['category_name'] . '</td>
+                    <td class="p-2 py-5">' . $item['condition']['condition_name'] . '</td>
+                    <td class="p-2 py-5">' . $item->selling_price.'$'  . '</td>
+                    <td class="p-2 py-5">' . $item['supplier']['name'] . '</td>
                     
-                    <td class="p-4 py-5">' . $item->selling_price  . '</td>
-                    <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
-                    
-                    <td class="p-4 py-5 text-center align-middle">
+                    <td class="p-2 py-5 text-center align-middle">
                         <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm
                                      ">
                             '. $item->product_store  .'

@@ -121,48 +121,55 @@
                             <thead>
                                 <tr>
 
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                            {!! __('messages.table_no') !!}
                                         </p>
                                     </th>
 
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.image') }}
                                         </p>
                                     </th>
 
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.product_code') }}
                                         </p>
                                     </th>
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.product_name') }}
                                         </p>
                                     </th>
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.category') }}
                                         </p>
                                     </th>
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
+                                        <p class="text-sm font-normal leading-none text-slate-500">
+                                            {{ __('messages.condition_name') }}
+                                        </p>
+                                    </th>
+
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.price') }}
                                         </p>
                                     </th>
 
 
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.supplier') }}
                                         </p>
                                     </th>
 
 
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __(key: 'messages.inventory') }}
                                         </p>
@@ -170,7 +177,7 @@
 
                                     
 
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                    <th class="sticky top-0 dark:bg-gray-800 p-2 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __('messages.table_action') }}
                                         </p>

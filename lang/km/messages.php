@@ -445,4 +445,7 @@ return [
         'condition_inserted_successfully' => 'ការបន្ថែម លក្ខណៈផលិតផលថ្មីឬចាស់បានជោគជ័យ',
         'condition_delete_error_has_products' => 'ការលុបមិនអាចទៅរួចទេ ព្រោះមានផលិតផលណាមួយកំពុងប្រើលក្ខណៈផលិតផលថ្មីឬចាស់',
         'condition_deleted_successfully'=> 'ការលុប លក្ខណៈផលិតផលថ្មីឬចាស់បានជោគជ័យ',
+        'please_select_condition'=> 'សូមជ្រើសរើសលក្ខណៈនៃផលិតផល',
+        // Validate
+        'select_condition'=> 'ជ្រើសរើសលក្ខណៈនៃផលិតផល',
 ];      

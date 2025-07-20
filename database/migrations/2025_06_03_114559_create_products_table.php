@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('condition_id');
             $table->string('product_code')->unique();
             $table->string('product_image');
             $table->string('product_store')->nullable();
@@ -38,6 +39,11 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->foreign('supplier_id')
                 ->references('id')->on('suppliers')
+                ->onDelete('restrict')  // កុំប្រើ cascade
+                ->onUpdate('cascade');
+
+            $table->foreign('condition_id')
+                ->references('id')->on('conditions')
                 ->onDelete('restrict')  // កុំប្រើ cascade
                 ->onUpdate('cascade');
 
