@@ -15,10 +15,13 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ConditionController;
 
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\LanguageController;
+
+
 use Illuminate\Support\Facades\Auth;
 
 Route::get('language/{locale}', function ($locale) {
@@ -72,6 +75,23 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
 
 
+    // ============================= Condition ==================================================
+    Route::controller(ConditionController::class)->group(function () {
+        Route::get('/all/condition', 'AllCondition')->name('all.condition')->middleware('permission:condition.all');
+
+        Route::get('/add/condition', 'AddCondition')->name('add.condition')->middleware('permission:condition.add');
+        Route::post('/store/condition', 'StoreCondition')->name('condition.store');
+
+
+
+        Route::get('/edit/condition/{id}', 'EditCondition')->name('edit.condition')->middleware('permission:condition.edit');
+        Route::post('/condition/update', 'ConditionUpdate')->name('condition.update');
+
+        Route::get('/delete/condition/{id}', 'DeleteCondition')->name('delete.condition')->middleware('permission:condition.delete');
+
+        Route::get('/search-condition',  'searchCondition')->name('search.condition');
+
+    });/// End 
 
     
 
@@ -208,6 +228,9 @@ Route::middleware(['auth'])->group(callback: function () {
 
         Route::get('/delete/category/{id}', 'DeleteCategory')->name('delete.category')->middleware('permission:category.delete');
     });/// End Category Route
+
+
+    
     
 
 

@@ -431,6 +431,20 @@ return [
 
 
 
+// ======================= Condition =========================
+        'condition_name' => 'Condtion Name',
+        'condition' => 'Condition',
+        'add_condition' => 'Add Condition',
+        'edit_condition' => 'Edit Condition',
+
+         // Notification 
+        'condition_updated_successfully' => 'Condition Updted Successfully',
+        'condition_inserted_successfully' => 'Condition Inserted Successfully',
+        'condition_delete_error_has_products' => 'Condition Delete Can Not Delete, have Product Use This Condition',
+        'condition_deleted_successfully'=> 'Condition Deleted Successfully',
+       
+
+
 
 
 

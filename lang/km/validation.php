@@ -29,7 +29,7 @@ return [
         'email' => 'អុីមែល',
         'old_password'=> 'លេខកូដសម្ងាត់ចាស់',
         'new_password'=> 'លេខកូដសម្ងាត់ថ្មី',
-        
+        'condition_name'=> 'លក្ខណៈថ្មីឬចាស់',
 
     ],
 

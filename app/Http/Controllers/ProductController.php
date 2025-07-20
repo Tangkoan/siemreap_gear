@@ -101,9 +101,7 @@ public function search(Request $request)
     
        // Store Product
        public function StoreProduct(Request $request){ 
-     
-        
-           
+
         do {
             $pcode = IdGenerator::generate([
                 'table' => 'products',
