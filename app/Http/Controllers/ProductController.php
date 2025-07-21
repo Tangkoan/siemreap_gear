@@ -44,7 +44,7 @@ class ProductController extends Controller
                                      ->orWhere('stock_alert', '!=', 0);
                            })
                            // Corrected select statement: product_stock instead of duplicate product_store
-                           ->select('product_name', 'product_store', 'product_store', 'stock_alert')
+                           ->select('product_name', 'product_store', 'stock_alert')
                            ->get();
 
         return response()->json([
