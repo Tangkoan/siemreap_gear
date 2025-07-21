@@ -115,14 +115,6 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
-            // Insert logic
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withErrors(['error' => $e->getMessage()]);
-        }
-
-
             // Default null if no image
             $image_path = $request->input('product_image') ?? null;
 
@@ -156,16 +148,28 @@ class ProductController extends Controller
                 'created_at' => Carbon::now(), 
             ]);
 
-            // Success notification
-             $notification = array(
-                'message' => __('messages.product_inserted_successfully'),
-                'alert-type' => 'success'
+            DB::commit();
+
+        } catch (\Exception $e) {
+            \Log::error('Error storing product: ' . $e->getMessage()); // ជាការល្អគួរ Log error ទុក
+        
+            $notification = array(
+                'message' => 'Something went wrong: ' . $e->getMessage(),
+                'alert-type' => 'error'
             );
-            return redirect()->route('all.product')->with($notification); 
+            return redirect()->back()->with($notification)->withInput();
+        }
+
+        $notification = array(
+            'message' => __('messages.product_inserted_successfully'),
+            'alert-type' => 'success'
+        );
+        return redirect()->route('all.product')->with($notification);
         } // End Method 
                 
         public function UpdateProduct(Request $request){
                 $product_id = $request->id;
+                
                 if ($request->file('product_image')) {
                 $image = $request->file('product_image');
                 $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
