@@ -15,14 +15,27 @@ use App\Models\product;
 use App\Models\Orderdetails;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
+use Illuminate\Support\Facades\DB; // ✅ ត្រូវប្រាកដថាបាន use DB Facad
+
 // PDF 
 use Barryvdh\DomPDF\Facade\Pdf;
 
-use DB;
 
 
 class OrderController extends Controller
 {
+
+    public function PendingPreOrders()
+    {
+        
+        $preOrderItems = OrderDetails::with(['order.customer', 'product'])
+                            ->where('item_status', 'pre_ordered')
+                            ->orderBy('created_at', 'asc')
+                            ->get();
+
+        return view('admin.order.pending_pre_orders', compact('preOrderItems'));
+    }
+    
     //
     public function PendingDue(){
 
@@ -31,109 +44,53 @@ class OrderController extends Controller
         return view('admin.order.pending_due',compact('alldue'));
     }// End Method 
 
+    
     // public function FinalInvoice(Request $request){
-
-
-
-
-
 
     //     $rtotal = $request->total;
     //     $rpay = $request->pay;
     //     $mtotal = $rtotal - $rpay;
-
-    //     $data = array();
+    
+    //     $data = [];
     //     $data['customer_id'] = $request->customer_id;
     //     $data['order_date'] = $request->order_date;
     //     $data['order_status'] = $request->order_status;
     //     $data['total_products'] = $request->total_products;
     //     $data['sub_total'] = $request->sub_total;
     //     $data['vat'] = $request->vat;
-
-    //     $data['invoice_no'] = 'EPOS'.mt_rand(10000000,99999999);
-    //     $data['total'] = $request->total;
+    
+    //     $data['invoice_no'] = 'SR GEAR' . mt_rand(10000000, 99999999);
+    //     $data['total'] = $rtotal;
     //     $data['payment_status'] = $request->payment_status;
-    //     $data['pay'] = $request->pay;
-    //      $data['due'] = $mtotal;
-    //     $data['due'] = $request->due;
-    //     $data['created_at'] = Carbon::now(); 
-
+    //     $data['pay'] = $rpay;
+    //     $data['due'] = $mtotal; // ✅ តែម្ដង!
+    //     $data['created_at'] = Carbon::now();
+    
     //     $order_id = Order::insertGetId($data);
+    
     //     $contents = Cart::content();
-
-    //     $pdata = array();
+    
     //     foreach($contents as $content){
+    //         $pdata = [];
     //         $pdata['order_id'] = $order_id;
     //         $pdata['product_id'] = $content->id;
     //         $pdata['quantity'] = $content->qty;
     //         $pdata['unitcost'] = $content->price;
     //         $pdata['total'] = $content->total;
-            
-    //         $insert = Orderdetails::insert($pdata); 
-
-    //     } // end foreach
-
-
-    //     $notification = array(
-    //         'message' => 'Order Complete Successfully',
+    
+    //         Orderdetails::insert($pdata);
+    //     }
+    
+    //     $notification = [
+    //         'message' => __('messages.order_complete_successfully'),
     //         'alert-type' => 'success'
-    //     );
-
+    //     ];
+    
     //     Cart::destroy();
-
+    
     //     return redirect()->route('pos')->with($notification);
-
-    // } // End Method 
-
+    // }
     
-
-    
-    
-    public function FinalInvoice(Request $request){
-
-        $rtotal = $request->total;
-        $rpay = $request->pay;
-        $mtotal = $rtotal - $rpay;
-    
-        $data = [];
-        $data['customer_id'] = $request->customer_id;
-        $data['order_date'] = $request->order_date;
-        $data['order_status'] = $request->order_status;
-        $data['total_products'] = $request->total_products;
-        $data['sub_total'] = $request->sub_total;
-        $data['vat'] = $request->vat;
-    
-        $data['invoice_no'] = 'SR GEAR' . mt_rand(10000000, 99999999);
-        $data['total'] = $rtotal;
-        $data['payment_status'] = $request->payment_status;
-        $data['pay'] = $rpay;
-        $data['due'] = $mtotal; // ✅ តែម្ដង!
-        $data['created_at'] = Carbon::now();
-    
-        $order_id = Order::insertGetId($data);
-    
-        $contents = Cart::content();
-    
-        foreach($contents as $content){
-            $pdata = [];
-            $pdata['order_id'] = $order_id;
-            $pdata['product_id'] = $content->id;
-            $pdata['quantity'] = $content->qty;
-            $pdata['unitcost'] = $content->price;
-            $pdata['total'] = $content->total;
-    
-            Orderdetails::insert($pdata);
-        }
-    
-        $notification = [
-            'message' => __('messages.order_complete_successfully'),
-            'alert-type' => 'success'
-        ];
-    
-        Cart::destroy();
-    
-        return redirect()->route('pos')->with($notification);
-    }
     
     
     

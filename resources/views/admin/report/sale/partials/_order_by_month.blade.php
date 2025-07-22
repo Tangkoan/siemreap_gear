@@ -6,6 +6,11 @@
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_orders') }}</h3><p id="kpi-orders-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.items_sold') }}</h3><p id="kpi-items-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.avg_order_value') }}</h3><p id="kpi-avg-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+            <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">TOTAL PRE-ORDERS</h3>
+            
+            <p id="kpi-pre_orders-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p>
+        </div>
     </div>
 
     {{-- Control Bar --}}

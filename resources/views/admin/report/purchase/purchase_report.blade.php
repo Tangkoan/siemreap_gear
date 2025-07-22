@@ -356,7 +356,7 @@
                         <div class="text-left md:text-right">
                             <p class="text-sm font-semibold text-slate-500">DATE</p>
                             <p id="purchase-date" class="font-medium mt-1"></p>
-                            <p class="text-sm font-semibold text-slate-500 mt-4">STATUS</p><span
+                            <p class="text-sm font-semibold text-slate-500 mt-4">Payment Method</p><span
                                 id="purchase-status-badge"
                                 class="px-3 py-1 text-xs font-bold rounded-full mt-1 inline-block"></span>
                         </div>
@@ -521,8 +521,10 @@
                     success: function(response) {
                         const {
                             purchase,
-                            purchaseDetails
+                            purchaseDetails,
+                            assetBaseUrl, 
                         } = response;
+                        
                         $('#purchase-invoice-no').text(purchase.invoice_no);
                         $('#purchase-date').text(new Date(purchase.purchase_date)
                             .toLocaleDateString('en-GB', {
@@ -549,9 +551,23 @@
                         let detailsHtml = purchaseDetails?.length ? '' :
                             '<tr><td colspan="4" class="text-center p-6 text-slate-500">No items found for this purchase.</td></tr>';
                         purchaseDetails?.forEach(item => {
+                            // ✅ បង្កើត URL រូបភាពដោយប្រើ assetBaseUrl
+                            const imageUrl = `${assetBaseUrl}${item.product.product_image}`;
+
                             detailsHtml +=
-                                `<tr class="border-b last:border-b-0 border-slate-200 dark:border-slate-700"><td class="p-4"><div class="flex items-center gap-3"><img src="{{ asset('') }}/${item.product.product_image}" class="w-12 h-12 object-cover rounded-lg"><div class="font-semibold text-slate-800 dark:text-white">${item.product.product_name}</div></div></td><td class="p-4 text-center">${item.quantity}</td><td class="p-4 text-right">$${parseFloat(item.purchase_price).toFixed(2)}</td><td class="p-4 text-right font-medium text-slate-800 dark:text-white">$${parseFloat(item.total).toFixed(2)}</td></tr>`;
-                        });
+                                    `<tr class="border-b last:border-b-0 border-slate-200 dark:border-slate-700">
+                                        <td class="p-4">
+                                            <div class="flex items-center gap-3">
+                                                <img src="${imageUrl}" class="w-12 h-12 object-cover rounded-lg">
+                                                <div class="font-semibold text-slate-800 dark:text-white">${item.product.product_name}</div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-center">${item.quantity}</td>
+                                        <td class="p-4 text-right">$${parseFloat(item.purchase_price).toFixed(2)}</td>
+                                        <td class="p-4 text-right font-medium text-slate-800 dark:text-white">$${parseFloat(item.total).toFixed(2)}</td>
+                                    </tr>`;
+                            });
+
                         $('#modal-purchase-table-body').html(detailsHtml);
                         $('#purchaseDetailsModal').removeClass('hidden');
                     }

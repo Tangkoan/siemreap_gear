@@ -76,7 +76,8 @@ class ReportController extends Controller
 
         return response()->json([
             'order' => $order,
-            'orderDetails' => $order->orderDetails
+            'orderDetails' => $order->orderDetails,
+            'assetBaseUrl' => asset('') // ✅ ការកែប្រែ៖ បន្ថែមบรรทัดនេះ
         ]);
     }
 
@@ -614,7 +615,8 @@ class ReportController extends Controller
 
         return response()->json([
             'purchase' => $purchase,
-            'purchaseDetails' => $purchase->purchaseDetails
+            'purchaseDetails' => $purchase->purchaseDetails,
+            'assetBaseUrl' => asset('') // ✅ ការកែប្រែ៖ បន្ថែមบรรทัดនេះ
         ]);
     }
 

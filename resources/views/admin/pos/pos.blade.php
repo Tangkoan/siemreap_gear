@@ -224,25 +224,32 @@
 
         // ✅ FIX: បង្កើត function សម្រាប់បង្កើត Product Card ដើម្បីកុំឱ្យសរសេរកូដស្ទួន
         function createProductCardHTML(product) {
-            return `
-                <div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200 cursor-pointer hover:scale-[1.02]"
-                     onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.price});"
-                     title="Click to add to cart">
-                    <div class="p-2 w-full">
-                        <img class="w-full h-32 rounded-md object-fill" src="${product.imageUrl}" alt="${product.name}">
-                    </div>
-                    <br>
-                    <div class="p-4 px-3 text-center">
-                        <div class="w-40">
-                            <h3 class="font-semibold mb-1">${product.name}</h3>
-                        </div>
-                        <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
-                        <p class="font-semibold mb-1">${product.code}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Qty: ${product.stock}</p>
-                    </div>
-                </div>`;
+        // កំណត់ Badge ដោយផ្អែកលើจำนวนស្តុក
+        let stockBadge = '';
+        if (product.stock > 0) {
+            stockBadge = `<span class="absolute top-2 right-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">In Stock: ${product.stock}</span>`;
+        } else {
+            stockBadge = `<span class="absolute top-2 right-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pre-Order</span>`;
         }
 
+        // បន្ថែម data-stock ទៅក្នុង div ដើម្បីងាយស្រួលទាញយកពេលក្រោយ
+        return `
+            <div class="relative bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition duration-200 cursor-pointer hover:scale-[1.02]"
+                 onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.price}, ${product.stock});"
+                 title="Click to add to cart">
+                ${stockBadge}
+                <div class="p-2 w-full">
+                    <img class="w-full h-32 rounded-md object-fill" src="${product.imageUrl}" alt="${product.name}">
+                </div>
+                <div class="p-4 pt-2 text-center">
+                    <div class="w-full">
+                        <h3 class="font-semibold mb-1 truncate">${product.name}</h3>
+                    </div>
+                    <p class="text-blue-600 font-bold text-lg">$${product.price}</p>
+                    <p class="text-xs text-gray-500">${product.code}</p>
+                </div>
+            </div>`;
+    }
         // ✅ FIX: កែប្រែ function loadProducts ឱ្យទទួល clickedButton និងបន្ថែម active class
         function loadProducts(categoryId = 'all', clickedButton = null) {
             const categoryButtonsContainer = document.getElementById('category-buttons');
@@ -269,11 +276,10 @@
                 .then(data => {
                     const productGrid = document.getElementById('product-grid');
                     productGrid.innerHTML = '';
-                    data.products.forEach(product => {
-                        if (product.stock > 0) {
+                    // យើងបង្ហាញផលិតផលទាំងអស់ ដោយមិនពិនិត្យស្តុកទៀតទេ
+                        data.products.forEach(product => {
                             productGrid.innerHTML += createProductCardHTML(product);
-                        }
-                    });
+                        });
                 })
                 .catch(error => console.error('Error loading products:', error));
         }
@@ -288,23 +294,32 @@
             } else {
                 for (const rowId in cartContent) {
                     const item = cartContent[rowId];
+                     // ពិនិត្យមើល option ที่เราបានបន្ថែម
+                        const isPreOrder = item.options.is_pre_order === 'true';
+                        
+                        const preOrderLabel = isPreOrder ? `<span class="block text-xs text-yellow-500">Pre-Order</span>` : '';
+                        
                     const row = `
-                        <tr class="hover:bg-gray-50 transition duration-200 dark:bg-gray-800 hover:dark:bg-gray-700">
-                            <td class="p-2">${item.name}</td>
-                            <td class="p-2">${item.price}</td>
-                            <td class="p-2">
-                                <input name="qty" type="number" min="1" value="${item.qty}" data-rowid="${item.rowId}"
-                                       class="qty-input w-16 py-2 px-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-100">
-                            </td>
-                            <td class="p-2 item-subtotal">${(item.price * item.qty).toFixed(2)}</td>
-                            <td class="p-2">
-                                <button type="button" class="icon-delete text-red-500 hover:text-red-700" onclick="removeCartItem('${item.rowId}')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>`;
+                    <tr class="hover:bg-gray-50 transition duration-200 dark:bg-gray-800 hover:dark:bg-gray-700">
+                        <td class="p-2">
+                            ${item.name}
+                            ${preOrderLabel}
+                        </td>
+                        <td class="p-2">$${item.price.toFixed(2)}</td>
+                        <td class="p-2">
+                            <input name="qty" type="number" min="1" value="${item.qty}" data-rowid="${item.rowId}"
+                                   class="qty-input w-16 py-2 px-3 border border-gray-300 rounded dark:bg-gray-700 dark:text-gray-100">
+                        </td>
+                        <td class="p-2 item-subtotal">$${(item.price * item.qty).toFixed(2)}</td>
+                        <td class="p-2">
+                            <button type="button" class="icon-delete text-red-500 hover:text-red-700" onclick="removeCartItem('${item.rowId}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>`;
+                
                     cartTableBody.innerHTML += row;
                 }
             }
@@ -312,14 +327,32 @@
             attachCartEventListeners();
         }
 
-        function addProductToCartAjax(id, name, qty, price) {
+        function addProductToCartAjax(id, name, qty, price,stock) {
+            const isPreOrder = stock <= 0;
+            // បង្កើត Object សម្រាប់បញ្ជូន
+            const params = new URLSearchParams();
+            params.append('id', id);
+            params.append('name', name);
+            params.append('qty', qty);
+            params.append('price', price);
+            params.append('_token', CSRF_TOKEN);
+            // បន្ថែម Option សម្រាប់ Pre-Order
+            params.append('options[is_pre_order]', isPreOrder);
+
+
             fetch("/add-cart", {
                 method: 'POST',
-                body: new URLSearchParams({ id, name, qty, price, _token: CSRF_TOKEN }),
+                body: params, // ប្រើ Object ដែលបានបង្កើត
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.json())
-            .then(data => updateCartDisplay(data.cart_content, data.cart_subtotal))
+            .then(data => {
+                if(data.error) {
+                    toastr.error(data.error);
+                } else {
+                    updateCartDisplay(data.cart_content, data.cart_subtotal);
+                }
+            })
             .catch(error => console.error('Error adding to cart:', error));
         }
 
@@ -386,10 +419,9 @@
                     .then(data => {
                         const productGrid = document.getElementById('product-grid');
                         productGrid.innerHTML = '';
+                        // ដកលក្ខខណ្ឌ filter ចេញពីទីនេះដែរ
                         data.products.forEach(product => {
-                            if (product.stock > 0) {
-                                productGrid.innerHTML += createProductCardHTML(product);
-                            }
+                            productGrid.innerHTML += createProductCardHTML(product);
                         });
                     });
             });

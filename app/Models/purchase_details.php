@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Models\Product;
+use App\Models\purchase;
 
 use Illuminate\Database\Eloquent\Model;
 

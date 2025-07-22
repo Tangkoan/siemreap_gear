@@ -38,6 +38,9 @@
                         <thead class="bg-slate-50 dark:bg-slate-700">
                             <tr>
                                 <th class="p-4 text-sm font-semibold text-left text-slate-600 dark:text-slate-300 w-2/5">PRODUCT</th>
+                                
+                                <th class="p-4 text-sm font-semibold text-center text-slate-600 dark:text-slate-300">STATUS</th>
+
                                 <th class="p-4 text-sm font-semibold text-center text-slate-600 dark:text-slate-300">QTY</th>
                                 <th class="p-4 text-sm font-semibold text-right text-slate-600 dark:text-slate-300">UNIT PRICE</th>
                                 <th class="p-4 text-sm font-semibold text-right text-slate-600 dark:text-slate-300">TOTAL</th>

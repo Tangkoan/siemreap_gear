@@ -17,6 +17,9 @@ $(document).ready(function() {
             $(`#kpi-orders-${period}`).text(kpis.orders);
             $(`#kpi-items-${period}`).text(kpis.items);
             $(`#kpi-avg-${period}`).text(kpis.avg);
+
+            // ✅ ការកែប្រែទី១៖ បន្ថែមบรรทัดนี้เพื่ออัปเดต Card ใหม่
+            $(`#kpi-pre_orders-${period}`).text(kpis.pre_orders);
         }
     }
     
@@ -119,55 +122,62 @@ $(document).ready(function() {
     });
 
     // --- MODAL LOGIC ---
+    
     $(document).on('click', '.view-details-btn', function() {
         const orderId = $(this).data('order-id');
         $('#orderDetailsModal').removeClass('hidden');
-        $('#modal-table-body').html('<tr><td colspan="4" class="text-center p-6">Loading details...</td></tr>');
+
+        // ✅ ការកែប្រែទី២៖ เปลี่ยน colspan เป็น 5 (เพราะเราจะเพิ่มคอลัมน์ Status)
+        $('#modal-table-body').html('<tr><td colspan="5" class="text-center p-6">Loading details...</td></tr>'); 
         
         $.ajax({
             url: "{{ route('report.orders.details') }}",
             type: 'GET',
             data: { order_id: orderId },
             success: function(response) {
-                const { order, orderDetails } = response;
-                const assetBaseUrl = "{{ asset('') }}";
-                $('#invoice-no').text(order.invoice_no);
-                $('#order-date').text(new Date(order.order_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric'}));
-                $('#customer-name').text(order.customer.name);
-                $('#customer-phone').text(order.customer.phone);
-                
-                const statusBadge = $('#order-status-badge');
-                statusBadge.text(order.order_status);
-                if (order.order_status === 'Paid') {
-                    statusBadge.attr('class', 'px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300');
-                } else {
-                    statusBadge.attr('class', 'px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300');
-                }
-
-                $('#summary-subtotal').text(`$${parseFloat(order.sub_total).toFixed(2)}`);
-                $('#summary-discount').text(`-$${parseFloat(order.discount || 0).toFixed(2)}`);
-                $('#summary-grandtotal').text(`$${parseFloat(order.total).toFixed(2)}`);
-                $('#summary-payment-method').text(order.payment_status);
+                // ... (โค้ดส่วนบนของ success function) ...
 
                 let detailsHtml = '';
-                if (orderDetails && orderDetails.length > 0) {
-                    orderDetails.forEach(item => {
+                if (response.orderDetails && response.orderDetails.length > 0) {
+                    response.orderDetails.forEach(item => {
+                        
+                        // ✅ ការកែប្រែទី៣៖ สร้าง Badge สำหรับสถานะสินค้า
+                        let itemStatusBadge = '';
+                        if (item.item_status === 'pre_ordered') {
+                            itemStatusBadge = '<span class="px-2 py-1 text-xs font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">Pre-Order</span>';
+                        } else { // 'fulfilled'
+                            itemStatusBadge = '<span class="px-2 py-1 text-xs font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Fulfilled</span>';
+                        }
+
+                        // ✅ ការកែប្រែទី៤៖ เพิ่มแถว HTML พร้อมคอลัมน์สถานะ
                         detailsHtml += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                            <td class="p-4"><div class="flex items-center gap-4"><img src="${assetBaseUrl}${item.product.product_image}" alt="${item.product.product_name}" class="w-12 h-12 object-cover rounded-lg"><div class="flex-grow"><div class="font-semibold text-gray-800 dark:text-white">${item.product.product_name}</div><div class="text-xs text-gray-500">${item.product.product_code}</div></div></div></td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-4">
+                                    <img src="${response.assetBaseUrl}${item.product.product_image}" alt="${item.product.product_name}" class="w-12 h-12 object-cover rounded-lg">
+                                    <div class="flex-grow">
+                                        <div class="font-semibold text-gray-800 dark:text-white">${item.product.product_name}</div>
+                                        <div class="text-xs text-gray-500">${item.product.product_code}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-4 text-center">${itemStatusBadge}</td>
                             <td class="p-4 text-center">${item.quantity}</td>
                             <td class="p-4 text-right">$${parseFloat(item.unitcost).toFixed(2)}</td>
                             <td class="p-4 text-right font-medium">$${parseFloat(item.total).toFixed(2)}</td>
                         </tr>`;
                     });
                 } else {
-                    detailsHtml = '<tr><td colspan="4" class="text-center p-6 text-slate-500">No items found.</td></tr>';
+                    // ✅ การកែប្រែទី៥៖ เปลี่ยน colspan เป็น 5
+                    detailsHtml = '<tr><td colspan="5" class="text-center p-6 text-slate-500">No items found.</td></tr>';
                 }
                 $('#modal-table-body').html(detailsHtml);
             },
-            error: function() { $('#modal-table-body').html('<tr><td colspan="4" class="text-center text-red-500 p-6">Failed to load details.</td></tr>');}
+            error: function() { 
+                // ✅ ការកែប្រែទី៦៖ เปลี่ยน colspan เป็น 5
+                $('#modal-table-body').html('<tr><td colspan="5" class="text-center text-red-500 p-6">Failed to load details.</td></tr>');
+            }
         });
     });
-
     const closeModal = () => $('#orderDetailsModal').addClass('hidden');
     $(document).on('click', '#closeModalBtn', closeModal);
     $(document).on('click', '#orderDetailsModal', function(e) { if ($(e.target).is('#orderDetailsModal')) closeModal(); });

@@ -36,8 +36,6 @@ class CustomerController extends Controller
 
         $request->validate([
             'name' => 'required|max:200|unique:customers,name',
-        ], [
-            'name.required' => 'ឈ្មោះអតិថិជន តម្រូវឲ្យបំពេញ!!!',
         ]);
 
 

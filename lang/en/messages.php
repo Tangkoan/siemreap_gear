@@ -57,6 +57,8 @@ return [
         // List Customer
         'add_customer' => 'Add Customer',
         'customer_name' => 'Customer Name',
+        'customer_address' => 'Customer Address',
+        'customer_phone'=> 'Customer Phone',
         'table_customer_name' => 'Customer Name',
         'table_customer_phone' => 'Customer Phone',
         // Edit

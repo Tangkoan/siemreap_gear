@@ -38,8 +38,6 @@ class SupplierController extends Controller
         $request->validate([
             'name' => 'required|max:200|unique:suppliers,name',
             'email' => 'nullable|unique:suppliers|max:200',
-        ], [
-            'name.required' => 'ឈ្មោះអ្នកផ្គត់ផ្គង់ តម្រូវឲ្យបំពេញ!!!',
         ]);
 
 

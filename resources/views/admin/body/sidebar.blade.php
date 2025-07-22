@@ -170,10 +170,6 @@
             @endif
         {{-- End Supplier --}}
 
-        
-
-       
-
         {{-- Purchase Dropdown --}}
         @php
             $purchaseMenu = Auth::user()->can('purchase.menu');
@@ -222,7 +218,7 @@
             $orderPendingDue = Auth::user()->can('order.pending.due');
             $isOrderActive = isRouteActive(['pending.order', 'complete.order', 'pending.due']);
         @endphp
-        @if ($orderMenu || $orderPending || $orderComplete || $orderPendingDue)
+        @if ($orderMenu || $orderPending || $orderComplete || $orderPendingDue )
             <div id="orderDropdown" class="relative group">
                 @if ($orderMenu)
                     <a href="{{ route('pending.order') }}"
