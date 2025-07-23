@@ -197,6 +197,8 @@ return [
         // Modal Add New Customer
         'add_new_customer' => 'Add New Customer',
         'address'=> 'Address',
+
+        'order_type'=> 'Order Type',
     
 // ============ Permision =========================================
         // Pemision Page
