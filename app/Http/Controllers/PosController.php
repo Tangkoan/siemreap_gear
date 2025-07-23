@@ -344,6 +344,13 @@ class PosController extends Controller
             ]);
         }
     }
+
+
+
+
+
+
+    
     public function PrintInvoice($id)
     {
         $order = Order::with('customer')->findOrFail($id);

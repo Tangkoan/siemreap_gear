@@ -123,7 +123,7 @@
                             {{-- Buying Price --}}
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.buy_price') }} 
+                                    {{ __('messages.cost') }} 
                                 </label>
                                 <input type="number" step="0.01" name="buying_price" value="{{ $product->buying_price }}"
                                     class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">

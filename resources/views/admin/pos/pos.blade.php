@@ -340,42 +340,65 @@
         }
 
         // SECTION 2: CORE LOGIC & AJAX FUNCTIONS
-        function fetchProducts() {
-            const url = `/get-products?category_id=${currentCategoryId}&condition_id=${currentConditionId}`;
-            document.getElementById('product-grid').innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">Loading products...</p>`;
+    function fetchProducts() {
+        // ✅ សូមប្រាកដថា URL គឺ '/get-products'
+        const url = `/get-products?category_id=${currentCategoryId}&condition_id=${currentConditionId}`;
+        const productGrid = document.getElementById('product-grid');
+        productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 dark:text-slate-400 p-10">Loading...</p>`;
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const productGrid = document.getElementById('product-grid');
-                    productGrid.innerHTML = '';
-                    if (data.products && data.products.length > 0) {
-                        data.products.forEach(product => {
-                            productGrid.innerHTML += createProductCardHTML(product);
-                        });
-                    } else {
-                        productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">No products found for this filter.</p>`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading products:', error);
-                    document.getElementById('product-grid').innerHTML = `<p class="col-span-full text-center text-red-500 p-10">Failed to load products.</p>`;
-                });
-        }
-        
-        function filterProducts(type, id, clickedButton) {
-            if (type === 'category') { currentCategoryId = id; }
-            else if (type === 'condition') { currentConditionId = id; }
-            
-            const btnClass = (type === 'category') ? '.category-btn' : '.condition-btn';
-            document.querySelectorAll(btnClass).forEach(button => button.classList.remove('active-filter'));
-            clickedButton.classList.add('active-filter');
-            
-            fetchProducts();
-        }
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    // ប្រសិនបើមាន Error (ដូចជា 404 ឬ 500)
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                productGrid.innerHTML = ''; // លុប Loading ចេញ
+                if (data.products && data.products.length > 0) {
+                    data.products.forEach(product => {
+                        productGrid.innerHTML += createProductCardHTML(product);
+                    });
+                } else {
+                    productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 dark:text-slate-400 p-10">No products found.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+                productGrid.innerHTML = `<p class="col-span-full text-center text-red-500 p-10">Failed to load products. Please check the URL and route.</p>`;
+            });
+    }
+            function filterProducts(type, id, clickedButton) {
+                if (type === 'category') { currentCategoryId = id; }
+                else if (type === 'condition') { currentConditionId = id; }
+                
+                const btnClass = (type === 'category') ? '.category-btn' : '.condition-btn';
+                document.querySelectorAll(btnClass).forEach(button => button.classList.remove('active-filter'));
+                clickedButton.classList.add('active-filter');
+                
+                fetchProducts();
+            }
 
-        function calculateDue() {
-            const discount = parseFloat(document.getElementById('discount').value) || 0;
+        // function calculateDue() {
+        //     const discount = parseFloat(document.getElementById('discount').value) || 0;
+        //     const payNow = parseFloat(document.getElementById('payNow').value) || 0;
+        //     const finalTotal = originalSubtotal - discount;
+        //     const dueAmount = finalTotal - payNow;
+
+        //     document.getElementById('subtotal').innerText = originalSubtotal.toFixed(2);
+        //     document.getElementById('discountDisplay').innerText = discount.toFixed(2);
+        //     document.getElementById('totalPayable').innerText = finalTotal > 0 ? finalTotal.toFixed(2) : '0.00';
+        //     document.getElementById('orderTotalHidden').value = finalTotal > 0 ? finalTotal.toFixed(2) : '0.00';
+        //     document.getElementById('dueHidden').value = dueAmount.toFixed(2);
+        // }
+
+       function calculateDue() {
+            let discount = parseFloat(document.getElementById('discount').value) || 0;
+            
+            // យើងមិនចាំបាច់កែតម្រូវតម្លៃ ở đây nữaទេ ព្រោះ jQuery Validate នឹងจัดการมัน
+            // if (discount > originalSubtotal) { ... } // លុប Logic នេះចេញពីទីនេះ
+
             const payNow = parseFloat(document.getElementById('payNow').value) || 0;
             const finalTotal = originalSubtotal - discount;
             const dueAmount = finalTotal - payNow;
@@ -440,132 +463,153 @@
         }
 
         // SECTION 3: INITIALIZATION & EVENT LISTENERS
-        function attachCartEventListeners() {
-            document.querySelectorAll('#cart-table-body .qty-input').forEach(input => {
-                input.addEventListener('change', updateCartQuantity);
-            });
-        }
+function attachCartEventListeners() {
+    document.querySelectorAll('#cart-table-body .qty-input').forEach(input => {
+        input.addEventListener('change', updateCartQuantity);
+    });
+}
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // Initial Data Loads
-            fetchProducts();
-            updateCartDisplay({!! Js::from(Cart::content()) !!}, "{{ Cart::subtotal() }}");
+document.addEventListener("DOMContentLoaded", function() {
+    // Initial Data Loads
+    fetchProducts();
+    updateCartDisplay({!! Js::from(Cart::content()) !!}, "{{ Cart::subtotal() }}");
 
-            // Search Functionality
-            document.getElementById('searchBox').addEventListener('input', function() {
-                const keyword = this.value;
-                fetch(`/search-pos-products?keyword=${keyword}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const productGrid = document.getElementById('product-grid');
-                        productGrid.innerHTML = '';
-                        if (data.products && data.products.length > 0) {
-                            data.products.forEach(product => {
-                                productGrid.innerHTML += createProductCardHTML(product);
-                            });
-                        }
+    // Search Functionality
+    document.getElementById('searchBox').addEventListener('input', function() {
+        const keyword = this.value;
+        fetch(`/search-pos-products?keyword=${keyword}`)
+            .then(response => response.json())
+            .then(data => {
+                const productGrid = document.getElementById('product-grid');
+                productGrid.innerHTML = '';
+                if (data.products && data.products.length > 0) {
+                    data.products.forEach(product => {
+                        productGrid.innerHTML += createProductCardHTML(product);
                     });
+                }
             });
+    });
 
-            // Calculation Listeners
-            document.getElementById('payNow').addEventListener('input', calculateDue);
-            document.getElementById('discount').addEventListener('input', calculateDue);
+    // Calculation Listeners
+    document.getElementById('payNow').addEventListener('input', calculateDue);
+    document.getElementById('discount').addEventListener('input', calculateDue);
 
-            // Customer Modal Functionality
-            const customerModal = document.getElementById('add-customer-modal');
-            const addCustomerBtn = document.getElementById('add-customer-btn');
-            const cancelCustomerBtn = document.getElementById('cancel-add-customer');
-            const cancelCustomerBtnX = document.getElementById('cancel-add-customer-x');
-            const addCustomerForm = document.getElementById('addCustomerForm');
-            function closeCustomerModal() {
-                customerModal.classList.add('hidden');
-                addCustomerForm.reset();
-                document.querySelectorAll('#addCustomerForm [id$="_error"]').forEach(el => el.textContent = '');
-            }
-            addCustomerBtn.addEventListener('click', () => customerModal.classList.remove('hidden'));
-            cancelCustomerBtn.addEventListener('click', closeCustomerModal);
-            cancelCustomerBtnX.addEventListener('click', closeCustomerModal);
-            window.addEventListener('click', (e) => { if (e.target == customerModal) closeCustomerModal(); });
-            addCustomerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                fetch("{{ route('store.customer.ajax') }}", {
-                    method: 'POST',
-                    body: new FormData(this),
-                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': CSRF_TOKEN }
-                })
-                .then(response => response.json().then(data => ({ ok: response.ok, data })))
-                .then(({ ok, data }) => {
-                    if (!ok) throw data;
-                    toastr.success(data.message);
-                    const customerSelect = document.getElementById('customer_id');
-                    const newOption = new Option(data.newCustomer.name, data.newCustomer.id, true, true);
-                    customerSelect.add(newOption, null);
-                    customerSelect.dispatchEvent(new Event('change'));
-                    closeCustomerModal();
-                })
-                .catch(errorData => {
-                    if (errorData.errors) {
-                        Object.keys(errorData.errors).forEach(key => {
-                            const errorElement = document.getElementById(`${key}_error`);
-                            if (errorElement) errorElement.textContent = errorData.errors[key][0];
-                        });
-                    }
+    // Customer Modal Functionality
+    const customerModal = document.getElementById('add-customer-modal');
+    const addCustomerBtn = document.getElementById('add-customer-btn');
+    const cancelCustomerBtn = document.getElementById('cancel-add-customer');
+    const cancelCustomerBtnX = document.getElementById('cancel-add-customer-x');
+    const addCustomerForm = document.getElementById('addCustomerForm');
+
+    function closeCustomerModal() {
+        customerModal.classList.add('hidden');
+        addCustomerForm.reset();
+        document.querySelectorAll('#addCustomerForm [id$="_error"]').forEach(el => el.textContent = '');
+    }
+    addCustomerBtn.addEventListener('click', () => customerModal.classList.remove('hidden'));
+    cancelCustomerBtn.addEventListener('click', closeCustomerModal);
+    cancelCustomerBtnX.addEventListener('click', closeCustomerModal);
+    window.addEventListener('click', (e) => { if (e.target == customerModal) closeCustomerModal(); });
+    addCustomerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetch("{{ route('store.customer.ajax') }}", {
+            method: 'POST',
+            body: new FormData(this),
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': CSRF_TOKEN }
+        })
+        .then(response => response.json().then(data => ({ ok: response.ok, data })))
+        .then(({ ok, data }) => {
+            if (!ok) throw data;
+            toastr.success(data.message);
+            const customerSelect = document.getElementById('customer_id');
+            const newOption = new Option(data.newCustomer.name, data.newCustomer.id, true, true);
+            customerSelect.add(newOption, null);
+            customerSelect.dispatchEvent(new Event('change'));
+            closeCustomerModal();
+        })
+        .catch(errorData => {
+            if (errorData.errors) {
+                Object.keys(errorData.errors).forEach(key => {
+                    const errorElement = document.getElementById(`${key}_error`);
+                    if (errorElement) errorElement.textContent = errorData.errors[key][0];
                 });
-            });
-
-            // Product Details Modal Functionality
-            const detailsModal = document.getElementById('product-details-modal');
-            const closeDetailsBtn = document.getElementById('close-details-modal-btn');
-            const modalLoading = document.getElementById('modal-loading-state');
-            const modalContent = document.getElementById('modal-content-state');
-            window.showProductDetails = function(productId, event) {
-                event.stopPropagation();
-                detailsModal.classList.remove('hidden');
-                modalLoading.classList.remove('hidden');
-                modalContent.classList.add('hidden');
-                fetch(`/get-product-details/${productId}`)
-                    .then(response => response.ok ? response.json() : Promise.reject('Product not found'))
-                    .then(data => {
-                        document.getElementById('details-modal-image').src = data.imageUrl || defaultImagePath;
-                        document.getElementById('details-modal-name').innerText = data.product_name || 'N/A';
-                        document.getElementById('details-modal-price').innerText = `$${parseFloat(data.selling_price || 0).toFixed(2)}`;
-                        document.getElementById('details-modal-category').innerText = data.category ? data.category.category_name : 'N/A';
-                        document.getElementById('details-modal-supplier').innerText = data.supplier ? data.supplier.name : 'N/A';
-                        document.getElementById('details-modal-code').innerText = data.product_code || 'N/A';
-                        document.getElementById('details-modal-stock').innerText = data.product_store || '0';
-                        modalLoading.classList.add('hidden');
-                        modalContent.classList.remove('hidden');
-                    })
-                    .catch(error => {
-                        console.error('Error fetching product details:', error);
-                        modalLoading.innerHTML = `<p class="text-red-500 p-8">Could not load details. Please try again.</p>`;
-                    });
             }
-            function closeDetailsModal() { detailsModal.classList.add('hidden'); }
-            closeDetailsBtn.addEventListener('click', closeDetailsModal);
-            detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
-
-            // jQuery Form Validation
-            $('#myForm').validate({
-                rules: { customer_id: { required: true }, payment_status: { required: true }, pay: { required: true } },
-                messages: {
-                    customer_id: { required: 'Please select a customer' },
-                    payment_status: { required: 'Please select a payment method' },
-                    pay: { required: 'Please enter the amount paid' },
-                 },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback text-red-500 text-xs mt-1');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('border-red-500').removeClass('border-slate-300');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('border-red-500').addClass('border-slate-300');
-                },
-            });
         });
+    });
+
+    // Product Details Modal Functionality
+    const detailsModal = document.getElementById('product-details-modal');
+    const closeDetailsBtn = document.getElementById('close-details-modal-btn');
+    const modalLoading = document.getElementById('modal-loading-state');
+    const modalContent = document.getElementById('modal-content-state');
+    window.showProductDetails = function(productId, event) {
+        event.stopPropagation();
+        detailsModal.classList.remove('hidden');
+        modalLoading.classList.remove('hidden');
+        modalContent.classList.add('hidden');
+        fetch(`/get-product-details/${productId}`)
+            .then(response => response.ok ? response.json() : Promise.reject('Product not found'))
+            .then(data => {
+                document.getElementById('details-modal-image').src = data.imageUrl || defaultImagePath;
+                document.getElementById('details-modal-name').innerText = data.product_name || 'N/A';
+                document.getElementById('details-modal-price').innerText = `$${parseFloat(data.selling_price || 0).toFixed(2)}`;
+                document.getElementById('details-modal-category').innerText = data.category ? data.category.category_name : 'N/A';
+                document.getElementById('details-modal-supplier').innerText = data.supplier ? data.supplier.name : 'N/A';
+                document.getElementById('details-modal-code').innerText = data.product_code || 'N/A';
+                document.getElementById('details-modal-stock').innerText = data.product_store || '0';
+                modalLoading.classList.add('hidden');
+                modalContent.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error fetching product details:', error);
+                modalLoading.innerHTML = `<p class="text-red-500 p-8">Could not load details. Please try again.</p>`;
+            });
+    }
+    function closeDetailsModal() { detailsModal.classList.add('hidden'); }
+    closeDetailsBtn.addEventListener('click', closeDetailsModal);
+    detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
+
+    // jQuery Form Validation
+    $.validator.addMethod("maxDiscount", function(value, element) {
+        const discountValue = parseFloat(value) || 0;
+        return discountValue <= originalSubtotal;
+    }, function() {
+        return `Discount cannot exceed subtotal ($${originalSubtotal.toFixed(2)})`;
+    });
+
+    $('#myForm').validate({
+        rules: {
+            customer_id: { required: true },
+            payment_status: { required: true },
+            pay: { required: true },
+            discount: {
+                number: true,
+                min: 0,
+                maxDiscount: true // Use the new custom rule
+            }
+        },
+        messages: {
+            customer_id: { required: 'Please select a customer' },
+            payment_status: { required: 'Please select a payment method' },
+            pay: { required: 'Please enter the amount paid' },
+            discount: {
+                number: 'Please enter a valid number',
+                min: 'Discount must be 0 or greater'
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            error.addClass('invalid-feedback text-red-500 text-xs mt-1');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('border-red-500').removeClass('border-slate-300');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('border-red-500').addClass('border-slate-300');
+        },
+    });
+});
     </script>
 
     @if (session('message'))

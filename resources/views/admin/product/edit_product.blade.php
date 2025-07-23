@@ -135,7 +135,7 @@
                             <div class="form-group">
                                 <label for="buying_price"
                                     class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
-                                    {{ __('messages.buy_price') }}<span class="text-red-500">*</span>
+                                    {{ __('messages.cost') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
                                     value="{{ $product->buying_price }}"
