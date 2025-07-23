@@ -182,8 +182,12 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::controller(ProductController::class)->group(function () {
 
 
+
         // Notification Stock Alert API
         Route::get('/get-stock-alerts',  'getStockAlerts')->name('stock.alerts');
+            // API
+            Route::get('/get-product-details/{id}', 'getProductDetails')->name('get.product.details');
+
         // End
 
         Route::get('/product/page', 'ProductPage')->name('all.product')->middleware('permission:product.all');
@@ -328,6 +332,10 @@ Route::middleware(['auth'])->group(callback: function () {
 //===================================================== Purchase ==================================================================
 
     Route::controller(PurchaseController::class)->group(function () {
+
+        // API
+        Route::get('/get-products-for-purchase',  'getProductsForPurchase')->name('get.products.for.purchase');
+
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:purchase.menu');
 
@@ -512,14 +520,11 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/get-products', [PosController::class, 'getProductsByCategory']);
     // Route::post('/add-cart', [PosController::class, 'AddCart']);
 
-
-    // Route::post('/add-cart', [PosController::class, 'AddCart']);
-    // Route::get('/all-cart-items', [PosController::class, 'AllItem']);
-    // Route::get('/cart-remove/{id}', [PosController::class, 'CartRemove']);
-
     Route::post('/add-cart', [PosController::class, 'AddCart']);
     Route::post('/cart-update/{rowId}', [PosController::class, 'CartUpdate']);
     Route::get('/cart-remove/{rowId}', [PosController::class, 'CartRemove']);
+
+    
 
     // End POS
     ///POS All Route 

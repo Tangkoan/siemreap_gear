@@ -11,6 +11,7 @@ use App\Models\purchase_details;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator; //  <-- ត្រូវ Import ថែម
+use App\Models\Condition; // ✅ 1. បន្ថែម Model Condition
 
 class PurchaseController extends Controller
 {
@@ -450,15 +451,24 @@ class PurchaseController extends Controller
     public function PurchasePage() {
         $products = Product::latest()->get();
         $categories = Category::all();
+        $conditions = Condition::orderBy('condition_name', 'asc')->get(); // ✅ 2. ទាញយក Conditions
         $supplier = Supplier::orderBy('name', 'ASC')->get();
-        return view('admin.purchases.add_purchase', compact('products', 'supplier', 'categories'));
+        
+        // បញ្ជូន $conditions ទៅកាន់ View
+        return view('admin.purchases.add_purchase', compact('products', 'supplier', 'categories', 'conditions'));
     }
 
     public function getProductsForPurchase(Request $request) {
-        $query = Product::with('category');
+        $query = Product::with(['category', 'condition']); // Eager load cả hai
 
+        // Filter តាម Category (រក្សាទុកដដែល)
         if ($request->has('category_id') && $request->category_id !== 'all') {
             $query->where('category_id', $request->category_id);
+        }
+
+        // ✅ 3. បន្ថែម Logic សម្រាប់ Filter តាម Condition
+        if ($request->has('condition_id') && $request->condition_id !== 'all') {
+            $query->where('condition_id', $request->condition_id);
         }
 
         $products = $query->latest()->get()->map(function ($product) {
@@ -469,6 +479,8 @@ class PurchaseController extends Controller
                 'code' => $product->product_code,
                 'category' => $product->category ? $product->category->category_name : 'No Category',
                 'imageUrl' => asset($product->product_image),
+                'stock' => $product->product_store, // បញ្ជូន Stock ទៅด้วย
+                'condition' => $product->condition ? $product->condition->condition_name : 'N/A' // ✅ បញ្ជូន Condition Name
             ];
         });
 

@@ -510,5 +510,22 @@ public function Import(Request $request){
     );
     return redirect()->back()->with($notification); 
 }
-        
+
+
+    public function getProductDetails($id)
+    {
+        try {
+            // Eager load a relation category and supplier for more details
+            $product = Product::with(['category', 'supplier'])
+                              ->findOrFail($id);
+
+            // បង្កើត Image URL ពេញលេញ (កែសម្រួលតាមរចនាសម្ព័ន្ធរបស់អ្នក)
+            $product->imageUrl = $product->product_image ? asset($product->product_image) : null;
+
+            return response()->json($product);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Product not found.'], 404);
+        }
+    }
 }
