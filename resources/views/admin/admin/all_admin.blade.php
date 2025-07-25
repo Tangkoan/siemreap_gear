@@ -74,7 +74,7 @@
 
                                     <th class="sticky top-0 dark:bg-gray-800  p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            {{ __(key: 'messages.table_no') }}
+                                            {!! __('messages.table_no') !!}
                                         </p>
                                     </th>
 
