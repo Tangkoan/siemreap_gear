@@ -325,7 +325,7 @@
         })
         .then(res => res.json())
         .then(data => {
-            toastr.success("Product added to purchase cart.");
+            // toastr.success("Product added to purchase cart.");
             updateCartDisplay(data.cart_content, data.cart_subtotal);
         })
         .catch(err => console.error('Error adding to cart:', err));

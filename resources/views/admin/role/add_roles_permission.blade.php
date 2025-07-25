@@ -34,7 +34,8 @@
 
                     <div class="mb-6 flex items-center gap-3">
                         {{-- កែតម្រូវ: id និង for ត្រូវតែដូចគ្នា --}}
-                        <input type="checkbox" id="checkAll" class="h-5 w-5 rounded border-gray-400 text-blue-600 focus:ring-blue-500">
+                        <input type="checkbox" id="checkAll" 
+                            class="h-5 w-5 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-offset-gray-800 dark:text-blue-500">
                         <label for="checkAll" class="text-gray-700 text-sm dark:text-white">{{ __('messages.all_permission') }}</label>
                     </div>
 
@@ -60,8 +61,7 @@
                                     {{-- កែតម្រូវ: ដកដកឃ្លាចេញពី for --}}
                                     <label for="perm_{{ $permission->id }}" class="dark:text-white flex items-center gap-3 text-gray-700 text-sm">
                                         <input type="checkbox" name="permission[]" value="{{ $permission->id }}" id="perm_{{ $permission->id }}"
-                                            class="dark:text-white h-5 w-5 rounded border-gray-400 text-blue-600 focus:ring-blue-500">
-                                        
+    class="h-5 w-5 rounded border-gray-400 text-blue-600 focus:ring-blue-500">
                                         {{-- កែតម្រូវ: ត្រូវបញ្ជាក់ឈ្មោះไฟล์ 'messages.' --}}
                                         {{ __('messages.' . $permission->name) }}
                                     </label>
