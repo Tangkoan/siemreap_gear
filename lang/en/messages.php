@@ -36,6 +36,7 @@ return [
     'name' => 'Name',
     'image' => 'Image',
     'all' => 'All',
+    'action'=>'Action',
 
     // Category page
         'product_category' => 'Product Category',
@@ -411,7 +412,6 @@ return [
         'file_name'=>'File Name',
         'size'=>'SIZE',
         'path'=>'PATH',
-        'action'=>'Action',
         'backup_database_now'=>'Backup Database Now',
         'database'=>'Database',
         'backup_project_file_now'=>'Backup Project File Now',

@@ -234,116 +234,116 @@ class PosController extends Controller
     } // End Method 
 
     public function FinalInvoice(Request $request)
-    {
-        $cartItems = Cart::content();
+{
+    $cartItems = Cart::content();
 
-        if ($cartItems->isEmpty()) {
-            return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
-        }
+    if ($cartItems->isEmpty()) {
+        return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
+    }
 
-        $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
-        $discount = floatval($request->discount ?? 0);
+    $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+    $discount = floatval($request->discount ?? 0);
 
-        if ($discount > $subTotal) {
-            return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
-        }
+    if ($discount > $subTotal) {
+        return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
+    }
 
-        $pay = floatval($request->pay);
-        $total = $subTotal - $discount;
-        $due = $total - $pay;
+    $pay = floatval($request->pay);
+    $total = $subTotal - $discount;
+    $due = $total - $pay;
 
-        // ✅ ==================== START: កូដដែលបានកែប្រែ ====================
-
-        // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders) 💡
-        $hasPreOrder = false;
-        foreach ($cartItems as $item) {
-            $product = Product::find($item->id);
-            // ប្រសិនបើផលិតផលមិនមាន ឬស្តុកមិនគ្រប់គ្រាន់ នោះវាជា Pre-Order
-            if (!$product || $product->product_store < $item->qty) {
-                $hasPreOrder = true;
-                break; // រកឃើញ Pre-Order មួយហើយ មិនចាំបាច់ឆែកបន្ត
-            }
-        }
-
-        // B2: កំណត់ Order Status ដោយផ្អែកលើលក្ខខណ្ឌថ្មី
-        $orderStatus = '';
-        if ($hasPreOrder) {
-            // 👉 បើមាន Pre-Order យ៉ាងហោចណាស់មួយ, Order ត្រូវតែ Pending ជានិច្ច
-            $orderStatus = 'pending';
-        } else {
-            // 👉 បើមិនមាន Pre-Order ទើបពិនិត្យលើការបង់ប្រាក់
-            $orderStatus = ($due <= 0) ? 'complete' : 'pending';
-        }
-
-        // ✅ ===================== END: កូដដែលបានកែប្រែ =====================
-
-        DB::beginTransaction();
-
-        try {
-            $data = [
-                'customer_id' => $request->customer_id,
-                'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
-                'order_status' => $orderStatus, // ប្រើប្រាស់ Status ដែលបានកំណត់យ៉ាងត្រឹមត្រូវ
-                'discount' => $discount,
-                'total_products' => Cart::count(),
-                'sub_total' => $subTotal,
-                'vat' => 0,
-                'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
-                'total' => $total,
-                'payment_status' => $request->payment_status,
-                'pay' => $pay,
-                'due' => max(0, $due),
-                'created_at' => Carbon::now(),
-            ];
-            
-            $order_id = Order::insertGetId($data);
-
-            foreach ($cartItems as $item) {
-                $product = Product::find($item->id);
-
-                // ពិនិត្យមើលថាតើជា Pre-Order ឬ In-Stock
-                if ($product && $product->product_store >= $item->qty) {
-                    // --- ករណីលក់ធម្មតា (In-Stock) ---
-                    $item_status = 'fulfilled';
-
-                    // កាត់ស្តុកតែក្នុងករណីដែល Order ទាំងមូល "complete" ប៉ុណ្ណោះ
-                    // (មានន័យថា គ្មាន Pre-Order และ បង់ប្រាក់គ្រប់)
-                    if ($orderStatus === 'complete') {
-                        $product->decrement('product_store', $item->qty);
-                    }
-                    
-                } else {
-                    // --- ករណី Pre-Order ---
-                    $item_status = 'pre_ordered';
-                    // មិនកាត់ស្តុកទេ
-                }
-
-                Orderdetails::insert([
-                    'order_id' => $order_id,
-                    'product_id' => $item->id,
-                    'quantity' => $item->qty,
-                    'unitcost' => $item->price,
-                    'total' => $item->qty * $item->price,
-                    'item_status' => $item_status, // កំណត់ status សម្រាប់ item នីមួយៗ
-                ]);
-            }
-
-            DB::commit();
-            Cart::destroy();
-
-            return redirect()->route('print.invoice', $order_id)->with([
-                'message' => __('messages.order_completed_successfully'),
-                'alert-type' => 'success'
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with([
-                'message' => __('messages.something_went_wrong'). ': ' . $e->getMessage(),
-                'alert-type' => 'error'
-            ]);
+    // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
+    $hasPreOrder = false;
+    foreach ($cartItems as $item) {
+        $product = Product::find($item->id);
+        // ប្រសិនបើផលិតផលមិនមាន ឬស្តុកមិនគ្រប់គ្រាន់ នោះវាជា Pre-Order
+        if (!$product || $product->product_store < $item->qty) {
+            $hasPreOrder = true;
+            break; // រកឃើញ Pre-Order មួយហើយ មិនចាំបាច់ឆែកបន្ត
         }
     }
+
+    // B2: កំណត់ Order Status និង Order Type ដោយផ្អែកលើលក្ខខណ្ឌ
+    $orderStatus = '';
+    $orderType = ''; // បង្កើតអថេរសម្រាប់ order_type
+
+    if ($hasPreOrder) {
+        // 👉 បើមាន Pre-Order យ៉ាងហោចណាស់មួយ, Order ត្រូវតែ Pending ជានិច្ច
+        $orderStatus = 'pending';
+        $orderType = 'pre_order'; // កំណត់ type ជា pre_order
+    } else {
+        // 👉 បើមិនមាន Pre-Order ទើបពិនិត្យលើការបង់ប្រាក់
+        $orderStatus = ($due <= 0) ? 'complete' : 'pending';
+        $orderType = 'sale'; // កំណត់ type ជា sale
+    }
+
+    DB::beginTransaction();
+
+    try {
+        $data = [
+            'customer_id' => $request->customer_id,
+            'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+            'order_status' => $orderStatus,       // ប្រើប្រាស់ Status ដែលបានកំណត់
+            'order_type' => $orderType,         // ✅ បញ្ចូល order_type ដែលបានកំណត់
+            'discount' => $discount,
+            'total_products' => Cart::count(),
+            'sub_total' => $subTotal,
+            'vat' => 0,
+            'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+            'total' => $total,
+            'payment_status' => $request->payment_status,
+            'pay' => $pay,
+            'due' => max(0, $due),
+            'created_at' => Carbon::now(),
+        ];
+        
+        $order_id = Order::insertGetId($data);
+
+        foreach ($cartItems as $item) {
+            $product = Product::find($item->id);
+
+            // ពិនិត្យមើលថាតើជា Pre-Order ឬ In-Stock
+            if ($product && $product->product_store >= $item->qty) {
+                // --- ករណីលក់ធម្មតា (In-Stock) ---
+                $item_status = 'fulfilled';
+
+                // កាត់ស្តុកតែក្នុងករណីដែល Order ទាំងមូល "complete" ប៉ុណ្ណោះ
+                if ($orderStatus === 'complete') {
+                    $product->decrement('product_store', $item->qty);
+                }
+                
+            } else {
+                // --- ករណី Pre-Order ---
+                $item_status = 'pre_ordered';
+                // មិនកាត់ស្តុកទេ
+            }
+
+            Orderdetails::insert([
+                'order_id' => $order_id,
+                'product_id' => $item->id,
+                'quantity' => $item->qty,
+                'unitcost' => $item->price,
+                'total' => $item->qty * $item->price,
+                'item_status' => $item_status, // កំណត់ status សម្រាប់ item នីមួយៗ
+            ]);
+        }
+
+        DB::commit();
+        Cart::destroy();
+
+        return redirect()->route('print.invoice', $order_id)->with([
+            'message' => __('messages.order_completed_successfully'),
+            'alert-type' => 'success'
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with([
+            'message' => __('messages.something_went_wrong'). ': ' . $e->getMessage(),
+            'alert-type' => 'error'
+        ]);
+    }
+}
 
 
 

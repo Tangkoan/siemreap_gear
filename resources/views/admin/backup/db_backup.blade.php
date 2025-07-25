@@ -118,7 +118,7 @@
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.file_name') }}</th>
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.size') }}</th>
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.path') }}</th>
-                                    <th scope="col" class="px-6 py-3 text-center">{{ __(key: 'messages.action') }}</th>
+                                    <th scope="col" class="px-6 py-3 text-center">{{ __(key: 'messages.table_action') }}</th>
                                 </tr>
                             </thead>
                             <tbody id="project_backup_tbody" class="divide-y divide-slate-200 dark:divide-slate-800">

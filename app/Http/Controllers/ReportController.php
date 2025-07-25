@@ -113,7 +113,10 @@ class ReportController extends Controller
         $orderIds = $kpiData->pluck('id');
         $itemsSold = OrderDetails::whereIn('order_id', $orderIds)->sum('quantity');
         $avgOrderValue = ($totalOrders > 0) ? $totalRevenue / $totalOrders : 0;
+        $totalPreOrders = $kpiData->where('order_type', 'pre_order')->count();
         // --- End KPI Calculation ---
+        // ✅ បន្ថែមការគណនានេះ
+        
 
         $orders = $query->paginate(15); // Show 15 items per page
 
@@ -138,6 +141,7 @@ class ReportController extends Controller
                 'orders' => number_format($totalOrders),
                 'items' => number_format($itemsSold),
                 'avg' => '$' . number_format($avgOrderValue, 2),
+                'pre_orders' => number_format($totalPreOrders), // ✅ បន្ថែម key នេះ
             ]
         ]);
     }
@@ -675,6 +679,7 @@ class ReportController extends Controller
                 'purchases' => number_format($totalPurchases),
                 'items' => number_format($itemsPurchased),
                 'avg' => '$' . number_format($avgPurchaseValue, 2),
+                
             ]
         ]);
     }
