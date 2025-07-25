@@ -31,7 +31,7 @@
                     {{-- All Permissions Toggle --}}
                     <div class="mb-6 flex items-center gap-3">
                         <input type="checkbox" id="checkAllPermissions"
-                            class="h-5 w-5 rounded border-gray-400 text-blue-600 focus:ring-blue-500">
+                            class="h-5 w-5 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-offset-gray-800 dark:text-blue-500">
                         <label for="checkAllPermissions" class="text-gray-700 dark:text-gray-200 text-sm">All
                             Permissions</label>
                     </div>
@@ -55,7 +55,7 @@
                                         class="flex items-center gap-2 text-gray-700 dark:text-gray-200 text-sm">
                                         <input type="checkbox" name="permission[]" value="{{ $permission->id }}"
                                             id="perm_{{ $permission->id }}" {{ App\Models\User::roleHasPermissions($role, $permission) ? 'checked' : '' }}
-                                            class="h-5 w-5 rounded border-gray-400 text-blue-600 focus:ring-blue-500">
+                                            class="h-5 w-5 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-offset-gray-800 dark:text-blue-500">
                                         {{ $permission->name }}
                                     </label>
                                 @endforeach
