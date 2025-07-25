@@ -425,7 +425,7 @@
             .then(data => {
                 if (data.error) { toastr.error(data.error); }
                 else {
-                    toastr.success(data.message || 'Product added to cart');
+                    // toastr.success(data.message || 'Product added to cart');
                     updateCartDisplay(data.cart_content, data.cart_subtotal);
                 }
             })
@@ -456,7 +456,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                toastr.success(data.message || 'Item removed');
+                // toastr.success(data.message || 'Item removed');
                 updateCartDisplay(data.cart_content, data.cart_subtotal);
             })
             .catch(error => console.error('Error removing item:', error));

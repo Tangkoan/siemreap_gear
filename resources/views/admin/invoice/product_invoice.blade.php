@@ -1,288 +1,207 @@
-@extends('admin/admin_dashboard')
+{{-- @extends('admin/admin_dashboard')
 @section('admin')
-                <style>
-                    /* Style នេះនឹងដំណើរការតែពេលបញ្ជាឱ្យបោះពុម្ពប៉ុណ្ណោះ */
-                    @media print {
 
-                        /* * ជំហានទី១៖ លាក់អ្វីៗទាំងអស់នៅលើទំព័រជាមុនសិន
-                                                                                                                                                 * នេះរាប់បញ្ចូលទាំង Header, Sidebar, Footer របស់เว็บអ្នក
-                                                                                                                                                */
-                        body * {
-                            visibility: hidden;
-                        }
+<style>
+    /* ថ្នាក់ CSS នេះនឹងលាក់ធាតុនៅពេលបោះពុម្ព */
+    .no-print {
+        display: block;
+    }
 
-                        /* * ជំហានទី២៖ បង្ហាញតែส่วนវិក្កយបត្រ និងអ្វីៗទាំងអស់ដែលនៅក្នុងនោះ
-                                                                                                                                                */
-                        #invoice-box,
-                        #invoice-box * {
-                            visibility: visible;
-                        }
+    /* Style នេះនឹងដំណើរការតែពេលបញ្ជាឱ្យបោះពុម្ពប៉ុណ្ណោះ */
+    @media print {
 
-                        /* * ជំហានទី៣៖ កំណត់ទីតាំងវិក្កយបត្រឲ្យពេញក្រដាសតែម្ដង
-                                                                                                                                                 * ដើម្បីចៀសវាងបញ្ហាទំព័រទទេ
-                                                                                                                                                */
-                        #invoice-box {
-                            position: absolute;
-                            left: 0;
-                            top: 0;
-                            width: 100%;
-                        }
+        /* ជំហានទី១៖ លាក់អ្វីៗដែលមិនត្រូវបោះពុម្ព (រួមទាំង Sidebar, Header និង Action Panel) */
+        body * {
+            visibility: hidden;
+        }
 
-                        /* * ជំហានទី៤៖ លុប Header/Footer របស់ Browser និងកំណត់ទំហំក្រដាស
-                                                                                                                                                */
-                        @page {
-                            size: A5;
-                            margin: 0;
-                            /* ការដាក់ margin: 0 ជួយលុប Header/Footer របស់ Browser */
-                        }
-                    }
-                </style>
+        .no-print {
+            display: none;
+        }
 
-                <div class="page-content w-full h-full m-4">
+        /* ជំហានទី២៖ បង្ហាញតែส่วนវិក្កយបត្រ និងអ្វីៗទាំងអស់ដែលនៅក្នុងនោះ */
+        #invoice-box,
+        #invoice-box * {
+            visibility: visible;
+        }
 
-                    {{-- <div class="mb-4 text-center">
-                                                                                                                                        <button onclick="window.print()" class="btn btn-primary">
-                                                                                                                                            <i class="fa-solid fa-print"></i> 🖨️ បោះពុម្ពវិក្កយបត្រ
-                                                                                                                                        </button>
-                                                                                                                                    </div> --}}
+        /* ជំហានទី៣៖ កំណត់ទីតាំងវិក្កយបត្រឲ្យពេញក្រដាស */
+        #invoice-box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
 
-                    <!-- Button Print -->
-                    <div class="mb-4 no-print text-right">
-                        <button onclick="openPrintPopup()" class="button-add text-white font-bold py-2 px-4 rounded shadow-lg">
-                            🖨️ Print
-                        </button>
-                    </div>
+        /* ជំហានទី៤៖ កំណត់ទំហំក្រដាស និងលុប Header/Footer របស់ Browser */
+        @page {
+            size: A5;
+            margin: 0;
+        }
+    }
+</style>
 
+<div class="page-content">
+    <div class="flex flex-col lg:flex-row gap-8">
 
-                    <!-- Modal Popup with Animation -->
-                    <div id="printPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-                        <div id="popupContent"
-                            class="bg-white p-6 rounded shadow-lg w-full max-w-md transform scale-95 opacity-0 transition-all duration-300">
-                            <h2 class="text-xl font-bold mb-4">
-                                Invoice Of {{ $customer->name }}
-                                <h3>Total Amount ${{ Cart::subtotal() }}</h3>
-                            </h2>
-
-                            @php
-                                $sub_total = (float) str_replace(',', '', Cart::subtotal()); // ចម្លង subtotal ពី backend
-                            @endphp
-
-                            <form class="px-3" method="post" action="{{ url('/final-invoice') }}">
-                                @csrf
-
-                                <label class="block mb-2">Payment :</label>
-                                <select name="payment_status" id="example-select" class="w-full p-2 border rounded mb-4" required>
-                                    <option selected disabled>Select Payment </option>
-                                    <option value="HandCash">HandCash</option>
-                                    <option value="Cheque">Cheque</option>
-                                    <option value="Due">Due</option>
-                                </select>
-
-                                <label class="block mb-2">Pay Now:</label>
-                                <input type="number" name="pay" id="payNow" class="w-full p-2 border rounded mb-4" required
-                                    placeholder="Pay Now" oninput="calculateDue()" min="0">
-
-                                {{-- <label class="block mb-2">Due Amount:</label>
-                                <input type="text" name="due" id="dueAmount" class="w-full p-2 border rounded mb-4"
-                                    placeholder="Due amount" readonly> --}}
-
-                                <label class="block mb-2">Change:</label>
-                                <input type="text" name="change" id="changeAmount" class="w-full p-2 border rounded mb-4" placeholder="Change" readonly>
-
-                                <!-- Hidden Fields -->
-                                <input type="hidden" name="customer_id" value="{{ $customer->id }}">
-                                <input type="hidden" name="order_date" value="{{ date('d-F-Y') }}">
-                                <input type="hidden" name="order_status" value="pending">
-                                <input type="hidden" name="total_products" value="{{ Cart::count() }}">
-                                <input type="hidden" name="sub_total" id="subTotal" value="{{ $sub_total }}">
-                                <input type="hidden" name="vat" value="{{ Cart::tax() }}">
-                                <input type="hidden" name="total" value="{{ Cart::total() }}">
-
-                                <div class="flex justify-end">
-                                    <button onclick="closePrintPopup()" type="button"
-                                        class="bg-gray-300 text-black px-4 py-2 rounded mr-2">Cancel</button>
-                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Print</button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <div id="invoice-box" class="w-full h-full px-4 bg-white p-4 mx-auto box-border text-xs border">
-
-                        <div class="flex items-center">
-                            <div class="w-1/3">
-                                <img src="" class="w-full h-auto">
-                            </div>
-                            <div class="mb-4 no-print text-right">
-                                <h1 class="text-2xl font-bold text-center mb-2">សៀមរាប ហ្គៀ</h1>
-                                <h3 class="text-lg text-center mb-4">SIEM REAP GEARS</h3>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between mb-4">
-                            <div class="w-1/2 bg-gray-50 p-2 rounded shadow-sm mr-2">
-                                <h4 class="font-semibold mb-1">Company: SR Gears</h4>
-                                <h4 class="font-semibold mb-1 mt-2">Address:</h4>
-                                <p>#C02, St.Kompea Mother, MonduI I Village, Svay Dongkom Commune, SiemReap Town</p>
-                                <h4 class="font-semibold mb-1 mt-2">Tel: 098 222 500, 017 3000 31</h4>
-                            </div>
-                            <div class="w-1/2 bg-gray-50 p-2 rounded shadow-sm ml-2">
-                                <h4 class="font-semibold mb-1">Quotation</h4>
-                                <p><span class="font-semibold">Invoice Date:</span> {{ now()->format('d-M-Y') }}</p>
-                                <p><span class="font-semibold">Customer Name:</span> {{ $customer->name }} </p>
-                                <p><span class="font-semibold">Validity:</span> </p>
-                                <p><span class="font-semibold">Phone:</span> {{ $customer->phone }} </p>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto mb-4">
-                            <table class="w-full border-collapse border border-gray-300 text-xs shadow-sm">
-                                <thead>
-                                    <tr class="bg-gray-200">
-                                        <th class="border border-gray-300 px-2 py-1">No</th>
-                                        <th class="border border-gray-300 px-2 py-1">Product & Description</th>
-                                        <th class="border border-gray-300 px-2 py-1">Price</th>
-                                        <th class="border border-gray-300 px-2 py-1">QTY</th>
-                                        <th class="border border-gray-300 px-2 py-1">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-    $sl = 1;
-                                    @endphp
-                                    @foreach ($contents as $key => $item)
-                                        <tr>
-                                            <td class="border border-gray-300 px-2 py-1 text-center">{{ $loop->iteration }}</td>
-                                            <td class="border border-gray-300 px-2 py-1 text-center">{{ $item->name }}</td>
-                                            <td class="border border-gray-300 px-2 py-1 text-center">{{ $item->price }}</td>
-                                            <td class="border border-gray-300 px-2 py-1 text-center">{{ $item->qty }}</td>
-                                            <td class="border border-gray-300 px-2 py-1 text-center">{{ $item->price * $item->qty }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
+        <div id="invoice-box" class="lg:w-2/3 w-full bg-white p-6 rounded-lg shadow-md">
+            <div class="flex justify-between items-start pb-4 border-b">
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('backend/assets/images/logo-dark.png') }}" alt="logo" class="w-24 h-auto">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">សៀមរាប ហ្គៀ</h1>
+                        <p class="text-sm text-gray-500">SIEM REAP GEARS</p>
                     </div>
                 </div>
+                <div class="text-right">
+                    <h2 class="text-3xl font-bold text-blue-600">INVOICE</h2>
+                    <p class="text-sm text-gray-600">Invoice Date: {{ now()->format('d-M-Y') }}</p>
+                </div>
+            </div>
 
+            <div class="grid grid-cols-2 gap-6 mt-6">
+                <div class="text-sm">
+                    <h3 class="font-bold text-gray-700 mb-2">From:</h3>
+                    <p class="font-semibold">SR Gears</p>
+                    <p class="text-gray-600">#C02, St.Kompea Mother, MonduI I Village, Svay Dongkom Commune, SiemReap Town</p>
+                    <p class="text-gray-600">Tel: 098 222 500 / 017 3000 31</p>
+                </div>
+                <div class="text-sm bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-gray-700 mb-2">To:</h3>
+                    <p class="font-semibold">{{ $customer->name }}</p>
+                    <p class="text-gray-600">{{ $customer->address ?? 'N/A' }}</p>
+                    <p class="text-gray-600">Phone: {{ $customer->phone }}</p>
+                </div>
+            </div>
 
-                <script>
-                    function openPrintPopup() {
-                        const popup = document.getElementById("printPopup");
-                        const content = document.getElementById("popupContent");
+            <div class="mt-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-600">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">No.</th>
+                                <th scope="col" class="px-4 py-3">Product & Description</th>
+                                <th scope="col" class="px-4 py-3 text-right">Qty</th>
+                                <th scope="col" class="px-4 py-3 text-right">Price</th>
+                                <th scope="col" class="px-4 py-3 text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($contents as $key => $item)
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">{{ $item->name }}</th>
+                                    <td class="px-4 py-3 text-right">{{ $item->qty }}</td>
+                                    <td class="px-4 py-3 text-right">${{ number_format($item->price, 2) }}</td>
+                                    <td class="px-4 py-3 text-right font-semibold">${{ number_format($item->price * $item->qty, 2) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                        popup.classList.remove("hidden");
+            <div class="flex justify-end mt-8">
+                <div class="w-full max-w-xs text-sm">
+                    <div class="flex justify-between py-2">
+                        <span class="text-gray-600">Subtotal:</span>
+                        <span class="font-medium">${{ Cart::subtotal() }}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-gray-600">VAT (Tax):</span>
+                        <span class="font-medium">${{ Cart::tax() }}</span>
+                    </div>
+                    <div class="flex justify-between py-3 border-t-2 border-gray-200 mt-2">
+                        <span class="font-bold text-lg text-gray-800">Total:</span>
+                        <span class="font-bold text-lg text-blue-600">${{ Cart::total() }}</span>
+                    </div>
+                </div>
+            </div>
 
-                        // បន្ថែម animation class
-                        setTimeout(() => {
-                            content.classList.remove("scale-95", "opacity-0");
-                            content.classList.add("scale-100", "opacity-100");
-                        }, 10);
-                    }
+            <div class="mt-10 pt-4 border-t text-center text-xs text-gray-500">
+                <p>Thank you for your business!</p>
+            </div>
+        </div>
 
-                    function closePrintPopup() {
-                        const popup = document.getElementById("printPopup");
-                        const content = document.getElementById("popupContent");
+        <div class="lg:w-1/3 w-full no-print">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4 border-b pb-2">ប្រតិបត្តិការ & ការទូទាត់</h3>
+                
+                @php
+                    $sub_total = (float) str_replace(',', '', Cart::total()); // ប្រើ Total ព្រោះវាជាតម្លៃសរុបពិត
+                @endphp
 
-                        // Animation close effect
-                        content.classList.remove("scale-100", "opacity-100");
-                        content.classList.add("scale-95", "opacity-0");
+                <form method="post" action="{{ url('/final-invoice') }}">
+                    @csrf
+                    
+                    <div class="mb-4">
+                        <label for="payment_status" class="block mb-2 text-sm font-medium text-gray-700">Payment Method</label>
+                        <select name="payment_status" id="payment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            <option selected disabled>Select Payment</option>
+                            <option value="HandCash">HandCash</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Due">Due</option>
+                        </select>
+                    </div>
 
-                        // បិទ popup បន្ទាប់ពី animation (delay 300ms)
-                        setTimeout(() => {
-                            popup.classList.add("hidden");
-                        }, 300);
-                    }
+                    <div class="mb-4">
+                        <label for="payNow" class="block mb-2 text-sm font-medium text-gray-700">Pay Now ($)</label>
+                        <input type="number" name="pay" id="payNow" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="0.00" oninput="calculateChange()" min="0" step="0.01" required>
+                    </div>
 
-                    function submitPrint() {
-                        const name = document.getElementById("printName").value;
-                        const quantity = document.getElementById("printQuantity").value;
-                        const type = document.getElementById("printType").value;
+                    <div class="mb-4">
+                        <label for="changeAmount" class="block mb-2 text-sm font-medium text-gray-700">Change ($)</label>
+                        <input type="text" name="change" id="changeAmount" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="0.00" readonly>
+                    </div>
 
-                        if (!name || !quantity || !type) {
-                            alert("សូមបំពេញទិន្នន័យទាំងអស់!");
-                            return;
-                        }
+                     <div class="mb-4">
+                        <label for="dueAmount" class="block mb-2 text-sm font-medium text-gray-700">Due Amount ($)</label>
+                        <input type="text" name="due" id="dueAmount" class="bg-gray-100 border border-gray-300 text-red-600 font-bold text-sm rounded-lg block w-full p-2.5" placeholder="0.00" readonly>
+                    </div>
 
-                        console.log("Printing with:", name, quantity, type);
+                    <input type="hidden" name="customer_id" value="{{ $customer->id }}">
+                    <input type="hidden" name="order_date" value="{{ date('d-F-Y') }}">
+                    <input type="hidden" name="order_status" value="pending">
+                    <input type="hidden" name="total_products" value="{{ Cart::count() }}">
+                    <input type="hidden" name="sub_total" value="{{ Cart::subtotal() }}">
+                    <input type="hidden" name="vat" value="{{ Cart::tax() }}">
+                    <input type="hidden" name="total" id="grandTotal" value="{{ $sub_total }}">
 
-                        closePrintPopup(); // បិទ popup
+                    <div class="mt-6 border-t pt-4">
+                        <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 text-center mb-3">
+                            <i class="fa-solid fa-floppy-disk"></i> បង្កើតវិក្កយបត្រ (Create Invoice)
+                        </button>
+                        <button type="button" onclick="window.print()" class="w-full text-gray-900 bg-white hover:bg-gray-100 border border-gray-300 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-3 text-center">
+                            <i class="fa-solid fa-print"></i> បោះពុម្ព (Print)
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-                        // Print
-                        window.print();
-                    }
+    </div>
+</div>
 
+<script>
+    function calculateChange() {
+        let grandTotal = parseFloat(document.getElementById("grandTotal").value) || 0;
+        let payNow = parseFloat(document.getElementById("payNow").value) || 0;
 
-                    // function calculateDue() {
-                    //     let subTotal = parseFloat(document.getElementById("subTotal").value) || 0;
-                    //     let payNow = parseFloat(document.getElementById("payNow").value) || 0;
+        let difference = payNow - grandTotal;
+        let due = 0;
+        let change = 0;
 
-                    //     let due = subTotal - payNow;
-                    //     if (due < 0) {
-                    //         due = 0;
-                    //     }
+        if (difference < 0) {
+            // បើបង់មិនគ្រប់ ចំនួនជំពាក់គឺតម្លៃដាច់ខាតនៃผลต่าง
+            due = Math.abs(difference);
+        } else {
+            // បើបង់គ្រប់ ឬលើស ប្រាក់អាប់គឺผลต่าง
+            change = difference;
+        }
 
-                    //     document.getElementById("dueAmount").value = due.toFixed(2);
-                    // }
+        document.getElementById("dueAmount").value = due.toFixed(2);
+        document.getElementById("changeAmount").value = change.toFixed(2);
+    }
+</script>
 
-                    function calculateDue() {
-                        let payNow = parseFloat(document.getElementById("payNow").value) || 0;
-                        let subTotal = parseFloat(document.getElementById("subTotal").value) || 0;
-
-                        let due = subTotal - payNow;
-                        let change = 0;
-
-                        if (due < 0) {
-                            change = Math.abs(due); // ប្រាក់អាប់
-                            due = 0; // បើបង់លើស ប្រាក់ជំពាក់គ្មានទេ
-                        }
-
-                        document.getElementById("dueAmount").value = due.toFixed(2);
-                        document.getElementById("changeAmount").value = change.toFixed(2);
-                    }
-
-                </script>
-@endsection
+@endsection --}}

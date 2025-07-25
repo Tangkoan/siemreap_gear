@@ -162,7 +162,7 @@
 
                 // បង្កើត Badge ដោយ​ផ្អែក​លើ​លក្ខខណ្ឌ​ខាង​លើ
                 if ($isPreOrder) {
-                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-blue-500 text-white font-semibold shadow-sm">Pre-Order</span>';
+                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-blue-600 text-white font-semibold shadow-sm">Pre-Order</span>';
                 } else {
                     $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">Sale</span>';
                 }
@@ -187,12 +187,12 @@
                     <td class="p-4 py-5">' . $item->order_date  . '</td>
                     <td class="p-4 py-5">' . $item->payment_status  . '</td>
                     <td class="p-4 py-5">' . $item->invoice_no  . '</td>
-                    <td class="p-4 py-5">' . $item->total  . ' $</td>
-                    <td class="p-4 py-5">' . $item->pay  . ' $</td>
+                    <td class="p-4 py-5">' . $item->total  . '$</td>
+                    <td class="p-4 py-5">' . $item->pay  . '$</td>
                     
                     <td class="p-4 py-5">
                         <span class="inline-block px-3 py-1 rounded-md ' . ($item->due > 0 ? 'bg-red-500' : 'bg-gray-400') . ' text-white font-semibold shadow-sm">
-                            '. $item->due .' $
+                            '. $item->due .'$
                         </span>
                     </td>
                     
@@ -255,37 +255,46 @@
 
 
         
-        public function OrderStatusUpdate(Request $request){
-            $order_id = $request->id;
-        
-            $orderProducts = Orderdetails::where('order_id', $order_id)->get();
-        
-            foreach ($orderProducts as $item) {
-                $product = Product::find($item->product_id);
-        
-                if ($product->product_store >= $item->quantity) {
-                    // Stock គ្រប់គ្រាន់ -> កាត់ Stock
-                    $product->decrement('product_store', $item->quantity);
-                } else {
-                    // Stock មិនគ្រប់គ្រាន់ -> បោះ message error
-                    $notification = array(
-                        'message' => __('messages.stock_not_enough_for_the_product'). $product->product_name,
-                        'alert-type' => 'error'
-                    );
-                    return redirect()->route('pending.order')->with($notification);
-                }
-            }
-        
-            // បន្ទាប់ពីកាត់ stock សម្រេច -> update status order
-            Order::findOrFail($order_id)->update(['order_status' => 'complete']);
-        
+        public function OrderStatusUpdate(Request $request)
+{
+    $order_id = $request->id;
+    $order = Order::findOrFail($order_id);
+
+    // ✅ បើសិនថា due > 0 ត្រូវតែបាន Confirm មកពី client
+    if ($order->due > 0 && !$request->has('confirm_due')) {
+        $notification = array(
+            'message' => __('messages.due_amount_remaining_confirmation_required'),
+            'alert-type' => 'warning'
+        );
+        return redirect()->route('pending.order')->with($notification);
+    }
+
+    $orderProducts = Orderdetails::where('order_id', $order_id)->get();
+
+    foreach ($orderProducts as $item) {
+        $product = Product::find($item->product_id);
+
+        if ($product->product_store >= $item->quantity) {
+            $product->decrement('product_store', $item->quantity);
+        } else {
             $notification = array(
-                'message' => __('messages.order_done_successfully'),
-                'alert-type' => 'success'
+                'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
+                'alert-type' => 'error'
             );
-        
             return redirect()->route('pending.order')->with($notification);
         }
+    }
+
+    $order->update(['order_status' => 'complete']);
+
+    $notification = array(
+        'message' => __('messages.order_done_successfully'),
+        'alert-type' => 'success'
+    );
+
+    return redirect()->route('pending.order')->with($notification);
+}
+
         
         public function StockManage(){
 

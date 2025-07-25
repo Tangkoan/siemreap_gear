@@ -35,6 +35,7 @@ return [
     'phone' => 'Phone',
     'name' => 'Name',
     'image' => 'Image',
+    'all' => 'All',
 
     // Category page
         'product_category' => 'Product Category',
