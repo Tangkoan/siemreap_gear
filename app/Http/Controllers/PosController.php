@@ -10,14 +10,53 @@ use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Orderdetails;
 use App\Models\Category;
+use App\Models\ExchangeRate;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator; //  <-- ត្រូវ Import ថែម
 use App\Models\Condition; // ✅ 1. បន្ថែម Use Condition Model
 
+// បន្ថែម Use Statement ទាំងពីរនេះនៅផ្នែកខាងលើនៃ PosController.php
+use Illuminate\Support\Facades\Http;
+use Symfony\Component\DomCrawler\Crawler;
+
 
 class PosController extends Controller
 {
+
+    // បន្ថែម Method នេះเข้าไปក្នុង PosController
+public function getLatestExchangeRate()
+{
+    try {
+        // URL របស់ធនាគារជាតិនៃកម្ពុជា
+        $url = 'https://www.nbc.gov.kh/english/economic_research/exchange_rate.php';
+        $response = Http::get($url);
+
+        if ($response->successful()) {
+            $html = $response->body();
+            $crawler = new Crawler($html);
+
+            // ស្វែងរកអត្រាប្តូរប្រាក់ (Selector នេះអាចផ្លាស់ប្តូរបើគេហទំព័រ NBC មានការកែប្រែ)
+            $rateNode = $crawler->filter('td:contains("Official Exchange Rate")')->first();
+
+            if ($rateNode->count() > 0) {
+                $text = $rateNode->text(); // នឹងទទួលបានអត្ថបទដូចជា "Official Exchange Rate : 4,095 KHR / USD"
+                preg_match('/(\d{1,3}(,\d{3})*(\.\d+)?)/', $text, $matches);
+                $rate = (float) str_replace(',', '', $matches[0]);
+
+                if ($rate > 0) {
+                    return response()->json(['success' => true, 'rate' => $rate]);
+                }
+            }
+        }
+    } catch (\Exception $e) {
+        // បើមានបញ្ហា មិនធ្វើអ្វីទាំងអស់
+    }
+
+    // បើបរាជ័យ បញ្ជូន success: false
+    return response()->json(['success' => false]);
+}
+
         //
         /**
          * នេះជាកូដដែលកែប្រែពី StoreCustomer របស់អ្នក ឱ្យទៅជា AJAX Standard
@@ -75,26 +114,46 @@ class PosController extends Controller
             }
     }
 
-    
 
     public function PosPage()
-    {
-        $product = Product::latest()->get();
-        $categories = Category::all();
-        $conditions = Condition::orderBy('condition_name', 'asc')->get(); // ✅ 2. ទាញយក Conditions ទាំងអស់
+{
+    $product = Product::latest()->get();
+    $categories = Category::all();
+    $conditions = Condition::orderBy('condition_name', 'asc')->get();
 
-        $walkInCustomer = Customer::where('name', 'Walk-In')->first();
-        $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
+    // ✅ ดึงអត្រាប្តូរប្រាក់ដែល Active
+    $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
 
-        $customers = collect();
-        if ($walkInCustomer) {
-            $customers->push($walkInCustomer);
-        }
-        $customers = $customers->merge($otherCustomers);
+    $walkInCustomer = Customer::where('name', 'Walk-In')->first();
+    $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
 
-        // ✅ 3. បញ្ជូន $conditions ទៅកាន់ View
-        return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions'));
-    }
+    $customers = collect();
+    if ($walkInCustomer) { $customers->push($walkInCustomer); }
+    $customers = $customers->merge($otherCustomers);
+
+    // ✅ បញ្ជូនអត្រានោះទៅកាន់ View
+    return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
+}
+    
+
+    // public function PosPage()
+    // {
+    //     $product = Product::latest()->get();
+    //     $categories = Category::all();
+    //     $conditions = Condition::orderBy('condition_name', 'asc')->get(); // ✅ 2. ទាញយក Conditions ទាំងអស់
+
+    //     $walkInCustomer = Customer::where('name', 'Walk-In')->first();
+    //     $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
+
+    //     $customers = collect();
+    //     if ($walkInCustomer) {
+    //         $customers->push($walkInCustomer);
+    //     }
+    //     $customers = $customers->merge($otherCustomers);
+
+    //     // ✅ 3. បញ្ជូន $conditions ទៅកាន់ View
+    //     return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions'));
+    // }
 
    public function getProductsByCategory(Request $request)
     {
@@ -233,130 +292,244 @@ class PosController extends Controller
 
     } // End Method 
 
-    public function FinalInvoice(Request $request)
-{
-    $cartItems = Cart::content();
+//     public function FinalInvoice(Request $request)
+// {
+//     $cartItems = Cart::content();
 
-    if ($cartItems->isEmpty()) {
-        return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
-    }
+//     if ($cartItems->isEmpty()) {
+//         return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
+//     }
 
-    $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
-    $discount = floatval($request->discount ?? 0);
+//     $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+//     $discount = floatval($request->discount ?? 0);
 
-    if ($discount > $subTotal) {
-        return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
-    }
+//     if ($discount > $subTotal) {
+//         return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
+//     }
 
-    $pay = floatval($request->pay);
-    $total = $subTotal - $discount;
-    $due = $total - $pay;
+//     $pay = floatval($request->pay);
+//     $total = $subTotal - $discount;
+//     $due = $total - $pay;
 
-    // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
-    $hasPreOrder = false;
-    foreach ($cartItems as $item) {
-        $product = Product::find($item->id);
-        // ប្រសិនបើផលិតផលមិនមាន ឬស្តុកមិនគ្រប់គ្រាន់ នោះវាជា Pre-Order
-        if (!$product || $product->product_store < $item->qty) {
-            $hasPreOrder = true;
-            break; // រកឃើញ Pre-Order មួយហើយ មិនចាំបាច់ឆែកបន្ត
-        }
-    }
+//     // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
+//     $hasPreOrder = false;
+//     foreach ($cartItems as $item) {
+//         $product = Product::find($item->id);
+//         // ប្រសិនបើផលិតផលមិនមាន ឬស្តុកមិនគ្រប់គ្រាន់ នោះវាជា Pre-Order
+//         if (!$product || $product->product_store < $item->qty) {
+//             $hasPreOrder = true;
+//             break; // រកឃើញ Pre-Order មួយហើយ មិនចាំបាច់ឆែកបន្ត
+//         }
+//     }
 
-    // B2: កំណត់ Order Status និង Order Type ដោយផ្អែកលើលក្ខខណ្ឌ
-    $orderStatus = '';
-    $orderType = ''; // បង្កើតអថេរសម្រាប់ order_type
+//     // B2: កំណត់ Order Status និង Order Type ដោយផ្អែកលើលក្ខខណ្ឌ
+//     $orderStatus = '';
+//     $orderType = ''; // បង្កើតអថេរសម្រាប់ order_type
 
-    if ($hasPreOrder) {
-        // 👉 បើមាន Pre-Order យ៉ាងហោចណាស់មួយ, Order ត្រូវតែ Pending ជានិច្ច
-        $orderStatus = 'pending';
-        $orderType = 'pre_order'; // កំណត់ type ជា pre_order
-    } else {
-        // 👉 បើមិនមាន Pre-Order ទើបពិនិត្យលើការបង់ប្រាក់
-        $orderStatus = ($due <= 0) ? 'complete' : 'pending';
-        $orderType = 'sale'; // កំណត់ type ជា sale
-    }
+//     if ($hasPreOrder) {
+//         // 👉 បើមាន Pre-Order យ៉ាងហោចណាស់មួយ, Order ត្រូវតែ Pending ជានិច្ច
+//         $orderStatus = 'pending';
+//         $orderType = 'pre_order'; // កំណត់ type ជា pre_order
+//     } else {
+//         // 👉 បើមិនមាន Pre-Order ទើបពិនិត្យលើការបង់ប្រាក់
+//         $orderStatus = ($due <= 0) ? 'complete' : 'pending';
+//         $orderType = 'sale'; // កំណត់ type ជា sale
+//     }
 
-    DB::beginTransaction();
+//     DB::beginTransaction();
 
-    try {
-        $data = [
-            'customer_id' => $request->customer_id,
-            'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
-            'order_status' => $orderStatus,       // ប្រើប្រាស់ Status ដែលបានកំណត់
-            'order_type' => $orderType,         // ✅ បញ្ចូល order_type ដែលបានកំណត់
-            'discount' => $discount,
-            'total_products' => Cart::count(),
-            'sub_total' => $subTotal,
-            'vat' => 0,
-            'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
-            'total' => $total,
-            'payment_status' => $request->payment_status,
-            'pay' => $pay,
-            'due' => max(0, $due),
-            'created_at' => Carbon::now(),
-        ];
+//     try {
+//         $data = [
+//             'customer_id' => $request->customer_id,
+//             'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+//             'order_status' => $orderStatus,       // ប្រើប្រាស់ Status ដែលបានកំណត់
+//             'order_type' => $orderType,         // ✅ បញ្ចូល order_type ដែលបានកំណត់
+//             'discount' => $discount,
+//             'total_products' => Cart::count(),
+//             'sub_total' => $subTotal,
+//             'vat' => 0,
+//             'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+//             'total' => $total,
+//             'payment_status' => $request->payment_status,
+//             'pay' => $pay,
+//             'due' => max(0, $due),
+//             'created_at' => Carbon::now(),
+//         ];
         
-        $order_id = Order::insertGetId($data);
+//         $order_id = Order::insertGetId($data);
 
+//         foreach ($cartItems as $item) {
+//             $product = Product::find($item->id);
+
+//             // ពិនិត្យមើលថាតើជា Pre-Order ឬ In-Stock
+//             if ($product && $product->product_store >= $item->qty) {
+//                 // --- ករណីលក់ធម្មតា (In-Stock) ---
+//                 $item_status = 'fulfilled';
+
+//                 // កាត់ស្តុកតែក្នុងករណីដែល Order ទាំងមូល "complete" ប៉ុណ្ណោះ
+//                 if ($orderStatus === 'complete') {
+//                     $product->decrement('product_store', $item->qty);
+//                 }
+                
+//             } else {
+//                 // --- ករណី Pre-Order ---
+//                 $item_status = 'pre_ordered';
+//                 // មិនកាត់ស្តុកទេ
+//             }
+
+//             Orderdetails::insert([
+//                 'order_id' => $order_id,
+//                 'product_id' => $item->id,
+//                 'quantity' => $item->qty,
+//                 'unitcost' => $item->price,
+//                 'total' => $item->qty * $item->price,
+//                 'item_status' => $item_status, // កំណត់ status សម្រាប់ item នីមួយៗ
+//             ]);
+//         }
+
+//         DB::commit();
+//         Cart::destroy();
+
+//         return redirect()->route('print.invoice', $order_id)->with([
+//             'message' => __('messages.order_completed_successfully'),
+//             'alert-type' => 'success'
+//         ]);
+
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+//         return back()->with([
+//             'message' => __('messages.something_went_wrong'). ': ' . $e->getMessage(),
+//             'alert-type' => 'error'
+//         ]);
+//     }
+// }
+
+
+
+ public function FinalInvoice(Request $request)
+    {
+        $cartItems = Cart::content();
+
+        if ($cartItems->isEmpty()) {
+            return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
+        }
+
+        $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+        $discount = floatval($request->discount ?? 0);
+
+        if ($discount > $subTotal) {
+            return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
+        }
+
+        $pay = floatval($request->pay);
+        $total = $subTotal - $discount;
+        $due = $total - $pay;
+
+        // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
+        $hasPreOrder = false;
         foreach ($cartItems as $item) {
             $product = Product::find($item->id);
-
-            // ពិនិត្យមើលថាតើជា Pre-Order ឬ In-Stock
-            if ($product && $product->product_store >= $item->qty) {
-                // --- ករណីលក់ធម្មតា (In-Stock) ---
-                $item_status = 'fulfilled';
-
-                // កាត់ស្តុកតែក្នុងករណីដែល Order ទាំងមូល "complete" ប៉ុណ្ណោះ
-                if ($orderStatus === 'complete') {
-                    $product->decrement('product_store', $item->qty);
-                }
-                
-            } else {
-                // --- ករណី Pre-Order ---
-                $item_status = 'pre_ordered';
-                // មិនកាត់ស្តុកទេ
+            if (!$product || $product->product_store < $item->qty) {
+                $hasPreOrder = true;
+                break;
             }
-
-            Orderdetails::insert([
-                'order_id' => $order_id,
-                'product_id' => $item->id,
-                'quantity' => $item->qty,
-                'unitcost' => $item->price,
-                'total' => $item->qty * $item->price,
-                'item_status' => $item_status, // កំណត់ status សម្រាប់ item នីមួយៗ
-            ]);
         }
 
-        DB::commit();
-        Cart::destroy();
+        // B2: កំណត់ Order Status និង Order Type
+        $orderStatus = '';
+        $orderType = '';
 
-        return redirect()->route('print.invoice', $order_id)->with([
-            'message' => __('messages.order_completed_successfully'),
-            'alert-type' => 'success'
-        ]);
+        if ($hasPreOrder) {
+            $orderStatus = 'pending';
+            $orderType = 'pre_order';
+        } else {
+            $orderStatus = ($due <= 0) ? 'complete' : 'pending';
+            $orderType = 'sale';
+        }
 
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with([
-            'message' => __('messages.something_went_wrong'). ': ' . $e->getMessage(),
-            'alert-type' => 'error'
-        ]);
+        DB::beginTransaction();
+
+        try {
+            $data = [
+                'customer_id' => $request->customer_id,
+                'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+                'order_status' => $orderStatus,
+                'order_type' => $orderType,
+                'discount' => $discount,
+                'total_products' => Cart::count(),
+                'sub_total' => $subTotal,
+                'vat' => 0,
+                'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+                'total' => $total,
+                'payment_status' => $request->payment_status,
+                'pay' => $pay,
+                'due' => max(0, $due),
+                'created_at' => Carbon::now(),
+                // ✅ START: បន្ថែម Exchange Rate ទៅក្នុង Data Array
+                'exchange_rate_khr' => $request->exchange_rate_khr ?? 4100, // ใช้ค่าจาก request หรือถ้าไม่มีให้ใช้ 4100
+
+                // ✅ END: បញ្ចប់ការបន្ថែម
+            ];
+            
+            $order_id = Order::insertGetId($data);
+
+            foreach ($cartItems as $item) {
+                $product = Product::find($item->id);
+
+                if ($product && $product->product_store >= $item->qty) {
+                    $item_status = 'fulfilled';
+                    if ($orderStatus === 'complete') {
+                        $product->decrement('product_store', $item->qty);
+                    }
+                } else {
+                    $item_status = 'pre_ordered';
+                }
+
+                Orderdetails::insert([
+                    'order_id' => $order_id,
+                    'product_id' => $item->id,
+                    'quantity' => $item->qty,
+                    'unitcost' => $item->price,
+                    'total' => $item->qty * $item->price,
+                    'item_status' => $item_status,
+                ]);
+            }
+
+            DB::commit();
+            Cart::destroy();
+
+            return redirect()->route('print.invoice', $order_id)->with([
+                'message' => __('messages.order_completed_successfully'),
+                'alert-type' => 'success'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with([
+                'message' => __('messages.something_went_wrong'). ': ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ]);
+        }
     }
-}
-
-
 
 
 
 
     
+    // public function PrintInvoice($id)
+    // {
+    //     $order = Order::with('customer')->findOrFail($id);
+    //     $orderDetails = Orderdetails::with('product')->where('order_id', $id)->get();
+
+    // return view('admin.invoice.print', compact('order', 'orderDetails'))->with("message", 'Successfully Order!!');
+    // }
+ 
     public function PrintInvoice($id)
     {
+        // មិនចាំបាច់កែប្រែទេ ព្រោះ $order នឹងមាន exchange_rate_khr ដោយស្វ័យប្រវត្តិ
         $order = Order::with('customer')->findOrFail($id);
         $orderDetails = Orderdetails::with('product')->where('order_id', $id)->get();
 
-    return view('admin.invoice.print', compact('order', 'orderDetails'))->with("message", 'Successfully Order!!');
+        return view('admin.invoice.print', compact('order', 'orderDetails'))->with("message", 'Successfully Order!!');
     }
- 
 }

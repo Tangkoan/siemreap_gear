@@ -16,6 +16,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\Backend\ExchangeRateController;
 
 use App\Http\Controllers\BackupController;
 
@@ -62,10 +63,10 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // ==================== Dashboard ==================== 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-// Route สำหรับดึงข้อมูลผ่าน AJAX
-Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route AJAX
+    Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
+// End
 
 
 
@@ -79,6 +80,10 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
     Route::get('/change/password', [AdminController::class, 'ChangePassword'])->name('change.password');
     Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
+
+
+    // ================================ Exchange Rate ==========================================
+    Route::resource('exchange-rates', ExchangeRateController::class)->except(['show', 'edit', 'update']);
 
 
     // ============================= Condition ==================================================
@@ -529,6 +534,9 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::post('/add-cart', [PosController::class, 'AddCart']);
     Route::post('/cart-update/{rowId}', [PosController::class, 'CartUpdate']);
     Route::get('/cart-remove/{rowId}', [PosController::class, 'CartRemove']);
+
+    // API Get Exchange Rate
+    Route::get('/get-latest-exchange-rate', [PosController::class, 'getLatestExchangeRate'])->name('get.exchange.rate');
 
     
 

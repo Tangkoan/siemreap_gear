@@ -490,6 +490,22 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     });
 
+
+    // ✅ កែប្រែទី២៖ បន្ថែម function ថ្មី fetchExchangeRate()
+        function fetchExchangeRate() {
+            fetch("{{ route('get.exchange.rate') }}")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.rate) {
+                        const rateInput = document.getElementById('exchange_rate_khr');
+                        rateInput.value = Math.round(data.rate);
+                        calculateDue(); 
+                        toastr.info(`Exchange rate updated to ${Math.round(data.rate)} KHR/USD.`);
+                    }
+                })
+                .catch(error => console.error('Could not fetch exchange rate:', error));
+        }
+
     // Calculation Listeners
     document.getElementById('payNow').addEventListener('input', calculateDue);
     document.getElementById('discount').addEventListener('input', calculateDue);
