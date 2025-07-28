@@ -18,9 +18,11 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ConditionController;
 
 use App\Http\Controllers\BackupController;
-use App\Http\Controllers\Admin\DashboardController;
+
 use App\Http\Controllers\LanguageController;
 
+
+use App\Http\Controllers\DashboardController;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -59,6 +61,10 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
+// ==================== Dashboard ==================== 
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Route สำหรับดึงข้อมูลผ่าน AJAX
+Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
 
 
 
