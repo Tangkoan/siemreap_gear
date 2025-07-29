@@ -291,9 +291,12 @@
     // --- CORE LOGIC & AJAX FUNCTIONS ---
     // ✅ 1. បន្ថែម FUNCTION FETCHPRODUCTS មកវិញ
     function fetchProducts() {
-        const url = `/get-products-for-purchase?category_id=${currentCategoryId}&condition_id=${currentConditionId}`;
+        let keyword = document.getElementById('searchBox').value;
+        const url = `/get-products-for-purchase?category_id=${currentCategoryId}&search=${keyword}`;
+        
         const productGrid = document.getElementById('product-grid');
-        productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">Loading...</p>`;
+        productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">កំពុង​ទាញ​យក...</p>`;
+        
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -301,19 +304,19 @@
                 if (data.products && data.products.length > 0) {
                     data.products.forEach(product => productGrid.innerHTML += createProductCardHTML(product));
                 } else {
-                    productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">No products found.</p>`;
+                    productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">មិន​មាន​ផលិតផល​ទេ។</p>`;
                 }
             })
             .catch(error => console.error('Error loading products:', error));
     }
-
     // ✅ 2. បន្ថែម FUNCTION FILTERPRODUCTS មកវិញ
     function filterProducts(type, id, clickedButton) {
-        if (type === 'category') { currentCategoryId = id; }
-        else if (type === 'condition') { currentConditionId = id; }
-        document.querySelectorAll(`.${type}-btn`).forEach(button => button.classList.remove('active-filter'));
-        clickedButton.classList.add('active-filter');
-        fetchProducts();
+        if (type === 'category') {
+            currentCategoryId = id;
+            document.querySelectorAll('.category-btn').forEach(button => button.classList.remove('active-filter'));
+            clickedButton.classList.add('active-filter');
+            fetchProducts();
+        }
     }
 
     // ✅ 3. បន្ថែម FUNCTION សម្រាប់ CART មកវិញ
@@ -382,6 +385,22 @@
         
         document.getElementById('payNow').addEventListener('input', calculateTotals);
         document.getElementById('discount').addEventListener('input', calculateTotals);
+
+        // ✅ START: ADD THIS CODE FOR SEARCH FUNCTIONALITY
+            const searchBox = document.getElementById('searchBox');
+                let searchTimeout; // This will hold our timeout ID
+                searchBox.addEventListener('keyup', function() {
+                    // Clear the previous timeout to avoid making too many requests
+                    clearTimeout(searchTimeout);
+
+                    // Set a new timeout to run fetchProducts after 300ms of inactivity
+                    searchTimeout = setTimeout(() => {
+                        fetchProducts(); // This is your existing function that fetches products
+                    }, 300); 
+            });
+        // ✅ END: ADD THIS CODE
+
+
 
         // Supplier Modal
         const supplierModal = document.getElementById('add-supplier-modal');

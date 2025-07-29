@@ -137,121 +137,81 @@ public function storeExchangeRate(Request $request)
 
     public function PosPage()
     {
-        $product = Product::latest()->get();
+        // ✅ កែប្រែទី១៖ បន្ថែម ->where('status', '1') 
+        $product = Product::where('status', '1')->latest()->get();
+        
         $categories = Category::all();
         $conditions = Condition::orderBy('condition_name', 'asc')->get();
-
-        // ✅ ទាញយកអត្រាប្តូរប្រាក់ដែល Active
-        // ✅ Fetch the active exchange rate
         $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
-
+        
         $walkInCustomer = Customer::where('name', 'Walk-In')->first();
         $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
-
+        
         $customers = collect();
         if ($walkInCustomer) { $customers->push($walkInCustomer); }
         $customers = $customers->merge($otherCustomers);
 
-        // ✅ បញ្ជូនអត្រានោះទៅកាន់ View
-        // ✅ Pass that rate to the View
         return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
     }
 
+    public function getProductsByCategory(Request $request)
+        {
+            $query = Product::with('category', 'condition');
 
+            // ✅ ត្រឹមត្រូវ​ហើយ
+            $query->where('status', '1');
 
-//     public function PosPage()
-// {
-//     $product = Product::latest()->get();
-//     $categories = Category::all();
-//     $conditions = Condition::orderBy('condition_name', 'asc')->get();
+            if ($request->filled('category_id') && $request->category_id != 'all') {
+                $query->where('category_id', $request->category_id);
+            }
 
-//     // ✅ ดึงអត្រាប្តូរប្រាក់ដែល Active
-//     $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
+            if ($request->filled('condition_id') && $request->condition_id != 'all') {
+                $query->where('condition_id', $request->condition_id);
+            }
 
-//     $walkInCustomer = Customer::where('name', 'Walk-In')->first();
-//     $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
+            $products = $query->latest()->get()->map(function($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->product_name,
+                    'price' => (float)$product->selling_price,
+                    'buying_price' => (float)$product->buying_price,
+                    'code' => $product->product_code,
+                    'category' => $product->category ? $product->category->category_name : 'No Category',
+                    'imageUrl' => asset($product->product_image),
+                    'stock' => (int) $product->product_store,
+                    'condition' => $product->condition ? $product->condition->condition_name : 'N/A'
+                ];
+            });
 
-//     $customers = collect();
-//     if ($walkInCustomer) { $customers->push($walkInCustomer); }
-//     $customers = $customers->merge($otherCustomers);
-
-//     // ✅ បញ្ជូនអត្រានោះទៅកាន់ View
-//     return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
-//     }
-    
-
-    // public function PosPage()
-    // {
-    //     $product = Product::latest()->get();
-    //     $categories = Category::all();
-    //     $conditions = Condition::orderBy('condition_name', 'asc')->get(); // ✅ 2. ទាញយក Conditions ទាំងអស់
-
-    //     $walkInCustomer = Customer::where('name', 'Walk-In')->first();
-    //     $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
-
-    //     $customers = collect();
-    //     if ($walkInCustomer) {
-    //         $customers->push($walkInCustomer);
-    //     }
-    //     $customers = $customers->merge($otherCustomers);
-
-    //     // ✅ 3. បញ្ជូន $conditions ទៅកាន់ View
-    //     return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions'));
-    // }
-
-   public function getProductsByCategory(Request $request)
-    {
-        $query = Product::with('category');
-
-        // 👉 Filter តាម Category (រក្សាទុកដដែល)
-        if ($request->has('category_id') && $request->category_id != 'all') {
-            $query->where('category_id', $request->category_id);
+            return response()->json(['products' => $products]);
         }
+    // PosController.php
+  public function searchProducts(Request $request)
+    {
+        $keyword = $request->input('keyword');
 
-        // ✅ 4. បន្ថែម Logic សម្រាប់ Filter តាម Condition
-        if ($request->has('condition_id') && $request->condition_id != 'all') {
-            $query->where('condition_id', $request->condition_id);
+        // ✅ កែប្រែទី២៖ បន្ថែម ->where('status', '1') សម្រាប់​ពេល​ស្វែងរក
+        $query = Product::where('status', '1');
+
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('product_name', 'LIKE', "%{$keyword}%")
+                  ->orWhere('product_code', 'LIKE', "%{$keyword}%");
+            });
         }
 
         $products = $query->latest()->get()->map(function($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->product_name,
-                'price' => (float)$product->selling_price,
                 'buying_price' => (float)$product->buying_price,
+                'price' => (float)$product->selling_price,
                 'code' => $product->product_code,
-                'category' => $product->category ? $product->category->category_name : 'No Category',
+                'category' => optional($product->category)->category_name ?? 'No Category',
                 'imageUrl' => asset($product->product_image),
                 'stock' => (int) $product->product_store,
-                'condition' => $product->condition ? $product->condition->condition_name : 'N/A' // បញ្ជូន Condition name
             ];
         });
-
-        return response()->json(['products' => $products]);
-    }
-    // PosController.php
-    public function searchProducts(Request $request)
-    {
-        $keyword = $request->input('keyword');
-
-        $products = Product::where('product_name', 'LIKE', "%{$keyword}%")
-            ->orWhere('product_code', 'LIKE', "%{$keyword}%") // បន្ថែមលក្ខខណ្ឌ Search តាម Code ក៏បាន
-            ->latest()
-            ->get()
-            ->map(function($product) {
-                // ប្រើ .map() ដើម្បីរៀបចំទិន្នន័យឲ្យដូចគ្នា
-                return [
-                    'id' => $product->id,
-                    'name' => $product->product_name,
-                    'buying_price' => (float)$product->buying_price,
-                    'price' => (float)$product->selling_price,
-                    'code' => $product->product_code,
-                    'category' => $product->category ? $product->category->category_name : 'No Category',
-                    'imageUrl' => asset($product->product_image),
-                    'stock' => (float) $product->product_store,
-
-                ];
-            });
 
         return response()->json(['products' => $products]);
     }

@@ -192,6 +192,8 @@ Route::middleware(['auth'])->group(callback: function () {
     // Start Product
     Route::controller(ProductController::class)->group(function () {
 
+        Route::post('/product/update-status',  'updateProductStatus')->name('product.update.status');
+
 
 
         // Notification Stock Alert API

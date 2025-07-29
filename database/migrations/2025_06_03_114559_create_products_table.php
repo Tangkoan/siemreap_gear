@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('selling_price')->nullable();
             $table->string('cost')->nullable();
             $table->string('expire_date')->nullable();
+            $table->enum('status', ['1', '0'])->default('1');
             $table->timestamps();
         
             // Foreign keys
