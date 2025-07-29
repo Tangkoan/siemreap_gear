@@ -9,5 +9,12 @@ class ExchangeRate extends Model
 {
     //
     use HasFactory;
-     protected $fillable = ['rate_date', 'rate_khr', 'is_active'];
+    protected $table = 'exchange_rates';  // ត្រូវតាម migration
+    
+    protected $fillable = [
+        'rate_khr',  // ✅ Corrected to match your database
+        'rate_date', // ✅ Added to match your database
+        'is_active',
+    ];
+
 }

@@ -37,7 +37,7 @@
     <div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full bg-slate-100 dark:bg-slate-900 p-4">
 
         {{-- Left Side - Product Selection --}}
-        <div class="lg:w-3/5 xl:w-2/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-100px)]">
+        <div class="lg:w-3/5 xl:w-2/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-85px)]">
             {{-- Header & Search --}}
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200 dark:border-slate-700 mb-4">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-0">{{ __('messages.pos') }}</h2>
@@ -86,7 +86,7 @@
         </div>
 
         {{-- Right Side - Cart & Checkout --}}
-        <div class="lg:w-2/5 xl:w-1/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-100px)]">
+        <div class="lg:w-2/5 xl:w-1/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-85px)]">
             <h2 class="text-xl font-bold text-slate-800 dark:text-white pb-4 border-b border-slate-200 dark:border-slate-700">
                 {{ __('messages.product_items') }}
             </h2>
@@ -119,8 +119,12 @@
                 </div>
                 <div class="flex justify-between text-lg font-bold text-slate-800 dark:text-white border-t border-dashed pt-2 mt-2 border-slate-300 dark:border-slate-600">
                     <span>{{ __('messages.total_payable') }}:</span>
-                    <span>$<span id="totalPayable">0.00</span></span>
+                    <span>$<span id="totalPayable">0.00</span> / <span><span id="totalPayableKhr">0</span> ៛</span>
+                
+                </span>
                 </div>
+            
+
             </div>
 
             <form method="POST" id="myForm" action="{{ url('/store-sell') }}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
@@ -129,7 +133,11 @@
                 <input type="hidden" name="total" id="orderTotalHidden">
                 <input type="hidden" name="due" id="dueHidden">
 
-                <div class="form-group sm:col-span-2">
+                {{-- ✅ START: បន្ថែមបន្ទាត់នេះ --}}
+                <input type="hidden" name="exchange_rate_khr" id="exchange_rate_khr" value="{{ $activeRate->rate_khr ?? 4100 }}">
+                {{-- ✅ END --}}
+
+                <div class="form-group ">
                     <label for="customer_id" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">
                         {{ __('messages.customer_name') }}
                     </label>
@@ -140,7 +148,7 @@
                                 <option value="{{ $cus->id }}">{{ $cus->name }}</option>
                             @endforeach
                         </select>
-                        <button type="button" id="add-customer-btn" title="Add New Customer" class="absolute inset-y-0 right-0 flex items-center rounded-r-lg px-3 text-slate-500 transition hover:text-red-600 focus:outline-none dark:text-slate-400 dark:hover:text-red-400">
+                        <button type="button" id="add-customer-btn" title="Add New Customer" class="absolute inset-y-0 right-5 flex items-center rounded-r-lg px-3 text-slate-500 transition hover:text-red-600 focus:outline-none dark:text-slate-400 dark:hover:text-red-400">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
@@ -163,7 +171,7 @@
                     <input type="number" name="discount" id="discount" placeholder="0.00" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500" min="0" value="0" step="0.01">
                 </div>
 
-                <div class="form-group sm:col-span-2">
+                <div class="form-group">
                     <label for="payNow" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.pay') }} ($)</label>
                     <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay_now') }}" min="0" step="0.01" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
                 </div>
@@ -393,6 +401,12 @@
         //     document.getElementById('dueHidden').value = dueAmount.toFixed(2);
         // }
 
+        // ✅ Function to format KHR (rounds to the nearest 100)
+        function formatKhr(number) {
+            const rounded = Math.round(number / 100) * 100;
+            return new Intl.NumberFormat('en-US').format(rounded);
+        }
+
        function calculateDue() {
             let discount = parseFloat(document.getElementById('discount').value) || 0;
             
@@ -402,6 +416,12 @@
             const payNow = parseFloat(document.getElementById('payNow').value) || 0;
             const finalTotal = originalSubtotal - discount;
             const dueAmount = finalTotal - payNow;
+
+            // ✅ START: បន្ថែម Logic គណនាលុយរៀល
+            const exchangeRate = parseFloat(document.getElementById('exchange_rate_khr').value) || 4100;
+            const totalInKhr = finalTotal * exchangeRate;
+            document.getElementById('totalPayableKhr').innerText = formatKhr(totalInKhr);
+            // ✅ END
 
             document.getElementById('subtotal').innerText = originalSubtotal.toFixed(2);
             document.getElementById('discountDisplay').innerText = discount.toFixed(2);
@@ -509,6 +529,15 @@ document.addEventListener("DOMContentLoaded", function() {
     // Calculation Listeners
     document.getElementById('payNow').addEventListener('input', calculateDue);
     document.getElementById('discount').addEventListener('input', calculateDue);
+
+    // ✅ START: បន្ថែម Listener នេះ
+    // វាចាំស្តាប់ Event នៅពេលអត្រាប្តូរប្រាក់ត្រូវបាន Update ពី Header
+    document.addEventListener('rateUpdated', () => {
+        calculateDue(); // គណនាឡើងវិញភ្លាមៗ
+        toastr.info('Exchange rate applied to current order.');
+    });
+    // ✅ END
+
 
     // Customer Modal Functionality
     const customerModal = document.getElementById('add-customer-modal');

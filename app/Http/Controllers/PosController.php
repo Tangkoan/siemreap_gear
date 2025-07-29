@@ -24,37 +24,58 @@ use Symfony\Component\DomCrawler\Crawler;
 class PosController extends Controller
 {
 
-    // បន្ថែម Method នេះเข้าไปក្នុង PosController
-public function getLatestExchangeRate()
+// នៅក្នុង app/Http/Controllers/PosController.php
+// In app/Http/Controllers/PosController.php
+
+public function storeExchangeRate(Request $request)
 {
-    try {
-        // URL របស់ធនាគារជាតិនៃកម្ពុជា
-        $url = 'https://www.nbc.gov.kh/english/economic_research/exchange_rate.php';
-        $response = Http::get($url);
+    $validator = Validator::make($request->all(), [
+        'rate' => 'required|numeric|min:1',
+    ]);
 
-        if ($response->successful()) {
-            $html = $response->body();
-            $crawler = new Crawler($html);
-
-            // ស្វែងរកអត្រាប្តូរប្រាក់ (Selector នេះអាចផ្លាស់ប្តូរបើគេហទំព័រ NBC មានការកែប្រែ)
-            $rateNode = $crawler->filter('td:contains("Official Exchange Rate")')->first();
-
-            if ($rateNode->count() > 0) {
-                $text = $rateNode->text(); // នឹងទទួលបានអត្ថបទដូចជា "Official Exchange Rate : 4,095 KHR / USD"
-                preg_match('/(\d{1,3}(,\d{3})*(\.\d+)?)/', $text, $matches);
-                $rate = (float) str_replace(',', '', $matches[0]);
-
-                if ($rate > 0) {
-                    return response()->json(['success' => true, 'rate' => $rate]);
-                }
-            }
-        }
-    } catch (\Exception $e) {
-        // បើមានបញ្ហា មិនធ្វើអ្វីទាំងអស់
+    if ($validator->fails()) {
+        return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
     }
 
-    // បើបរាជ័យ បញ្ជូន success: false
-    return response()->json(['success' => false]);
+    try {
+        DB::transaction(function () use ($request) {
+            
+            // ✅ START: ប្រើ 'updateOrCreate' ដើម្បីដោះស្រាយបញ្ហា Duplicate Entry
+            // ✅ START: Use 'updateOrCreate' to solve the Duplicate Entry problem
+
+            // ជំហានទី១៖ Deactivate អត្រាផ្សេងៗទាំងអស់ (សម្រាប់ករណីមាន Error ចាស់)
+            // Step 1: Deactivate all other rates (for safety against old errors)
+            \App\Models\ExchangeRate::where('rate_date', '!=', now()->toDateString())
+                ->update(['is_active' => false]);
+
+            // ជំហានទី២៖ រកមើល Record ដែលមានកាលបរិច្ឆេទថ្ងៃនេះ បើមានគឺ Update បើមិនមានគឺ Create
+            // Step 2: Find a record with today's date. If it exists, update it. If not, create it.
+            \App\Models\ExchangeRate::updateOrCreate(
+                [
+                    'rate_date' => now()->toDateString() // លក្ខខណ្ឌសម្រាប់រាវរក (Find by this condition)
+                ],
+                [
+                    'rate_khr' => $request->rate,      // ទិន្នន័យសម្រាប់ Update ឬ Create (Data to update or create with)
+                    'is_active' => true
+                ]
+            );
+            // ✅ END: បញ្ចប់ការកែប្រែ
+
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Exchange rate updated successfully!',
+            'new_rate' => $request->rate,
+        ]);
+
+    } catch (\Exception $e) {
+        \Log::error('Error saving exchange rate: ' . $e->getMessage()); 
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update exchange rate.'
+        ], 500);
+    }
 }
 
         //
@@ -114,26 +135,49 @@ public function getLatestExchangeRate()
             }
     }
 
-
     public function PosPage()
-{
-    $product = Product::latest()->get();
-    $categories = Category::all();
-    $conditions = Condition::orderBy('condition_name', 'asc')->get();
+    {
+        $product = Product::latest()->get();
+        $categories = Category::all();
+        $conditions = Condition::orderBy('condition_name', 'asc')->get();
 
-    // ✅ ดึงអត្រាប្តូរប្រាក់ដែល Active
-    $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
+        // ✅ ទាញយកអត្រាប្តូរប្រាក់ដែល Active
+        // ✅ Fetch the active exchange rate
+        $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
 
-    $walkInCustomer = Customer::where('name', 'Walk-In')->first();
-    $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
+        $walkInCustomer = Customer::where('name', 'Walk-In')->first();
+        $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
 
-    $customers = collect();
-    if ($walkInCustomer) { $customers->push($walkInCustomer); }
-    $customers = $customers->merge($otherCustomers);
+        $customers = collect();
+        if ($walkInCustomer) { $customers->push($walkInCustomer); }
+        $customers = $customers->merge($otherCustomers);
 
-    // ✅ បញ្ជូនអត្រានោះទៅកាន់ View
-    return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
-}
+        // ✅ បញ្ជូនអត្រានោះទៅកាន់ View
+        // ✅ Pass that rate to the View
+        return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
+    }
+
+
+
+//     public function PosPage()
+// {
+//     $product = Product::latest()->get();
+//     $categories = Category::all();
+//     $conditions = Condition::orderBy('condition_name', 'asc')->get();
+
+//     // ✅ ดึงអត្រាប្តូរប្រាក់ដែល Active
+//     $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
+
+//     $walkInCustomer = Customer::where('name', 'Walk-In')->first();
+//     $otherCustomers = Customer::where('name', '!=', 'Walk-In')->orderBy('name', 'ASC')->get();
+
+//     $customers = collect();
+//     if ($walkInCustomer) { $customers->push($walkInCustomer); }
+//     $customers = $customers->merge($otherCustomers);
+
+//     // ✅ បញ្ជូនអត្រានោះទៅកាន់ View
+//     return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
+//     }
     
 
     // public function PosPage()
@@ -466,8 +510,7 @@ public function getLatestExchangeRate()
                 'due' => max(0, $due),
                 'created_at' => Carbon::now(),
                 // ✅ START: បន្ថែម Exchange Rate ទៅក្នុង Data Array
-                'exchange_rate_khr' => $request->exchange_rate_khr ?? 4100, // ใช้ค่าจาก request หรือถ้าไม่มีให้ใช้ 4100
-
+                'exchange_rate_khr' => $request->exchange_rate_khr,
                 // ✅ END: បញ្ចប់ការបន្ថែម
             ];
             

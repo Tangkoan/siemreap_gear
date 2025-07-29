@@ -269,19 +269,21 @@
             <table class="totals-table">
                 <tr>
                     <td>Total</td>
-                    <td>${{ number_format($order->sub_total, 2) }}</td>
+                    <td>
+                        ${{ number_format($order->sub_total, 2) }} / {{ number_format(round($order->sub_total * $order->exchange_rate_khr, -2), 0) }}៛
+                    </td>
                 </tr>
                 <tr>
                     <td>Deposit</td>
-                    <td>${{ number_format($order->pay, 2) }}</td>
+                    <td>${{ number_format($order->pay, 2) }}  / {{ number_format(round($order->pay * $order->exchange_rate_khr, -2), 0) }}៛</td>
                 </tr>
                 <tr>
                     <td>Discount</td>
-                    <td>${{ number_format($order->discount, 2) }}</td>
+                    <td>${{ number_format($order->discount, 2) }} / {{ number_format(round($order->discount * $order->exchange_rate_khr, -2), 0) }}៛</td>
                 </tr>
                 <tr>
                     <td>Balance</td>
-                    <td>${{ number_format($order->due, 2) }}</td>
+                    <td>${{ number_format($order->due, 2) }} / {{ number_format(round($order->due * $order->exchange_rate_khr, -2), 0) }}៛</td>
                 </tr>
             </table>
         </div>
