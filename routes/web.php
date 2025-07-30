@@ -246,16 +246,6 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('/delete/category/{id}', 'DeleteCategory')->name('delete.category')->middleware('permission:category.delete');
     });/// End Category Route
 
-
-    
-    
-
-
-
-
-
-
-
     // supplier All Route 
     Route::controller(SupplierController::class)->group(function () {
         Route::get('/all/supplier', 'SupplierPage')->name('all.supplier')->middleware('permission:supplier.all');
