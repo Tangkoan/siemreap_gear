@@ -16,13 +16,7 @@ use App\Models\Condition; // ✅ 1. បន្ថែម Model Condition
 class PurchaseController extends Controller
 {
 
-    /**
-     * Store a new supplier via AJAX and return it as JSON.
-     */
-        /**
-         * នេះជាកូដដែលកែប្រែពី StoreSupplier របស់អ្នក ឱ្យទៅជា AJAX Standard
-         */
-        public function storeSupplierAjax(Request $request)
+    public function storeSupplierAjax(Request $request)
         {
             // === ផ្នែកទី១៖ ការធ្វើ Validation ===
             // យើងប្រើ Validator::make() ជំនួសឱ្យ $request->validate() ដើម្បីគ្រប់គ្រង Response ដោយខ្លួនឯង
@@ -73,8 +67,7 @@ class PurchaseController extends Controller
                     'errors' => ['database' => __('messages.supplier_insert_failed')]
                 ], 500);
             }
-        }
-
+    }
 
     // Purchases All List Complter Purchase & Pending Purchase & Due Purchase
     public function PendingDue(){
@@ -130,16 +123,12 @@ class PurchaseController extends Controller
         return redirect()->route('purchase')->with($notification);
     }
     
-
-
     public function PendingPurchase(){
 
         $purchases = purchase::where('purchase_status','pending')->get();
         return view('admin.purchases.pending_purchase',compact('purchases'));
 
     }// End Method 
-
-
 
     // Search Show table
     public function searchPurchase(Request $request)
@@ -221,7 +210,6 @@ class PurchaseController extends Controller
             'pagination' => $pagination
         ]);
     }
-
 
     public function PurchaseDetails($purchase_id){
 
@@ -333,9 +321,7 @@ class PurchaseController extends Controller
         ]);
     }
 
-
-    public function searchPendingDue(Request $request)
-    {
+    public function searchPendingDue(Request $request){
         $query = Purchase::where('due', '>' ,0); 
 
 
@@ -422,13 +408,6 @@ class PurchaseController extends Controller
                                 </a>
                     </button>
 
-
-                    
-                       
-                    
-                    
-                    
-                    
                     </div>
 
                     
@@ -443,10 +422,6 @@ class PurchaseController extends Controller
             'pagination' => $pagination
         ]);
     }
-
-
-    
-
 
     public function PurchasePage() {
         $products = Product::latest()->get();
@@ -487,9 +462,6 @@ class PurchaseController extends Controller
 
         return response()->json(['products' => $products]);
     }
-
-
-
 
     public function AddToCart(Request $request) {
         // You might want to add stock validation here before adding to cart
@@ -630,7 +602,6 @@ class PurchaseController extends Controller
         ]);
     }
     
-
     public function payDueModel(Request $request, $id){
         $purchasepaydue = Purchase::findOrFail($id);
         return view('admin.purchases.purchase_payduepage',compact('purchasepaydue'));
@@ -665,7 +636,7 @@ class PurchaseController extends Controller
     }// End Method 
 
     
-public function searchPurchaseProducts(Request $request)
+    public function searchPurchaseProducts(Request $request)
     {
         $keyword = $request->input('keyword');
 
