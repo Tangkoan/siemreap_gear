@@ -459,7 +459,8 @@ class PurchaseController extends Controller
     }
 
     public function getProductsForPurchase(Request $request) {
-        $query = Product::with(['category', 'condition']); // Eager load cả hai
+        $query = Product::with(['category', 'condition'])
+            ->where("status",1);
 
         // Filter តាម Category (រក្សាទុកដដែល)
         if ($request->has('category_id') && $request->category_id !== 'all') {
@@ -662,4 +663,36 @@ class PurchaseController extends Controller
 
 
     }// End Method 
+
+    
+public function searchPurchaseProducts(Request $request)
+    {
+        $keyword = $request->input('keyword');
+
+        // ✅ កែប្រែទី២៖ បន្ថែម ->where('status', '1') សម្រាប់​ពេល​ស្វែងរក
+        $query = Product::where('status', '1');
+
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('product_name', 'LIKE', "%{$keyword}%")
+                  ->orWhere('product_code', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        $products = $query->latest()->get()->map(function($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->product_name,
+                'buying_price' => (float)$product->buying_price,
+                'price' => (float)$product->selling_price,
+                'code' => $product->product_code,
+                'category' => optional($product->category)->category_name ?? 'No Category',
+                'imageUrl' => asset($product->product_image),
+                'stock' => (int) $product->product_store,
+            ];
+        });
+
+        return response()->json(['products' => $products]);
+    }
+    
 }

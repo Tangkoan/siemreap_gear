@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <form method="POST" id="myForm" action="{{ url('/purchase/store') }}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <form method="POST" id="myForm" action="{{ route('purchase.store') }}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
             @csrf
             <input type="hidden" name="total" id="orderTotalHidden">
             <input type="hidden" name="pay" id="paidHidden">
@@ -152,6 +152,7 @@
     </div>
 </div>
 
+{{-- Modal Add Supplier --}}
 <div id="add-supplier-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm">
     <div class="relative top-10 sm:top-20 mx-auto w-full max-w-lg transform rounded-xl bg-white p-6 shadow-2xl dark:bg-slate-800 border dark:border-slate-700">
         <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
@@ -187,37 +188,37 @@
 </div>
 
 {{-- Modal Product Details --}}
-    <div id="product-details-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
-        <div class="relative top-10 sm:top-20 mx-auto w-full max-w-2xl transform rounded-xl bg-white p-6 shadow-2xl transition-all duration-300 dark:bg-slate-800 border dark:border-slate-700">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
-                <h3 class="text-xl leading-6 font-bold text-gray-900 dark:text-white">{{ __('messages.product_details') }}</h3>
-                <button id="close-details-modal-btn" type="button" class="p-1 rounded-full text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+<div id="product-details-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
+    <div class="relative top-10 sm:top-20 mx-auto w-full max-w-2xl transform rounded-xl bg-white p-6 shadow-2xl transition-all duration-300 dark:bg-slate-800 border dark:border-slate-700">
+        <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
+            <h3 class="text-xl leading-6 font-bold text-gray-900 dark:text-white">{{ __('messages.product_details') }}</h3>
+            <button id="close-details-modal-btn" type="button" class="p-1 rounded-full text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+        <div id="modal-product-body" class="mt-4 text-left">
+            <div id="modal-loading-state" class="text-center p-8">
+                <svg class="animate-spin h-8 w-8 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <p class="mt-2 text-sm text-slate-500">Loading Details...</p>
             </div>
-            <div id="modal-product-body" class="mt-4 text-left">
-                <div id="modal-loading-state" class="text-center p-8">
-                    <svg class="animate-spin h-8 w-8 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <p class="mt-2 text-sm text-slate-500">Loading Details...</p>
+            <div id="modal-content-state" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <img id="details-modal-image" src="" alt="Product Image" class="w-full h-64 object-cover rounded-lg border dark:border-slate-700">
                 </div>
-                <div id="modal-content-state" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <img id="details-modal-image" src="" alt="Product Image" class="w-full h-64 object-cover rounded-lg border dark:border-slate-700">
-                    </div>
-                    <div class="space-y-3">
-                        <h4 id="details-modal-name" class="text-2xl font-bold text-slate-800 dark:text-white"></h4>
-                        <p id="details-modal-price" class="text-3xl font-light text-red-600 dark:text-red-400"></p>
-                        <div class="text-sm space-y-2 pt-2 border-t dark:border-slate-700">
-                            <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Category:</span> <span id="details-modal-category" class="text-slate-700 dark:text-slate-200"></span></p>
-                            <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Supplier:</span> <span id="details-modal-supplier" class="text-slate-700 dark:text-slate-200"></span></p>
-                            <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Product Code:</span> <span id="details-modal-code" class="text-slate-700 dark:text-slate-200"></span></p>
-                            <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Stock:</span> <span id="details-modal-stock" class="text-slate-700 dark:text-slate-200"></span></p>
-                        </div>
+                <div class="space-y-3">
+                    <h4 id="details-modal-name" class="text-2xl font-bold text-slate-800 dark:text-white"></h4>
+                    <p id="details-modal-price" class="text-3xl font-light text-red-600 dark:text-red-400"></p>
+                    <div class="text-sm space-y-2 pt-2 border-t dark:border-slate-700">
+                        <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Category:</span> <span id="details-modal-category" class="text-slate-700 dark:text-slate-200"></span></p>
+                        <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Supplier:</span> <span id="details-modal-supplier" class="text-slate-700 dark:text-slate-200"></span></p>
+                        <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Product Code:</span> <span id="details-modal-code" class="text-slate-700 dark:text-slate-200"></span></p>
+                        <p class="flex justify-between"><span class="text-slate-500 dark:text-slate-400 font-medium">Stock:</span> <span id="details-modal-stock" class="text-slate-700 dark:text-slate-200"></span></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/jquery.validate.min.js') }}"></script>
@@ -226,13 +227,14 @@
     // --- GLOBAL VARIABLES ---
     let currentCategoryId = 'all';
     let currentConditionId = 'all';
+    let searchTimeout;
     const CSRF_TOKEN = "{{ csrf_token() }}";
-    const defaultImagePath = "{{ asset('images/icons/no_image.jpg') }}";
+    const defaultImagePath = "{{ asset('upload/no_image.jpg') }}";
     let cartSubtotal = 0;
 
     // --- UI RENDERING FUNCTIONS ---
     function createProductCardHTML(product) {
-        const imageUrl = product.imageUrl ? product.imageUrl : defaultImagePath;
+        const imageUrl = product.imageUrl || defaultImagePath;
         const conditionText = (product.condition && product.condition !== 'N/A')
             ? `<p class="text-xs text-sky-600 dark:text-sky-400 font-medium">${product.condition}</p>`
             : '';
@@ -241,14 +243,12 @@
         <div class="group relative bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700/50 transform transition-all duration-200 cursor-pointer hover:border-red-500 dark:hover:border-red-500 hover:shadow-lg"
              onclick="addProductToCartAjax(${product.id}, '${product.name.replace(/'/g, "\\'")}', 1, ${product.buying_price});"
              title="Click to add to purchase cart">
-
             <button
                 onclick="showProductDetails(${product.id}, event)"
                 title="View Details"
                 class="absolute top-2 left-2 z-20 p-1.5 bg-white/70 dark:bg-slate-900/70 rounded-full text-slate-600 dark:text-slate-300 hover:bg-white hover:text-red-600 dark:hover:bg-slate-900 dark:hover:text-red-400 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
             </button>
-
             <div class="w-full h-32">
                 <img class="w-full h-full object-cover" src="${imageUrl}" alt="${product.name}" onerror="this.onerror=null; this.src='${defaultImagePath}';">
             </div>
@@ -256,7 +256,7 @@
                 <h3 class="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">${product.name}</h3>
                 ${conditionText}
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Stock: ${product.stock}</p>
-                <p class="text-red-600 dark:text-red-400 font-bold text-lg mt-1">$${product.buying_price}</p>
+                <p class="text-red-600 dark:text-red-400 font-bold text-lg mt-1">$${parseFloat(product.buying_price).toFixed(2)}</p>
             </div>
         </div>`;
     }
@@ -289,14 +289,10 @@
     }
 
     // --- CORE LOGIC & AJAX FUNCTIONS ---
-    // ✅ 1. បន្ថែម FUNCTION FETCHPRODUCTS មកវិញ
-    function fetchProducts() {
-        let keyword = document.getElementById('searchBox').value;
-        const url = `/get-products-for-purchase?category_id=${currentCategoryId}&search=${keyword}`;
-        
+    function fetchProductsByFilter() {
+        const url = `/get-products-for-purchase?category_id=${currentCategoryId}&condition_id=${currentConditionId}`;
         const productGrid = document.getElementById('product-grid');
-        productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">កំពុង​ទាញ​យក...</p>`;
-        
+        productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">Loading...</p>`;
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -304,22 +300,28 @@
                 if (data.products && data.products.length > 0) {
                     data.products.forEach(product => productGrid.innerHTML += createProductCardHTML(product));
                 } else {
-                    productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">មិន​មាន​ផលិតផល​ទេ។</p>`;
+                    productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">No products found for this filter.</p>`;
                 }
             })
-            .catch(error => console.error('Error loading products:', error));
-    }
-    // ✅ 2. បន្ថែម FUNCTION FILTERPRODUCTS មកវិញ
-    function filterProducts(type, id, clickedButton) {
-        if (type === 'category') {
-            currentCategoryId = id;
-            document.querySelectorAll('.category-btn').forEach(button => button.classList.remove('active-filter'));
-            clickedButton.classList.add('active-filter');
-            fetchProducts();
-        }
+            .catch(error => console.error('Error loading products by filter:', error));
     }
 
-    // ✅ 3. បន្ថែម FUNCTION សម្រាប់ CART មកវិញ
+    function filterProducts(type, id, clickedButton) {
+        if (type === 'category') { currentCategoryId = id; }
+        else if (type === 'condition') { currentConditionId = id; }
+        document.getElementById('searchBox').value = '';
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+        document.querySelectorAll(`.${type}-btn`).forEach(btn => btn.classList.remove('active-filter'));
+        clickedButton.classList.add('active-filter');
+        document.querySelector(`.condition-btn[onclick*="'all'"]`).classList.add('active-filter');
+        document.querySelector(`.category-btn[onclick*="'all'"]`).classList.add('active-filter');
+        if (id !== 'all') {
+            if (type === 'condition') document.querySelector(`.condition-btn[onclick*="'all'"]`).classList.remove('active-filter');
+            if (type === 'category') document.querySelector(`.category-btn[onclick*="'all'"]`).classList.remove('active-filter');
+        }
+        fetchProductsByFilter();
+    }
+    
     function addProductToCartAjax(id, name, qty, price) {
         fetch("/purchase/add-cart", {
             method: 'POST',
@@ -328,8 +330,11 @@
         })
         .then(res => res.json())
         .then(data => {
-            // toastr.success("Product added to purchase cart.");
-            updateCartDisplay(data.cart_content, data.cart_subtotal);
+            if (data.error) {
+                toastr.error(data.error);
+            } else {
+                updateCartDisplay(data.cart_content, data.cart_subtotal);
+            }
         })
         .catch(err => console.error('Error adding to cart:', err));
     }
@@ -360,7 +365,6 @@
         if (discount > cartSubtotal) {
             discount = cartSubtotal;
             document.getElementById('discount').value = discount.toFixed(2);
-            toastr.warning("Discount cannot exceed subtotal.");
         }
         const finalTotal = cartSubtotal - discount;
         const dueAmount = finalTotal - payNow;
@@ -378,31 +382,89 @@
         });
     }
 
+    window.showProductDetails = function(productId, event) {
+        event.stopPropagation();
+        const detailsModal = document.getElementById('product-details-modal');
+        const modalLoading = document.getElementById('modal-loading-state');
+        const modalContent = document.getElementById('modal-content-state');
+        detailsModal.classList.remove('hidden');
+        modalLoading.classList.remove('hidden');
+        modalContent.classList.add('hidden');
+        fetch(`/get-product-details/${productId}`)
+            .then(response => response.ok ? response.json() : Promise.reject('Product not found'))
+            .then(data => {
+                document.getElementById('details-modal-image').src = data.imageUrl || defaultImagePath;
+                document.getElementById('details-modal-name').innerText = data.product_name || 'N/A';
+                document.getElementById('details-modal-price').innerHTML = `Buying Price: <span class="font-bold">$${parseFloat(data.buying_price || 0).toFixed(2)}</span>`;
+                document.getElementById('details-modal-category').innerText = data.category ? data.category.category_name : 'N/A';
+                document.getElementById('details-modal-supplier').innerText = data.supplier ? data.supplier.name : 'N/A';
+                document.getElementById('details-modal-code').innerText = data.product_code || 'N/A';
+                document.getElementById('details-modal-stock').innerText = data.product_store || '0';
+                modalLoading.classList.add('hidden');
+                modalContent.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error fetching product details:', error);
+                modalLoading.innerHTML = `<p class="text-red-500 p-8">Could not load details.</p>`;
+            });
+    }
+
     // --- INITIALIZATION & EVENT LISTENERS ---
     document.addEventListener("DOMContentLoaded", function () {
-        fetchProducts();
+        fetchProductsByFilter(); 
         updateCartDisplay({!! Js::from(Cart::content()) !!}, "{{ Cart::subtotal() }}");
         
+        const searchBox = document.getElementById('searchBox');
+        searchBox.addEventListener('input', function () {
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                const buttonText = button.textContent.trim();
+                if (buttonText !== 'All' && buttonText !== 'All Category') {
+                    button.classList.remove('active-filter');
+                } else {
+                    button.classList.add('active-filter');
+                }
+            });
+            currentCategoryId = 'all';
+            currentConditionId = 'all';
+
+            clearTimeout(searchTimeout);
+            const keyword = this.value;
+
+            if (keyword.trim() === '') {
+                fetchProductsByFilter();
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                const url = `/purchase/search-products?keyword=${keyword}`;
+                const productGrid = document.getElementById('product-grid');
+                productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">Searching...</p>`;
+                
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                           return response.text().then(text => { throw new Error(text) });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        productGrid.innerHTML = '';
+                        if (data.products && data.products.length > 0) {
+                            data.products.forEach(product => productGrid.innerHTML += createProductCardHTML(product));
+                        } else {
+                            productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">No products found for "${keyword}".</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error searching products:', error);
+                        productGrid.innerHTML = `<p class="col-span-full text-center text-red-500 p-10">An error occurred during search.</p>`;
+                    });
+            }, 300); 
+        });
+
         document.getElementById('payNow').addEventListener('input', calculateTotals);
         document.getElementById('discount').addEventListener('input', calculateTotals);
-
-        // ✅ START: ADD THIS CODE FOR SEARCH FUNCTIONALITY
-            const searchBox = document.getElementById('searchBox');
-                let searchTimeout; // This will hold our timeout ID
-                searchBox.addEventListener('keyup', function() {
-                    // Clear the previous timeout to avoid making too many requests
-                    clearTimeout(searchTimeout);
-
-                    // Set a new timeout to run fetchProducts after 300ms of inactivity
-                    searchTimeout = setTimeout(() => {
-                        fetchProducts(); // This is your existing function that fetches products
-                    }, 300); 
-            });
-        // ✅ END: ADD THIS CODE
-
-
-
-        // Supplier Modal
+        
         const supplierModal = document.getElementById('add-supplier-modal');
         const addSupplierForm = document.getElementById('addSupplierForm');
         function closeSupplierModal() {
@@ -414,6 +476,7 @@
         document.getElementById('cancel-add-supplier').addEventListener('click', closeSupplierModal);
         document.getElementById('cancel-add-supplier-x').addEventListener('click', closeSupplierModal);
         window.addEventListener('click', (e) => { if (e.target == supplierModal) closeSupplierModal(); });
+        
         addSupplierForm.addEventListener('submit', function (e) {
             e.preventDefault();
             fetch("{{ route('store.supplier.ajax') }}", {
@@ -429,52 +492,33 @@
                 supplierSelect.add(newOption, null);
                 closeSupplierModal();
             })
-            .catch(errorData => { /* Error handling */ });
+            .catch(errorData => {
+                 if (errorData.errors) {
+                    Object.keys(errorData.errors).forEach(key => {
+                        const errorElement = document.getElementById(`${key}_error`);
+                        if (errorElement) errorElement.textContent = errorData.errors[key][0];
+                    });
+                }
+            });
         });
 
-        // Product Details Modal
         const detailsModal = document.getElementById('product-details-modal');
         const closeDetailsBtn = document.getElementById('close-details-modal-btn');
-        const modalLoading = document.getElementById('modal-loading-state');
-        const modalContent = document.getElementById('modal-content-state');
-        window.showProductDetails = function(productId, event) {
-            event.stopPropagation();
-            detailsModal.classList.remove('hidden');
-            modalLoading.classList.remove('hidden');
-            modalContent.classList.add('hidden');
-            fetch(`/get-product-details/${productId}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Product not found');
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById('details-modal-image').src = data.imageUrl || defaultImagePath;
-                    document.getElementById('details-modal-name').innerText = data.product_name || 'N/A';
-                    document.getElementById('details-modal-price').innerHTML = `Buying Price: <span class="font-bold">$${parseFloat(data.buying_price || 0).toFixed(2)}</span>`;
-                    document.getElementById('details-modal-category').innerText = data.category ? data.category.category_name : 'N/A';
-                    document.getElementById('details-modal-supplier').innerText = data.supplier ? data.supplier.name : 'N/A';
-                    document.getElementById('details-modal-code').innerText = data.product_code || 'N/A';
-                    document.getElementById('details-modal-stock').innerText = data.product_store || '0';
-                    modalLoading.classList.add('hidden');
-                    modalContent.classList.remove('hidden');
-                })
-                .catch(error => {
-                    console.error('Error fetching product details:', error);
-                    modalLoading.innerHTML = `<p class="text-red-500 p-8">Could not load details.</p>`;
-                });
-        }
-        function closeDetailsModal() {
-            detailsModal.classList.add('hidden');
-        }
+        function closeDetailsModal() { detailsModal.classList.add('hidden'); }
         closeDetailsBtn.addEventListener('click', closeDetailsModal);
-        detailsModal.addEventListener('click', (e) => {
-            if (e.target === detailsModal) closeDetailsModal();
-        });
+        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
 
-        // jQuery Form Validation
         $('#myForm').validate({
-            rules: { supplier_id: { required: true }, payment_status: { required: true }, pay: { required: true }, },
-            messages: { /* ... messages ... */ },
+            rules: { 
+                supplier_id: { required: true }, 
+                payment_status: { required: true }, 
+                pay: { required: true } 
+            },
+            messages: { 
+                supplier_id: { required: 'Please select a supplier' },
+                payment_status: { required: 'Please select a payment method' },
+                pay: { required: 'Please enter the amount to pay' }
+             },
             errorElement: 'span',
             errorPlacement: (error, element) => {
                 error.addClass('invalid-feedback text-red-500 text-xs mt-1');

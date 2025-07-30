@@ -382,22 +382,22 @@ Route::middleware(['auth'])->group(callback: function () {
     });
 
     //
-    Route::controller(PurchaseController::class)->group(function () {
-        Route::get('/add/purchase', 'PurchasePage')->name('purchase.page');
-        Route::get('/purchase/product/search', 'PurchaseProductSearch')->name('purchase.product.search'); 
+        Route::controller(PurchaseController::class)->group(function () {
+            Route::get('/add/purchase', 'PurchasePage')->name('purchase.page');
+            Route::get('/purchase/search-products', [PurchaseController::class, 'searchPurchaseProducts'])->name('purchase.search.products');
 
 
 
-        Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
-        Route::post('/purchase/add-to-cart', 'AddToCart');
+            Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
+            Route::post('/purchase/add-to-cart', 'AddToCart');
 
-        Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
+            Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
 
-        Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
-        Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
-        Route::get('/purchase/cart/remove/{rowId}', [PurchaseController::class, 'RemoveCartItem']);
-    });
-    
+            Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
+            Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
+            Route::get('/purchase/cart/remove/{rowId}', [PurchaseController::class, 'RemoveCartItem']);
+        });
+        
 
     // Start Permision
     Route::controller(RoleController::class)->group(function () {
