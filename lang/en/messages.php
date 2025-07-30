@@ -218,6 +218,7 @@ return [
         'permission_updated_successfully' => 'Permission Updated Successfully',
         'permission_deleted_successfully' => 'Permission Deleted Successfully',
         'permission_name_already_exists'=>'Pemission Name Already',
+        'permission_in_use_error' => 'Permission Can not delete,User use this permission',
 
 
         // 'message' => 'Role Updated Successfully',

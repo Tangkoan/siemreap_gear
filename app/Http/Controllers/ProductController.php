@@ -103,11 +103,11 @@ class ProductController extends Controller
         $condition = Condition::orderBy('condition_name', 'asc')->get();
 
         return view('admin.product.add_product',compact('category','supplier','condition'));
-       }// End Method 
+    }// End Method 
     
     
-       // Store Product
-       public function StoreProduct(Request $request){ 
+    
+    public function StoreProduct(Request $request){ 
 
         do {
             $pcode = IdGenerator::generate([
@@ -171,79 +171,79 @@ class ProductController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->route('all.product')->with($notification);
-        } // End Method 
+    } // End Method 
                 
         // In ProductController.php
 
-public function UpdateProduct(Request $request)
-{
-    $product_id = $request->id;
+    public function UpdateProduct(Request $request)
+    {
+        $product_id = $request->id;
 
-    // ✅ 1. បន្ថែម Validation ដើម្បី​ធានា​ថា​ទិន្នន័យ​ត្រឹមត្រូវ
-    // ✅ 1. Add validation to ensure data integrity
-    $validatedData = $request->validate([
-        'product_name'   => 'required|string|max:255',
-        'category_id'    => 'required|exists:categories,id',
-        'supplier_id'    => 'required|exists:suppliers,id',
-        'condition_id'   => 'required|exists:conditions,id',
-        'product_code'   => 'required|string',
-        'product_store'  => 'required|integer',
-        'buying_price'   => 'required|numeric',
-        'selling_price'  => 'required|numeric',
-        'stock_alert'    => 'required|integer',
-        'product_detail' => 'nullable|string',
-        'product_image'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'status'         => 'required|in:0,1', // ត្រូវប្រាកដថា status ត្រូវបានส่งมา
-    ]);
+        // ✅ 1. បន្ថែម Validation ដើម្បី​ធានា​ថា​ទិន្នន័យ​ត្រឹមត្រូវ
+        // ✅ 1. Add validation to ensure data integrity
+        $validatedData = $request->validate([
+            'product_name'   => 'required|string|max:255',
+            'category_id'    => 'required|exists:categories,id',
+            'supplier_id'    => 'required|exists:suppliers,id',
+            'condition_id'   => 'required|exists:conditions,id',
+            'product_code'   => 'required|string',
+            'product_store'  => 'required|integer',
+            'buying_price'   => 'required|numeric',
+            'selling_price'  => 'required|numeric',
+            'stock_alert'    => 'required|integer',
+            'product_detail' => 'nullable|string',
+            'product_image'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status'         => 'required|in:0,1', // ត្រូវប្រាកដថា status ត្រូវបានส่งมา
+        ]);
 
-    try {
-        $product = Product::findOrFail($product_id);
+        try {
+            $product = Product::findOrFail($product_id);
 
-        // ✅ 2. រៀបចំ Data Array តែ​ម្តង​គត់ (No code repetition)
-        // ✅ 2. Prepare the data array only once
-        $updateData = $validatedData;
+            // ✅ 2. រៀបចំ Data Array តែ​ម្តង​គត់ (No code repetition)
+            // ✅ 2. Prepare the data array only once
+            $updateData = $validatedData;
 
-        if ($request->file('product_image')) {
-            // លុប​រូបភាព​ចាស់ (ถ้ามี)
-            if ($product->product_image && file_exists(public_path($product->product_image))) {
-                unlink(public_path($product->product_image));
+            if ($request->file('product_image')) {
+                // លុប​រូបភាព​ចាស់ (ถ้ามี)
+                if ($product->product_image && file_exists(public_path($product->product_image))) {
+                    unlink(public_path($product->product_image));
+                }
+
+                // Upload រូបភាព​ថ្មី
+                $image = $request->file('product_image');
+                $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('upload/product/'), $name_gen);
+                $updateData['product_image'] = 'upload/product/' . $name_gen;
             }
 
-            // Upload រូបភាព​ថ្មី
-            $image = $request->file('product_image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('upload/product/'), $name_gen);
-            $updateData['product_image'] = 'upload/product/' . $name_gen;
+            // ✅ 3. Update ទិន្នន័យ​ទាំងអស់​ក្នុង​ពេល​តែ​មួយ
+            // ✅ 3. Update all data at once
+            $product->update($updateData);
+            // Eloquent នឹង​จัดการ updated_at ដោយ​ស្វ័យប្រវត្តិ មិន​ចាំបាច់​ដាក់ Carbon::now() ទេ
+            // Eloquent will handle updated_at automatically, no need for Carbon::now()
+
+            $notification = [
+                'message'    => __('messages.product_updated_successfully'),
+                'alert-type' => 'success'
+            ];
+
+            return redirect()->route('all.product')->with($notification);
+
+        } catch (\Exception $e) {
+            // បើ​មាន​បញ្ហា Log វា​ទុក
+            \Log::error('Product Update Error: ' . $e->getMessage());
+
+            $notification = [
+                'message'    => 'An error occurred during the update.',
+                'alert-type' => 'error'
+            ];
+
+            return redirect()->back()->with($notification)->withInput();
         }
-
-        // ✅ 3. Update ទិន្នន័យ​ទាំងអស់​ក្នុង​ពេល​តែ​មួយ
-        // ✅ 3. Update all data at once
-        $product->update($updateData);
-        // Eloquent នឹង​จัดการ updated_at ដោយ​ស្វ័យប្រវត្តិ មិន​ចាំបាច់​ដាក់ Carbon::now() ទេ
-        // Eloquent will handle updated_at automatically, no need for Carbon::now()
-
-        $notification = [
-            'message'    => __('messages.product_updated_successfully'),
-            'alert-type' => 'success'
-        ];
-
-        return redirect()->route('all.product')->with($notification);
-
-    } catch (\Exception $e) {
-        // បើ​មាន​បញ្ហា Log វា​ទុក
-        \Log::error('Product Update Error: ' . $e->getMessage());
-
-        $notification = [
-            'message'    => 'An error occurred during the update.',
-            'alert-type' => 'error'
-        ];
-
-        return redirect()->back()->with($notification)->withInput();
     }
-}
         
 
-        public function DeleteProduct($id)
+    public function DeleteProduct($id)
         {
             $product = Product::findOrFail($id);
             $img = $product->product_image;
@@ -274,19 +274,19 @@ public function UpdateProduct(Request $request)
                 'alert-type' => 'success'
             );
             return redirect()->back()->with($notification);
-        }
+    }
 
-         public function EditProduct($id){
+    public function EditProduct($id){
                 $product = Product::findOrFail($id);
                 $category = Category::orderBy('category_name', 'asc')->get();
                 $supplier = Supplier::orderBy('name', 'asc')->get();
                 $condition = Condition::orderBy('condition_name', 'asc')->get();
 
                 return view('admin.product.edit_product',compact('product','category','supplier','condition'));
-        } // End Method
+    } // End Method
 
 
-        public function DetailProduct($id){
+    public function DetailProduct($id){
                 $product = Product::findOrFail($id);
                 $category = Category::orderBy('category_name', 'asc')->get();
                 $supplier = Supplier::orderBy('name', 'asc')->get();
@@ -294,10 +294,10 @@ public function UpdateProduct(Request $request)
 
                 return view('admin.product.detail_product', compact('product', 'category', 'supplier','condition'));
 
-        } // End Method
+    } // End Method
 
 
-            public function searchProduct(Request $request)
+    public function searchProduct(Request $request)
             {
                 $query = Product::query();
 
@@ -515,10 +515,7 @@ public function UpdateProduct(Request $request)
                     'table' => $table,
                     'pagination' => $pagination
                 ]);
-            }
-
-
-
+    }
 
     public function BarcodeProduct($id){
         $product = Product::findOrFail($id);
@@ -527,27 +524,27 @@ public function UpdateProduct(Request $request)
 
 
     //
-public function ImportProduct(){
-        return view('admin.product.import_product');
-}// End Method 
+    public function ImportProduct(){
+            return view('admin.product.import_product');
+    }// End Method 
 
-public function Export(){
-    return Excel::download(new ProductExport,'products.xlsx');
-}
-// End Export
+    public function Export(){
+        return Excel::download(new ProductExport,'products.xlsx');
+    }
+    // End Export
 
-public function Import(Request $request){
-        
-    Excel::import(new ProductImport, $request->file('import_file'));
-    // Excel::import(new ProductImport, $request->file('import_file'), null, \Maatwebsite\Excel\Excel::XLSX);
+    public function Import(Request $request){
+            
+        Excel::import(new ProductImport, $request->file('import_file'));
+        // Excel::import(new ProductImport, $request->file('import_file'), null, \Maatwebsite\Excel\Excel::XLSX);
 
 
-      $notification = array(
-        'message' => 'Product Import Successfully',
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification); 
-}
+        $notification = array(
+            'message' => 'Product Import Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification); 
+    }
 
 
     // ✅ Function ថ្មីសម្រាប់ Update status ដោយប្រើ AJAX

@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="table-wrapper overflow-y-auto max-h-[500px]">
+                    <div class="table-wrapper overflow-y-auto max-h-[520px]">
                         <table class="w-full text-left table-auto min-w-max">
                             <thead>
                                 <tr>

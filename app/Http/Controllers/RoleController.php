@@ -94,8 +94,22 @@ class RoleController extends Controller
 
     public function DeletePermission($id)
     {
+        
+        $permission = Permission::with('roles')->findOrFail($id);
 
-        Permission::findOrFail($id)->delete();
+        // ត្រួតពិនិត្យថាតើ Permission នេះមានជាប់ទាក់ទងនឹង Role ណាមួយទេ
+        if ($permission->roles->count() > 0) {
+            // ប្រសិនបើមាន Role កំពុងប្រើ 
+            $notification = array(
+                'message' => __('messages.permission_in_use_error'), // "មិនអាចលុបបានទេ! Permission នេះកំពុងត្រូវបានប្រើប្រាស់។"
+                'alert-type' => 'warning' // ប្តូរទៅជា 'error' ឬ 'warning'
+            );
+
+            return redirect()->back()->with($notification);
+        }
+
+        // ប្រសិនបើគ្មាន Role  nàoប្រើទេ (count ស្មើ 0) -> ទើបអនុញ្ញាតឱ្យលុប
+        $permission->delete();
 
         $notification = array(
             'message' => __('messages.permission_deleted_successfully'),
@@ -103,7 +117,8 @@ class RoleController extends Controller
         );
 
         return redirect()->back()->with($notification);
-    } // End Method 
+
+    } // End Method
 
     public function searchPermission(Request $request)
     {
@@ -179,24 +194,7 @@ class RoleController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /// Start Setup Role
+    ///  ========================================== Start Setup Role ========================================== 
     public function AllRoles()
     {
 
@@ -246,7 +244,6 @@ class RoleController extends Controller
         return redirect()->route('all.roles')->with($notification);
     } // End Method 
 
-
     public function DeleteRoles($id)
     {
         // 1. ស្វែងរក Role នោះ
@@ -274,7 +271,6 @@ class RoleController extends Controller
         return redirect()->back()->with($notification);
     } // End Method 
 
-
     public function StoreRoles(Request $request)
     {
 
@@ -301,8 +297,6 @@ class RoleController extends Controller
 
         return redirect()->route('all.roles')->with($notification);
     } // End Method 
-
-
 
     public function searchRoles(Request $request)
     {
@@ -378,13 +372,6 @@ class RoleController extends Controller
     }
 
     /// End
-
-
-
-
-
-
-
 
 // ========================================== Add Roles Permission All Method ========================================== 
     
@@ -464,13 +451,13 @@ class RoleController extends Controller
         foreach ($roles as $key => $item) {
             $permissionTags = '';
             foreach ($item->permissions as $perm) {
-                $permissionTags .= '<span class="inline-block bg-blue-500 text-white text-l px-2 py-1 rounded-md mr-1 mb-1 text-center align-middle ">' . $perm->name . '</span>';
+                $permissionTags .= '<span class="inline-block icon-add text-white text-l px-2 py-1 rounded-md mr-1 mb-1 text-center align-middle ">' . $perm->name . '</span>';
             }
 
             $table .= '<tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">'
                 . '<td class="dark:text-white p-4 py-5 font-semibold text-sm text-slate-800">' . ($key + 1) . '</td>'
                 . '<td class="dark:text-white  p-4 py-5 text-sm text-black">' . $item->name . '</td>'
-                . '<td  class="dark:text-white  p-4 py-5 text-sm text-black grid grid-cols-3 grid-rows-3 gap-4 ">' . $permissionTags . '</td>'
+                . '<td  class="p-4 py-5 text-sm  grid grid-cols-3 grid-rows-3 gap-4 ">' . $permissionTags . '</td>'
                 . '<td class="dark:text-white  px-4 py-4 text-sm whitespace-nowrap">'
                 . '<div class="flex items-center gap-x-6">'
 
@@ -573,49 +560,5 @@ class RoleController extends Controller
         return redirect()->back()->with($notification);
 
     } // End Method
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
