@@ -300,6 +300,8 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::controller(OrderController::class)->group(function () {
         // API 
         Route::get('/get-invoice-html/{id}',  'getInvoiceHtml')->name('get.invoice.html');
+        Route::get('/get-complete-invoice-html/{id}',  'getCompleteInvoiceHtml')->name('get.complete.invoice.html');
+
         // End
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');

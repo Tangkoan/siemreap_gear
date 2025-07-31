@@ -1,5 +1,18 @@
 @extends('admin/admin_dashboard')
 @section('admin')
+
+    {{-- ✅ START: បន្ថែម CSS និង Div សម្រាប់ Print --}}
+    <style>
+        @media print {
+            body * { visibility: hidden; }
+            #invoice-box, #invoice-box * { visibility: visible; }
+            #invoice-box { position: absolute; left: 0; top: 0; width: 100%; }
+            @page { size: A4; margin: 0; }
+        }
+    </style>
+    <div id="invoice-box" class="hidden"></div>
+    {{-- ✅ END --}}
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <div class="container mx-auto p-6">
@@ -31,7 +44,7 @@
                                 <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                    <option value="6" selected>6</option>
+                                    <option value="7" selected>7</option>
                                     <option value="10">10</option> <!-- ✅ Default -->
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -46,9 +59,6 @@
                                     <input
                                         class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                                         placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
-
-
-
                                     <button
                                         class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center dark:bg-gray-800 bg-white rounded "
                                         type="button">
@@ -63,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="table-wrapper overflow-y-auto max-h-[450px]">
+                    <div class="table-wrapper overflow-y-auto max-h-[520px]">
                         <table class="w-full text-left table-auto min-w-max">
                             <thead>
                                 <tr>
@@ -194,7 +204,36 @@
                 fetchData(page);
             });
         });
-
         // End
+
+         // បង្កើត Event Listener ថ្មីសម្រាប់ប៊ូតុង Print Complete
+    $(document).on('click', '.print-complete-invoice-btn', function() {
+        const orderId = $(this).data('order-id');
+        const invoiceBox = $('#invoice-box');
+
+        invoiceBox.html('<div class="text-center p-20">Loading Invoice...</div>').removeClass('hidden');
+
+        $.ajax({
+            url: `/get-complete-invoice-html/${orderId}`, // ✅ ហៅ Route ថ្មី
+            type: 'GET',
+            success: function(response) {
+                if (response.html) {
+                    invoiceBox.html(response.html);
+
+                    window.onafterprint = function() {
+                        invoiceBox.addClass('hidden').html(''); 
+                        window.onafterprint = null; 
+                    };
+
+                    window.print();
+                } else {
+                    invoiceBox.html('<div class="text-center p-20 text-red-500">Could not load invoice.</div>');
+                }
+            },
+            error: function() {
+                invoiceBox.html('<div class="text-center p-20 text-red-500">Error loading data.</div>');
+            }
+        });
+    });
     </script>
 @endsection

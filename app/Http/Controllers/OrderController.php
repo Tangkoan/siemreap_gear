@@ -294,12 +294,7 @@
             $perPage = $request->perPage ?? 10; // ✅ Default = 10
             $isAll = $perPage === 'all';
 
-            // if ($isAll) {
-            //     // $orders = $query->get();
-            //     $orders = Order::where('order_status','pending')->get();;
-            // } else {
-            //     $orders = $query->paginate((int)$perPage);
-            // }
+          
 
             if ($isAll) {
                 $orders = $query->get(); // ✅ Use query result with filter
@@ -309,6 +304,19 @@
 
             $table = '';
             foreach ($orders as $key => $item) {
+
+                // ✅ START: បង្កើតប៊ូតុង Print សម្រាប់ Complete Order
+                $printCompleteButton = '
+                <button type="button" 
+                        class="print-complete-invoice-btn text-gray-500 hover:text-blue-600" 
+                        title="Print Complete Invoice" 
+                        data-order-id="' . $item->id . '">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.061c1.24 0 2.25-1.01 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H5.625a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h1.06" />
+                    </svg>
+                </button>';
+                // ✅ END
+
                 $table .= '
                 <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                     <td class="p-4 py-5">' . ($key + 1) . '</td>
@@ -322,37 +330,22 @@
                     <td class="p-4 py-5">' . $item->invoice_no  . '</td>
                     <td class="p-4 py-5">' . $item->pay  . '</td>
                     
-                    <td class="p-4 py-5 text-center align-middle">
-                        
-                            <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">
-                                '. $item->order_status  .'
-                            </span>
-                        
-                        
+                   
+
+
+                    <td class="py-1 text-xs font-semibold text-center align-middle">
+                        <span class="inline-block px-3 py-1 rounded-md bg-green-600  dark:bg-green-600 dark:text-white text-white">
+                            '. $item->order_status  .'
+                        </span>
                     </td>
-                    
+
                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div class="flex items-center gap-x-6">
-                    
-                    
-
-                        <button type="button" class="icon-edit dark:hover:text-blue-900  hover:text-blue-900 text-gray-500 transition-colors duration-200  focus:outline-none">
-                                    <a href="' .  url('order/invoice-download/' . $item->id)  . '" >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                        </svg>
-
-                                    </a>
-                        </button>
-                        
-                        
-                        
-                        
-                        
+                            ' . $printCompleteButton . '
                         </div>
-
-                        
                     </td>
+                    
+                    
                 </tr>';
             }
 
@@ -529,5 +522,21 @@
 
         return response()->json(['html' => $html]);
     }
+
+     // ✅ START: បង្កើត Function ថ្មីសម្រាប់ Complete Invoice
+    public function getCompleteInvoiceHtml($id)
+    {
+        $order = Order::with('customer', 'orderdetails.product')->find($id);
+
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // បង្កើត HTML ដោយហៅ View ថ្មីដែលយើងបានបង្កើត
+        $html = view('admin.invoice.order_complete._template', compact('order'))->render();
+
+        return response()->json(['html' => $html]);
+    }
+    // ✅ END
         
     }
