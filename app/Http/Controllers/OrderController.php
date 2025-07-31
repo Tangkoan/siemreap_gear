@@ -25,7 +25,7 @@
     class OrderController extends Controller
     {
 
-        public function PendingPreOrders()
+    public function PendingPreOrders()
         {
             
             $preOrderItems = OrderDetails::with(['order.customer', 'product'])
@@ -34,62 +34,18 @@
                                 ->get();
 
             return view('admin.order.pending_pre_orders', compact('preOrderItems'));
-        }
+    }
         
         //
-        public function PendingDue(){
+    public function PendingDue(){
 
             $alldue = Order::where('due','>','0')
             ->orderBy('id','DESC')->get();
             return view('admin.order.pending_due',compact('alldue'));
-        }// End Method 
+    }// End Method 
 
         
-        // public function FinalInvoice(Request $request){
 
-        //     $rtotal = $request->total;
-        //     $rpay = $request->pay;
-        //     $mtotal = $rtotal - $rpay;
-        
-        //     $data = [];
-        //     $data['customer_id'] = $request->customer_id;
-        //     $data['order_date'] = $request->order_date;
-        //     $data['order_status'] = $request->order_status;
-        //     $data['total_products'] = $request->total_products;
-        //     $data['sub_total'] = $request->sub_total;
-        //     $data['vat'] = $request->vat;
-        
-        //     $data['invoice_no'] = 'SR GEAR' . mt_rand(10000000, 99999999);
-        //     $data['total'] = $rtotal;
-        //     $data['payment_status'] = $request->payment_status;
-        //     $data['pay'] = $rpay;
-        //     $data['due'] = $mtotal; // ✅ តែម្ដង!
-        //     $data['created_at'] = Carbon::now();
-        
-        //     $order_id = Order::insertGetId($data);
-        
-        //     $contents = Cart::content();
-        
-        //     foreach($contents as $content){
-        //         $pdata = [];
-        //         $pdata['order_id'] = $order_id;
-        //         $pdata['product_id'] = $content->id;
-        //         $pdata['quantity'] = $content->qty;
-        //         $pdata['unitcost'] = $content->price;
-        //         $pdata['total'] = $content->total;
-        
-        //         Orderdetails::insert($pdata);
-        //     }
-        
-        //     $notification = [
-        //         'message' => __('messages.order_complete_successfully'),
-        //         'alert-type' => 'success'
-        //     ];
-        
-        //     Cart::destroy();
-        
-        //     return redirect()->route('pos')->with($notification);
-        // }
         
         
         
@@ -119,17 +75,8 @@
     }// End Method 
 
 
-
-
-
-
-
-
-
-
-
-        // OrderController.php
-        public function searchOrder(Request $request)
+    // OrderController.php
+    public function searchOrder(Request $request)
         {
             // ✅ Eager load ទាំង customer និង orderdetails ដើម្បី​បង្កើន​ល្បឿន
             $query = Order::with('customer', 'orderdetails') 
@@ -157,14 +104,26 @@
             $table = '';
             foreach ($orders as $key => $item) {
 
+                // ✅ START: បង្កើតប៊ូតុង Print Invoice ថ្មី
+                $printButton = '
+                <button type="button" 
+                        class="print-invoice-btn text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 focus:outline-none" 
+                        title="Print Invoice" 
+                        data-order-id="' . $item->id . '">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.061c1.24 0 2.25-1.01 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H5.625a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h1.06" />
+                    </svg>
+                </button>';
+                // ✅ END
+
                 // ពិនិត្យ​មើល​ថា​តើ​ក្នុង Order នេះ​មាន​ទំនិញ pre-order ដែរ​ឬទេ
                 $isPreOrder = $item->orderdetails->contains('item_status', 'pre_ordered');
 
                 // បង្កើត Badge ដោយ​ផ្អែក​លើ​លក្ខខណ្ឌ​ខាង​លើ
                 if ($isPreOrder) {
-                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-blue-600 text-white font-semibold shadow-sm">Pre-Order</span>';
+                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-blue-600 dark:bg-blue-900 text-white font-semibold shadow-sm">Pre-Order</span>';
                 } else {
-                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">Sale</span>';
+                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-green-600 dark:bg-green-900 text-white font-semibold shadow-sm">Sale</span>';
                 }
                 
                 // --- 👇 កូដថ្មីទី១៖ បង្កើតប៊ូតុង "Pay" លុះត្រាតែមានទឹកប្រាក់ជំពាក់ ---
@@ -191,19 +150,23 @@
                     <td class="p-4 py-5">' . $item->pay  . '$</td>
                     
                     <td class="p-4 py-5">
-                        <span class="inline-block px-3 py-1 rounded-md ' . ($item->due > 0 ? 'bg-red-500' : 'bg-gray-400') . ' text-white font-semibold shadow-sm">
+                        <span class="inline-block px-3 py-1 rounded-md ' . ($item->due > 0 ? 'bg-red-500 dark:bg-red-900 dark:text-white text-white' : 'bg-gray-500') . ' text-white text-xs font-semibold shadow-sm">
                             '. $item->due .'$
                         </span>
                     </td>
                     
-                    <td class="p-4 px-4 py-5 text-center align-middle">
-                        <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">
+                    <td class="px-2 py-1 text-xs font-semibold text-center align-middle">
+                        <span class="inline-block px-3 py-1 rounded-md bg-red-500  dark:bg-red-900 dark:text-white text-white">
                             '. $item->order_status  .'
                         </span>
                     </td>
 
-                    <td class="p-4 px-4 py-5 text-center align-middle">
-                        ' . $orderTypeBadge . '
+                    <td class="px-2 py-1 text-xs font-semibold text-center align-middle">
+                       
+                        <span class="inline-block">
+                        
+                             ' . $orderTypeBadge . '
+                        </span>
                     </td>
                     
                     <td class="px-4 py-4 text-sm whitespace-nowrap">
@@ -218,7 +181,7 @@
                             </button>
 
                             ' . $payButton . '
-
+                            ' . $printButton . ' 
                         </div>
                     </td>
                 </tr>';
@@ -230,89 +193,88 @@
                 'table' => $table,
                 'pagination' => $pagination
             ]);
-        }
+    }
 
 
-        public function OrderDetails($order_id){
+    public function OrderDetails($order_id){
 
             $order = Order::where('id',$order_id)->first();
 
             $orderItem = Orderdetails::with('product')->where('order_id',$order_id)->orderBy('id','DESC')->get();
             return view('admin.order.order_details',compact('order','orderItem'));
 
-        }// End Method 
+    }// End Method 
 
 
-        public function OrderDetailsDue($order_id){
+    public function OrderDetailsDue($order_id){
 
             $order = Order::where('id',$order_id)->first();
 
             $orderItem = Orderdetails::with('product')->where('order_id',$order_id)->orderBy('id','DESC')->get();
             return view('admin.order.order_details_due',compact('order','orderItem'));
 
-        }// End Method 
+    }// End Method 
 
 
 
         
-        public function OrderStatusUpdate(Request $request)
-{
-    $order_id = $request->id;
-    $order = Order::findOrFail($order_id);
+    public function OrderStatusUpdate(Request $request){
+        $order_id = $request->id;
+        $order = Order::findOrFail($order_id);
 
-    // ✅ បើសិនថា due > 0 ត្រូវតែបាន Confirm មកពី client
-    if ($order->due > 0 && !$request->has('confirm_due')) {
-        $notification = array(
-            'message' => __('messages.due_amount_remaining_confirmation_required'),
-            'alert-type' => 'warning'
-        );
-        return redirect()->route('pending.order')->with($notification);
-    }
-
-    $orderProducts = Orderdetails::where('order_id', $order_id)->get();
-
-    foreach ($orderProducts as $item) {
-        $product = Product::find($item->product_id);
-
-        if ($product->product_store >= $item->quantity) {
-            $product->decrement('product_store', $item->quantity);
-        } else {
+        // ✅ បើសិនថា due > 0 ត្រូវតែបាន Confirm មកពី client
+        if ($order->due > 0 && !$request->has('confirm_due')) {
             $notification = array(
-                'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
-                'alert-type' => 'error'
+                'message' => __('messages.due_amount_remaining_confirmation_required'),
+                'alert-type' => 'warning'
             );
             return redirect()->route('pending.order')->with($notification);
         }
+
+        $orderProducts = Orderdetails::where('order_id', $order_id)->get();
+
+        foreach ($orderProducts as $item) {
+            $product = Product::find($item->product_id);
+
+            if ($product->product_store >= $item->quantity) {
+                $product->decrement('product_store', $item->quantity);
+            } else {
+                $notification = array(
+                    'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
+                    'alert-type' => 'error'
+                );
+                return redirect()->route('pending.order')->with($notification);
+            }
+        }
+
+        $order->update(['order_status' => 'complete']);
+
+        $notification = array(
+            'message' => __('messages.order_done_successfully'),
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('pending.order')->with($notification);
     }
 
-    $order->update(['order_status' => 'complete']);
-
-    $notification = array(
-        'message' => __('messages.order_done_successfully'),
-        'alert-type' => 'success'
-    );
-
-    return redirect()->route('pending.order')->with($notification);
-}
-
         
-        public function StockManage(){
+    public function StockManage(){
 
             $product = Product::latest()->get();
             return view('admin.stock.all_stock',compact('product'));
         
-        }// End Method 
+    }// End Method 
 
 
-        public function CompleteOrder(){
+    public function CompleteOrder(){
 
             $orders = Order::where('order_status','complete')->get();
             return view('admin.order.order_complete',compact('orders'));
 
-        }// End Method 
+    }// End Method 
 
 
-        public function searchCompleteOrder(Request $request)
+    public function searchCompleteOrder(Request $request)
         {
             $query = Order::where('order_status', 'complete'); // ✅ មិនប្រើ get()
 
@@ -400,11 +362,11 @@
                 'table' => $table,
                 'pagination' => $pagination
             ]);
-        }
+    }
 
 
         // Pending Due
-        public function searchPendingDue(Request $request)
+    public function searchPendingDue(Request $request)
         {
             $query = Order::where('due', '>' ,0); 
 
@@ -512,17 +474,17 @@
                 'table' => $table,
                 'pagination' => $pagination
             ]);
-        }
+    }
 
-        public function payDueModel(Request $request, $id){
+    public function payDueModel(Request $request, $id){
             $paydue = Order::findOrFail($id);
             
 
             return view('admin.order.order_payduepage',compact('paydue',));
 
-        }
+    }
 
-        public function UpdateDue(Request $request){
+    public function UpdateDue(Request $request){
             $order_id = $request->id;
             $due_amount = $request->due;
             $pay_amount = $request->pay;
@@ -550,7 +512,22 @@
 
 
 
-        }// End Method 
+    }// End Method 
 
+    // Printe OrderPending
+    public function getInvoiceHtml($id)
+    {
+      
+        $order = Order::with('customer', 'orderdetails.product')->find($id);
+
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // បង្កើត HTML សម្រាប់ Invoice ដោយប្រើ Blade View
+        $html = view('admin.invoice.order_pending._template', compact('order'))->render();
+
+        return response()->json(['html' => $html]);
+    }
         
     }

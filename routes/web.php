@@ -298,6 +298,9 @@ Route::middleware(['auth'])->group(callback: function () {
     //Order All Route Add commentMore actions
 
     Route::controller(OrderController::class)->group(function () {
+        // API 
+        Route::get('/get-invoice-html/{id}',  'getInvoiceHtml')->name('get.invoice.html');
+        // End
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');
         Route::get('/pending/order', 'PendingOrder')->name('pending.order')->middleware('permission:order.pending');

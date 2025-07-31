@@ -1,5 +1,32 @@
 @extends('admin/admin_dashboard')
 @section('admin')
+
+
+{{-- ✅ START: បន្ថែម CSS សម្រាប់ Print --}}
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #invoice-box, #invoice-box * {
+                visibility: visible;
+            }
+            #invoice-box {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 10px;
+            }
+             @page {
+                size: A5; /* កំណត់ទំហំក្រដាស */
+                margin: 0;
+            }
+        }
+    </style>
+    {{-- ✅ END --}}
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
         <div class="container mx-auto p-6">
@@ -31,7 +58,7 @@
                                     <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                     <select id="perPage" name="perPage"
                                         class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                        <option value="6" selected>6</option>
+                                        <option value="7" selected>7</option>
                                         <option value="10">10</option> <!-- ✅ Default -->
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -64,7 +91,7 @@
                             </div>
 
                         <div
-                            class="table-wrapper overflow-y-auto max-h-[500px]">
+                            class="table-wrapper overflow-y-auto max-h-[520px]">
                             <table class="w-full text-left table-auto min-w-max">
                                 <thead>
                                     <tr>
@@ -152,6 +179,12 @@
             </div>
         </div>
 
+        {{-- ✅ START: បន្ថែមកន្លែងសម្រាប់ផ្ទុក Invoice ដែលនឹង Print (ដាក់នៅខាងក្រៅ container) --}}
+            <div id="invoice-box" class="hidden">
+                {{-- Invoice HTML នឹងត្រូវបានបញ្ចូលនៅទីនេះដោយ JavaScript --}}
+            </div>
+        {{-- ✅ END --}}
+
         <script type="text/javascript">
             $(document).ready(function() {
                 $('.toggle-password').on('click', function() {
@@ -214,5 +247,42 @@
             });
 
             // End
+
+
+            // ✅ START: បន្ថែម JavaScript សម្រាប់ Print Invoice
+            $(document).on('click', '.print-invoice-btn', function() {
+                const orderId = $(this).data('order-id');
+                const invoiceBox = $('#invoice-box');
+
+                invoiceBox.html('<div class="text-center p-20">Loading Invoice...</div>').removeClass('hidden');
+
+                $.ajax({
+                    url: `/get-invoice-html/${orderId}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.html) {
+                            invoiceBox.html(response.html);
+                            
+                            // ដាក់ Event Listener មុននឹងហៅ print
+                            window.onafterprint = function() {
+                                // លាក់ div ហើយសម្អាត content ចេញវិញ
+                                invoiceBox.addClass('hidden').html(''); 
+                                // ដក Event ចេញវិញ ដើម្បីកុំឲ្យវាជាន់គ្នាពេលចុចលើកក្រោយ
+                                window.onafterprint = null; 
+                            };
+
+                            window.print(); // <--- បញ្ជាឱ្យព្រីន
+
+                        } else {
+                            invoiceBox.html('<div class="text-center p-20 text-red-500">Could not load invoice.</div>');
+                        }
+                    },
+                    error: function() {
+                        invoiceBox.html('<div class="text-center p-20 text-red-500">Error loading data.</div>');
+                    }
+                });
+            });
+            // ✅ END
+
         </script>
 @endsection
