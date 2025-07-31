@@ -13,6 +13,9 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator; //  <-- ត្រូវ Import ថែម
 use App\Models\Condition; // ✅ 1. បន្ថែម Model Condition
 
+
+use Illuminate\Support\Facades\DB; 
+
 class PurchaseController extends Controller
 {
 
@@ -519,88 +522,83 @@ class PurchaseController extends Controller
         ]);
     }
 
-    public function StorePurchase(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'supplier_id' => 'required',
-            'payment_status' => 'required',
-            'total' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'pay' => 'required|numeric|min:0',
-        ]);
-    
-        $cartItems = Cart::content();
-    
-        if ($cartItems->isEmpty()) {
-            return redirect()->back()->with([
-                'message' => __('messages.please_select_product_for_purchase'),
-                'alert-type' => 'error',
-            ]);
-        }
-    
-        // Subtotal from cart (total before any discount)
-        $subTotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->qty;
-        });
-    
-        $discount = floatval($request->discount ?? 0);
-        $paid = floatval($request->pay);
-    
-        // ❗ Prevent discount from exceeding subtotal
-        if ($discount >= $subTotal) {
-            return redirect()->back()->withInput()->with([
-            'message' => __('messages.discount_cannot_exceed_subtotal') . ' (' . number_format($subTotal, 2) . ')',
-                'alert-type' => 'error',
-            ]);
-        }
-    
-        // Final total after discount
-        $finalTotal = $subTotal - $discount;
-        $due = max($finalTotal - $paid, 0);
-    
-        $data = [
-            'supplier_id' => $request->supplier_id,
-            'purchase_date' => Carbon::now(),
-            'invoice_no' => 'PUR_' . mt_rand(10000000, 99999999),
-            'purchase_status' => 'pending',
-            'discount' => $discount,
-            'total_products' => $cartItems->count(),
-            'sub_total' => $subTotal,
-            'vat' => 0,
-            'total' => $finalTotal,
-            'payment_status' => $request->payment_status,
-            'pay' => $paid,
-            'due' => $due,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ];
-    
-        $purchase_id = Purchase::insertGetId($data);
-    
-        foreach ($cartItems as $item) {
-            purchase_details::create([
-                'purchase_id' => $purchase_id,
-                'product_id' => $item->id,
-                'purchase_price' => $item->price,
-                'unitcost' => $item->price,
-                'quantity' => $item->qty,
-                'total' => $item->price * $item->qty,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-    
-            // Optional: Update stock
-            // Product::where('id', $item->id)->increment('product_store', $item->qty);
-        }
-    
-        Cart::destroy();
-    
-        return redirect()->route('purchase.page')->with([
-            'message' => __('messages.purchase_completed_successfully'),
-            'alert-type' => 'success',
-        ]);
-    }
+   public function StorePurchase(Request $request)
+{
+  $cartItems = Cart::content();
+
+  if ($cartItems->isEmpty()) {
+    return response()->json([
+      'status' => 'error',
+      'message' => __('messages.please_select_product_for_purchase'),
+    ], 422);
+  }
+
+  $validated = $request->validate([
+    'supplier_id' => 'required',
+    'payment_status' => 'required',
+    'total' => 'required|numeric|min:0',
+    'discount' => 'nullable|numeric|min:0',
+    'pay' => 'required|numeric|min:0',
+  ]);
+
+  $subTotal = $cartItems->sum(fn($item) => $item->price * $item->qty);
+  $discount = floatval($request->discount ?? 0);
+  $paid = floatval($request->pay);
+
+  if ($discount >= $subTotal) {
+  return back()->withErrors([
+    'discount' => __('messages.discount_cannot_exceed_subtotal'),
+  ])->withInput()->with([
+    'cart' => Cart::content(),
+    'subtotal' => Cart::subtotal()
+  ]);
+}
+
+
+  $finalTotal = $subTotal - $discount;
+  $due = max($finalTotal - $paid, 0);
+
+  $data = [
+    'supplier_id' => $request->supplier_id,
+    'purchase_date' => now(),
+    'invoice_no' => 'PUR_' . mt_rand(10000000, 99999999),
+    'purchase_status' => 'pending',
+    'discount' => $discount,
+    'total_products' => $cartItems->count(),
+    'sub_total' => $subTotal,
+    'vat' => 0,
+    'total' => $finalTotal,
+    'payment_status' => $request->payment_status,
+    'pay' => $paid,
+    'due' => $due,
+    'created_at' => now(),
+    'updated_at' => now(),
+  ];
+
+  $purchase_id = Purchase::insertGetId($data);
+
+  foreach ($cartItems as $item) {
+    purchase_details::create([
+      'purchase_id' => $purchase_id,
+      'product_id' => $item->id,
+      'purchase_price' => $item->price,
+      'unitcost' => $item->price,
+      'quantity' => $item->qty,
+      'total' => $item->price * $item->qty,
+      'created_at' => now(),
+      'updated_at' => now(),
+    ]);
+  }
+
+  Cart::destroy();
+
+  return response()->json([
+    'status' => 'success',
+    'message' => __('messages.purchase_completed_successfully'),
+    'redirect' => route('purchase.page')
+  ]);
+}
+
     
     public function payDueModel(Request $request, $id){
         $purchasepaydue = Purchase::findOrFail($id);

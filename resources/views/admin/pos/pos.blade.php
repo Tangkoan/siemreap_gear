@@ -388,19 +388,6 @@
                 fetchProducts();
             }
 
-        // function calculateDue() {
-        //     const discount = parseFloat(document.getElementById('discount').value) || 0;
-        //     const payNow = parseFloat(document.getElementById('payNow').value) || 0;
-        //     const finalTotal = originalSubtotal - discount;
-        //     const dueAmount = finalTotal - payNow;
-
-        //     document.getElementById('subtotal').innerText = originalSubtotal.toFixed(2);
-        //     document.getElementById('discountDisplay').innerText = discount.toFixed(2);
-        //     document.getElementById('totalPayable').innerText = finalTotal > 0 ? finalTotal.toFixed(2) : '0.00';
-        //     document.getElementById('orderTotalHidden').value = finalTotal > 0 ? finalTotal.toFixed(2) : '0.00';
-        //     document.getElementById('dueHidden').value = dueAmount.toFixed(2);
-        // }
-
         // ✅ Function to format KHR (rounds to the nearest 100)
         function formatKhr(number) {
             const rounded = Math.round(number / 100) * 100;

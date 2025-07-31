@@ -120,6 +120,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                     </button>
                 </div>
+                {{-- ✅ បន្ថែមបន្ទាត់នេះ --}}
+                @error('supplier_id')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group">
@@ -130,6 +134,10 @@
                     <option value="Cheque">Cheque</option>
                     <option value="Due">Due</option>
                 </select>
+                {{-- ✅ បន្ថែមបន្ទាត់នេះ --}}
+                @error('payment_status')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group">
@@ -140,7 +148,12 @@
             <div class="form-group sm:col-span-2">
                 <label for="payNow" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.pay_now') }} ($)</label>
                 <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay') }}" min="0" step="0.01" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                {{-- ✅ បន្ថែមបន្ទាត់នេះ --}}
+                @error('pay')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
             </div>
+            
 
             <div class="sm:col-span-2 mt-2">
                 <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
@@ -464,7 +477,88 @@
 
         document.getElementById('payNow').addEventListener('input', calculateTotals);
         document.getElementById('discount').addEventListener('input', calculateTotals);
+
+      
+
+   $(document).ready(function() {
+    $('#myForm').validate({
+        rules: {
+            supplier_id: { required: true },
+            payment_status: { required: true },
+            pay: { required: true, number: true, min: 0 },
+            discount: { number: true, min: 0 }
+        },
+        messages: {
+            // ... (សារ Error របស់អ្នកនៅដដែល) ...
+        },
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            // ... (កូដ errorPlacement របស់អ្នកនៅដដែល) ...
+            // លាងសម្អាត Error ចាស់ៗចេញសិន
+            element.closest('.form-group').find('.invalid-feedback').remove();
+            error.addClass('invalid-feedback text-red-500 text-xs mt-1');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('border-red-500').removeClass('border-slate-300 dark:border-slate-600');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('border-red-500').addClass('border-slate-300 dark:border-slate-600');
+        },
         
+        submitHandler: function(form) {
+    // ✅ បន្ថែមលក្ខខណ្ឌបញ្ជាក់ថា cart មិនទទេ
+    if (cartSubtotal <= 0) {
+        toastr.error("{{ __('messages.please_select_product_for_purchase') }}");
+        return false;
+    }
+
+    var submitButton = $(form).find('button[type="submit"]');
+    submitButton.prop('disabled', true).text('កំពុងដំណើរការ...');
+
+    // ❗លាងសម្អាត error
+    $('.invalid-feedback').remove();
+    $('.border-red-500').removeClass('border-red-500');
+
+    $.ajax({
+        url: $(form).attr('action'),
+        type: $(form).attr('method'),
+        data: $(form).serialize(),
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                toastr.success(response.message);
+                form.reset();
+                // 👉 ប្រើ redirect ប្រសិនបើមាន
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            }
+        },
+        error: function(xhr) {
+            var response = xhr.responseJSON;
+            if (xhr.status === 422) {
+                toastr.error('សូមពិនិត្យទិន្នន័យ!');
+                $.each(response.errors, function(key, value){
+                    var field = $('[name="' + key + '"]');
+                    field.addClass('border-red-500');
+                    var errorSpan = '<span class="invalid-feedback text-red-500 text-xs mt-1">' + value[0] + '</span>';
+                    field.closest('.form-group').append(errorSpan);
+                });
+            } else {
+                toastr.error(response?.message || 'មានបញ្ហាកើតឡើង។');
+            }
+        },
+        complete: function() {
+            submitButton.prop('disabled', false).text('រក្សាទុក');
+        }
+    });
+
+    return false; // ❗បញ្ឈប់ page reload
+}
+
+    });
+});
         const supplierModal = document.getElementById('add-supplier-modal');
         const addSupplierForm = document.getElementById('addSupplierForm');
         function closeSupplierModal() {
@@ -508,25 +602,6 @@
         closeDetailsBtn.addEventListener('click', closeDetailsModal);
         detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
 
-        $('#myForm').validate({
-            rules: { 
-                supplier_id: { required: true }, 
-                payment_status: { required: true }, 
-                pay: { required: true } 
-            },
-            messages: { 
-                supplier_id: { required: 'Please select a supplier' },
-                payment_status: { required: 'Please select a payment method' },
-                pay: { required: 'Please enter the amount to pay' }
-             },
-            errorElement: 'span',
-            errorPlacement: (error, element) => {
-                error.addClass('invalid-feedback text-red-500 text-xs mt-1');
-                element.closest('.form-group').append(error);
-            },
-            highlight: (element) => $(element).addClass('border-red-500'),
-            unhighlight: (element) => $(element).removeClass('border-red-500'),
-        });
     });
 </script>
 
