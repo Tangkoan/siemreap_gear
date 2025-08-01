@@ -299,6 +299,9 @@ public function storeExchangeRate(Request $request)
 
  public function FinalInvoice(Request $request)
     {
+
+        
+
         $cartItems = Cart::content();
 
         if ($cartItems->isEmpty()) {

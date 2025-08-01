@@ -22,7 +22,7 @@
 <div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full bg-slate-100 dark:bg-slate-900 p-4">
 
     {{-- Left Side - Product Selection --}}
-    <div class="lg:w-3/5 xl:w-2/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-100px)]">
+    <div class="lg:w-3/5 xl:w-2/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
         {{-- Header & Search --}}
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200 dark:border-slate-700 mb-4">
             <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-0">{{ __('messages.purchase') }}</h2>
@@ -69,7 +69,7 @@
     </div>
 
     {{-- Right Side - Cart & Checkout --}}
-    <div class="lg:w-2/5 xl:w-1/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-100px)]">
+    <div class="lg:w-2/5 xl:w-1/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
         <h2 class="text-xl font-bold text-slate-800 dark:text-white pb-4 border-b border-slate-200 dark:border-slate-700">{{ __('messages.purchase_cart') }}</h2>
 
         <div class="flex-1 mt-4 overflow-auto -mx-4 px-4">
@@ -86,7 +86,7 @@
             </table>
         </div>
 
-        <div class="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2 text-sm">
+       <div class="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-1 text-xs">
             <div class="flex justify-between text-slate-600 dark:text-slate-300">
                 <span>{{ __('messages.subtotal') }}:</span>
                 <span class="font-medium">$<span id="subtotalDisplay">0.00</span></span>
@@ -95,68 +95,68 @@
                 <span>{{ __('messages.discount') }}:</span>
                 <span class="font-medium text-red-500">-$<span id="discountDisplay">0.00</span></span>
             </div>
-            <div class="flex justify-between text-lg font-bold text-slate-800 dark:text-white border-t border-dashed pt-2 mt-2 border-slate-300 dark:border-slate-600">
+            <div class="flex justify-between text-base font-bold text-slate-800 dark:text-white border-t border-dashed pt-1 mt-1 border-slate-300 dark:border-slate-600">
                 <span>{{ __('messages.total_payable') }}:</span>
                 <span>$<span id="totalPayableDisplay">0.00</span></span>
             </div>
         </div>
 
-        <form method="POST" id="myForm" action="{{ route('purchase.store') }}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+       <form method="POST" id="purchaseForm" action="{{ route('purchase.store') }}" class="space-y-0 pt-2 border-t border-slate-200 dark:border-slate-700">
             @csrf
             <input type="hidden" name="total" id="orderTotalHidden">
             <input type="hidden" name="pay" id="paidHidden">
             <input type="hidden" name="due" id="dueHidden">
 
-            <div class="form-group sm:col-span-2">
-                <label for="supplier_id" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.supplier_name') }}</label>
-                <div class="group relative flex items-center">
-                    <select name="supplier_id" id="supplier_id" class="w-full appearance-none rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white">
+            {{-- Supplier Selection --}}
+            <div>
+                <label for="supplier_id" class="block mb-1.5 text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('messages.supplier_name') }}</label>
+                <div class="relative">
+                    <select name="supplier_id" id="supplier_id" required class="w-full appearance-none rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 pr-10 text-sm text-slate-800 transition-colors focus:border-red-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-900">
                         <option value="" disabled selected>{{ __('messages.select_supplier') }}</option>
                         @foreach ($supplier as $sup)
                             <option value="{{ $sup->id }}">{{ $sup->name }}</option>
                         @endforeach
                     </select>
-                    <button type="button" id="add-supplier-btn" title="Add New Supplier" class="absolute inset-y-0 right-5 flex items-center rounded-r-lg px-3 text-slate-500 transition hover:text-red-600 focus:outline-none dark:text-slate-400 dark:hover:text-red-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                    <button type="button" id="add-supplier-btn" title="Add New Supplier" class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-slate-500 transition hover:text-red-600 focus:outline-none dark:text-slate-400 dark:hover:text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                     </button>
                 </div>
-                {{-- ✅ បន្ថែមបន្ទាត់នេះ --}}
-                @error('supplier_id')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
             </div>
 
-            <div class="form-group">
-                <label for="payment_status" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.payment_method') }}</label>
-                <select name="payment_status" id="payment_status" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
-                    <option value="" disabled selected>{{ __('messages.select_payment') }}</option>
-                    <option value="HandCash">HandCash</option>
-                    <option value="Cheque">Cheque</option>
-                    <option value="Due">Due</option>
-                </select>
-                {{-- ✅ បន្ថែមបន្ទាត់នេះ --}}
-                @error('payment_status')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
+            {{-- Form Grid --}}
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {{-- Invoice Number --}}
+                <div>
+                    <label for="invoice_no" class="block mb-1.5 text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('messages.invoice_no') }} <span class="text-red-500">*</span></label>
+                    <input type="text" name="invoice_no" id="invoice_no" placeholder="{{ __('messages.enter_invoice_no') }}" required class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-800 transition-colors focus:border-red-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-900">
+                </div>
+                
+                {{-- Payment Method --}}
+                <div>
+                    <label for="payment_status" class="block mb-1.5 text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('messages.payment_method') }}</label>
+                    <select name="payment_status" id="payment_status" required class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-800 transition-colors focus:border-red-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-900">
+                        <option value="" disabled selected>{{ __('messages.select_payment') }}</option>
+                        <option value="QrScan">Qr Scan</option>
+                        <option value="HandCash">Hand Cash</option>
+                    </select>
+                </div>
+
+                {{-- Discount --}}
+                <div>
+                    <label for="discount" class="block mb-1.5 text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('messages.discount') }} ($)</label>
+                    <input type="number" name="discount" id="discount" placeholder="0.00" value="0" min="0" step="0.01" class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-800 transition-colors focus:border-red-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-900">
+                </div>
+                
+                {{-- Pay Now --}}
+                <div>
+                    <label for="payNow" class="block mb-1.5 text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('messages.pay_now') }} ($)</label>
+                    <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay') }}" required min="0" step="0.01" class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-800 transition-colors focus:border-red-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-900">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="discount" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.discount') }} ($)</label>
-                <input type="number" name="discount" id="discount" placeholder="0.00" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500" min="0" value="0" step="0.01">
-            </div>
-
-            <div class="form-group sm:col-span-2">
-                <label for="payNow" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.pay_now') }} ($)</label>
-                <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay') }}" min="0" step="0.01" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
-                {{-- ✅ បន្ថែមបន្ទាត់នេះ --}}
-                @error('pay')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
-            </div>
-            
-
-            <div class="sm:col-span-2 mt-2">
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+            {{-- Submit Button --}}
+            <div class="pt-2">
+                <button type="submit" class="w-full flex items-center justify-center gap-x-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
                     {{ __('messages.complete_purchase') }}
                 </button>
@@ -236,7 +236,28 @@
 <script src="{{ asset('backend/assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/jquery.validate.min.js') }}"></script>
 
+
+<script>
+    document.getElementById('purchaseForm').addEventListener('submit', function(e) {
+        const supplier = document.getElementById('supplier_id').value;
+        const invoice = document.getElementById('invoice_no').value;
+        const payment = document.getElementById('payment_status').value;
+        const pay = document.getElementById('payNow').value;
+
+        if (!supplier || !invoice || !payment || !pay) {
+            alert('សូមបំពេញទិន្នន័យទាំងអស់ដែលត្រូវការ!');
+            e.preventDefault(); // បញ្ឈប់ការបញ្ជូនទម្រង់
+        }
+    });
+</script>
+
 <script type="text/javascript">
+
+// ✅ ប្រើ $(document).ready() តែមួយដង γιαครอบคลุมកូដ jQuery ទាំងអស់
+$(document).ready(function() {
+
+
+    
     // --- GLOBAL VARIABLES ---
     let currentCategoryId = 'all';
     let currentConditionId = 'all';
@@ -302,7 +323,7 @@
     }
 
     // --- CORE LOGIC & AJAX FUNCTIONS ---
-    function fetchProductsByFilter() {
+    window.fetchProductsByFilter = function() {
         const url = `/get-products-for-purchase?category_id=${currentCategoryId}&condition_id=${currentConditionId}`;
         const productGrid = document.getElementById('product-grid');
         productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">Loading...</p>`;
@@ -319,23 +340,19 @@
             .catch(error => console.error('Error loading products by filter:', error));
     }
 
-    function filterProducts(type, id, clickedButton) {
+    window.filterProducts = function(type, id, clickedButton) {
         if (type === 'category') { currentCategoryId = id; }
         else if (type === 'condition') { currentConditionId = id; }
-        document.getElementById('searchBox').value = '';
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
-        document.querySelectorAll(`.${type}-btn`).forEach(btn => btn.classList.remove('active-filter'));
+
+        // Logic to toggle active class on buttons
+        let container = clickedButton.closest('div');
+        container.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
         clickedButton.classList.add('active-filter');
-        document.querySelector(`.condition-btn[onclick*="'all'"]`).classList.add('active-filter');
-        document.querySelector(`.category-btn[onclick*="'all'"]`).classList.add('active-filter');
-        if (id !== 'all') {
-            if (type === 'condition') document.querySelector(`.condition-btn[onclick*="'all'"]`).classList.remove('active-filter');
-            if (type === 'category') document.querySelector(`.category-btn[onclick*="'all'"]`).classList.remove('active-filter');
-        }
+        
         fetchProductsByFilter();
     }
     
-    function addProductToCartAjax(id, name, qty, price) {
+    window.addProductToCartAjax = function(id, name, qty, price) {
         fetch("/purchase/add-cart", {
             method: 'POST',
             body: new URLSearchParams({ id, name, qty, price, _token: CSRF_TOKEN }),
@@ -366,7 +383,7 @@
         .then(data => updateCartDisplay(data.cart_content, data.cart_subtotal));
     }
 
-    function removeCartItem(rowId) {
+    window.removeCartItem = function(rowId) {
         fetch(`/purchase/cart/remove/${rowId}`)
         .then(res => res.json())
         .then(data => updateCartDisplay(data.cart_content, data.cart_subtotal));
@@ -423,192 +440,83 @@
     }
 
     // --- INITIALIZATION & EVENT LISTENERS ---
-    document.addEventListener("DOMContentLoaded", function () {
-        fetchProductsByFilter(); 
-        updateCartDisplay({!! Js::from(Cart::content()) !!}, "{{ Cart::subtotal() }}");
-        
-        const searchBox = document.getElementById('searchBox');
-        searchBox.addEventListener('input', function () {
-            document.querySelectorAll('.filter-btn').forEach(button => {
-                const buttonText = button.textContent.trim();
-                if (buttonText !== 'All' && buttonText !== 'All Category') {
-                    button.classList.remove('active-filter');
-                } else {
-                    button.classList.add('active-filter');
-                }
-            });
-            currentCategoryId = 'all';
-            currentConditionId = 'all';
+    fetchProductsByFilter(); 
+    updateCartDisplay({!! Js::from(Cart::content()) !!}, "{{ Cart::subtotal() }}");
+    
+    $('#searchBox').on('input', function () {
+        clearTimeout(searchTimeout);
+        const keyword = this.value;
 
-            clearTimeout(searchTimeout);
-            const keyword = this.value;
-
-            if (keyword.trim() === '') {
-                fetchProductsByFilter();
-                return;
-            }
-
-            searchTimeout = setTimeout(() => {
-                const url = `/purchase/search-products?keyword=${keyword}`;
-                const productGrid = document.getElementById('product-grid');
-                productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">Searching...</p>`;
-                
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                           return response.text().then(text => { throw new Error(text) });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        productGrid.innerHTML = '';
-                        if (data.products && data.products.length > 0) {
-                            data.products.forEach(product => productGrid.innerHTML += createProductCardHTML(product));
-                        } else {
-                            productGrid.innerHTML = `<p class="col-span-full text-center text-slate-500 p-10">No products found for "${keyword}".</p>`;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error searching products:', error);
-                        productGrid.innerHTML = `<p class="col-span-full text-center text-red-500 p-10">An error occurred during search.</p>`;
-                    });
-            }, 300); 
-        });
-
-        document.getElementById('payNow').addEventListener('input', calculateTotals);
-        document.getElementById('discount').addEventListener('input', calculateTotals);
-
-      
-
-   $(document).ready(function() {
-    $('#myForm').validate({
-        rules: {
-            supplier_id: { required: true },
-            payment_status: { required: true },
-            pay: { required: true, number: true, min: 0 },
-            discount: { number: true, min: 0 }
-        },
-        messages: {
-            // ... (សារ Error របស់អ្នកនៅដដែល) ...
-        },
-        errorElement: 'span',
-        errorPlacement: function(error, element) {
-            // ... (កូដ errorPlacement របស់អ្នកនៅដដែល) ...
-            // លាងសម្អាត Error ចាស់ៗចេញសិន
-            element.closest('.form-group').find('.invalid-feedback').remove();
-            error.addClass('invalid-feedback text-red-500 text-xs mt-1');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass('border-red-500').removeClass('border-slate-300 dark:border-slate-600');
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass('border-red-500').addClass('border-slate-300 dark:border-slate-600');
-        },
-        
-        submitHandler: function(form) {
-    // ✅ បន្ថែមលក្ខខណ្ឌបញ្ជាក់ថា cart មិនទទេ
-    if (cartSubtotal <= 0) {
-        toastr.error("{{ __('messages.please_select_product_for_purchase') }}");
-        return false;
-    }
-
-    var submitButton = $(form).find('button[type="submit"]');
-    submitButton.prop('disabled', true).text('កំពុងដំណើរការ...');
-
-    // ❗លាងសម្អាត error
-    $('.invalid-feedback').remove();
-    $('.border-red-500').removeClass('border-red-500');
-
-    $.ajax({
-        url: $(form).attr('action'),
-        type: $(form).attr('method'),
-        data: $(form).serialize(),
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                toastr.success(response.message);
-                form.reset();
-                // 👉 ប្រើ redirect ប្រសិនបើមាន
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }
-        },
-        error: function(xhr) {
-            var response = xhr.responseJSON;
-            if (xhr.status === 422) {
-                toastr.error('សូមពិនិត្យទិន្នន័យ!');
-                $.each(response.errors, function(key, value){
-                    var field = $('[name="' + key + '"]');
-                    field.addClass('border-red-500');
-                    var errorSpan = '<span class="invalid-feedback text-red-500 text-xs mt-1">' + value[0] + '</span>';
-                    field.closest('.form-group').append(errorSpan);
+        searchTimeout = setTimeout(() => {
+            const url = `/purchase/search-products?keyword=${keyword}`;
+            const productGrid = $('#product-grid');
+            productGrid.html(`<p class="col-span-full text-center text-slate-500 p-10">Searching...</p>`);
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    productGrid.html('');
+                    if (data.products && data.products.length > 0) {
+                        data.products.forEach(product => productGrid.append(createProductCardHTML(product)));
+                    } else {
+                        productGrid.html(`<p class="col-span-full text-center text-slate-500 p-10">No products found for "${keyword}".</p>`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error searching products:', error);
+                    productGrid.html(`<p class="col-span-full text-center text-red-500 p-10">An error occurred during search.</p>`);
                 });
-            } else {
-                toastr.error(response?.message || 'មានបញ្ហាកើតឡើង។');
+        }, 300); 
+    });
+
+    $('#payNow, #discount').on('input', calculateTotals);
+
+    
+    // --- MODAL HANDLING ---
+    const supplierModal = document.getElementById('add-supplier-modal');
+    const addSupplierForm = document.getElementById('addSupplierForm');
+    function closeSupplierModal() {
+        supplierModal.classList.add('hidden');
+        addSupplierForm.reset();
+        addSupplierForm.querySelectorAll('[id$="_error"]').forEach(el => el.textContent = '');
+    }
+    document.getElementById('add-supplier-btn').addEventListener('click', () => supplierModal.classList.remove('hidden'));
+    document.getElementById('cancel-add-supplier').addEventListener('click', closeSupplierModal);
+    document.getElementById('cancel-add-supplier-x').addEventListener('click', closeSupplierModal);
+    
+    addSupplierForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch("{{ route('store.supplier.ajax') }}", {
+            method: 'POST', body: new FormData(this),
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': CSRF_TOKEN }
+        })
+        .then(res => res.json().then(data => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+            if (!ok) throw data;
+            toastr.success(data.message);
+            const supplierSelect = document.getElementById('supplier_id');
+            const newOption = new Option(data.newSupplier.name, data.newSupplier.id, true, true);
+            supplierSelect.add(newOption, null);
+            closeSupplierModal();
+        })
+        .catch(errorData => {
+            if (errorData.errors) {
+                Object.keys(errorData.errors).forEach(key => {
+                    const errorElement = document.getElementById(`${key}_error`);
+                    if (errorElement) errorElement.textContent = errorData.errors[key][0];
+                });
             }
-        },
-        complete: function() {
-            submitButton.prop('disabled', false).text('រក្សាទុក');
-        }
-    });
-
-    return false; // ❗បញ្ឈប់ page reload
-}
-
-    });
-});
-        const supplierModal = document.getElementById('add-supplier-modal');
-        const addSupplierForm = document.getElementById('addSupplierForm');
-        function closeSupplierModal() {
-            supplierModal.classList.add('hidden');
-            addSupplierForm.reset();
-            addSupplierForm.querySelectorAll('[id$="_error"]').forEach(el => el.textContent = '');
-        }
-        document.getElementById('add-supplier-btn').addEventListener('click', () => supplierModal.classList.remove('hidden'));
-        document.getElementById('cancel-add-supplier').addEventListener('click', closeSupplierModal);
-        document.getElementById('cancel-add-supplier-x').addEventListener('click', closeSupplierModal);
-        window.addEventListener('click', (e) => { if (e.target == supplierModal) closeSupplierModal(); });
-        
-        addSupplierForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            fetch("{{ route('store.supplier.ajax') }}", {
-                method: 'POST', body: new FormData(this),
-                headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': CSRF_TOKEN }
-            })
-            .then(res => res.json().then(data => ({ ok: res.ok, data })))
-            .then(({ ok, data }) => {
-                if (!ok) throw data;
-                toastr.success(data.message);
-                const supplierSelect = document.getElementById('supplier_id');
-                const newOption = new Option(data.newSupplier.name, data.newSupplier.id, true, true);
-                supplierSelect.add(newOption, null);
-                closeSupplierModal();
-            })
-            .catch(errorData => {
-                 if (errorData.errors) {
-                    Object.keys(errorData.errors).forEach(key => {
-                        const errorElement = document.getElementById(`${key}_error`);
-                        if (errorElement) errorElement.textContent = errorData.errors[key][0];
-                    });
-                }
-            });
         });
-
-        const detailsModal = document.getElementById('product-details-modal');
-        const closeDetailsBtn = document.getElementById('close-details-modal-btn');
-        function closeDetailsModal() { detailsModal.classList.add('hidden'); }
-        closeDetailsBtn.addEventListener('click', closeDetailsModal);
-        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
-
     });
+
+    const detailsModal = document.getElementById('product-details-modal');
+    const closeDetailsBtn = document.getElementById('close-details-modal-btn');
+    function closeDetailsModal() { detailsModal.classList.add('hidden'); }
+    closeDetailsBtn.addEventListener('click', closeDetailsModal);
+    detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
+
+}); // End of $(document).ready()
 </script>
 
-@if (session('message'))
-    <script>
-        document.addEventListener('DOMContentLoaded', () => toastr["{{ session('alert-type', 'success') }}"]("{{ session('message') }}"));
-    </script>
-@endif
 
 @endsection

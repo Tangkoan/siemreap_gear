@@ -17,14 +17,13 @@ export default defineConfig({
 
 // export default defineConfig({
 //     server: {
-//         host: "172.10.0.131", // ✅ អនុញ្ញាតអោយអាច run តាម IP
+//         host: "192.168.137.1", // ✅ អនុញ្ញាតអោយអាច run តាម IP
 //         port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
 //     },
 //     plugins: [
 //         laravel({
 //             input: ["resources/css/app.css", "resources/js/app.js"],
 //             refresh: true,
-            
 //         }),
 //     ],
 // });

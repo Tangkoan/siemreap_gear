@@ -644,11 +644,4 @@ document.addEventListener("DOMContentLoaded", function() {
 });
     </script>
 
-    @if (session('message'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                toastr["{{ session('alert-type') ?? 'success' }}"]("{{ session('message') }}");
-            });
-        </script>
-    @endif
 @endsection
