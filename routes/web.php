@@ -344,29 +344,15 @@ Route::middleware(['auth'])->group(callback: function () {
         // API
         Route::get('/get-products-for-purchase',  'getProductsForPurchase')->name('get.products.for.purchase');
 
-
-        Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:purchase.menu');
-
-        Route::get('/pending/purchase', 'PendingPurchase')->name('pending.purchase')->middleware('permission:purchase.pending');
-
         Route::get('/purchase/details/{purchase_id}', 'PurchaseDetails')->name('purchase.details');
-
         // View Details for purchase page Don't have button complete purhcase
         Route::get('/purchase/view/details/{purchase_id}', 'PurchaseViewDetails')->name('purchase.view.details');
-
-
-        Route::post('/purchase/status/update', 'PurchaserStatusUpdate')->name('purchase.status.update');
-
+        
         Route::get('/complete/purchase', 'CompletePurchase')->name('complete.purchase')->middleware('permission:purchase.complete');
-
         // PDF Complete Purchase
         Route::get('/purchase/invoice-download/{order_id}', 'PurchaseInvoice');
-
-
-
-        //// Due All Route Add commentMore actions
-        Route::get('/purchase/pending/due', 'PendingDue')->name('purchase.pending.due');
-        // Route::get('/order/due/{id}','OrderDueAjax');
+        //// Due All Route Add commentMore actions          
+        Route::get('/purchase/pending/due', 'PendingDue')->name('purchase.pending.due')->middleware('permission:purchase.pending.due');
         Route::get('/purchase/due/{id}', 'getDue'); // ← This will never be reached!
         Route::get('/purchasesearch.purchase/paydue/{id}', 'payDueModel')->name('paydue.due');
 
@@ -378,21 +364,16 @@ Route::middleware(['auth'])->group(callback: function () {
     });
 
     //
-        Route::controller(PurchaseController::class)->group(function () {
-            Route::get('/add/purchase', 'PurchasePage')->name('purchase.page');
+    Route::controller(PurchaseController::class)->group(function () {
+            Route::get('/add/purchase', 'PurchasePage')->name('purchase.page')->middleware('permission:purchase.menu');
             Route::get('/purchase/search-products', [PurchaseController::class, 'searchPurchaseProducts'])->name('purchase.search.products');
-
-
-
             Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
             Route::post('/purchase/add-to-cart', 'AddToCart');
-
             Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
-
             Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
             Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
             Route::get('/purchase/cart/remove/{rowId}', [PurchaseController::class, 'RemoveCartItem']);
-        });
+    });
         
 
     // Start Permision

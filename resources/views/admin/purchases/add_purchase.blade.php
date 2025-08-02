@@ -153,7 +153,7 @@
                             <option value="{{ $sup->id }}">{{ $sup->name }}</option>
                         @endforeach
                     </select>
-                    <button type="button" id="add-supplier-btn" title="Add New Supplier" class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-slate-500 transition hover:text-red-600 focus:outline-none dark:text-slate-400 dark:hover:text-red-400">
+                    <button type="button" id="add-supplier-btn" title="Add New Supplier" class="absolute inset-y-0 right-5 flex items-center rounded-r-md px-3 text-slate-500 transition hover:text-red-600 focus:outline-none dark:text-slate-400 dark:hover:text-red-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                     </button>
                 </div>

@@ -97,10 +97,10 @@
                                             {{ $item->quantity }}
                                         </td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
-                                            {{ $item->product->selling_price ?? 0 }} $
+                                            {{ $item->product->buying_price ?? 0 }} $
                                         </td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
-                                            {{ ($item->product->selling_price ?? 0) * $item->quantity }} $
+                                            {{ ($item->product->buying_price ?? 0) * $item->quantity }} $
                                         </td>
                                     </tr>
                                 @endforeach

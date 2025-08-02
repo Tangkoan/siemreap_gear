@@ -173,15 +173,14 @@
         {{-- Purchase Dropdown --}}
         @php
             $purchaseMenu = Auth::user()->can('purchase.menu');
-            $purchasePending = Auth::user()->can('purchase.pending');
             $purchaseComplete = Auth::user()->can('purchase.complete');
             $purchasePendingDue = Auth::user()->can('purchase.pending.due');
-            $isPurchaseActive = isRouteActive(['pending.purchase', 'complete.purchase', 'purchase.pending.due']);
+            $isPurchaseActive = isRouteActive(['complete.purchase', 'purchase.pending.due','purchase.page']);
         @endphp
-        @if ($purchaseMenu || $purchasePending || $purchaseComplete || $purchasePendingDue)
+        @if ($purchaseMenu || $purchaseComplete || $purchasePendingDue)
             <div id="purchaseDropdown" class="relative group">
                 @if ($purchaseMenu)
-                    <a href="{{ route('pending.purchase') }}"
+                    <a href="{{ route('purchase.page') }}"
                         class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
                         {{ $isPurchaseActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                         @if($isPurchaseActive)
@@ -194,9 +193,7 @@
                     </a>
                 @endif
                 <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
-                    @if ($purchasePending)
-                        <a href="{{ route('pending.purchase') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Pending</a>
-                    @endif
+                    
                     @if ($purchaseComplete)
                         <a href="{{ route('complete.purchase') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Complete</a>
                     @endif

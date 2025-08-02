@@ -18,7 +18,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class PurchaseController extends Controller
 {
-     public function storeProductAjax(Request $request)
+    public function storeProductAjax(Request $request)
     {
         // Part 1: Validation
         // We use Validator::make() to have full control over the JSON response.
@@ -168,129 +168,11 @@ class PurchaseController extends Controller
         return view('admin.purchases.pending_due', compact('alldue'));
     }
 
-    // This method seems like an older version, the primary one is StorePurchase
-    public function FinalInvoice(Request $request)
-    {
-        $rtotal = $request->total;
-        $rpay = $request->pay;
-        $mtotal = $rtotal - $rpay;
-
-        $data = [];
-        $data['supplier_id'] = $request->supplier_id;
-        $data['purchase_date'] = $request->purchase_date;
-        $data['purchase_status'] = $request->purchase_status;
-        $data['total_products'] = $request->total_products;
-        $data['sub_total'] = $request->sub_total;
-        $data['vat'] = $request->vat;
-        $data['invoice_no'] = 'Pur' . mt_rand(10000000, 99999999);
-        $data['total'] = $rtotal;
-        $data['payment_status'] = $request->payment_status;
-        $data['pay'] = $rpay;
-        $data['due'] = $mtotal;
-        $data['created_at'] = Carbon::now();
-
-        $purchase_id = Purchase::insertGetId($data);
-        $contents = Cart::content();
-        foreach ($contents as $content) {
-            $pdata = [];
-            $pdata['purchase_id'] = $purchase_id;
-            $pdata['product_id'] = $content->id;
-            $pdata['quantity'] = $content->qty;
-            $pdata['unitcost'] = $content->price;
-            $pdata['total'] = $content->total;
-            purchase_details::insert($pdata);
-        }
-
-        $notification = [
-            'message' => 'Purchase Complete Successfully',
-            'alert-type' => 'success'
-        ];
-
-        Cart::destroy();
-        return redirect()->route('purchase')->with($notification);
-    }
-
-    // List all pending purchases
-    public function PendingPurchase()
-    {
-        $purchases = Purchase::where('purchase_status', 'pending')->get();
-        return view('admin.purchases.pending_purchase', compact('purchases'));
-    }
-
-    // AJAX search for pending purchases
-    public function searchPurchase(Request $request)
-    {
-        $query = Purchase::where('purchase_status', 'pending');
-        if ($request->has('search') && $request->search != '') {
-            $query->whereHas('supplier', function ($cat) use ($request) {
-                $cat->where('name', 'LIKE', '%' . $request->search . '%');
-            });
-        }
-        $query->orderBy('created_at', 'desc');
-        $perPage = $request->perPage ?? 10;
-        $isAll = $perPage === 'all';
-        $purchases = $isAll ? $query->get() : $query->paginate((int)$perPage);
-        $table = '';
-        foreach ($purchases as $key => $item) {
-            $table .= '
-            <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-4 py-5">' . ($key + 1) . '</td>
-                <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
-                <td class="p-4 py-5">' . $item->purchase_date  . '</td>
-                <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                <td class="p-4 py-5">' . $item->invoice_no  . '</td>
-                <td class="p-4 py-5">' . $item->pay  . '</td>
-                <td class="p-4 px-4 py-5 text-center align-middle">
-                    <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">' . $item->purchase_status  . '</span>
-                </td>
-                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                    <div class="flex items-center gap-x-6">
-                        <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
-                            <a href="' . route('purchase.details', $item->id) . '" >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                            </a>
-                        </button>
-                    </div>
-                </td>
-            </tr>';
-        }
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $purchases->links('pagination::tailwind')->toHtml();
-        return response()->json(['table' => $table, 'pagination' => $pagination]);
-    }
-
-    public function PurchaseDetails($purchase_id)
-    {
-        $purchase = Purchase::where('id', $purchase_id)->first();
-        $purchaseItem = purchase_details::with('product')->where('purchase_id', $purchase_id)->orderBy('id', 'DESC')->get();
-        return view('admin.purchases.purchase_details', compact('purchase', 'purchaseItem'));
-    }
-
     public function PurchaseViewDetails($purchase_id)
     {
         $purchase = Purchase::where('id', $purchase_id)->first();
         $purchaseItem = purchase_details::with('product')->where('purchase_id', $purchase_id)->orderBy('id', 'DESC')->get();
         return view('admin.purchases.purchase_view_details', compact('purchase', 'purchaseItem'));
-    }
-    
-    // This method might become less used now but is kept for existing pending purchases
-    public function PurchaseStatusUpdate(Request $request)
-    {
-        $purchase_id = $request->id;
-        $purchaseProducts = purchase_details::where('purchase_id', $purchase_id)->get();
-        foreach ($purchaseProducts as $item) {
-            $product = Product::find($item->product_id);
-            $product->increment('product_store', $item->quantity);
-        }
-
-        Purchase::findOrFail($purchase_id)->update(['purchase_status' => 'complete']);
-        $notification = [
-            'message' => __('messages.purchase_done_successfully'),
-            'alert-type' => 'success'
-        ];
-        return redirect()->route('pending.purchase')->with($notification);
     }
     
     // List all complete purchases
@@ -459,67 +341,66 @@ class PurchaseController extends Controller
         ]);
     }
 
-   public function StorePurchase(Request $request)
-{
-    $cartItems = Cart::content();
+    public function StorePurchase(Request $request){
+        $cartItems = Cart::content();
 
-    if ($cartItems->isEmpty()) {
-        return redirect()->back()->with([
-            'message' => __('messages.please_select_product_for_purchase'),
-            'alert-type' => 'error',
-        ]);
-    }
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with([
+                'message' => __('messages.please_select_product_for_purchase'),
+                'alert-type' => 'error',
+            ]);
+        }
 
-    $subTotal = $cartItems->sum(function ($item) {
-        return $item->price * $item->qty;
-    });
+        $subTotal = $cartItems->sum(function ($item) {
+            return $item->price * $item->qty;
+        });
 
-    $discount = floatval($request->discount ?? 0);
-    $paid = floatval($request->pay);
+        $discount = floatval($request->discount ?? 0);
+        $paid = floatval($request->pay);
 
-    if ($discount >= $subTotal) {
-        return redirect()->back()->withInput()->with([
-            'message' => __('messages.discount_cannot_exceed_subtotal') . ' (' . number_format($subTotal, 2) . ')',
-            'alert-type' => 'error',
-        ]);
-    }
+        if ($discount >= $subTotal) {
+            return redirect()->back()->withInput()->with([
+                'message' => __('messages.discount_cannot_exceed_subtotal') . ' (' . number_format($subTotal, 2) . ')',
+                'alert-type' => 'error',
+            ]);
+        }
 
-    $finalTotal = $subTotal - $discount;
-    $due = max($finalTotal - $paid, 0);
+        $finalTotal = $subTotal - $discount;
+        $due = max($finalTotal - $paid, 0);
 
-    $data = [
-        'supplier_id' => $request->supplier_id,
-        'purchase_date' => Carbon::now(),
-        'invoice_no' => $request->invoice_no, // ✅ បញ្ចូលដោយដៃ
-        'purchase_status' => 'complete', // ✅ ប្តូរទៅ complete ដោយស្វ័យប្រវត្តិ
-        'discount' => $discount,
-        'total_products' => $cartItems->count(),
-        'sub_total' => $subTotal,
-        'vat' => 0,
-        'total' => $finalTotal,
-        'payment_status' => $request->payment_status,
-        'pay' => $paid,
-        'due' => $due,
-        'created_at' => Carbon::now(),
-        'updated_at' => Carbon::now(),
-    ];
-
-    $purchase_id = Purchase::insertGetId($data);
-
-    foreach ($cartItems as $item) {
-        purchase_details::create([
-            'purchase_id' => $purchase_id,
-            'product_id' => $item->id,
-            'purchase_price' => $item->price,
-            'unitcost' => $item->price,
-            'quantity' => $item->qty,
-            'total' => $item->price * $item->qty,
+        $data = [
+            'supplier_id' => $request->supplier_id,
+            'purchase_date' => Carbon::now(),
+            'invoice_no' => $request->invoice_no, // ✅ បញ្ចូលដោយដៃ
+            'purchase_status' => 'complete', // ✅ ប្តូរទៅ complete ដោយស្វ័យប្រវត្តិ
+            'discount' => $discount,
+            'total_products' => $cartItems->count(),
+            'sub_total' => $subTotal,
+            'vat' => 0,
+            'total' => $finalTotal,
+            'payment_status' => $request->payment_status,
+            'pay' => $paid,
+            'due' => $due,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-        ]);
+        ];
 
-        // ✅ បន្ថែមចំនួនចូលក្នុងស្តុក
-        Product::where('id', $item->id)->increment('product_store', $item->qty);
+        $purchase_id = Purchase::insertGetId($data);
+
+        foreach ($cartItems as $item) {
+            purchase_details::create([
+                'purchase_id' => $purchase_id,
+                'product_id' => $item->id,
+                'purchase_price' => $item->price,
+                'unitcost' => $item->price,
+                'quantity' => $item->qty,
+                'total' => $item->price * $item->qty,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+
+            // ✅ បន្ថែមចំនួនចូលក្នុងស្តុក
+            Product::where('id', $item->id)->increment('product_store', $item->qty);
     }
 
     Cart::destroy();
@@ -528,9 +409,8 @@ class PurchaseController extends Controller
         'message' => __('messages.purchase_completed_successfully'),
         'alert-type' => 'success',
     ]);
-}
+    }
 
-    
     // Pay due amount modal page
     public function payDueModel(Request $request, $id)
     {
@@ -591,4 +471,5 @@ class PurchaseController extends Controller
         });
         return response()->json(['products' => $products]);
     }
+
 }
