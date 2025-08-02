@@ -1,6 +1,13 @@
 @extends('admin/admin_dashboard')
 @section('admin')
 
+
+{{-- 🛰️ ការបន្ថែម jQuery & jQuery Validate ពី CDN --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+
+
 {{-- Style for Printing and Active Filter --}}
 <style>
     @media print {
@@ -17,6 +24,20 @@
     .dark .active-filter {
         background-color: #f87171 !important; /* red-400 */
     }
+
+
+    
+    /* In the <style> tag at the top of the file */
+.form-label {
+    @apply block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1;
+}
+.form-input {
+    @apply block w-full px-3 py-2 text-sm bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm placeholder-slate-400 dark:placeholder-slate-500 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500;
+}
+.form-error {
+    @apply text-red-500 text-xs mt-1 h-4; /* h-4 prevents layout shift */
+}
 </style>
 
 <div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full bg-slate-100 dark:bg-slate-900 p-4">
@@ -32,6 +53,8 @@
                 </span>
                 <input type="text" placeholder="{{ __('messages.search') }}" id="searchBox" class="w-full p-2 pl-10 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white dark:bg-slate-900 dark:text-white" />
             </div>
+
+            
         </div>
 
         {{-- Condition Filter Buttons --}}
@@ -70,7 +93,20 @@
 
     {{-- Right Side - Cart & Checkout --}}
     <div class="lg:w-2/5 xl:w-1/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
-        <h2 class="text-xl font-bold text-slate-800 dark:text-white pb-4 border-b border-slate-200 dark:border-slate-700">{{ __('messages.purchase_cart') }}</h2>
+        <div class="flex justify-between">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white pb-4 border-b border-slate-200 dark:border-slate-700">{{ __('messages.purchase_cart') }}</h2>
+
+        {{-- Add Product Button --}}
+            <button id="add-product-btn" type="button" title="{{ __('messages.add_new_product') }}" aria-label="{{ __('messages.add_new_product') }}"
+                class="flex-shrink-0 bg-red-600 text-white text-xs px-3 py-0.5 rounded-md hover:bg-red-700 transition-colors font-semibold flex items-center gap-1 leading-none h-6 min-h-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span class="hidden md:inline">{{ __('messages.add_product') }}</span>
+            </button>
+
+        </div>
+
 
         <div class="flex-1 mt-4 overflow-auto -mx-4 px-4">
             <table class="w-full text-sm">
@@ -165,6 +201,128 @@
     </div>
 </div>
 
+{{-- Modal Add Product --}}
+<div id="add-product-modal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    {{-- Modal Container with Animation --}}
+    <div id="add-product-modal-container" class="fixed inset-0 flex items-center justify-center p-4 opacity-0 scale-95 transition-all duration-300 ease-out">
+        
+        {{-- This container now mimics the Add Supplier modal's style --}}
+        <div class="relative w-full max-w-xl transform rounded-xl bg-white dark:bg-slate-800 shadow-2xl border dark:border-slate-700">
+            <form id="addProductForm" novalidate>
+                @csrf
+                {{-- Modal Header --}}
+                <div class="flex justify-between items-center p-5 border-b border-slate-200 dark:border-slate-700">
+                    <h3 id="modal-title" class="text-lg font-medium text-gray-900 dark:text-white">{{ __('messages.add_new_product') }}</h3>
+                    <button id="cancel-add-product-x" type="button" class="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                {{-- Modal Body with vertical fields --}}
+                <div class="p-6 max-h-[75vh] overflow-y-auto">
+                    <div class="space-y-4">
+
+                        {{-- Product Name --}}
+                        <div>
+                            <label for="product_name" class="form-label">{{ __('messages.product_name') }} <span class="text-red-500">*</span></label>
+                            <input type="text" name="product_name" id="product_name" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700" placeholder="e.g., Coca-Cola Can">
+                            <div id="product_name_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            
+                        </div>
+
+                        {{-- Category & Condition (Side-by-side) --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="category_id" class="form-label">{{ __('messages.category_name') }} <span class="text-red-500">*</span></label>
+                                <select name="category_id" id="category_id" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700">
+                                    <option value="" disabled selected>{{ __('messages.select_category') }}</option>
+                                    @foreach ($categories as $cat) <option value="{{ $cat->id }}">{{ $cat->category_name }}</option> @endforeach
+                                </select>
+                                <div id="category_id_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            </div>
+                             <div>
+                                <label for="condition_id" class="form-label">{{ __('messages.condition_name') }} <span class="text-red-500">*</span></label>
+                                <select name="condition_id" id="condition_id" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700">
+                                    <option value="" disabled selected>{{ __('messages.select_condition') }}</option>
+                                    @foreach ($conditions as $con) <option value="{{ $con->id }}">{{ $con->condition_name }}</option> @endforeach
+                                </select>
+                                <div id="condition_id_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            </div>
+                        </div>
+
+                        {{-- Supplier --}}
+                        <div>
+                            <label for="modal_supplier_id" class="form-label">{{ __('messages.supplier_name') }} <span class="text-red-500">*</span></label>
+                            <select name="supplier_id" id="modal_supplier_id" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700">
+                                <option value="" disabled selected>{{ __('messages.select_supplier') }}</option>
+                                @foreach ($supplier as $sup) <option value="{{ $sup->id }}">{{ $sup->name }}</option> @endforeach
+                            </select>
+                            <div id="supplier_id_error" class="form-error text-red-500 text-sm mt-1"></div>
+                        </div>
+                        
+                        {{-- Buying & Selling Price (Side-by-side) --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="buying_price" class="form-label">{{ __('messages.cost') }} ($) <span class="text-red-500">*</span></label>
+                                <input type="number" name="buying_price" id="buying_price" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700" step="0.01" min="0" placeholder="0.00">
+                                <div id="buying_price_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="selling_price" class="form-label">{{ __('messages.price') }} ($) <span class="text-red-500">*</span></label>
+                                <input type="number" name="selling_price" id="selling_price" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700" step="0.01" min="0" placeholder="0.00">
+                                <div id="selling_price_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            </div>
+                        </div>
+
+                        {{-- Stock & Stock Alert (Side-by-side) --}}
+                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="product_store" class="form-label">{{ __('messages.inventory') }}  <span class="text-red-500">*</span></label>
+                                <input type="number" value="0" readonly name="product_store" id="product_store" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700" min="0" placeholder="e.g., 100">
+                                <div id="product_store_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            </div>
+                            <div>
+                                <label for="stock_alert" class="form-label">{{ __('messages.stock_alert') }}</label>
+                                <input type="number" name="stock_alert" id="stock_alert" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700" min="0" placeholder="e.g., 10">
+                                <div id="stock_alert_error" class="form-error text-red-500 text-sm mt-1"></div>
+                            </div>
+                        </div>
+                        
+                        {{-- Product Details --}}
+                        <div>
+                            <label for="product_detail" class="form-label">{{ __('messages.details') }}</label>
+                            <textarea name="product_detail" id="product_detail" rows="3" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 sm:text-sm dark:bg-slate-700" placeholder="Optional details about the product..."></textarea>
+                            <div id="product_detail_error" class="form-error text-red-500 text-sm mt-1"></div>
+                        </div>
+
+                        {{-- Product Image --}}
+                        <div>
+                            <label for="product_image_input" class="form-label">{{ __('messages.image') }}</label>
+                            <input type="file" name="product_image" id="product_image_input" class="block w-full text-sm text-gray-600 dark:text-gray-300
+                                           file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
+                                           file:text-sm file:font-semibold file:bg-gray-300 dark:file:bg-gray-700
+                                           file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-400 dark:hover:file:bg-gray-600
+                                           cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                             <img id="image-preview" src="#" alt="Image Preview" class="mt-2 rounded-md max-h-40 hidden border border-slate-300 dark:border-slate-600" />
+                            <div id="product_image_error" class="form-error text-red-500 text-sm mt-1"></div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                {{-- Modal Footer --}}
+                <div class="flex justify-end gap-x-3 p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700">
+                    <button id="cancel-add-product" type="button" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-md hover:bg-slate-200 focus:outline-none dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600">{{ __('messages.cancel') }}</button>
+                    <button id="save-product-btn" type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none w-28">
+                        <span>{{ __('messages.save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 {{-- Modal Add Supplier --}}
 <div id="add-supplier-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm">
     <div class="relative top-10 sm:top-20 mx-auto w-full max-w-lg transform rounded-xl bg-white p-6 shadow-2xl dark:bg-slate-800 border dark:border-slate-700">
@@ -199,6 +357,7 @@
         </form>
     </div>
 </div>
+
 
 {{-- Modal Product Details --}}
 <div id="product-details-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
@@ -471,6 +630,116 @@ $(document).ready(function() {
 
     $('#payNow, #discount').on('input', calculateTotals);
 
+    // --- Modal Add Product --
+    // Inside your $(document).ready(function() { ... });
+// Replace your previous "MODAL HANDLING for ADD PRODUCT" section with this new one.
+
+// --- MODAL HANDLING for ADD PRODUCT (2025 UI) ---
+const productModal = document.getElementById('add-product-modal');
+const productModalContainer = document.getElementById('add-product-modal-container');
+const addProductBtn = document.getElementById('add-product-btn');
+const addProductForm = document.getElementById('addProductForm');
+const cancelProductBtn = document.getElementById('cancel-add-product');
+const cancelProductBtnX = document.getElementById('cancel-add-product-x');
+
+// Image upload elements
+const imageInput = document.getElementById('product_image_input');
+const imagePreview = document.getElementById('image-preview');
+const imageUploadPrompt = document.getElementById('image-upload-prompt');
+
+// Function to open the modal with animation
+function openProductModal() {
+    productModal.classList.remove('hidden');
+    // Use requestAnimationFrame to ensure the transition happens after the display property is set
+    requestAnimationFrame(() => {
+        productModalContainer.classList.remove('opacity-0', 'scale-95');
+        productModalContainer.classList.add('opacity-100', 'scale-100');
+    });
+}
+
+// Function to close the modal with animation
+function closeProductModal() {
+    productModalContainer.classList.remove('opacity-100', 'scale-100');
+    productModalContainer.classList.add('opacity-0', 'scale-95');
+    // Wait for the animation to finish before hiding the modal completely
+    setTimeout(() => {
+        productModal.classList.add('hidden');
+        addProductForm.reset();
+        // Reset image preview to its initial state
+        imagePreview.classList.add('hidden');
+        imagePreview.setAttribute('src', '');
+        imageUploadPrompt.classList.remove('hidden');
+        // Clear all validation errors
+        addProductForm.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+    }, 300); // Duration should match the transition duration in CSS
+}
+
+// Event Listeners for opening and closing the modal
+if (addProductBtn) {
+    addProductBtn.addEventListener('click', openProductModal);
+}
+cancelProductBtn.addEventListener('click', closeProductModal);
+cancelProductBtnX.addEventListener('click', closeProductModal);
+
+// Handle image preview
+imageInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.setAttribute('src', e.target.result);
+            imagePreview.classList.remove('hidden');
+            imageUploadPrompt.classList.add('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// Form submission with AJAX
+addProductForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const submitButton = document.getElementById('save-product-btn');
+    const buttonSpan = submitButton.querySelector('span');
+    const originalButtonText = buttonSpan.innerHTML;
+    
+    // Show loading state
+    submitButton.disabled = true;
+    buttonSpan.innerHTML = `<svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+
+    // Clear previous errors
+    addProductForm.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+    
+    fetch("{{ route('store.product.ajax') }}", {
+        method: 'POST',
+        body: new FormData(this),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': CSRF_TOKEN 
+        }
+    })
+    .then(response => response.json().then(data => ({ ok: response.ok, data })))
+    .then(({ ok, data }) => {
+        if (!ok) throw data; 
+        
+        toastr.success(data.message);
+        closeProductModal();
+        fetchProductsByFilter(); // Refresh the product grid
+    })
+    .catch(errorData => {
+        if (errorData.errors) {
+                Object.keys(errorData.errors).forEach(key => {
+                    const errorElement = document.getElementById(`${key}_error`);
+                    if (errorElement) errorElement.textContent = errorData.errors[key][0];
+                });
+            }
+    })
+    .finally(() => {
+        // Restore button state
+        submitButton.disabled = false;
+        buttonSpan.innerHTML = originalButtonText;
+    });
+});
+    // -- End Modal Add product --
     
     // --- MODAL HANDLING ---
     const supplierModal = document.getElementById('add-supplier-modal');

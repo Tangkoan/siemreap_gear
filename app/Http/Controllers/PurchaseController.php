@@ -14,9 +14,102 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Condition;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class PurchaseController extends Controller
 {
+     public function storeProductAjax(Request $request)
+    {
+        // Part 1: Validation
+        // We use Validator::make() to have full control over the JSON response.
+        $validator = Validator::make($request->all(), [
+            'product_name'  => 'required|string|max:255|unique:products,product_name',
+            'category_id'   => 'required|integer|exists:categories,id', // Assumes 'categories' table
+            'supplier_id'   => 'required|integer|exists:suppliers,id', // Assumes 'suppliers' table
+            'condition_id'  => 'required|integer|exists:conditions,id', // Assumes 'conditions' table
+            'buying_price'  => 'required|numeric|min:0',
+            'selling_price' => 'required|numeric|min:0',
+            'product_store' => 'required|string|max:255',
+            'stock_alert'   => 'nullable|integer|min:0',
+            'product_detail'=> 'nullable|string',
+            'product_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Image validation rules
+        ],[], // 👈 Argument ទី 3 សម្រាប់ custom messages (ទុកឱ្យនៅទទេប្រសិនបើមិនត្រូវការ)
+        [
+            // 👇 Argument ទី 4 សម្រាប់ custom attributes
+            'buying_price' => 'cost', 
+            'selling_price' => 'price', 
+        ]);
+
+        // If validation fails, return errors as JSON with a 422 status code
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Use a database transaction to ensure all or no data is saved.
+        DB::beginTransaction();
+
+        // Part 2: Save data and handle potential errors
+        try {
+            // Generate a unique product code, ensuring it doesn't already exist.
+            do {
+                $pcode = IdGenerator::generate([
+                    'table'  => 'products',
+                    'field'  => 'product_code',
+                    'length' => 5,
+                    'prefix' => 'SR-'
+                ]);
+            } while (Product::where('product_code', $pcode)->exists());
+
+            // Handle the image upload if a file is present
+            $image_path = null;
+            if ($request->hasFile('product_image')) {
+                $image = $request->file('product_image');
+                $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('upload/product/'), $name_gen);
+                $image_path = 'upload/product/' . $name_gen;
+            }
+
+            // Create the product using Eloquent's create() method.
+            // This requires you to set the `$fillable` property in your Product model.
+            $product = Product::create([
+                'product_name'  => $request->product_name,
+                'category_id'   => $request->category_id,
+                'supplier_id'   => $request->supplier_id,
+                'condition_id'  => $request->condition_id,
+                'buying_price'  => $request->buying_price,
+                'selling_price' => $request->selling_price,
+                'product_store' => $request->product_store,
+                'stock_alert'   => $request->stock_alert,
+                'product_detail'=> $request->product_detail,
+                'product_code'  => $pcode,
+                'product_image' => $image_path,
+                'status'        => $request->status ?? '1', // Default to 'active' if not provided
+            ]);
+
+            // If everything is successful, commit the changes to the database.
+            DB::commit();
+
+            // Return a successful JSON response with the newly created product data.
+            return response()->json([
+                'message' => __('messages.product_inserted_successfully'),
+                'product' => $product // Sending the new product object is useful for the frontend
+            ], 201); // 201 'Created' is a more appropriate status code here.
+
+        } catch (\Exception $e) {
+            // If any error occurs, roll back the entire transaction.
+            DB::rollBack();
+
+            // Part 3: Exception Handling
+            // Log the detailed error for debugging purposes.
+            Log::error('Error storing product via AJAX: ' . $e->getMessage());
+
+            // Return a generic error message to the user.
+            return response()->json([
+                'errors' => ['database' => __('messages.product_insert_failed')]
+            ], 500); // 500 'Internal Server Error' status code.
+        }
+    }
+
     public function storeSupplierAjax(Request $request)
     {
         // Part 1: Validation

@@ -373,6 +373,7 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('/purchase/update/due', 'PurchaseUpdateDue')->name('purchase.update.due');
 
         Route::post('/purchase/store-supplier', 'storeSupplierAjax')->name('store.supplier.ajax');
+        Route::post('/purchase/store-product', 'storeProductAjax')->name('store.product.ajax');
 
     });
 

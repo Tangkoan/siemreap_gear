@@ -166,6 +166,12 @@ return [
         'add_new_supplier'=> 'Add New Supplier',
         'cancel'=> 'Cancel',
         'errors'=> 'Error',
+        'add_new_product' => 'Add New Product',
+        'cost' => 'Cost',
+        'invoice_no'=> 'Invoice',
+        'enter_invoice_no'=> 'Enter Invoice',
+
+
         
 
 // =========================== Order ===========================

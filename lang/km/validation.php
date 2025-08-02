@@ -31,6 +31,13 @@ return [
         'new_password'=> 'លេខកូដសម្ងាត់ថ្មី',
         'condition_name'=> 'លក្ខណៈថ្មីឬចាស់',
 
+        // =========== Purchase ====================
+        'product_name' => 'ឈ្មោះផលិតផល',
+        'category_id' => 'ប្រភេទផលិតផល',
+        'condition_id' => 'លក្ខណៈផលិតផល',
+        'supplier_id' => 'អ្នកផ្គត់ផ្គង់',
+        'buying_price' => 'តម្លៃដើម',
+        'selling_price' => 'តម្លៃលក់',
     ],
 
 ];
