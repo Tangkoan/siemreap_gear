@@ -517,7 +517,8 @@ Route::middleware(['auth'])->group(callback: function () {
     // API Get Exchange Rate
     Route::get('/get-latest-exchange-rate', [PosController::class, 'getLatestExchangeRate'])->name('get.exchange.rate');
     Route::post('/exchange-rate/store', [App\Http\Controllers\PosController::class, 'storeExchangeRate'])->name('exchange-rate.store');
-
+    Route::post('/exchange-rate/auto-fetch', [App\Http\Controllers\PosController::class, 'fetchAndStoreAutoRate'])->name('exchange-rate.auto-fetch');
+    
 
    
     
