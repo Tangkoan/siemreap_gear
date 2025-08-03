@@ -518,11 +518,20 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/get-latest-exchange-rate', [PosController::class, 'getLatestExchangeRate'])->name('get.exchange.rate');
     Route::post('/exchange-rate/store', [App\Http\Controllers\PosController::class, 'storeExchangeRate'])->name('exchange-rate.store');
 
+
+   
     
 
     // End POS
     ///POS All Route 
     Route::controller(PosController::class)->group(function () {
+
+         // quotation
+    Route::post('/generate-quotation-preview',  'generateQuotationPreview')->name('generate.quotation.preview');
+    Route::get('/clear-cart-and-redirect-pos',  'clearCartAndRedirect')->name('clear.cart.pos');
+
+
+
 
         Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
         // Route::post('/add-cart', 'AddCart');

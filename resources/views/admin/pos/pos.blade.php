@@ -175,14 +175,25 @@
                     <input type="number" name="pay" id="payNow" placeholder="{{ __('messages.pay_now') }}" min="0" step="0.01" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
                 </div>
 
-                <div class="sm:col-span-2 mt-2">
-                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 21z" />
-                        </svg>
-                        {{ __('messages.pay_nows') }}
-                    </button>
-                </div>
+                <div class="sm:col-span-2 mt-2 flex items-center gap-3">
+
+                        {{-- ប៊ូតុង Quotation (Secondary Action) --}}
+                        <button type="button" id="create-quotation-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                            Create Quotation
+                        </button>
+
+                        {{-- ប៊ូតុង Pay Nows (Primary Action) --}}
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 21z" />
+                            </svg>
+                            {{ __('messages.pay_nows') }}
+                        </button>
+
+                    </div>
             </form>
         </div>
     </div>
@@ -269,21 +280,21 @@
 
         // SECTION 1: FUNCTIONS FOR RENDERING UI
         function createProductCardHTML(product) {
-    const imageUrl = product.imageUrl && product.imageUrl.endsWith('/') ? defaultImagePath : (product.imageUrl || defaultImagePath);
-    const isPreOrder = product.stock <= 0;
+        const imageUrl = product.imageUrl && product.imageUrl.endsWith('/') ? defaultImagePath : (product.imageUrl || defaultImagePath);
+        const isPreOrder = product.stock <= 0;
 
-    const stockBadge = isPreOrder ?
-        `<span class="absolute top-2 right-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Pre-Order</span>` :
-        `<span class="absolute top-2 right-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">In Stock: ${product.stock}</span>`;
+        const stockBadge = isPreOrder ?
+            `<span class="absolute top-2 right-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Pre-Order</span>` :
+            `<span class="absolute top-2 right-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">In Stock: ${product.stock}</span>`;
 
-    const cardClass = isPreOrder ?
-        'opacity-80 hover:opacity-100' :
-        'hover:border-red-500 dark:hover:border-red-500 hover:shadow-lg';
+        const cardClass = isPreOrder ?
+            'opacity-80 hover:opacity-100' :
+            'hover:border-red-500 dark:hover:border-red-500 hover:shadow-lg';
 
-    // បង្កើតអត្ថបទសម្រាប់ Condition, បើไม่มีគឺបង្ហាញค่าว่าง
-    const conditionText = (product.condition && product.condition !== 'N/A')
-        ? `<p class="text-xs text-sky-600 dark:text-sky-400 font-medium">${product.condition}</p>`
-        : '';
+        // បង្កើតអត្ថបទសម្រាប់ Condition, បើไม่มีគឺបង្ហាញค่าว่าง
+        const conditionText = (product.condition && product.condition !== 'N/A')
+            ? `<p class="text-xs text-sky-600 dark:text-sky-400 font-medium">${product.condition}</p>`
+            : '';
 
     return `
     <div class="group relative bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700/50 transform transition-all duration-200 cursor-pointer ${cardClass}"
@@ -641,6 +652,61 @@ document.addEventListener("DOMContentLoaded", function() {
         },
     });
 });
-    </script>
+
+
+    document.getElementById('create-quotation-btn').addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        const customerId = document.getElementById('customer_id').value;
+        const discount = document.getElementById('discount').value;
+        const button = this;
+
+        if (!customerId) {
+            toastr.error('Please select a customer first.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('customer_id', customerId);
+        formData.append('discount', discount);
+        formData.append('_token', CSRF_TOKEN);
+
+        button.disabled = true;
+        button.innerHTML = 'Generating Preview...';
+
+        try {
+            const response = await fetch("{{ route('generate.quotation.preview') }}", {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('please add product to');
+            }
+
+            const html = await response.text();
+
+            // ប្តូរពេញលេញនៅលើផ្ទៃបច្ចុប្បន្ន (same tab)
+            document.open();
+            document.write(html);
+            document.close();
+
+            // ព្រោះខាងលើស្ដាប់ entire document ត្រូវ load ថ្មីហើយ,
+            // មិនចាំបាច់ reset button ទៀតឡើយ (វានឹងត្រូវផ្លាស់ប្តូរជាមួយ HTML ថ្មី)
+        } catch (error) {
+            console.error('Error:', error);
+            toastr.error(error.message);
+            button.disabled = false;
+            button.innerHTML = `Create Quotation`;
+        }
+    });
+
+    
+</script>
+
 
 @endsection

@@ -24,64 +24,117 @@ use Symfony\Component\DomCrawler\Crawler;
 class PosController extends Controller
 {
 
-// នៅក្នុង app/Http/Controllers/PosController.php
-// In app/Http/Controllers/PosController.php
 
-public function storeExchangeRate(Request $request)
+    // In app/Http/Controllers/PosController.php
+
+public function generateQuotationPreview(Request $request)
 {
-    $validator = Validator::make($request->all(), [
-        'rate' => 'required|numeric|min:1',
+    // ពិនិត្យ Cart និង Customer
+    if (Cart::count() < 1) {
+        return response('Cart is empty.', 400);
+    }
+    if (empty($request->customer_id)) {
+        return response('Customer not selected.', 400);
+    }
+
+    // 1. ទាញយកข้อมูลពី Cart និង Request
+    $cartItems = Cart::content();
+    $customer = Customer::find($request->customer_id);
+    $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+    $discount = floatval($request->discount ?? 0);
+    $total = $subTotal - $discount;
+
+    // 2. បង្កើត Object ក្លែងក្លាយ (Fake Object) ដែលមានโครงสร้างដូច Quotation
+    // ដើម្បីให้ View អាចប្រើប្រាស់បានโดยไม่ต้องកែប្រែច្រើន
+    $quotationData = (object) [
+        'customer' => $customer,
+        'quotation_no' => 'PREVIEW-' . mt_rand(1000, 9999),
+        'quotation_date' => Carbon::now()->toDateString(),
+        'validity_date' => Carbon::now()->addDays(7)->toDateString(),
+        'sub_total' => $subTotal,
+        'discount' => $discount,
+        'total' => $total,
+        'terms_and_conditions' => "a. Laptop 2years Warranty, 1year service warranty\nb. Warranty void if: seal broken, electric shock, misuse, accident, or modification by anyone other than SR Gears.\nc. CPU(1year),MB(2years),RAM(1year),GPU(2years),HDD(1year) SSD(3year),Monitor (3years).\nd. Goods sold are not refundable or returnable.",
+    ];
+
+    // 3. បង្កើត Array សម្រាប់เก็บรายละเอียด Product
+    $quotationDetailsData = [];
+    foreach ($cartItems as $item) {
+        $quotationDetailsData[] = (object) [
+            'product' => (object) ['product_name' => $item->name], // បង្កើត Fake Product Object
+            'quantity' => $item->qty,
+            'unitcost' => $item->price,
+            'total' => $item->qty * $item->price,
+        ];
+    }
+
+    // 4. បញ្ជូនข้อมูลទៅកាន់ View ហើយ Return ជា HTML
+    // យើងប្រើ View ដដែលกับตอน Print ធម្មតា
+    return view('admin.quotation.print', [
+        'quotation' => $quotationData,
+        'quotationDetails' => $quotationDetailsData
     ]);
-
-    if ($validator->fails()) {
-        return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
-    }
-
-    try {
-        DB::transaction(function () use ($request) {
-            
-            // ✅ START: ប្រើ 'updateOrCreate' ដើម្បីដោះស្រាយបញ្ហា Duplicate Entry
-            // ✅ START: Use 'updateOrCreate' to solve the Duplicate Entry problem
-
-            // ជំហានទី១៖ Deactivate អត្រាផ្សេងៗទាំងអស់ (សម្រាប់ករណីមាន Error ចាស់)
-            // Step 1: Deactivate all other rates (for safety against old errors)
-            \App\Models\ExchangeRate::where('rate_date', '!=', now()->toDateString())
-                ->update(['is_active' => false]);
-
-            // ជំហានទី២៖ រកមើល Record ដែលមានកាលបរិច្ឆេទថ្ងៃនេះ បើមានគឺ Update បើមិនមានគឺ Create
-            // Step 2: Find a record with today's date. If it exists, update it. If not, create it.
-            \App\Models\ExchangeRate::updateOrCreate(
-                [
-                    'rate_date' => now()->toDateString() // លក្ខខណ្ឌសម្រាប់រាវរក (Find by this condition)
-                ],
-                [
-                    'rate_khr' => $request->rate,      // ទិន្នន័យសម្រាប់ Update ឬ Create (Data to update or create with)
-                    'is_active' => true
-                ]
-            );
-            // ✅ END: បញ្ចប់ការកែប្រែ
-
-        });
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Exchange rate updated successfully!',
-            'new_rate' => $request->rate,
-        ]);
-
-    } catch (\Exception $e) {
-        \Log::error('Error saving exchange rate: ' . $e->getMessage()); 
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to update exchange rate.'
-        ], 500);
-    }
 }
 
-        //
-        /**
-         * នេះជាកូដដែលកែប្រែពី StoreCustomer របស់អ្នក ឱ្យទៅជា AJAX Standard
-         */
+
+    public function clearCartAndRedirect()
+    {
+    
+        Cart::destroy();
+        return redirect()->back(); 
+    }
+
+    public function storeExchangeRate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'rate' => 'required|numeric|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        try {
+            DB::transaction(function () use ($request) {
+                
+                // ✅ START: ប្រើ 'updateOrCreate' ដើម្បីដោះស្រាយបញ្ហា Duplicate Entry
+                // ✅ START: Use 'updateOrCreate' to solve the Duplicate Entry problem
+
+                // ជំហានទី១៖ Deactivate អត្រាផ្សេងៗទាំងអស់ (សម្រាប់ករណីមាន Error ចាស់)
+                // Step 1: Deactivate all other rates (for safety against old errors)
+                \App\Models\ExchangeRate::where('rate_date', '!=', now()->toDateString())
+                    ->update(['is_active' => false]);
+
+                // ជំហានទី២៖ រកមើល Record ដែលមានកាលបរិច្ឆេទថ្ងៃនេះ បើមានគឺ Update បើមិនមានគឺ Create
+                // Step 2: Find a record with today's date. If it exists, update it. If not, create it.
+                \App\Models\ExchangeRate::updateOrCreate(
+                    [
+                        'rate_date' => now()->toDateString() // លក្ខខណ្ឌសម្រាប់រាវរក (Find by this condition)
+                    ],
+                    [
+                        'rate_khr' => $request->rate,      // ទិន្នន័យសម្រាប់ Update ឬ Create (Data to update or create with)
+                        'is_active' => true
+                    ]
+                );
+                // ✅ END: បញ្ចប់ការកែប្រែ
+
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Exchange rate updated successfully!',
+                'new_rate' => $request->rate,
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error saving exchange rate: ' . $e->getMessage()); 
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update exchange rate.'
+            ], 500);
+        }
+    }
+
     public function storeCustomerAjax(Request $request)
         {
             // === ផ្នែកទី១៖ ការធ្វើ Validation ===
