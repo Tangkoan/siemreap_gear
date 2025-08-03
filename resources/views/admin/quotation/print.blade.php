@@ -4,171 +4,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quotation - {{ $quotation->quotation_no }}</title>
+    
+    <!-- Include Tailwind CSS for modern styling -->
+    <!-- បញ្ចូល Tailwind CSS សម្រាប់​ការ​រចនា​បែប​ទំនើប -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Include Google Fonts for professional typography -->
+    <!-- បញ្ចូល Google Fonts សម្រាប់​អក្សរ​បែប​អាជីព -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Khmer+OS+Siemreap:wght@400;700&family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
+
     <style>
+        @page {
+            size: A5;
+            margin: 0; 
+        }
+
         body {
-            font-family: 'Khmer OS Siemreap', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            color: #333;
-            background-color: #fff;
+            background-color: #f3f4f6; 
+            font-family: 'Inter', 'Khmer OS Siemreap', sans-serif;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
         }
-        .quotation-container {
-            width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+        .quotation-paper {
+            width: 148mm; 
+            /* ✅ ADJUSTED: Reduced min-height to better fit content */
+            /* ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ min-height ដើម្បីឲ្យសមនឹងเนื้อหา */
+            min-height: 190mm; 
+            margin: 2rem auto;
+            background-color: white;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border-radius: 0.25rem;
+            border-top: 6px solid red; /* Teal-600 color */
         }
-        /* ... CSS ផ្សេងទៀតរបស់អ្នកអាចនៅទីនេះ ... */
-        .header, .info-section, .footer-section { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .header .logo-container { display: flex; align-items: center; }
-        .header .logo { width: 80px; height: auto; margin-right: 15px; }
-        .header .company-name-kh { font-family: 'Khmer OS Muol Light', sans-serif; font-size: 24px; color: #000; font-weight: bold; }
-        .header .company-name-en { font-size: 18px; font-weight: bold; }
-        .header .title-box { text-align: right; }
-        .header .title { font-size: 32px; font-weight: bold; padding: 5px 15px; border: 2px solid #000; display: inline-block; }
-        .info-box { width: 48%; }
-        .info-box p { margin: 0 0 8px 0; }
-        .info-box .info-line { display: flex; margin-bottom: 12px; }
-        .info-box .info-label { min-width: 120px; font-weight: bold; }
-        .info-box .info-value { border-bottom: 1px dotted #888; width: 100%; padding-left: 5px; }
-        .product-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        .product-table th, .product-table td { border: 1px solid #000; padding: 8px; text-align: left; }
-        .product-table th { background-color: #f2f2f2; font-weight: bold; }
-        .product-table td.center { text-align: center; }
-        .product-table td.right { text-align: right; }
-        .product-table .dollar-sign { float: left; margin-right: 10px; }
-        .note { font-size: 12px; font-style: italic; margin-bottom: 20px; }
-        .footer-box { width: 48%; }
-        .terms-conditions ul { padding-left: 20px; margin: 0; font-size: 12px; }
-        .summary-table { width: 100%; }
-        .summary-table td { padding: 8px 0; }
-        .summary-table .summary-label { font-weight: bold; }
-        .summary-table .summary-value { text-align: right; border: 1px solid #000; padding: 8px; }
-        .summary-table .balance { font-weight: bold; background-color: #e0e0e0; }
-        .signature-area { margin-top: 60px; border-top: 1px solid #000; padding-top: 5px; text-align: center; font-weight: bold; }
-        .print-message { text-align: center; margin-top: 20px; font-style: italic; color: #777; }
+        .font-khmer-muol {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+        }
+        .font-khmer-siemreap {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+        }
 
         @media print {
-            .print-message { display: none; }
+            body {
+                background-color: #fff;
+            }
+            .quotation-paper {
+                margin: 0;
+                padding: 1cm; 
+                box-shadow: none;
+                border-radius: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .print-hidden {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="quotation-container">
-        {{-- កូដ HTML សម្រាប់បង្ហាញ Quotation របស់អ្នកទាំងអស់គឺនៅទីនេះ --}}
-        <div class="header">
-            <div class="logo-container">
-                 <img src="{{ asset('image/logo.jpg') }}" alt="SR Gears Logo" class="logo">
-                <div>
-                    <p class="company-name-kh">សៀមរាប ហ្គៀរ</p>
-                    <p class="company-name-en">Siem Reap Gears</p>
-                    <small>Upgrade Your Professional</small>
+    <div class="quotation-paper">
+        <!-- ✅ ADJUSTED: Reduced padding from p-5 to p-4 -->
+        <!-- ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ Padding ពី p-5 ទៅ p-4 -->
+        <div class="p-4">
+            <!-- Header Section -->
+            <!-- ផ្នែក Header -->
+            <!-- ✅ ADJUSTED: Reduced bottom margin from mb-6 to mb-4 -->
+            <!-- ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ Margin ខាងក្រោមពី mb-6 ទៅ mb-4 -->
+            <header class="flex justify-between items-start pb-4 mb-4">
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('image/logo.jpg') }}" alt="SR Gears Logo" class="w-14 h-14 rounded-full">
+                    <div>
+                        <h1 class="font-khmer-muol text-xl font-bold text-gray-900">សៀមរាប ហ្គៀរ</h1>
+                        <p class="text-base font-semibold text-gray-700">Siem Reap Gears</p>
+                    </div>
                 </div>
-            </div>
-            <div class="title-box">
-                <span class="title">QUOTATION</span>
-            </div>
-        </div>
+                <div class="text-right">
+                    <h2 class="text-3xl font-bold text-red-600 tracking-wider">QUOTATION</h2>
+                    <p class="text-xs text-gray-500 mt-1">No: <span class="font-medium text-gray-700">{{ $quotation->quotation_no }}</span></p>
+                </div>
+            </header>
 
-        <div class="info-section">
-            <div class="info-box">
-                <p><strong>Company:</strong> SR Gears</p>
-                <p><strong>Address:</strong> #C02, St.Kompea Mother, Mondul I Village, Svay DongKom Commune, SiemReap Town</p>
-                <p><strong>Tell:</strong> 098 222 500 / 017 3000 31</p>
-            </div>
-            <div class="info-box">
-                <div class="info-line">
-                    <span class="info-label">Quotation No:</span>
-                    <span class="info-value">{{ $quotation->quotation_no }}</span>
+            <!-- Information Section -->
+            <!-- ផ្នែកព័ត៌មាន -->
+            <section class="flex flex-col text-xs">
+                <div class="flex justify-between gap-6">
+                    <div class="flex-1">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">To Customer</h3>
+                        <div class="space-y-1 text-gray-800">
+                            <p class="font-bold text-sm">{{ $quotation->customer->name }}</p>
+                            <p>{{ $quotation->customer->phone ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-right">
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                            <span class="font-semibold text-gray-600">Date:</span>
+                            <span class="text-gray-800">{{ \Carbon\Carbon::parse($quotation->quotation_date)->format('d-M-Y') }}</span>
+                            
+                        </div>
+                    </div>
                 </div>
-                <div class="info-line">
-                    <span class="info-label">Quotation Date:</span>
-                    <span class="info-value">{{ \Carbon\Carbon::parse($quotation->quotation_date)->format('d-M-Y') }}</span>
-                </div>
-                 <div class="info-line">
-                    <span class="info-label">Customer Name:</span>
-                    <span class="info-value">{{ $quotation->customer->name }}</span>
-                </div>
-                <div class="info-line">
-                    <span class="info-label">Validity:</span>
-                    <span class="info-value">{{ \Carbon\Carbon::parse($quotation->validity_date)->format('d-M-Y') }}</span>
-                </div>
-                <div class="info-line">
-                    <span class="info-label">Phone:</span>
-                    <span class="info-value">{{ $quotation->customer->phone }}</span>
-                </div>
-            </div>
-        </div>
-        
-        <table class="product-table">
-            <thead>
-                <tr>
-                    <th style="width:5%;">N°</th>
-                    <th style="width:55%;">Product & Description</th>
-                    <th style="width:10%;" class="center">Quantity</th>
-                    <th style="width:15%;" class="right">Price</th>
-                    <th style="width:15%;" class="right">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php $rowCount = 15; @endphp
-                @foreach($quotationDetails as $key => $item)
-                <tr>
-                    <td class="center">{{ $key + 1 }}</td>
-                    <td>{{ optional($item->product)->product_name ?? 'Product not found' }}</td>
-                    <td class="center">{{ $item->quantity }}</td>
-                    <td class="right">
-                        <span class="dollar-sign">$</span>{{ number_format($item->unitcost, 2) }}
-                    </td>
-                    <td class="right">
-                        <span class="dollar-sign">$</span>{{ number_format($item->total, 2) }}
-                    </td>
-                </tr>
-                @endforeach
-                {{-- @for ($i = count($quotationDetails); $i < $rowCount; $i++)
-                <tr>
-                    <td class="center">{{ $i + 1 }}</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                </tr>
-                @endfor --}}
-            </tbody>
-        </table>
-        <p class="note">Note: Before receiving the goods, you must check the quality and quantity that cannot be returned.</p>
-        <div class="footer-section">
-            <div class="footer-box terms-conditions">
-                <strong>Terms and Condition</strong>
-                <p style="font-size: 12px;">{!! nl2br(e($quotation->terms_and_conditions)) !!}</p>
-                <div class="signature-area">Customer Signature</div>
-            </div>
-            <div class="footer-box">
-                <table class="summary-table">
-                    <tr><td class="summary-label">Total</td><td class="summary-value">${{ number_format($quotation->sub_total, 2) }}</td></tr>
-                    <tr><td class="summary-label">Deposit</td><td class="summary-value"></td></tr>
-                    <tr><td class="summary-label">Discount</td><td class="summary-value">${{ number_format($quotation->discount, 2) }}</td></tr>
-                    <tr><td class="summary-label balance">Balance</td><td class="summary-value balance">${{ number_format($quotation->total, 2) }}</td></tr>
+            </section>
+
+            <!-- Products Table -->
+            <!-- តារាងផលិតផល -->
+            <!-- ✅ ADJUSTED: Reduced top margin from mt-8 to mt-6 -->
+            <!-- ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ Margin ខាងលើពី mt-8 ទៅ mt-6 -->
+            <section class="mt-6">
+                <table class="w-full text-left">
+                    <thead class="bg-red-50 text-red-800 text-xs uppercase font-semibold">
+                        <tr>
+                            <th class="p-2 w-8 text-center rounded-l-md">#</th>
+                            <th class="p-2">Product</th>
+                            <th class="p-2 w-16 text-center">Qty</th>
+                            <th class="p-2 w-24 text-right">Price</th>
+                            <th class="p-2 w-24 text-right rounded-r-md">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs">
+                        @foreach($quotationDetails as $key => $item)
+                        <tr class="border-b border-gray-100">
+                            <td class="p-2 text-center text-gray-500">{{ $key + 1 }}</td>
+                            <td class="p-2 font-medium text-gray-800">{{ optional($item->product)->product_name ?? 'Product not found' }}</td>
+                            <td class="p-2 text-center text-gray-600">{{ $item->quantity }}</td>
+                            <td class="p-2 text-right text-gray-600">${{ number_format($item->unitcost, 2) }}</td>
+                            <td class="p-2 text-right font-semibold text-gray-800">${{ number_format($item->total, 2) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
                 </table>
-                 <div class="signature-area">Seller Signature</div>
-            </div>
-        </div>
+            </section>
 
+            <!-- Footer Section (Terms & Summary) -->
+            <!-- ផ្នែក Footer (លក្ខខណ្ឌ និងការសរុប) -->
+            <!-- ✅ ADJUSTED: Reduced top margin from mt-6 to mt-4 -->
+            <!-- ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ Margin ខាងលើពី mt-6 ទៅ mt-4 -->
+            <footer class="mt-4 flex flex-col">
+                <div class="flex justify-end">
+                    <div class="w-full max-w-xs space-y-2 text-sm">
+                        <div class="flex justify-between items-center text-blue-700">
+                            <span class="font-medium">Subtotal</span>
+                            <span class="font-medium">${{ number_format($quotation->sub_total, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-gray-700">
+                            <span class="font-medium">Discount</span>
+                            <span class="font-medium text-blue-600">-${{ number_format($quotation->discount, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-base font-bold text-gray-900 border-t-2 border-red-500 pt-2 mt-2">
+                            <span class="text-red-600">Total</span>
+                            <span class="text-red-600">${{ number_format($quotation->total, 2) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Terms & Conditions</h3>
+                    <div class="mt-2 text-xs text-gray-600 prose prose-sm max-w-none">
+                        {!! nl2br(e($quotation->terms_and_conditions)) !!}
+                    </div>
+                </div>
+            </footer>
+
+            <!-- Signature Section -->
+            <!-- ផ្នែកហត្ថលេខា -->
+            <!-- ✅ ADJUSTED: Significantly reduced top margin from mt-20 to mt-10 -->
+            <!-- ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ Margin ខាងលើយ៉ាងច្រើនពី mt-20 ទៅ mt-10 -->
+            <section class="grid grid-cols-2 gap-12 mt-10">
+                <div class="text-center border-t pt-2">
+                    <p class="text-xs text-gray-600">Customer Signature</p>
+                </div>
+                <div class="text-center border-t pt-2">
+                    <p class="text-xs text-gray-600">Seller Signature</p>
+                </div>
+            </section>
+            
+            <p class="print-hidden text-center text-xs text-gray-400 mt-8">
+                This is a preview. Redirecting back to POS after printing...
+            </p>
+        </div>
     </div>
 
-    <p class="print-message">Redirecting back to POS after printing...</p>
-
-    {{-- ✅ START: JAVASCRIPT ថ្មីសម្រាប់จัดการ PRINT និង REDIRECT --}}
+    <!-- JavaScript for printing and redirecting -->
+    <!-- JavaScript សម្រាប់ Print និង Redirect -->
     <script>
-        // នៅពេលที่ Browser បង្ហាញเนื้อหาทั้งหมดរួចរាល់
         window.onload = function() {
-            // បង្ហាញផ្ទាំង Print ដោយស្វ័យប្រវត្តិ
             window.print();
         };
-
-        // នៅពេលដែលផ្ទាំង Print ត្រូវបានបិទ (មិនថាចុច Print ឬ Cancel)
         window.onafterprint = function() {
-            // បញ្ជូនទៅកាន់ Route ដែលจะ Clear Cart ហើយ Redirect ទៅ POS
             window.location.href = "{{ route('clear.cart.pos') }}";
         };
     </script>
-    {{-- ✅ END: JAVASCRIPT --}}
 
 </body>
 </html>
