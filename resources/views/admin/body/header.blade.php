@@ -1,14 +1,30 @@
 <header class="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-    <div class="container mx-auto flex justify-between items-center p-3">
+    
+    <div class="container mx-auto flex flex-wrap justify-between items-center gap-y-2 p-3">
 
+        {{-- ✅ START: PHP Block to fetch Shop Info --}}
+        {{-- ✅ ចាប់ផ្តើម៖ ប្លុក PHP សម្រាប់ទាញយកข้อมูลร้านค้า --}}
+        @php
+            // ទាញយកข้อมูลร้านค้า Record ទីមួយពី Table 'informationshops'
+            $shopInfo = \App\Models\InformationShop::first();
+        @endphp
+        {{-- ✅ END: PHP Block to fetch Shop Info --}}
+
+        
         {{-- Left Side: Logo & Sidebar Toggle --}}
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2 w-full sm:w-auto">
             <a href="{{ route('dashboard') }}" class="flex items-center">
                 <span class="px-2">
-                    <img class="rounded-full h-10 w-auto" src="{{ asset('image/logo.jpg') }}" alt="Siem Reap Gear Logo">
+                    {{-- ✅ កែប្រែទីនេះ: Dynamic Logo --}}
+                    {{-- កូដនេះនឹងពិនិត្យមើលថា $shopInfo មានข้อมูล และมี logo ឬអត់ --}}
+                    <img class="rounded-full h-10 w-auto object-cover" 
+                         src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}" 
+                         alt="Shop Logo">
                 </span>
                 <span class="text-2xl font-bold text-slate-800 dark:text-slate-100">
-                    Siem Reap Gear
+                    {{-- ✅ កែប្រែទីនេះ: Dynamic Shop Name --}}
+                    {{-- បើ $shopInfo មានข้อมูล ให้แสดง name_en, បើไม่มี ให้แสดงค่า Default --}}
+                    {{ $shopInfo->name_en ?? 'Siem Reap Gear' }}
                 </span>
             </a>
             <button id="toggleSidebar" class="hidden md:flex items-center p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
@@ -19,7 +35,7 @@
         </div>
 
         {{-- Right Side: Actions --}}
-        <div class="flex items-center space-x-2 sm:space-x-4">
+        <div class="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto justify-center sm:justify-end">
 
             @php
                 // Get the active rate from the Database

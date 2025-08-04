@@ -23,6 +23,7 @@ return [
     'report' => 'របាយការណ៍',
     'user' => 'អ្នកប្រើប្រាស់',
     'backup' => 'ការបម្រុងទុក',
+    'setting' => 'ការកំណត់',
 
     // ក្បាល Table
     'table_no' => 'ល.រ',
@@ -455,4 +456,8 @@ return [
         'please_select_condition'=> 'សូមជ្រើសរើសលក្ខណៈនៃផលិតផល',
         // Validate
         'select_condition'=> 'ជ្រើសរើសលក្ខណៈនៃផលិតផល',
+
+// ================================= Seting ===========================
+        'information_shop'=> 'ពត៌មានហាង',
+        'information_invoice' => 'ព័ត៌មានវិក្កយបត្រ',
 ];      

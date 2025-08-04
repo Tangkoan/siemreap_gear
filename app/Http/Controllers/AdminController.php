@@ -31,9 +31,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log; // For logging errorsឮ
 
 
-
-
-
 class AdminController extends Controller
 {
     //

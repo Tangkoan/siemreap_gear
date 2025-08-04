@@ -60,6 +60,7 @@
                                     <option value="user">User</option>
                                     <option value="permission">Permission</option>
                                     <option value="backup">Backup</option>
+                                    <option value="setting">Setting</option>
                                 </select>
                             </div>
                         </div>

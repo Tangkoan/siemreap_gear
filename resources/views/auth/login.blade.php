@@ -30,13 +30,21 @@
 <body class="bg-gradient-to-r min-h-screen flex items-center justify-center p-4">
     <div class=" shadow-lg border border-gray-200 bg-white rounded-xl p-8 max-w-md w-full relative transform hover:scale-105 transition-transform duration-300 ease-in-out">
         
-        {{-- បន្ថែម Logo នៅទីនេះ --}}
-        <img class="rounded-full mx-auto h-32 w-auto mb-4" src="{{ asset('image/logo.jpg') }}" alt="Siem Reap Gear Logo">
 
+        {{-- ✅ START: PHP Block to fetch Shop Info --}}
+        {{-- ✅ ចាប់ផ្តើម៖ ប្លុក PHP សម្រាប់ទាញយកข้อมูลร้านค้า --}}
+        @php
+            // ទាញយកข้อมูลร้านค้า Record ទីមួយពី Table 'informationshops'
+            $shopInfo = \App\Models\InformationShop::first();
+        @endphp
+        {{-- ✅ END: PHP Block to fetch Shop Info --}}
+
+        {{-- បន្ថែម Logo នៅទីនេះ --}}
+        <img class="rounded-full mx-auto h-32 w-auto mb-4" src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}" alt="Shop Logo">
+ 
         
         <h2 class="text-3xl font-extrabold text-gray-800 text-center mb-6">
-            <span >Siem Reap</span>
-            <span >Gear</span>
+             {{ $shopInfo->name_en ?? 'Siem Reap Gear' }}
         </h2>
         <p class="text-center text-gray-600 mb-8">Please Login To Dashboard</p>
 

@@ -23,6 +23,7 @@ return [
     'report' => 'Report',
     'user' => 'User',
     'backup' => 'Backup',
+    'setting' => 'Setting',
 
     // របស់ដែលប្រើរួម
     'table_created' => 'Created',
@@ -459,8 +460,9 @@ return [
         'select_condition'=> 'Select Condition',
        
 
-
-
+// ========================= Setting =========================s
+        'information_shop'=> 'Information Shop',
+        'information_invoice' => 'Information Invoice',
 
 
         

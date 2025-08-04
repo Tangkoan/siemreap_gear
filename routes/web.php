@@ -16,6 +16,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Backend\ExchangeRateController;
 
 use App\Http\Controllers\BackupController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\LanguageController;
 
 
 use App\Http\Controllers\DashboardController;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -62,11 +64,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-// ==================== Dashboard ==================== 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Route AJAX
-    Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
-// End
 
 
 
@@ -75,6 +72,13 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
+    
+// ==================== Dashboard ==================== 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route AJAX
+    Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
+// End
 
     Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.admin_profile_view');
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
@@ -440,6 +444,20 @@ Route::middleware(['auth'])->group(callback: function () {
             
     });
     // End
+
+
+    // =============================== Setting ================================================
+        Route::controller(SettingController::class)->group(function () {
+            // setting
+            Route::get('/setting', 'settingPage')->name('admin.setting');
+            // Information Shop
+            Route::get('/setting/shop', 'informationShop')->name('admin.setting_infromationshop');
+            Route::post('/admin/information-shop/update', 'update')->name('admin.info.update');
+            
+    });
+    // End
+
+    
 
     // ==================================== Backup Project ===========================================
 
