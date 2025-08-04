@@ -7,17 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{-- ✅ កែចំណងជើង Title --}}
     <title>Invoice #{{ $order->invoice_no }}</title> 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
- 
-
+    
 <style>
 
 
 
-
-/* ... CSS ផ្សេងៗនៅដដែល ... */
         
         /* ✅ កែពណ៌ចំណងជើងពីក្រហមទៅបៃតង */
         .invoice-title h1, .invoice-title h2 {
@@ -30,10 +24,6 @@
             background-color: #6c757d !important; /* ពណ៌ប្រផេះពេល Due = 0 */
         }
         
-        /* ... CSS ផ្សេងៗទៀតនៅដដែល ... */
-
-
-
         /* === ការកំណត់ទូទៅ (General Settings) === */
         *, *::before, *::after {
             box-sizing: border-box; /* ✅ Best practice for easier layout management */
@@ -71,6 +61,7 @@
         .logo-container img {
             max-width: 140px;
             display: block;
+            border-radius: 100%; 
         }
         .invoice-title {
             flex: 2;
@@ -217,6 +208,10 @@
             color: #6c757d;
         }
 
+        .preserve-format {
+            white-space: pre-wrap;
+        }
+
         /* === ការកំណត់សម្រាប់ Print === */
         @page {
             size: A4;
@@ -237,10 +232,16 @@
     </style>
 </head>
 <body>
+
+    @php
+        $shopInfo = \App\Models\InformationShop::first();
+    @endphp
+
 <div class="page">
     <div class="header">
         <div class="logo-container">
-            <img src="{{ asset('image/logo.jpg') }}" alt="SR Gears Logo">
+            <img src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}"
+                    alt="Shop Logo">
         </div>
         <div class="invoice-title">
             {{-- ✅ កែអក្សរចំណងជើង --}}
@@ -257,17 +258,17 @@
                 <tr>
                     <td class="label">Company</td>
                     <td class="colon">:</td>
-                    <td class="value"><strong>SR Gears</strong></td>
+                    <td class="value">{{ $shopInfo->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <td class="label">Address</td>
                     <td class="colon">:</td>
-                    <td class="value">#C02, St.Kompea Motter, Mondul I Village, Svay Dongkom Commune, Siem Reap Town</td>
+                    <td class="value">{{ $shopInfo->address ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <td class="label">Tell</td>
                     <td class="colon">:</td>
-                    <td class="value"><strong>098 222 600 / 017 3000 31</strong></td>
+                    <td class="value">{{ $shopInfo->phone ?? 'N/A' }}</td>
                 </tr>
             </table>
         </div>
@@ -321,16 +322,13 @@
     </table>
     
     <div class="note">
-        <strong>Note:</strong> Before receiving the goods, you must check the quality and quantity that cannot be returned.
+        <strong>Note:</strong> <td class="value">{{ $shopInfo->note ?? 'N/A' }}</td>
     </div>
 
     <div class="footer-section">
         <div class="terms-box">
             <h4>Terms and Condition</h4>
-            <p><strong>A.</strong> Laptop 2years Warranty. 1Year service warranty</p>
-            <p><strong>B.</strong> Warranty void if seal broken, electric shock, misuse, system or modification by anyone other than SR Gears.</p>
-            <p><strong>C.</strong> CPU(1year), MB(3year), RAM(1year), GPU(3year), HDD(1year), SSD(1year), Monitor(3year).</p>
-            <p><strong>D.</strong> Goods sold are not refundable or returnable.</p>
+            <p class="preserve-format">{{ $shopInfo->terms_and_condition ?? 'N/A' }}</p> 
         </div>
         <div class="totals-box">
              <table class="totals-table">
