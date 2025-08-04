@@ -3,9 +3,9 @@
     <div class="container mx-auto flex flex-wrap justify-between items-center gap-y-2 p-3">
 
         {{-- ✅ START: PHP Block to fetch Shop Info --}}
-        {{-- ✅ ចាប់ផ្តើម៖ ប្លុក PHP សម្រាប់ទាញយកข้อมูลร้านค้า --}}
+        {{-- ✅ ចាប់ផ្តើម៖ ប្លុក PHP សម្រាប់ទាញយក --}}
         @php
-            // ទាញយកข้อมูลร้านค้า Record ទីមួយពី Table 'informationshops'
+            // ទាញយក Record ពី Table 'informationshops'
             $shopInfo = \App\Models\InformationShop::first();
         @endphp
         {{-- ✅ END: PHP Block to fetch Shop Info --}}
@@ -17,7 +17,7 @@
                 <span class="px-2">
                     {{-- ✅ កែប្រែទីនេះ: Dynamic Logo --}}
                     {{-- កូដនេះនឹងពិនិត្យមើលថា $shopInfo មានข้อมูล และมี logo ឬអត់ --}}
-                    <img class="rounded-full h-10 w-auto object-cover" 
+                    <img class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" 
                          src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}" 
                          alt="Shop Logo">
                 </span>

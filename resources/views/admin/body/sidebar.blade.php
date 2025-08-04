@@ -351,7 +351,7 @@
         @if (Auth::user()->can('setting.menu'))
             <a href="{{ route('admin.setting') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('admin.setting') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                {{ request()->routeIs('admin.setting', 'admin.setting_infromationshop') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                 @if(request()->routeIs('admin.setting'))
                     <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                 @endif

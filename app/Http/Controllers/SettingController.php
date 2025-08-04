@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\informationshop;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 
 
-use Illuminate\Support\Facades\File; // ត្រូវតែ use File facade
+
 
 
 class SettingController extends Controller
@@ -41,53 +43,66 @@ class SettingController extends Controller
 
     
     public function update(Request $request)
-    {
-        
-        $request->validate([
-            'name_kh' => 'required|string|max:255',
-            'name_en' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'phone' => 'nullable|string|max:50',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
-            'note' => 'nullable|string',
-            'terms_and_condition' => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'name_kh' => 'required|string|max:255',
+        'name_en' => 'required|string|max:255',
+        'address' => 'nullable|string',
+        'phone' => 'nullable|string|max:50',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'note' => 'nullable|string',
+        'terms_and_condition' => 'nullable|string',
+    ]);
 
-        
-        $info = InformationShop::first();
+    // ទាញ record ឬ បង្កើតមួយថ្មី ប្រសិនបើមិនមានទេ
+    $info = InformationShop::firstOrCreate([], [
+        'name_kh' => $request->name_kh,
+        'name_en' => $request->name_en,
+        'address' => $request->address,
+        'phone' => $request->phone,
+        'note' => $request->note,
+        'terms_and_condition' => $request->terms_and_condition,
+    ]);
 
-        
-        if ($request->hasFile('logo')) {
-            $image = $request->file('logo');
-            $uploadPath = 'upload/shop_info/';
+    $uploadPath = 'upload/shop_info/'; // relative to public/
 
-            
-            if ($info->logo && File::exists(public_path($uploadPath . $info->logo))) {
-                File::delete(public_path($uploadPath . $info->logo));
-            }
+    // បង្កើត folder ប្រសិនបើគ្មាន
+    if (!File::exists(public_path($uploadPath))) {
+        File::makeDirectory(public_path($uploadPath), 0755, true);
+    }
 
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path($uploadPath), $imageName);
-            $info->logo = $imageName; 
+    if ($request->hasFile('logo')) {
+        $image = $request->file('logo');
+
+        // លុប logo ពីមុន ប្រសិនបើមាន
+        if ($info->logo && File::exists(public_path($uploadPath . $info->logo))) {
+            File::delete(public_path($uploadPath . $info->logo));
         }
 
-       
-        $info->name_kh = $request->name_kh;
-        $info->name_en = $request->name_en;
-        $info->address = $request->address;
-        $info->phone = $request->phone;
-        $info->note = $request->note;
-        $info->terms_and_condition = $request->terms_and_condition;
+        // ឈ្មោះឯកសារ sanitized
+        $baseName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeName = Str::slug($baseName);
+        $imageName = time() . '_' . $safeName . '.' . $image->getClientOriginalExtension();
 
-        $info->save(); 
+        $image->move(public_path($uploadPath), $imageName);
+        $info->logo = $imageName;
+    }
 
-        
-        $notification = [
-            'message' => 'Shop Information Updated Successfully!',
-            'alert-type' => 'success'
-        ];
+    // អាប់ដេតដែកផ្សេងៗ (មកពី request) — វាអាចប្រើ fill ខ្នងដែរ
+    $info->name_kh = $request->name_kh;
+    $info->name_en = $request->name_en;
+    $info->address = $request->address;
+    $info->phone = $request->phone;
+    $info->note = $request->note;
+    $info->terms_and_condition = $request->terms_and_condition;
+    $info->save();
 
-        return redirect()->back()->with($notification);
-    } // End Method
+    $notification = [
+        'message' => 'Shop Information Updated Successfully!',
+        'alert-type' => 'success',
+    ];
+
+    return redirect()->back()->with($notification);
+}
 
 }

@@ -56,9 +56,9 @@
 
                 {{-- Terms and Condition --}}
                 <div>
-                    <label for="terms_and_condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Terms and Condition</label>
-                    <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
-                </div>
+                        <label for="terms_and_condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Terms and Condition</label>
+                        <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
+                    </div>
 
                 {{-- Shop Logo Upload --}}
                 <div>
