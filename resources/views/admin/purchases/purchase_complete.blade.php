@@ -46,12 +46,12 @@
                                     <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                     <select id="perPage" name="perPage"
                                         class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                        <option value="6" selected>6</option>
-                                        <option value="10">10</option> <!-- ✅ Default -->
+                                       
+                                        <option value="10" selected>10</option> <!-- ✅ Default -->
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="100">100</option>
-                                        <option value="all">All</option>
+                                        <option value="all">{{ __('messages.all') }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -120,6 +120,12 @@
                                         <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {{ __(key: 'messages.status') }}
+                                            </p>
+                                        </th>
+
+                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                            <p class="text-sm font-normal leading-none text-slate-500">
+                                                {{ __(key: 'messages.action') }}
                                             </p>
                                         </th>
 

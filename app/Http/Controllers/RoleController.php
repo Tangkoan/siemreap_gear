@@ -449,15 +449,30 @@ class RoleController extends Controller
 
         $table = '';
         foreach ($roles as $key => $item) {
+            // $permissionTags = '';
+            // foreach ($item->permissions as $perm) {
+            //     $permissionTags .= '<span class="inline-block icon-add text-white text-l px-2 py-1 rounded-md mr-1 mb-1 text-center align-middle ">' . $perm->name . '</span>';
+            // }
             $permissionTags = '';
-            foreach ($item->permissions as $perm) {
-                $permissionTags .= '<span class="inline-block icon-add text-white text-l px-2 py-1 rounded-md mr-1 mb-1 text-center align-middle ">' . $perm->name . '</span>';
+            $permissionCount = 0; // 1. Initialize a counter for permissions
+            $groupedPermissions = [];
+
+            // Loop through each permission for the current role
+            foreach ($item->permissions as $index => $perm) {
+                // Append the permission tag span
+                $permissionTags .= '<span class="inline-block  bg-red-600 text-white    text-xs font-semibold px-2.5 py-1 rounded-md mr-3 mb-1">' . $perm->name . '</span>';
+                $permissionCount++; // 2. Increment the counter
+
+                // 3. Check if the counter is a multiple of 8 and it's not the last permission
+                if ($permissionCount % 8 === 0 && $index < count($item->permissions) - 1) {
+                    $permissionTags .= '<br class="mb-1">'; // 4. Add a line break with a small bottom margin
+                }
             }
 
             $table .= '<tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">'
                 . '<td class="dark:text-white p-4 py-5 font-semibold text-sm text-slate-800">' . ($key + 1) . '</td>'
                 . '<td class="dark:text-white  p-4 py-5 text-sm text-black">' . $item->name . '</td>'
-                . '<td  class="p-4 py-5 text-sm  grid grid-cols-3 grid-rows-3 gap-4 ">' . $permissionTags . '</td>'
+                . '<td  class=" text-sm">' . $permissionTags . '</td>'
                 . '<td class="dark:text-white  px-4 py-4 text-sm whitespace-nowrap">'
                 . '<div class="flex items-center gap-x-6">'
 

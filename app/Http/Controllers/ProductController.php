@@ -478,7 +478,7 @@ class ProductController extends Controller
                         <td class="p-2 py-5">' . ($key + 1) . '</td>
                         
                         <td class="p-2 py-5">
-                            <img src="' . asset($item->product_image) . '" alt="Product Image" class="rounded-md" style="width: 40px; height: 40px; object-fit: cover; object-position: center;" />
+                            <img src="' . asset($item->product_image ? $item->product_image : 'upload/no_image.jpg') . '" alt="Product Image" class="rounded-md" style="width: 40px; height: 40px; object-fit: cover; object-position: center;" />
                         </td>
 
                         <td class="p-2 py-5">' . $item->product_code . '</td>

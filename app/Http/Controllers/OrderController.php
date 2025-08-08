@@ -84,12 +84,12 @@
 
             if ($request->has('search') && $request->search != '') {
                 $query->where(function ($q) use ($request) {
-                    $q->WhereHas('customer', function ($cat) use ($request) {
+                    $q->whereHas('customer', function ($cat) use ($request) {
                         $cat->where('name', 'LIKE', '%' . $request->search . '%');
-                    });
+                    })
+                    ->orWhere('invoice_no', 'LIKE', '%' . $request->search . '%');
                 });
             }
-
             $query->orderBy('created_at', 'desc');
 
             $perPage = $request->perPage ?? 10;
@@ -282,9 +282,10 @@
 
             if ($request->has('search') && $request->search != '') {
                 $query->where(function ($q) use ($request) {
-                    $q->WhereHas('customer', function ($cat) use ($request) {
-                            $cat->where('name', 'LIKE', '%' . $request->search . '%');
-                            });
+                    $q->whereHas('customer', function ($cat) use ($request) {
+                        $cat->where('name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->orWhere('invoice_no', 'LIKE', '%' . $request->search . '%');
                 });
             }
 
@@ -396,30 +397,26 @@
                     <td class="p-4 py-5">' . $item['customer']['name'] . '</td>
                     <td class="p-4 py-5">' . $item->order_date  . '</td>
                     <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                    <td class="p-4 py-5">
-                    <span class="inline-block px-3 py-1 rounded-md bg-gray-500 text-white font-semibold shadow-sm">
-                                ' . $item->total  . ' $
-                            </span>
-                        
                     
+
+                    <td class="text-xs font-semibold text-center align-middle">
+                        <span class="inline-block px-3 py-1 rounded-md bg-gray-500  dark:text-white text-white">
+                            ' . $item->total  . ' $
+                        </span>
                     </td>
 
-                    <td class="p-4 py-5 ">
-                        
-                            <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">
+                    <td class="  text-xs font-semibold text-center align-middle">
+                            <span class="inline-block px-3 py-1 rounded-md bg-green-600   dark:text-white text-white">
                                 '. $item->pay  .' $
                             </span>
                         
                         
                     </td>
                     
-                    <td class="p-4 py-5">
-                        
-                            <span class=" inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">
+                    <td class=" text-xs font-semibold text-center align-middle">
+                            <span class="inline-block px-3 py-1 rounded-md bg-red-500  dark:text-white text-white">
                                 '. $item->due  .' $
                             </span>
-                        
-                        
                     </td>
                     
                     <td class="px-4 py-4 text-sm whitespace-nowrap">

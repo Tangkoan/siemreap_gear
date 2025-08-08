@@ -52,33 +52,33 @@
                 </div>
             </div>
             {{-- កាត៖ ចំណូលខែនេះ --}}
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Month's Revenue</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_month_revenue, 2) }}</p>
+                {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Month's Revenue</p>
+                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_month_revenue, 2) }}</p>
+                        </div>
+                        <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" /></svg>
+                        </div>
                     </div>
-                    <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
-                         <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" /></svg>
-                    </div>
-                </div>
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('F') }}</p>
-            </div>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('F') }}</p>
+                </div> --}}
             {{-- កាត៖ ចំណូលឆ្នាំនេះ --}}
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Year's Revenue</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_year_revenue, 2) }}</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Year's Revenue</p>
+                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_year_revenue, 2) }}</p>
+                        </div>
+                        <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
+                        </div>
                     </div>
-                    <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
-                        <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
-                    </div>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('Y') }}</p>
                 </div>
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('Y') }}</p>
-            </div>
             {{-- កាត៖ Total Paid --}}
-             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+             {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Paid</p>
@@ -89,33 +89,33 @@
                     </div>
                 </div>
                 <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time paid amount</p>
-            </div>
+            </div> --}}
             {{-- កាត៖ Total Due --}}
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Due</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($total_due, 2) }}</p>
+                {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Due</p>
+                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($total_due, 2) }}</p>
+                        </div>
+                        <div class="bg-amber-100 dark:bg-amber-900/50 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                        </div>
                     </div>
-                    <div class="bg-amber-100 dark:bg-amber-900/50 p-3 rounded-full">
-                         <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-                    </div>
-                </div>
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time outstanding</p>
-            </div>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time outstanding</p>
+                </div> --}}
             {{-- កាត៖ Complete Orders --}}
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Complete Orders</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">{{ number_format($complete_orders_count) }}</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Complete Orders</p>
+                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">{{ number_format($complete_orders_count) }}</p>
+                        </div>
+                        <div class="bg-teal-100 dark:bg-teal-900/50 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-teal-600 dark:text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                        </div>
                     </div>
-                    <div class="bg-teal-100 dark:bg-teal-900/50 p-3 rounded-full">
-                        <svg class="w-6 h-6 text-teal-600 dark:text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
-                    </div>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time completed</p>
                 </div>
-                 <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time completed</p>
-            </div>
         </div>
 
         {{-- ប្លុកមេសម្រាប់តារាងក្រាហ្វិក និងតារាងទិន្នន័យ --}}
@@ -137,48 +137,48 @@
                 </div>
 
                 {{-- តារាងទិន្នន័យ៖ Recent Orders --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recent Orders</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-300">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">Customer</th>
-                                    <th scope="col" class="px-6 py-3">Invoice #</th>
-                                    <th scope="col" class="px-6 py-3 text-center">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($recent_orders as $order)
-                                <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center gap-3">
-                                            <img class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($order->customer->name ?? 'N A') }}&background=random&color=fff" alt="avatar">
-                                            <span class="font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ $order->customer->name ?? 'N/A' }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 font-mono text-xs">{{ $order->invoice_no }}</td>
-                                    <td class="px-6 py-4 text-center">
-                                        @if ($order->order_status == 'complete')
-                                            <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">Complete</span>
-                                        @else
-                                            <span class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 text-right font-semibold text-gray-800 dark:text-white">${{ number_format($order->total, 2) }}</td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center py-8 text-gray-500">No recent orders found.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                    {{-- <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recent Orders</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-300">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Customer</th>
+                                        <th scope="col" class="px-6 py-3">Invoice #</th>
+                                        <th scope="col" class="px-6 py-3 text-center">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($recent_orders as $order)
+                                    <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <img class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($order->customer->name ?? 'N A') }}&background=random&color=fff" alt="avatar">
+                                                <span class="font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ $order->customer->name ?? 'N/A' }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 font-mono text-xs">{{ $order->invoice_no }}</td>
+                                        <td class="px-6 py-4 text-center">
+                                            @if ($order->order_status == 'complete')
+                                                <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">Complete</span>
+                                            @else
+                                                <span class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 text-right font-semibold text-gray-800 dark:text-white">${{ number_format($order->total, 2) }}</td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center py-8 text-gray-500">No recent orders found.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> --}}
             </div>
 
             {{-- ក្រឡោនខាងស្តាំ (តូចជាង) --}}
@@ -197,11 +197,11 @@
                 </div>
 
                 {{-- ប្លុកថ្មីសម្រាប់បង្ហាញតារាងស្តុកទាប --}}
-                <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Products almost out of stock (Top 5)</h3>
-                    {{-- កន្លែងនេះនឹងត្រូវបង្ហាញ Chart ដែលបានបង្កើតដោយ JavaScript --}}
-                    <div id="low-stock-chart"></div> 
-                </div>
+                    {{-- <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Products almost out of stock (Top 5)</h3>
+                        {{-- កន្លែងនេះនឹងត្រូវបង្ហាញ Chart ដែលបានបង្កើតដោយ JavaScript --}}
+                        {{-- <div id="low-stock-chart"></div> 
+                    </div> --}} 
 
             </div>
         </div>

@@ -43,8 +43,8 @@
                                     <input type="number" min="0" step="0.01" value="{{ $purchasepaydue->due }}" id="due" name="due"
                                         required 
                                         class="w-full py-2.5 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                                               border border-gray-300 bg-white text-gray-900 
-                                               dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200
+                                               border  bg-white text-gray-900 
+                                                dark:text-gray-200
                                                @error('due') border-red-500 dark:border-red-500 @enderror">
 
                                     <x-input-error :messages="$errors->get('due')" class="mt-2" />

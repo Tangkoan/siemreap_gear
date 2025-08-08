@@ -208,6 +208,16 @@ class PurchaseController extends Controller
                 <td class="p-4 py-5 text-center align-middle">
                     <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  font-semibold shadow-sm">' . $item->purchase_status  . '</span>
                 </td>
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <div class="flex items-center gap-x-6">
+                        <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
+                            <a href="' . route('purchase.view.details', $item->id) . '" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                            </a>
+                        </button>
+                        
+                    </div>
+                </td>
             </tr>';
         }
         $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $purchases->links('pagination::tailwind')->toHtml();
@@ -219,8 +229,10 @@ class PurchaseController extends Controller
     {
         $query = Purchase::where('due', '>', 0);
         if ($request->has('search') && $request->search != '') {
-            $query->whereHas('supplier', function ($cat) use ($request) {
-                $cat->where('name', 'LIKE', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('supplier', function ($cat) use ($request) {
+                    $cat->where('name', 'LIKE', '%' . $request->search . '%');
+                })->orWhere('invoice_no', 'LIKE', '%' . $request->search . '%');
             });
         }
         $query->orderBy('created_at', 'desc');
@@ -233,6 +245,7 @@ class PurchaseController extends Controller
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
                 <td class="p-4 py-5">' . ($key + 1) . '</td>
                 <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
+                <td class="p-4 py-5">' . $item->invoice_no. '</td>
                 <td class="p-4 py-5">' . $item->purchase_date  . '</td>
                 <td class="p-4 py-5">' . $item->payment_status  . '</td>
                 <td class="p-4 py-5">

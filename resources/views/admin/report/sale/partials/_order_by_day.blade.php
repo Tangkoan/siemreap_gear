@@ -1,7 +1,7 @@
 @php $date = date('Y-m-d'); @endphp
 <div class="space-y-6">
     {{-- KPI Cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_revenue') }}</h3><p id="kpi-revenue-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_orders') }}</h3><p id="kpi-orders-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.items_sold') }}</h3><p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>

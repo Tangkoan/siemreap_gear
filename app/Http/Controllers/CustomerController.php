@@ -42,7 +42,7 @@ class CustomerController extends Controller
         Customer::insert([
             'name' => $request->name,
             'phone' => $request->phone,
-            'notes' => $request->phone,
+            'notes' => $request->notes,
             'address' => $request->address,
             'created_at' => Carbon::now(),
         ]);

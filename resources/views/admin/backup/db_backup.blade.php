@@ -37,9 +37,15 @@
     <div class="w-full card-ui-2025 rounded-2xl">
 
         <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-    <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">
-        🔐 {{ __(key: 'messages.backup_management') }}
-    </h1>
+            
+
+            <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                        </svg>
+                        <div class="px-2 text-b"> {{ __(key: 'messages.backup_management') }}</div>
+                       
+                    </h2>
     
     <div id="tab-container" class="inline-flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
         <button

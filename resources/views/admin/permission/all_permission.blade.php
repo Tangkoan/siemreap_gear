@@ -36,12 +36,11 @@
                                 <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                    <option value="6" selected>6</option>
-                                    <option value="10">10</option> <!-- ✅ Default -->
+                                    <option value="10" selected>10</option> <!-- ✅ Default -->
                                     <option value="25">25</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
-                                    <option value="all">All</option>
+                                    <option value="all">{{ __('messages.all') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -51,9 +50,6 @@
                                     <input
                                         class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                                         placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
-
-
-
                                     <button
                                         class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center dark:bg-gray-800 bg-white rounded "
                                         type="button">

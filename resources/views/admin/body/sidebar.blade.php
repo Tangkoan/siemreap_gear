@@ -129,7 +129,7 @@
        {{-- Customer --}}
             @if (Auth::user()->can('customer.menu'))
                 @php
-                    $isCustomerActive = request()->routeIs('customer.*','add.customer','edit.customer','delete.customer');
+                    $isCustomerActive = request()->routeIs('customer.all','add.customer','edit.customer','delete.customer');
                 @endphp
                 <a href="{{ route('customer.all') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
