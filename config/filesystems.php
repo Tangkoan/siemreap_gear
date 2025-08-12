@@ -33,7 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
-            
+        
         ],
 
         
@@ -48,10 +48,17 @@ return [
 
         'backups' => [
             'driver' => 'local', // កំណត់ driver ជា 'local'
-            'root' => storage_path('app/backups'), // ទីតាំងសម្រាប់เก็บไฟล์
+            'root' => storage_path('app/backups'), //ទីតាំង 
         ],
         
-        
+        'google' => [
+            'driver'        => 'google',
+            'clientId'      => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret'  => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken'  => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId'      => env('GOOGLE_DRIVE_FOLDER_ID'),
+            'cache'       => false, // <-- បន្ថែមកូដនេះដើម្បីបិទ Caching
+        ],
 
         's3' => [
             'driver' => 's3',

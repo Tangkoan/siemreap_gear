@@ -11,10 +11,14 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class BackupController extends Controller
 {
+    // private function getBackupDisk()
+    // {
+    //     $diskName = config('backup.backup.destination.disks')[0];
+    //     return Storage::disk($diskName);
+    // }
     private function getBackupDisk()
     {
-        $diskName = config('backup.backup.destination.disks')[0];
-        return Storage::disk($diskName);
+        return Storage::disk('backups'); // ⬅️ បញ្ជាក់ local disk តែម្ខាង
     }
 
     private function getBackupFolderName()
@@ -92,17 +96,59 @@ class BackupController extends Controller
         return response()->json(['table' => $table, 'pagination' => $pagination]);
     }
 
+    // public function backupNow()
+    // {
+    //     try {
+    //         Artisan::queue('backup:run');
+    //         Log::info('Database backup job has been queued successfully.');
+    //         return redirect()->back()->with('start_backup_check', true);
+    //     } catch (\Exception $e) {
+    //         Log::error('Failed to queue the database backup job: ' . $e->getMessage());
+    //         return redirect()->back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+    //     }
+    // }
+
+
+    // កូដ backupNow ខាងក្រោមជា ការBackup ប៉ុន្ដែវាBackupដោយដៃហើយចូលទាំងLocal ចូលទាំងGoogle Drive
+
+        // public function backupNow()
+        // {
+        //     try {
+        //         // DB only + local only + បិទ notification
+        //         Artisan::queue('backup:run', [
+        //             '--only-db'       => true,
+        //             '--only-to-disk'  => 'backups',
+        //             '--disable-notifications' => true,
+        //         ]);
+
+        //         Log::info('Database backup job queued (DB-only → local).');
+        //         return back()->with('start_backup_check', true);
+        //     } catch (\Exception $e) {
+        //         Log::error('Failed to queue DB backup: '.$e->getMessage());
+        //         return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+        //     }
+        // }
+
+
+    // ====================== Backup ដែលដើរតែ Local មិនទាក់ទងនឹង Google Drive =======================
     public function backupNow()
     {
         try {
-            Artisan::queue('backup:run');
-            Log::info('Database backup job has been queued successfully.');
-            return redirect()->back()->with('start_backup_check', true);
+            // ✅ Manual: DB only + LOCAL only
+            Artisan::queue('backup:run', [
+                '--only-db' => true,
+                '--only-to-disk' => 'backups',          // ⬅️ សំខាន់! local only
+                '--disable-notifications' => true,
+            ]);
+
+            \Log::info('Manual DB backup queued (local only).');
+            return back()->with('start_backup_check', true);
         } catch (\Exception $e) {
-            Log::error('Failed to queue the database backup job: ' . $e->getMessage());
-            return redirect()->back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+            \Log::error('Failed to queue DB backup: '.$e->getMessage());
+            return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
         }
     }
+
 
     public function getBackupStatus()
     {

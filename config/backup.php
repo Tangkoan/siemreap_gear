@@ -15,7 +15,13 @@ return [
                  * The list of directories and files that will be included in the backup.
                  */
                 'include' => [
-                    base_path(), // Backup Project ទាំងមូល
+                    // base_path(), // Backup Project ទាំងមូល
+                    base_path('app'),
+                    base_path('config'),
+                    base_path('database'),
+                    base_path('resources'),
+                    base_path('public'),
+                    storage_path('app'), // បើមាន upload
                 ],
 
                 /*
@@ -26,6 +32,8 @@ return [
                 'exclude' => [
                     base_path('vendor'),
                     base_path('node_modules'),
+                    storage_path('framework'),
+                    storage_path('logs'),
                 ],
 
                 /*
@@ -145,6 +153,7 @@ return [
              */
             'disks' => [
                 'backups',
+                'google',
             ],
         ],
 
@@ -152,6 +161,13 @@ return [
          * The directory where the temporary files will be stored.
          */
         'temporary_directory' => storage_path('app/SRGEAR'),
+
+        /*
+        * The queue to be used to background the backup job.
+        * Set to `null` or `''` to run the backup synchronously.
+        */
+        'queue' => '', // បង្ខំឱ្យ Backup រត់ភ្លាមៗ មិនប្រើ Queue
+
 
 
         /*
@@ -249,10 +265,13 @@ return [
     'monitor_backups' => [
         [
             'name' => env('APP_NAME', 'laravel-backup'),
-            'disks' => ['local'],
+            // 'disks' => ['local'],
+            'disks' => ['google','local'],
             'health_checks' => [
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
+                // \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
+                // \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 7,
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 12000,
             ],
         ],
 
@@ -286,40 +305,57 @@ return [
              * The number of days for which backups must be kept.
              */
             
-            'keep_all_backups_for_days' => 7,
+            // 'keep_all_backups_for_days' => 7,
+            // 'keep_all_backups_for_days' => 1,
+            // 'keep_all_backups_for_days' => 0,
+            'keep_all_backups_for_days' => 3650,
 
             /*
              * After the "keep_all_backups_for_days" period is over, the most recent backup
              * of that day will be kept. Older backups within the same day will be removed.
              * If you create backups only once a day, no backups will be removed yet.
              */
-            'keep_daily_backups_for_days' => 16,
+           
+            // 'keep_daily_backups_for_days' => 7,
 
             /*
              * After the "keep_daily_backups_for_days" period is over, the most recent backup
              * of that week will be kept. Older backups within the same week will be removed.
              * If you create backups only once a week, no backups will be removed yet.
              */
-            'keep_weekly_backups_for_weeks' => 8,
+
+            
+            // 'keep_weekly_backups_for_weeks' => 4,
 
             /*
              * After the "keep_weekly_backups_for_weeks" period is over, the most recent backup
              * of that month will be kept. Older backups within the same month will be removed.
              */
-            'keep_monthly_backups_for_months' => 4,
+
+            
+            // 'keep_monthly_backups_for_months' => 6,
 
             /*
              * After the "keep_monthly_backups_for_months" period is over, the most recent backup
              * of that year will be kept. Older backups within the same year will be removed.
              */
-            'keep_yearly_backups_for_years' => 2,
+
+            
+            // 'keep_yearly_backups_for_years' => 1,
 
             /*
              * After cleaning up the backups remove the oldest backup until
              * this amount of megabytes has been reached.
              * Set null for unlimited size.
              */
-            'delete_oldest_backups_when_using_more_megabytes_than' => 5000,
+
+            // 'delete_oldest_backups_when_using_more_megabytes_than' => 5000,
+            // 'delete_oldest_backups_when_using_more_megabytes_than' => 12000, // ~12GB // សំខាន់!
+            'keep_daily_backups_for_days' => 0,
+            'keep_weekly_backups_for_weeks' => 0,
+            'keep_monthly_backups_for_months' => 0,
+            'keep_yearly_backups_for_years' => 0,
+            'delete_oldest_backups_when_using_more_megabytes_than' => 1,
         ],
 
         /*
