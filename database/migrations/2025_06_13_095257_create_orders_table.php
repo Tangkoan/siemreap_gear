@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('discount');
             $table->string('sub_total')->nullable();
             $table->string('vat')->nullable();
+            $table->string('order_type')->nullable();
             $table->string('invoice_no')->nullable();
             $table->string('total')->nullable();
             $table->string('payment_status')->nullable();
