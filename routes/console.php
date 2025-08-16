@@ -35,7 +35,7 @@ Artisan::command('inspire', function () {
 
 
 // ================== Code សម្រាប់ Test 2នាទីម្ដង ===================
-    // // ✅ សម្រាប់តេស្តបណ្ដោះអាសន្ន
-    // Schedule::command('backup:run --only-db --only-to-disk=google')->everyTwoMinutes();
-    // // ✅ Cleanup សម្រាប់តេស្ត
-    // Schedule::command('backup:clean')->everyTwoMinutes()->withoutOverlapping();
+    // ✅ សម្រាប់តេស្តបណ្ដោះអាសន្ន
+    Schedule::command('backup:run --only-db --only-to-disk=google')->everyTwoMinutes();
+    // ✅ Cleanup សម្រាប់តេស្ត
+    Schedule::command('backup:clean')->everyTwoMinutes()->withoutOverlapping();

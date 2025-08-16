@@ -17,7 +17,7 @@ export default defineConfig({
 
 // export default defineConfig({
 //     server: {
-//         host: "192.168.1.7", // ✅ អនុញ្ញាតអោយអាច run តាម IP
+//         host: "10.18.1.185", // ✅ អនុញ្ញាតអោយអាច run តាម IP
 //         port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
 //     },
 //     plugins: [
@@ -26,4 +26,26 @@ export default defineConfig({
 //             refresh: true,
 //         }),
 //     ],
+// });
+
+
+
+
+// import { defineConfig } from "vite";
+// import laravel from "laravel-vite-plugin";
+
+// export default defineConfig({
+//     plugins: [
+//         laravel({
+//             input: ["resources/css/app.css", "resources/js/app.js"],
+//             refresh: true,
+//         }),
+//     ],
+//     // ✅ បន្ថែម
+//     server: {
+//         host: "0.0.0.0",
+//         hmr: {
+//             host: "localhost",
+//         },
+//     },
 // });

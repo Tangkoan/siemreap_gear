@@ -1,7 +1,9 @@
+# docker-compose.yml (with Vite, Queue, and Scheduler workers)
+
 version: '3.8'
 
 services:
-  # សេវាកម្មសម្រាប់កម្មវិធី Laravel (PHP-FPM)
+  # Laravel App Service (PHP-FPM)
   app:
     build:
       context: .
@@ -10,15 +12,12 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      # 1. Mount កូដកម្មវិធីរបស់អ្នកពីម៉ាស៊ីនពិត
       - .:/var/www/html
-      # 2. ប្រើ Named Volume សម្រាប់ vendor និង node_modules ដើម្បីល្បឿនលឿន
       - vendor_data:/var/www/html/vendor
-      - node_modules_data:/var/www/html/node_modules
     networks:
       - laravel
 
-  # សេវាកម្មสำหรับ Web Server (Nginx)
+  # Nginx Service
   nginx:
     image: nginx:alpine
     container_name: laravel_nginx
@@ -26,16 +25,12 @@ services:
     ports:
       - "8000:80"
     volumes:
-      # Nginx ត្រូវការចូលទៅកូដរួម ដើម្បីអាចបម្រើ Static file (CSS, JS)
       - .:/var/www/html
-      # បន្ថែមឯកសារកំណត់រចនាសម្ព័ន្ធរបស់ Nginx
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
     networks:
       - laravel
 
-  # សេវាកម្មសម្រាប់ Database (MySQL)
+  # Database Service
   db:
     image: mysql:8.0
     container_name: laravel_db
@@ -46,22 +41,71 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
       MYSQL_USER: ${DB_USERNAME:-user}
     volumes:
-      # ប្រើ Named Volume សម្រាប់ទិន្នន័យ Database ដើម្បីរក្សាទុកទិន្នន័យ
       - db_data:/var/lib/mysql
     ports:
       - "3307:3306"
     networks:
       - laravel
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_vite
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+    ports:
+        - "5173:5173"
+      # ✅ កែប្រែបន្ទាត់នេះ
+    command: sh -c "npm install && npm run dev -- --host" # បន្ថែម "-- --host"
+    networks:
+      - laravel
 
-# កំណត់ Named Volumes នៅទីនេះ
-volumes:
-  db_data:
-    driver: local
-  vendor_data:
-    driver: local
-  node_modules_data:
-    driver: local
+  # ✅ NEW: Queue Worker Service
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_queue
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - vendor_data:/var/www/html/vendor
+    # Command ที่จะให้รัน
+    command: php artisan queue:work
+    depends_on:
+      - app
+      - db
+    networks:
+      - laravel
+
+  # ✅ NEW: Scheduler Service
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_scheduler
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - vendor_data:/var/www/html/vendor
+    # Command ที่จะให้รัน
+    command: php artisan schedule:work
+    depends_on:
+      - app
+      - db
+    networks:
+      - laravel
 
 networks:
   laravel:
     driver: bridge
+
+volumes:
+  vendor_data:
+  db_data:
+
