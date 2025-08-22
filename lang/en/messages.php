@@ -24,6 +24,7 @@ return [
     'user' => 'User',
     'backup' => 'Backup',
     'setting' => 'Setting',
+    'stock' => 'Stock',
 
     // របស់ដែលប្រើរួម
     'table_created' => 'Created',

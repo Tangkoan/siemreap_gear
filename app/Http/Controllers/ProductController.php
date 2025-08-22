@@ -90,6 +90,12 @@ class ProductController extends Controller
         return view('admin.product.all_product', compact('product'));
     }// End Method
 
+    public function StockPage(){
+       
+        $product = Product::latest()->get();
+        return view('admin.stock.all_stock', compact('product'));
+    }// End Method
+
 
 
     // AddProduct

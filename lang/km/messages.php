@@ -24,6 +24,7 @@ return [
     'user' => 'អ្នកប្រើប្រាស់',
     'backup' => 'ការបម្រុងទុក',
     'setting' => 'ការកំណត់',
+    'stock' => 'ស្ដុក',
 
     // ក្បាល Table
     'table_no' => 'ល.រ',
@@ -88,7 +89,7 @@ return [
             'product_code'=> 'កូដផលិតផល',
             'product_name'=> 'ឈ្មោះផលិតផល',
             'price'=> 'តម្លៃ',
-            'inventory'=> 'ចំនួនក្នុងឃ្លាំង',
+            'inventory'=> 'ចំនួនទំនិញក្នុងស្ដុក',
             // Button List Product
             'import'=>'នាំចូល',
             'export'=>'នាំចេញ',
@@ -100,14 +101,14 @@ return [
             'choose_file' => 'ជ្រើសរើរូបភាព',
             'no_file_chosen' => 'មិនទាន់មានឯកសាររូពភាព',
             'buy_price' => 'តម្លៃទិញចូល',
-            'stock_alert' => 'ចំនួនផលិតផលដែលត្រូវលោតសារពេលជិតអស់ពីឃ្លាំង',
+            'stock_alert' => 'ចំនួនផលិតផលដែលត្រូវលោតសារពេលជិតអស់ពីស្ដុក',
             // jQuery Validation Messages
             'please_enter_product_name' => 'ឈ្មោះផលិតផលតម្រូវអោយបញ្ចូល',
             'please_select_category' => 'សូមជ្រើសរើសប្រភេទនៃឈ្មោះផលិតផល',
             'please_select_supplier' => 'សូមជ្រើសរើសឈ្មោះអ្នកផ្គត់ផ្គង់',
             'please_enter_price_selling_price' => 'តម្លៃផលិតផលតម្រូវអោយបញ្ជូល',
-            'please_enter_inventory' => 'ចំនួនផលិតផលក្នុងឃ្លាំងតម្រូវអោយបញ្ចូល',
-            'please_enter_stock_alert' => 'ចំនួនផលិតផលដែលត្រូវលោតសារពេលជិតអស់ពីឃ្លាំង តម្រូវអោយបញ្ចូល',
+            'please_enter_inventory' => 'ចំនួនផលិតផលក្នុងស្ដុកតម្រូវអោយបញ្ចូល',
+            'please_enter_stock_alert' => 'ចំនួនផលិតផលដែលត្រូវលោតសារពេលជិតអស់ពីស្ដុក តម្រូវអោយបញ្ចូល',
             'please_enter_buying_price' => 'តម្លៃទិញចូល តម្រូវអោយបញ្ចូល',
             // Message
             'product_inserted_successfully' => 'ទិន្នន័យផលិតផលត្រូវបានបញ្ចូលដោយជោគជ័យ',
@@ -204,7 +205,7 @@ return [
 
         // Notification
         'you_mout_add_product_to_cart' => 'សូមជ្រើសរើសផលិតផលមុនបញ្ជាទិញ',
-        'not_enough_stock_for_product'=>'ចំនួនផលិតផលក្នុងឃ្លាំងមិនគ្រប់គ្រាន់ដើម្បីលក់ឡើយ',
+        'not_enough_stock_for_product'=>'ចំនួនផលិតផលក្នុងស្ដុកមិនគ្រប់គ្រាន់ដើម្បីលក់ឡើយ',
         'something_went_wrong'=>'មានអ្វីមួយមិនដំណើរការបាន',
         // Modal Add New Customer
         'add_new_customer' => 'បន្ថែមអតិថិជនថ្មី',
@@ -324,7 +325,7 @@ return [
         'report.purchase' => 'របាយការណ៍ការបញ្ជាទិញ',
         'report.expense' => 'របាយការណ៍ចំណាយ',
         'report.sale' => 'របាយការណ៍ការលក់',
-        'report.stock' => 'របាយការណ៍ឃ្លាំង',
+        'report.stock' => 'របាយការណ៍ស្ដុក',
 
         // Role And Permission
         'permission_roler_already' => 'សិទ្ធក្នុងតួនាទីនេះមានរួចហើយ',
@@ -348,21 +349,21 @@ return [
                 'amount' => 'ចំនួនទឹកប្រាក់',
                 'total_amount' => 'ចំនួនទឹកប្រាក់សរុប',
         // របាយការណ៍ការទិញ
-                'purchase_report' => 'របាយការណ៍ការបញ្ជាទិញផលិតផលចូលឃ្លាំង',
+                'purchase_report' => 'របាយការណ៍ការបញ្ជាទិញផលិតផលចូលស្ដុក',
                 'total_spending' => 'ចំណាយសរុប',
                 'total_purchases' => 'ការទិញសរុប',
                 'items_purchased' => 'ផលិតផលដែលបានទិញ',
                 'avg_purchase_value' => 'តម្លៃទិញមធ្យម',
         // របាយការណ៍ស្តុក
-                'stock_movement_report' => 'របាយការណ៍ឃ្លាំងផលិតផលចេញចូល',
-                'stock_movement_for' => 'ដំណើរការឃ្លាំងសម្រាប់',
-                'total_stock_in' => 'ចំនួនផលិតផលចូលឃ្លាំងសរុប',
-                'total_stock_out' => 'ចំនួនផលិតផលចេញឃ្លាំងសរុប',
-                'opening_stock' => 'ចំនួនផលិតផលឃ្លាំងដើម',
+                'stock_movement_report' => 'របាយការណ៍ស្ដុកផលិតផលចេញចូល',
+                'stock_movement_for' => 'ដំណើរការស្ដុកសម្រាប់',
+                'total_stock_in' => 'ចំនួនផលិតផលចូលស្ដុកសរុប',
+                'total_stock_out' => 'ចំនួនផលិតផលចេញស្ដុកសរុប',
+                'opening_stock' => 'ចំនួនផលិតផលស្ដុកដើម',
                 
-                'stock_in' => 'ផលិតផលឃ្លាំងចូល',
-                'stock_out' => 'ផលិតផលឃ្លាំងចេញ',
-                'closing_stock' => 'បិទឃ្លាំងបញ្ចប់',
+                'stock_in' => 'ផលិតផលស្ដុកចូល',
+                'stock_out' => 'ផលិតផលស្ដុកចេញ',
+                'closing_stock' => 'បិទស្ដុកបញ្ចប់',
                 'type_stock'=>'ផលិតផលចេញឬចូល',
 
         // Income & Outcome
@@ -426,7 +427,7 @@ return [
         'project'=>'គម្រោង',
 
 // ==================== Stock Alert =====================
-        'in_stock'=>'ផលិតផលមានក្នុងឃ្លាំង',
+        'in_stock'=>'ផលិតផលមានក្នុងស្ដុក',
         'alert_threshold'=>'ចំនួនផលិតផលដែលត្រូវលោត',
 
 // ================== Profile ============================
@@ -440,7 +441,7 @@ return [
         'old_password'=>'លេខកូដសម្ងាត់ចាស់',
         'new_password'=>'លេខកូដសម្ងាត់ថ្មី',
         'confirm_password'=>'បញ្ជាក់លេខកូដសម្ងាត់ថ្មី',
-        'no_stock_alert'=>'ផលិតផលនៅក្នុងឃ្លាំងគឺល្អ អត់មានផលិតផលណាជិតអស់ឡើយ!',
+        'no_stock_alert'=>'ផលិតផលនៅក្នុងស្ដុកគឺល្អ អត់មានផលិតផលណាជិតអស់ឡើយ!',
 
 
 // ======================= Condition =========================

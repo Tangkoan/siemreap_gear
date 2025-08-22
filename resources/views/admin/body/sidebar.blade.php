@@ -107,6 +107,26 @@
 
         
 
+        {{-- Product --}}
+            @if (Auth::user()->can('stock.menu'))
+                @php
+                    $isCustomerActive = request()->routeIs('all.stock');
+                @endphp
+                <a href="{{ route('all.stock') }}"
+                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    
+                    @if($isCustomerActive)
+                        {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
+                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                    @endif
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                    </svg>
+                    <span class="px-2">{{ __('messages.stock') }}</span>
+            @endif
+        {{-- End Product --}}
 
 
 
