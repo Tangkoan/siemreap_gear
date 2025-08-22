@@ -43,32 +43,70 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate(): void
+    // public function authenticate(): void
+    // {
+    //     $this->ensureIsNotRateLimited();
+
+    //     // 1. Start សរសេរកូដបន្ថែមក្នុងកន្លែងComment
+    //     $user = User::where('email', $this->login)
+    //         ->orWhere('name', $this->login)
+    //         ->orWhere('phone', $this->login)
+    //         ->first();
+    //     // End
+
+    //     // 2. Start សរសេរកូដបន្ថែមក្នុងកន្លែងComment
+    //     if (!$user || !Hash::check($this->password, $user->password)) {
+    //         RateLimiter::hit($this->throttleKey());
+
+    //         throw ValidationException::withMessages([
+    //             'login' => trans('auth.failed'),
+    //         ]);
+    //     }
+    //     // End
+
+    //     // 3. Start
+    //     Auth::login($user, $this->boolean('remember'));
+    //     RateLimiter::clear($this->throttleKey()); // 👉 ត្រូវដាក់ក្រោយ Auth::login
+    //     // End
+    // }
+public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        // 1. Start សរសេរកូដបន្ថែមក្នុងកន្លែងComment
+        // បង្កើត Array មួយសម្រាប់ផ្ទុកសារកំហុស
+        $messages = [];
+
+        // ជំហានទី១: ស្វែងរកអ្នកប្រើប្រាស់
         $user = User::where('email', $this->login)
             ->orWhere('name', $this->login)
             ->orWhere('phone', $this->login)
             ->first();
-        // End
 
-        // 2. Start សរសេរកូដបន្ថែមក្នុងកន្លែងComment
-        if (!$user || !Hash::check($this->password, $user->password)) {
-            RateLimiter::hit($this->throttleKey());
+        // ជំហានទី២: ពិនិត្យលក្ខខណ្ឌ និងប្រមូលកំហុស
+        if (!$user) {
+            // ករណីរក User មិនឃើញ (Username ខុស)
+            $messages['login'] = 'Incorrect Username';
+            
+            
 
-            throw ValidationException::withMessages([
-                'login' => trans('auth.failed'),
-            ]);
+        } else {
+            // ករណីរក User ឃើញ, យើងពិនិត្យតែ Password
+            if (!Hash::check($this->password, $user->password)) {
+                $messages['password'] = 'Incorrect Password';
+            }
         }
-        // End
 
-        // 3. Start
+        // ជំហានទី៣: បើមានកំហុសណាមួយនៅក្នុង Array, បង្ហាញវាទាំងអស់
+        if (!empty($messages)) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages($messages);
+        }
+
+        // ជំហានទី៤: បើគ្មានកំហុស, ដំណើរការ Login
         Auth::login($user, $this->boolean('remember'));
-        RateLimiter::clear($this->throttleKey()); // 👉 ត្រូវដាក់ក្រោយ Auth::login
-        // End
+        RateLimiter::clear($this->throttleKey());
     }
+
 
     /**
      * Ensure the login request is not rate limited.

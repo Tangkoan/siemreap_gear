@@ -17,7 +17,7 @@ export default defineConfig({
 
 // export default defineConfig({
 //     server: {
-//         host: "10.18.1.185", // ✅ អនុញ្ញាតអោយអាច run តាម IP
+//         host: "192.168.1.6", // ✅ អនុញ្ញាតអោយអាច run តាម IP
 //         port: 5173, // ✅ អាចកំណត់ត្រឹមតែ 5173 ឬផ្សេងទៀត
 //     },
 //     plugins: [

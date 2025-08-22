@@ -160,8 +160,8 @@
                     <label for="payment_status" class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('messages.payment_method') }}</label>
                     <select name="payment_status" id="payment_status" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
                         <option value="" disabled selected>{{ __('messages.select_payment') }}</option>
-                        <option value="QrScan">Qr Scan</option>
-                        <option value="HandCash">HandCash</option>
+                        <option value="CashBank">Cash Bank</option>
+                        <option value="Cash">Cash</option>
                     </select>
                 </div>
 

@@ -153,7 +153,7 @@
 
 {{-- ✅ START: Exchange Rate Modal with Auto-Fetch Functionality --}}
 {{-- ✅ START: Modal សម្រាប់អត្រាប្តូរប្រាក់ ជាមួយនឹងមុខងារចាប់យកស្វ័យប្រវត្តិ --}}
-<div id="exchange-rate-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
+<div id="exchange-rate-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/20 backdrop-blur-sm transition-opacity duration-300">
     <div class="relative top-10 sm:top-20 mx-auto w-full max-w-sm transform rounded-xl bg-white p-6 shadow-2xl transition-all duration-300 dark:bg-slate-800 border dark:border-slate-700">
         <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Set Today's Exchange Rate</h3>
