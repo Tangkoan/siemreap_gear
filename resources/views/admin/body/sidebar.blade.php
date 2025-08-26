@@ -16,17 +16,17 @@
         @endphp
 
         {{-- Dashboard --}}
-        <a href="{{ route('dashboard') }}"
-            class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-            {{ request()->routeIs('dashboard') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-            @if(request()->routeIs('dashboard'))
-                <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-            @endif
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-            </svg>
-            <span class="px-2">{{ __('messages.dashboard') }}</span>
-        </a>
+            <a href="{{ route('dashboard') }}"
+                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
+                {{ request()->routeIs('dashboard') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                @if(request()->routeIs('dashboard'))
+                    <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                @endif
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                </svg>
+                <span class="px-2">{{ __('messages.dashboard') }}</span>
+            </a>
         {{-- End Dashboard --}}
 
         {{-- Category Dropdown --}}
@@ -72,18 +72,6 @@
             @endif
         {{-- End Category Dropdown --}}
 
-
-
-
-
-
-
-
-
-
-
-
-
         {{-- Product --}}
             @if (Auth::user()->can('product.menu'))
                 @php
@@ -105,28 +93,29 @@
             @endif
         {{-- End Product --}}
 
-        
+        {{-- Stock --}}
+            @if (Auth::user()->can('stock.menu'))
+                @php
+                    $isCustomerActive = request()->routeIs('all.stock');
+                @endphp
+                <a href="{{ route('all.stock') }}"
+                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    
+                    @if($isCustomerActive)
+                        {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
+                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                    @endif
 
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
+                    </svg>
 
+                    <span class="px-2">{{ __('messages.stock') }}</span>
+            @endif
+        {{-- End Stock --}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       {{-- Customer --}}
+        {{-- Customer --}}
             @if (Auth::user()->can('customer.menu'))
                 @php
                     $isCustomerActive = request()->routeIs('customer.all','add.customer','edit.customer','delete.customer');
@@ -171,105 +160,103 @@
         {{-- End Supplier --}}
 
         {{-- Purchase Dropdown --}}
-        @php
-            $purchaseMenu = Auth::user()->can('purchase.menu');
-            $purchaseComplete = Auth::user()->can('purchase.complete');
-            $purchasePendingDue = Auth::user()->can('purchase.pending.due');
-            $isPurchaseActive = isRouteActive(['complete.purchase', 'purchase.pending.due','purchase.page']);
-        @endphp
-        @if ($purchaseMenu || $purchaseComplete || $purchasePendingDue)
-            <div id="purchaseDropdown" class="relative group">
-                @if ($purchaseMenu)
-                    <a href="{{ route('purchase.page') }}"
-                        class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                        {{ $isPurchaseActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                        @if($isPurchaseActive)
-                            <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+            @php
+                $purchaseMenu = Auth::user()->can('purchase.menu');
+                $purchaseComplete = Auth::user()->can('purchase.complete');
+                $purchasePendingDue = Auth::user()->can('purchase.pending.due');
+                $isPurchaseActive = isRouteActive(['complete.purchase', 'purchase.pending.due','purchase.page']);
+            @endphp
+            @if ($purchaseMenu || $purchaseComplete || $purchasePendingDue)
+                <div id="purchaseDropdown" class="relative group">
+                    @if ($purchaseMenu)
+                        <a href="{{ route('purchase.page') }}"
+                            class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
+                            {{ $isPurchaseActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                            @if($isPurchaseActive)
+                                <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                            @endif
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                            </svg>
+                            <span class="px-2">{{ __('messages.purchase') }}</span>
+                        </a>
+                    @endif
+                    <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
+                        
+                        @if ($purchaseComplete)
+                            <a href="{{ route('complete.purchase') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.complete') }}</a>
                         @endif
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                        </svg>
-                        <span class="px-2">{{ __('messages.purchase') }}</span>
-                    </a>
-                @endif
-                <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
-                    
-                    @if ($purchaseComplete)
-                        <a href="{{ route('complete.purchase') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Complete</a>
-                    @endif
-                    @if ($purchasePendingDue)
-                        <a href="{{ route('purchase.pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Pending Due</a>
-                    @endif
+                        @if ($purchasePendingDue)
+                            <a href="{{ route('purchase.pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending_due') }}</a>
+                        @endif
+                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
         {{-- End Purchase --}}
 
-        
-
         {{-- Order Dropdown --}}
-        @php
-            $orderMenu = Auth::user()->can('order.menu');
-            $orderPending = Auth::user()->can('order.pending');
-            $orderComplete = Auth::user()->can('order.complete');
-            $orderPendingDue = Auth::user()->can('order.pending.due');
-            $isOrderActive = isRouteActive(['pending.order', 'complete.order', 'pending.due']);
-        @endphp
-        @if ($orderMenu || $orderPending || $orderComplete || $orderPendingDue )
-            <div id="orderDropdown" class="relative group">
-                @if ($orderMenu)
-                    <a href="{{ route('pending.order') }}"
-                        class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                        {{ $isOrderActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                        @if($isOrderActive)
-                            <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+            @php
+                $orderMenu = Auth::user()->can('order.menu');
+                $orderPending = Auth::user()->can('order.pending');
+                $orderComplete = Auth::user()->can('order.complete');
+                $orderPendingDue = Auth::user()->can('order.pending.due');
+                $isOrderActive = isRouteActive(['pending.order', 'complete.order', 'pending.due']);
+            @endphp
+            @if ($orderMenu || $orderPending || $orderComplete || $orderPendingDue )
+                <div id="orderDropdown" class="relative group">
+                    @if ($orderMenu)
+                        <a href="{{ route('pending.order') }}"
+                            class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
+                            {{ $isOrderActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                            @if($isOrderActive)
+                                <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                            @endif
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
+                            </svg>
+                            <span class="px-2">{{ __('messages.order') }}</span>
+                        </a>
+                    @endif
+                    <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
+                        @if ($orderPending)
+                            <a href="{{ route('pending.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending') }}</a>
                         @endif
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
-                        </svg>
-                        <span class="px-2">{{ __('messages.order') }}</span>
-                    </a>
-                @endif
-                <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
-                    @if ($orderPending)
-                        <a href="{{ route('pending.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Pending</a>
-                    @endif
-                    @if ($orderComplete)
-                        <a href="{{ route('complete.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Complete</a>
-                    @endif
-                    @if ($orderPendingDue)
-                        <a href="{{ route('pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Pending Due</a>
-                    @endif
+                        @if ($orderComplete)
+                            <a href="{{ route('complete.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.complete') }}</a>
+                        @endif
+                        @if ($orderPendingDue)
+                            <a href="{{ route('pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending_due_sale') }}</a>
+                        @endif
+                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
         {{-- End Order --}}
 
         {{-- Permission Dropdown --}}
-        @if (Auth::user()->can('role.menu'))
-            @php
-                $isPermissionActive = isRouteActive(['all.permission', 'add.permission', 'edit.permission', 'all.roles', 'add.roles', 'edit.roles', 'add.roles.permission', 'all.roles.permission']);
-            @endphp
-            <div id="permissionDropdown" class="relative group">
-                <a href="{{ route('all.permission') }}"
-                    class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                    {{ $isPermissionActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                    @if($isPermissionActive)
-                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                    @endif
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
-                    </svg>
-                    <span class="px-2">{{ __('messages.permission') }}</span>
-                </a>
-                <div class="absolute top-0 left-full ml-2 w-52 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
-                    <a href="{{ route('all.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">All Permission</a>
-                    <a href="{{ route('all.roles') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">All Roles</a>
-                    <a href="{{ route('add.roles.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Roles in Permission</a>
-                    <a href="{{ route('all.roles.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">All Roles in Permission</a>
+            @if (Auth::user()->can('role.menu'))
+                @php
+                    $isPermissionActive = isRouteActive(['all.permission', 'add.permission', 'edit.permission', 'all.roles', 'add.roles', 'edit.roles', 'add.roles.permission', 'all.roles.permission']);
+                @endphp
+                <div id="permissionDropdown" class="relative group">
+                    <a href="{{ route('all.permission') }}"
+                        class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
+                        {{ $isPermissionActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                        @if($isPermissionActive)
+                            <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                        @endif
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
+                        </svg>
+                        <span class="px-2">{{ __('messages.permission') }}</span>
+                    </a>
+                    <div class="absolute top-0 left-full ml-2 w-52 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
+                        <a href="{{ route('all.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.all_permission') }}</a>
+                        <a href="{{ route('all.roles') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.all_roles') }}</a>
+                        {{-- <a href="{{ route('add.roles.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.roles_in_permission') }}</a> --}}
+                        <a href="{{ route('all.roles.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.all_roles_in_permission') }}</a>
+                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
         {{-- End Permission --}}
 
         {{-- Report Dropdown --}}
@@ -298,16 +285,16 @@
                     @endif
                     <div class="absolute top-0 left-full ml-2 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl rounded-lg p-2 z-10 border border-slate-200 dark:border-slate-700">
                         @if ($reportSale)
-                            <a href="{{ route('all.reports') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Sale</a>
+                            <a href="{{ route('all.reports') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.sale_report') }}</a>
                         @endif
                         @if ($reportPurchase)
-                            <a href="{{ route('report.purchases.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Purchase</a>
+                            <a href="{{ route('report.purchases.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.purchases_report') }}</a>
                         @endif
                         @if ($reportStock)
-                            <a href="{{ route('all.report.stock') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Stock</a>
+                            <a href="{{ route('all.report.stock') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.stock_report') }}</a>
                         @endif
                         @if ($reportExpense)
-                            <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Income & Outcome</a>
+                            <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.incom_outcome_report') }}</a>
                         @endif
                     </div>
                 </div>
@@ -315,57 +302,54 @@
         {{-- End Report --}}
 
         {{-- User Menu --}}
-        @if (Auth::user()->can('user.menu'))
-            <a href="{{ route('all.admin') }}"
-                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('all.admin') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                @if(request()->routeIs('all.admin'))
-                    <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                <span class="px-2">{{ __('messages.user') }}</span>
-            </a>
-        @endif
+            @if (Auth::user()->can('user.menu'))
+                <a href="{{ route('all.admin') }}"
+                    class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
+                    {{ request()->routeIs('all.admin') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    @if(request()->routeIs('all.admin'))
+                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                    @endif
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <span class="px-2">{{ __('messages.user') }}</span>
+                </a>
+            @endif
         {{-- End User --}}
 
         {{-- Backup Menu --}}
-        @if (Auth::user()->can('backup.menu'))
-            <a href="{{ route('admin.backup') }}"
-                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('admin.backup') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                @if(request()->routeIs('admin.backup'))
-                    <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                </svg>
-                <span class="px-2">{{ __('messages.backup') }}</span>
-            </a>
-        @endif
+            @if (Auth::user()->can('backup.menu'))
+                <a href="{{ route('admin.backup') }}"
+                    class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
+                    {{ request()->routeIs('admin.backup') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    @if(request()->routeIs('admin.backup'))
+                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                    @endif
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                    </svg>
+                    <span class="px-2">{{ __('messages.backup') }}</span>
+                </a>
+            @endif
         {{-- End Backup --}}
-
 
         {{-- Setting Menu --}}
-        @if (Auth::user()->can('setting.menu'))
-            <a href="{{ route('admin.setting') }}"
-                class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('admin.setting', 'admin.setting_infromationshop') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
-                @if(request()->routeIs('admin.setting'))
-                    <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
+            @if (Auth::user()->can('setting.menu'))
+                <a href="{{ route('admin.setting') }}"
+                    class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
+                    {{ request()->routeIs('admin.setting', 'admin.setting_infromationshop') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    @if(request()->routeIs('admin.setting'))
+                        <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
+                    @endif
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
 
-                <span class="px-2">{{ __('messages.setting') }}</span>
-            </a>
-        @endif
+                    <span class="px-2">{{ __('messages.setting') }}</span>
+                </a>
+            @endif
         {{-- End Backup --}}
-
-        
     </div>
 </div>
 

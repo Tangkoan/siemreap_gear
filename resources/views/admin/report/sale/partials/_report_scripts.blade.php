@@ -18,7 +18,7 @@ $(document).ready(function() {
             $(`#kpi-items-${period}`).text(kpis.items);
             $(`#kpi-avg-${period}`).text(kpis.avg);
 
-            // ✅ ការកែប្រែទី១៖ បន្ថែមบรรทัดนี้เพื่ออัปเดต Card ใหม่
+            
             $(`#kpi-pre_orders-${period}`).text(kpis.pre_orders);
         }
     }
@@ -127,7 +127,6 @@ $(document).ready(function() {
         const orderId = $(this).data('order-id');
         $('#orderDetailsModal').removeClass('hidden');
 
-        // ✅ ការកែប្រែទី២៖ เปลี่ยน colspan เป็น 5 (เพราะเราจะเพิ่มคอลัมน์ Status)
         $('#modal-table-body').html('<tr><td colspan="5" class="text-center p-6">Loading details...</td></tr>'); 
         
         $.ajax({
@@ -135,13 +134,12 @@ $(document).ready(function() {
             type: 'GET',
             data: { order_id: orderId },
             success: function(response) {
-                // ... (โค้ดส่วนบนของ success function) ...
+                
 
                 let detailsHtml = '';
                 if (response.orderDetails && response.orderDetails.length > 0) {
                     response.orderDetails.forEach(item => {
-                        
-                        // ✅ ការកែប្រែទី៣៖ สร้าง Badge สำหรับสถานะสินค้า
+                       
                         let itemStatusBadge = '';
                         if (item.item_status === 'pre_ordered') {
                             itemStatusBadge = '<span class="px-2 py-1 text-xs font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">Pre-Order</span>';
@@ -149,11 +147,12 @@ $(document).ready(function() {
                             itemStatusBadge = '<span class="px-2 py-1 text-xs font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Fulfilled</span>';
                         }
 
-                        // ✅ ការកែប្រែទី៤៖ เพิ่มแถว HTML พร้อมคอลัมน์สถานะ
+                        
                         detailsHtml += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                             <td class="p-4">
                                 <div class="flex items-center gap-4">
-                                    <img src="${response.assetBaseUrl}${item.product.product_image}" alt="${item.product.product_name}" class="w-12 h-12 object-cover rounded-lg">
+                                    <img src="${item.product.product_image ? response.assetBaseUrl + item.product.product_image : response.assetBaseUrl + 'image/no_image.jpg'}"
+                                    alt="${item.product.product_name}" class="w-12 h-12 object-cover rounded-lg">
                                     <div class="flex-grow">
                                         <div class="font-semibold text-gray-800 dark:text-white">${item.product.product_name}</div>
                                         <div class="text-xs text-gray-500">${item.product.product_code}</div>

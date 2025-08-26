@@ -28,6 +28,6 @@
 
 @if($purchase_details->isEmpty() && $other_expenses->isEmpty())
     <tr>
-        <td colspan="5" class="text-center p-6 text-gray-500">No expense data available for this period.</td>
+        <td colspan="5" class="text-center p-6 text-gray-500">{{ __(key: 'messages.no_expense_data') }}</td>
     </tr>
 @endif

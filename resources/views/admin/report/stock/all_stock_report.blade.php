@@ -75,9 +75,9 @@
                     <table class="min-w-full text-left">
                         <thead class="sticky top-0 bg-gray-100 dark:bg-gray-700 text-xs text-gray-700 dark:text-gray-400 uppercase">
                             <tr>
-                                <th class="p-3">{{ __('messages.date') }}</th>
-                                <th class="p-3">{{ __('messages.type_stock') }}</th>
-                                <th class="p-3 text-right">{{ __('messages.qty') }}</th>
+                                <th class="p-3">Date</th>
+                                <th class="p-3">Type Of Stock</th>
+                                <th class="p-3 text-right">QTY</th>
                                 <th class="p-3">Reference</th>
                             </tr>
                         </thead>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="items-center px-5 py-4 mt-2 border-t border-gray-200 dark:border-gray-700">
-                <button id="closeModalBtn" class="px-6 py-2 bg-red-600 dark:bg-red-700 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 dark:hover:bg-red-800 transition duration-150 ease-in-out">Close</button>
+                <button id="closeModalBtn" class="px-6 py-2 bg-red-600 dark:bg-red-700 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 dark:hover:bg-red-800 transition duration-150 ease-in-out">{{ __('messages.close') }}</button>
             </div>
         </div>
     </div>

@@ -24,6 +24,13 @@ return [
     'user' => 'User',
     'backup' => 'Backup',
     'setting' => 'Setting',
+    'stock' => 'Stock',
+    'pending' => 'Pending',
+    'complete' => 'Complete',
+    'pending_due_sale' => 'Peding Due',
+    'all_roles' => 'All Roles',
+    'roles_in_permission'=> 'Roles In Permission',
+    'all_roles_in_permission'=> 'All Roels In Permission',
 
     // របស់ដែលប្រើរួម
     'table_created' => 'Created',
@@ -329,6 +336,10 @@ return [
         'reporte.expense' => 'reporte.expense',
         'reporte.sale' => 'reporte.sale',
         'reporte.stock' => 'reporte.stock',
+        'sale_report'=> 'Sale',
+        'purchases_report'=> 'Purchase',
+        'stock_report'=> 'Stock',
+        'incom_outcome_report'=> 'Income & Outcome',
         
         // Role And Permission
         'permission_roler_already' => 'This role already has permissions assigned. Please edit it instead.',
@@ -464,7 +475,14 @@ return [
         'information_shop'=> 'Information Shop',
         'information_invoice' => 'Information Invoice',
 
-
+// ================================ ចំណុចរាយរង​======================
+        'no_sales_data_abailable'=> 'No sales data available.',
+        'no_expense_data'=> 'No expense data available for this period.',
+        'no_purchases'=> 'No purchases found for this period.',
+        'no_order' => 'No orders found',
+        'total_order'=> 'Total Order',
+        'close'=> 'Close',
+        ''=> '',
         
 
 ];

@@ -17,6 +17,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\Backend\ExchangeRateController;
 
 use App\Http\Controllers\BackupController;
@@ -72,6 +73,11 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
+// =================== Stock =====================
+ Route::get('/stock', [StockController::class, 'searchStock'])->name('search.stock');
+ Route::get('/all/stock', [StockController::class, 'StockPage'])->name('all.stock')->middleware('permission:stock.menu');
+ // Route::get('/stock', 'StockManage')->name('all.stock')->middleware('permission:stock.menu');
 
     
 // ==================== Dashboard ==================== 
@@ -246,6 +252,9 @@ Route::middleware(['auth'])->group(callback: function () {
 
         Route::get('/edit/category/{id}', 'EditCategory')->name('edit.category')->middleware('permission:category.edit');
         Route::post('/category/update', 'CategoryUpdate')->name('category.update');
+        // Dlete ប្រើ Ajax
+        Route::delete('/category/ajax-delete/{id}', [CategoryController::class, 'ajaxDelete'])->name('ajax.delete.category');
+                
 
         Route::get('/delete/category/{id}', 'DeleteCategory')->name('delete.category')->middleware('permission:category.delete');
     });/// End Category Route
@@ -320,8 +329,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
         Route::get('/complete/order', 'CompleteOrder')->name('complete.order')->middleware('permission:order.complete');
 
-        // Stock
-        Route::get('/stock', 'StockManage')->name('all.stock')->middleware('permission:stock.menu');
+        
 
 
 

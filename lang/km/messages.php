@@ -24,6 +24,13 @@ return [
     'user' => 'អ្នកប្រើប្រាស់',
     'backup' => 'ការបម្រុងទុក',
     'setting' => 'ការកំណត់',
+    'stock' => 'ស្ដុក',
+    'pending' => 'មិនទាន់សម្រេច',
+    'complete' => 'សម្រេច',
+    'pending_due_sale' => 'អតិថិជនដែលជំពាក់',
+    'all_roles' => 'តួនាទី',
+    'roles_in_permission'=> 'ការផ្ដល់សិទ្ធទៅកាន់តួនាទី',
+    'all_roles_in_permission'=> 'សិទ្ធរបស់តួនាទី',
 
     // ក្បាល Table
     'table_no' => 'ល.រ',
@@ -88,7 +95,7 @@ return [
             'product_code'=> 'កូដផលិតផល',
             'product_name'=> 'ឈ្មោះផលិតផល',
             'price'=> 'តម្លៃ',
-            'inventory'=> 'ចំនួនក្នុងឃ្លាំង',
+            'inventory'=> 'ចំនួនក្នុងស្ដុក',
             // Button List Product
             'import'=>'នាំចូល',
             'export'=>'នាំចេញ',
@@ -186,7 +193,7 @@ return [
         'complete_order'=> 'បញ្ជាក់ការបញ្ជាទិញ',
         'complete_orders'=> 'ការបញ្ជាទិញដែលជោគជ័យ',
         // Pending Due Page
-        'pending_due'=> 'ការបញ្ជារទិញដែលមិនទាន់បង់ប្រាក់គ្រប់',
+        'pending_due'=> 'មិនទាន់បង់ប្រាក់គ្រប់',
         'pay_due_amount'=> 'ចំនួនទឹកប្រាក់ដែលត្រូវបង់',
         'order_details'=> 'ព័ត៌មានលម្អិតនៃការបញ្ជាទិញ',
         // Notification 
@@ -336,7 +343,7 @@ return [
 
 // ========================= Report ====================================================
         // Order Report
-                'orders_report' => 'របាយការណ៍ការបញ្ជាទិញ',
+                'orders_report' => 'របាយការណ៍ការលក់',
                 'by_day' => 'តាមថ្ងៃ',
                 'by_month' => 'តាមខែ',
                 'by_year' => 'តាមឆ្នាំ',
@@ -348,11 +355,15 @@ return [
                 'amount' => 'ចំនួនទឹកប្រាក់',
                 'total_amount' => 'ចំនួនទឹកប្រាក់សរុប',
         // របាយការណ៍ការទិញ
-                'purchase_report' => 'របាយការណ៍ការបញ្ជាទិញផលិតផលចូលឃ្លាំង',
+                'purchase_report' => 'របាយការណ៍ទិញផលិតផល',
+                'purchases_report' => 'របាយការណ៍ទិញ',
                 'total_spending' => 'ចំណាយសរុប',
                 'total_purchases' => 'ការទិញសរុប',
                 'items_purchased' => 'ផលិតផលដែលបានទិញ',
                 'avg_purchase_value' => 'តម្លៃទិញមធ្យម',
+                'sale_report' => 'របាយការណ៍លក់',
+                'stock_report' => 'របាយការណ៍ស្ដុក',
+                'incom_outcome_report' => 'របាយការណ៍ចំណូល',
         // របាយការណ៍ស្តុក
                 'stock_movement_report' => 'របាយការណ៍ឃ្លាំងផលិតផលចេញចូល',
                 'stock_movement_for' => 'ដំណើរការឃ្លាំងសម្រាប់',
@@ -445,9 +456,9 @@ return [
 
 // ======================= Condition =========================
         'condition_name' => 'ឈ្មោះលក្ខខណ្ឌ',
-        'condition' => 'លក្ខណៈផលិតថ្មីឬចាស់',
-        'add_condition' => 'បន្ថែមលក្ខណៈផលិតថ្មីឬចាស់',
-        'edit_condition' => 'កែប្រែលក្ខណៈផលិតថ្មីឬចាស់',
+        'condition' => 'ផលិតផលថ្មីឬចាស់',
+        'add_condition' => 'បន្ថែមលក្ខណៈផលិតផលថ្មីឬចាស់',
+        'edit_condition' => 'កែប្រែលក្ខណៈផលិតផលថ្មីឬចាស់',
         // Notification 
         'condition_updated_successfully' => 'ការកែប្រែ លក្ខណៈផលិតផលថ្មីឬចាស់បានជោគជ័យ',
         'condition_inserted_successfully' => 'ការបន្ថែម លក្ខណៈផលិតផលថ្មីឬចាស់បានជោគជ័យ',
@@ -460,4 +471,16 @@ return [
 // ================================= Seting ===========================
         'information_shop'=> 'ពត៌មានហាង',
         'information_invoice' => 'ព័ត៌មានវិក្កយបត្រ',
+
+
+
+
+
+// ================================ ចំណុចរាយរង​======================
+        'no_sales_data_abailable'=> 'គ្មានទិន្នន័យចំណូល',
+        'no_expense_data'=> 'គ្មានទិន្នន័យចំណាយ',
+        'no_purchases'=> 'គ្មានទិន្នន័យការបញ្ជាទិញ',
+        'no_order' => 'គ្មានទិន្នន័យលក់',
+        'total_order'=>'សរុបការលក់',
+        'close'=> 'បិទ',
 ];      

@@ -56,3 +56,5 @@
 @include('admin.report.sale.partials._report_scripts')
 
 @endsection
+
+

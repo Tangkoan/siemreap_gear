@@ -122,7 +122,7 @@ class ReportController extends Controller
 
         $tableHtml = '';
         if ($orders->isEmpty()) {
-            $tableHtml = '<tr><td colspan="7" class="text-center p-8 text-slate-500">No orders found for this period.</td></tr>';
+            $tableHtml = '<tr><td colspan="7" class="text-center p-8 text-slate-500">' . __('messages.no_order') . '</td></tr>';
         } else {
             foreach ($orders as $key => $item) {
                 $tableHtml .= view('admin.report.sale.partials._order_row', ['item' => $item, 'key' => $key, 'orders' => $orders])->render();

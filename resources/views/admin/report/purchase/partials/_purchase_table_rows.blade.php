@@ -23,6 +23,6 @@
     </tr>
 @empty
     <tr>
-        <td colspan="7" class="text-center p-8 text-slate-500">No purchases found for this period.</td>
+        <td colspan="7" class="text-center p-8 text-slate-500">{{ __(key: 'messages.no_purchases') }}</td>
     </tr>
 @endforelse

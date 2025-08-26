@@ -2,3 +2,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* ប្រកាស Font ថ្មីដែលយើងបានដាក់ក្នុង Folder public/fonts */
+  @font-face {
+    font-family: 'Khmer OS Siem Reap'; /* កំណត់ឈ្មោះ Font របស់យើង */
+    src: url('/fonts/KhmerOS_muollight.ttf') format('ttf'),
+         url('/fontsKhmerOS_siemreap.ttf') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* ជួយឲ្យអក្សរឆាប់បង្ហាញ */
+  }
+
+  body {
+    /* ឥឡូវយើងប្រើឈ្មោះ Font ដែលបានប្រកាសខាងលើ */
+    font-family: 'Khmer OS Siem Reap', serif;
+  }
+}

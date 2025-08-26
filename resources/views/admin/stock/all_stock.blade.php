@@ -9,33 +9,15 @@
                 <div class="lg:col-span-full p-0">
                 <div class="flex justify-between">
                     <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
                         </svg>
-                        <div class="px-2">{{ __('messages.product') }}</div>
+
+                        <div class="px-2">{{ __('messages.stock') }}</div>
                     </h2>
                     <div>
 
-                        @can('product.import')
-                            <!-- បើមានសិទ្ធ -->
-                            <button type="button"
-                                class="button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                                <a href="{{ route('import.product') }}">{{ __('messages.import') }}</a>
-                            </button>
-                        @else
-                            <!-- បើអត់មានសិទ្ធ -->
-                            <button class="button-imaport  py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent    focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none "
-                                disabled title="You don't have permission to access Import">
-                                {{ __('messages.import') }}
-                            </button>
-                        @endcan
-
-
-
-
-
+                        
 
                         @can('product.export')
                             <!-- បើមានសិទ្ធ -->
@@ -52,10 +34,7 @@
                             </button>
                         @endcan
 
-                        {{-- <button type="button"
-                            class="button-add py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent   focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none">
-                            <a href="{{ route('add.product') }}">Add Product</a>
-                        </button> --}}
+                        
 
                         @can('product.add')
                             <!-- បើមានសិទ្ធ -->
@@ -86,7 +65,7 @@
                                 <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                 <select id="perPage" name="perPage"
                                     class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                                    <option value="10" selected>10</option> <!-- ✅ Default -->
+                                    <option value="10" selected>10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
@@ -163,13 +142,6 @@
 
                                     <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                         <p class="text-sm font-normal leading-none text-slate-500">
-                                            {{ __('messages.supplier') }}
-                                        </p>
-                                    </th>
-
-
-                                    <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
-                                        <p class="text-sm font-normal leading-none text-slate-500">
                                             {{ __(key: 'messages.inventory') }}
                                         </p>
                                     </th>
@@ -190,62 +162,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($product as $key => $item)
-                                    <tr class="hover:bg-slate-50  border-b border-slate-200 dark:border-gray-700">
-                                        <td class=" p-4 py-5 font-semibold text-sm text-slate-800 dark:text-gray-200">{{ $key + 1 }}</td>
-                                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item->product_code }}</td>
-                                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item->product_name }}</td>
-                                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item['category']['category_name'] }}</td>
-                                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item->selling_price ?? 'null' }}</td>
-                                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item['supplier']['name'] }}</td>
-                                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">{{ $item->product_store ?? 'null' }}</td>
-                                        <td class="px-4 py-4 text-sm whitespace-nowrap dark:text-gray-200">
-                                            <div class="flex items-center gap-x-6">
-                                                <button
-                                                    class="icon-edit text-gray-500 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-500 focus:outline-none">
-                                                    <a href="{{ route('edit.category', $item->id) }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zM18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                        </svg>
-                                                    </a>
-                                                </button>
-
-                                                <button
-                                                    class="icon-edit text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-400 focus:outline-none">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor" stroke-width="1.5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M3 5v14m3-14v14m4-14v14m4-14v14m3-14v14m3-14v14" />
-                                                    </svg>
-                                                </button>
-
-                                                <button
-                                                    class="icon-detail text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-400 focus:outline-none">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                    </svg>
-                                                </button>
-
-                                                <button type="button"
-                                                    class="icon-delete text-gray-500 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 focus:outline-none">
-                                                    <a href="{{ route('delete.category', $item->id) }}" id="delete">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166M18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916" />
-                                                        </svg>
-                                                    </a>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach --}}
+                                
                             </tbody>
                         </table>
                     </div>
@@ -289,7 +206,7 @@
                 let perPage = $('#perPage').val();
 
                 $.ajax({
-                    url: "{{ route('search.product') }}?page=" + page,
+                    url: "{{ route('search.stock') }}?page=" + page,
                     type: "GET",
                     data: {
                         search: query,
