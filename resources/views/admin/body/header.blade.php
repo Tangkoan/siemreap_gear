@@ -43,16 +43,16 @@
                 $activeRate = \App\Models\ExchangeRate::where('is_active', true)->latest()->first();
             @endphp
 
-            <button id="exchange-rate-btn" class="hidden sm:block bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+            <button id="exchange-rate-btn" class="hidden sm:block bg-teal-500 hover:bg-teal-600 text-white   py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                 1$ = <span id="current-rate-display">{{ $activeRate->rate_khr ?? '?' }}</span>៛
             </button>
             
             @can('pos.menu')
-                <a href="{{ route('pos') }}" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                <a href="{{ route('pos') }}" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     {{ __('messages.pos') }}
                 </a>
             @else
-                <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-semibold py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="You don't have permission to access POS">
+                <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400   py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="You don't have permission to access POS">
                     {{ __('messages.pos') }}
                 </button>
             @endcan
@@ -72,7 +72,7 @@
                     @else
                         <img src="https://flagcdn.com/w20/us.png" srcset="https://flagcdn.com/w40/us.png 2x" width="30" alt="English" class="dark:ring-1 dark:ring-white rounded-sm">
                     @endif
-                    <span class="ml-2 text-xs font-semibold">{{ strtoupper(app()->getLocale()) }}</span>
+                    <span class="ml-2 text-xs  ">{{ strtoupper(app()->getLocale()) }}</span>
                 </button>
                 <div x-show="open" x-transition class="absolute right-0 mt-2 w-40 rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
                     <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
@@ -119,7 +119,7 @@
                     {{-- Dropdown content --}}
                     <div class="px-4 py-2">
                         <p class="text-sm text-slate-700 dark:text-slate-200">{{ __('messages.signed_in_as') }}</p>
-                        <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ $adminData->name }}</p>
+                        <p class="text-sm   text-slate-900 dark:text-white truncate">{{ $adminData->name }}</p>
                     </div>
                     <hr class="border-slate-200 dark:border-slate-700">
                     <div class="py-1">

@@ -8,7 +8,7 @@
             {{-- <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform "> --}}
             <div class="lg:col-span-full p-0">
                 <div class="flex justify-between">
-                    <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+                    <h2 class="text-xl  text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -123,7 +123,7 @@
                                 {{-- @foreach ($customer as $key => $item)
                                     <tr
                                         class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                                        <td class="p-4 py-5 font-semibold text-sm text-slate-800 dark:text-gray-200">
+                                        <td class="p-4 py-5  text-sm text-slate-800 dark:text-gray-200">
                                             {{ $key + 1 }}
                                         </td>
                                         <td class="p-4 py-5 text-sm text-slate-500 dark:text-gray-200">

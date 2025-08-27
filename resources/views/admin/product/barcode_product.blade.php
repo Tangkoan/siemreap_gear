@@ -4,7 +4,7 @@
             <div class="grid grid-cols-1">
 
                 <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                    <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+                    <h2 class="text-xl  text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -19,7 +19,7 @@
 
                     <!-- Move this out of the <h2> -->
                     <div class="overflow-x-auto">
-                        <div class="text-xl font-semibold text-default mb-6 flex items-center">
+                        <div class="text-xl  text-default mb-6 flex items-center">
 
                             <label for="firstname" class="form-label dark:text-white text-black"> {{ __('messages.product_code') }} </label>
                             <div class="px-2">
@@ -34,7 +34,7 @@
                     @endphp
 
                     <div class="overflow-x-auto">
-                        <div class="text-xl font-semibold text-default mb-6 flex items-center">
+                        <div class="text-xl  text-default mb-6 flex items-center">
 
                             
                             <div class="px-2">

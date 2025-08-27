@@ -5,7 +5,7 @@
             <div class="flex items-start justify-between px-8 pt-8 pb-4">
                 <div>
                     <h1 class="text-3xl font-bold text-blue-600 dark:text-blue-500">INVOICE</h1>
-                    <p class="mt-1 text-sm text-slate-500">Invoice No: <span id="invoice-no" class="font-semibold text-slate-700 dark:text-slate-300"></span></p>
+                    <p class="mt-1 text-sm text-slate-500">Invoice No: <span id="invoice-no" class=" text-slate-700 dark:text-slate-300"></span></p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button id="printInvoiceBtn" class="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-blue-600 dark:hover:bg-slate-700" title="Print Invoice">
@@ -21,26 +21,26 @@
                 <div class="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">
                     <div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Customer Name:</p>
+                            <p class="text-sm  text-slate-500 dark:text-slate-400">Customer Name:</p>
                             <p id="customer-name" class="text-sm font-bold text-slate-900 dark:text-white"></p>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Customer Phone:</p>
+                            <p class="text-sm  text-slate-500 dark:text-slate-400">Customer Phone:</p>
                             <p id="customer-phone" class="text-sm font-bold text-slate-900 dark:text-white"></p>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Payment Method:</p>
+                            <p class="text-sm  text-slate-500 dark:text-slate-400">Payment Method:</p>
                             <p id="summary-payment-method" class="text-sm font-bold text-slate-900 dark:text-white"></p>
                         </div>
                     </div>
 
                     <div class="text-left md:text-right">
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">DATE OF ISSUE:</p>
+                            <p class="text-sm  text-slate-500 dark:text-slate-400">DATE OF ISSUE:</p>
                             <p id="order-date" class="text-sm font-bold text-slate-900 dark:text-white"></p>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">STATUS:</p>
+                            <p class="text-sm  text-slate-500 dark:text-slate-400">STATUS:</p>
                             <p id="order-status-badge" class="rounded-full px-3 py-1 text-xs font-bold"></p>
                         </div>
                     </div>
@@ -51,11 +51,11 @@
                     <table class="min-w-full">
                         <thead class="bg-slate-50 dark:bg-slate-700">
                             <tr>
-                                <th class="w-2/5 p-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300">PRODUCT</th>
-                                <th class="p-4 text-center text-sm font-semibold text-slate-600 dark:text-slate-300">STATUS</th>
-                                <th class="p-4 text-center text-sm font-semibold text-slate-600 dark:text-slate-300">QTY</th>
-                                <th class="p-4 text-right text-sm font-semibold text-slate-600 dark:text-slate-300">UNIT PRICE</th>
-                                <th class="p-4 text-right text-sm font-semibold text-slate-600 dark:text-slate-300">TOTAL</th>
+                                <th class="w-2/5 p-4 text-left text-sm  text-slate-600 dark:text-slate-300">PRODUCT</th>
+                                <th class="p-4 text-center text-sm  text-slate-600 dark:text-slate-300">STATUS</th>
+                                <th class="p-4 text-center text-sm  text-slate-600 dark:text-slate-300">QTY</th>
+                                <th class="p-4 text-right text-sm  text-slate-600 dark:text-slate-300">UNIT PRICE</th>
+                                <th class="p-4 text-right text-sm  text-slate-600 dark:text-slate-300">TOTAL</th>
                             </tr>
                         </thead>
                         <tbody id="modal-table-body" class="text-sm divide-y divide-slate-200 dark:divide-slate-600"></tbody>
@@ -236,8 +236,8 @@ $(document).ready(function() {
                         const itemStatusClass = item.item_status === 'pre_ordered' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700';
 
                         detailsHtml += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                            <td class="p-4"><div class="flex items-center gap-4"><img src="${imageUrl}" alt="${item.product.product_name}" class="w-12 h-12 rounded-lg object-cover"><div class="flex-grow"><div class="font-semibold text-gray-800 dark:text-white">${item.product.product_name}</div><div class="text-xs text-gray-500">${item.product.product_code}</div></div></div></td>
-                            <td class="p-4 text-center"><span class="rounded-full px-2 py-1 text-xs font-semibold leading-tight ${itemStatusClass}">${itemStatusText}</span></td>
+                            <td class="p-4"><div class="flex items-center gap-4"><img src="${imageUrl}" alt="${item.product.product_name}" class="w-12 h-12 rounded-lg object-cover"><div class="flex-grow"><div class=" text-gray-800 dark:text-white">${item.product.product_name}</div><div class="text-xs text-gray-500">${item.product.product_code}</div></div></div></td>
+                            <td class="p-4 text-center"><span class="rounded-full px-2 py-1 text-xs  leading-tight ${itemStatusClass}">${itemStatusText}</span></td>
                             <td class="p-4 text-center">${item.quantity}</td>
                             <td class="p-4 text-right">$${parseFloat(item.unitcost).toFixed(2)}</td>
                             <td class="p-4 text-right font-medium">$${parseFloat(item.total).toFixed(2)}</td>

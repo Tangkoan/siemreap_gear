@@ -64,7 +64,7 @@
             <span class="digit">4</span><span class="digit">0</span><span class="digit">3</span>
         </h1>
         <!-- Message for the user -->
-        <p class="text-xl md:text-2xl font-semibold mb-8 text-gray-600">
+        <p class="text-xl md:text-2xl  mb-8 text-gray-600">
             Forbidden! You don't have permission to access this page.
             {{-- <br>
             ហាមឃាត់! អ្នកគ្មានសិទ្ធិចូលមើលទំព័រនេះទេ។ --}}

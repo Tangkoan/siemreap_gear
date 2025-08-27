@@ -1,21 +1,23 @@
 /* resources/css/app.css */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* resources/css/app.css */
+
 @layer base {
-  /* ប្រកាស Font ថ្មីដែលយើងបានដាក់ក្នុង Folder public/fonts */
   @font-face {
-    font-family: 'Khmer OS Siem Reap'; /* កំណត់ឈ្មោះ Font របស់យើង */
-    src: url('/fonts/fontsKhmerOS_siemreap.ttf') format('ttf'),
-         url('/fonts/KhmerOS_siemreap.ttf') format('ttf');
+    font-family: 'Khmer OS Siem Reap';
+    src: url('/fonts/KhmerOS_siemreap.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-    font-display: swap; /* ជួយឲ្យអក្សរឆាប់បង្ហាញ */
+    font-display: swap;
   }
 
   body {
-    /* ឥឡូវយើងប្រើឈ្មោះ Font ដែលបានប្រកាសខាងលើ */
-    font-family: 'Khmer OS Siem Reap', serif;
-  }
+  font-family: 'Lora', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, 'Khmer OS Siem Reap';
+}
 }

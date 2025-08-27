@@ -38,12 +38,12 @@
                 </div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
                     @if($revenue_change >= 0)
-                        <span class="flex items-center gap-1 text-green-600 font-semibold">
+                        <span class="flex items-center gap-1 text-green-600 ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 0 1-.75-.75V5.612L6.22 8.64a.75.75 0 1 1-1.06-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06L10.75 5.612V16.25a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" /></svg>
                             {{ number_format($revenue_change, 1) }}%
                         </span>
                     @else
-                        <span class="flex items-center gap-1 text-red-600 font-semibold">
+                        <span class="flex items-center gap-1 text-red-600 ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 0 1 .75.75v10.638l3.03-3.03a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.47 12.47a.75.75 0 1 1 1.06-1.06l3.03 3.03V3.75A.75.75 0 0 1 10 3Z" clip-rule="evenodd" /></svg>
                             {{ number_format(abs($revenue_change), 1) }}%
                         </span>
@@ -126,20 +126,20 @@
                 
                 {{-- តារាងក្រាហ្វិក៖ Sales Trend (30 Days) --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
+                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
                     <div id="sales-line-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Monthly Sales Trend (This Year) --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
+                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
                     <div id="this-year-monthly-sales-chart"></div>
                 </div>
 
                 {{-- តារាងទិន្នន័យ៖ Recent Orders --}}
                     {{-- <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recent Orders</h3>
+                            <h3 class="text-lg  text-gray-800 dark:text-white">Recent Orders</h3>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -168,7 +168,7 @@
                                                 <span class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-right font-semibold text-gray-800 dark:text-white">${{ number_format($order->total, 2) }}</td>
+                                        <td class="px-6 py-4 text-right  text-gray-800 dark:text-white">${{ number_format($order->total, 2) }}</td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -186,19 +186,19 @@
                 
                 {{-- តារាងក្រាហ្វិក៖ Top 5 Best-Selling Products --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
+                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
                     <div id="best-selling-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Order Distribution --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.order_distribution') }}</h3>
+                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.order_distribution') }}</h3>
                     <div id="order-status-doughnut-chart" class="flex justify-center"></div>
                 </div>
 
                 {{-- ប្លុកថ្មីសម្រាប់បង្ហាញតារាងស្តុកទាប --}}
                     {{-- <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Products almost out of stock (Top 5)</h3>
+                        <h3 class="text-lg  text-gray-800 dark:text-white mb-4">Products almost out of stock (Top 5)</h3>
                         {{-- កន្លែងនេះនឹងត្រូវបង្ហាញ Chart ដែលបានបង្កើតដោយ JavaScript --}}
                         {{-- <div id="low-stock-chart"></div> 
                     </div> --}} 

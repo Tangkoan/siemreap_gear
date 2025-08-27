@@ -22,13 +22,13 @@
             <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
                 <ul class="flex items-center space-x-2" id="reportTab" role="tablist">
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#day-tab-content">{{ __('messages.by_day') }}</button>
+                        <button class="tab-button text-sm  px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#day-tab-content">{{ __('messages.by_day') }}</button>
                     </li>
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#month-tab-content">{{ __('messages.by_month') }}</button>
+                        <button class="tab-button text-sm  px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#month-tab-content">{{ __('messages.by_month') }}</button>
                     </li>
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#year-tab-content">{{ __('messages.by_year') }}</button>
+                        <button class="tab-button text-sm  px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#year-tab-content">{{ __('messages.by_year') }}</button>
                     </li>
                 </ul>
             </div>

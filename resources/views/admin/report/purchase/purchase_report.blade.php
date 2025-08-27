@@ -22,13 +22,13 @@
             <div class="mb-6">
                 <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
                     <ul class="flex items-center space-x-2" id="reportTab" role="tablist">
-                        <li role="presentation"><button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg"
+                        <li role="presentation"><button class="tab-button text-sm  px-6 py-2.5 rounded-lg"
                                 type="button" role="tab" data-tab-target="#day-tab-content">
                                 {{ __('messages.by_day') }}</button></li>
-                        <li role="presentation"><button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg"
+                        <li role="presentation"><button class="tab-button text-sm  px-6 py-2.5 rounded-lg"
                                 type="button" role="tab" data-tab-target="#month-tab-content">
                                 {{ __('messages.by_month') }}</button></li>
-                        <li role="presentation"><button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg"
+                        <li role="presentation"><button class="tab-button text-sm  px-6 py-2.5 rounded-lg"
                                 type="button" role="tab" data-tab-target="#year-tab-content">
                                 {{ __('messages.by_year') }}</button></li>
                     </ul>
@@ -121,7 +121,7 @@
                                     <tbody id="report-table-body-day">
                                     </tbody>
                                     <tfoot id="report-table-footer-day"
-                                        class="text-sm font-semibold text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
+                                        class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
                                     </tfoot>
                                 </table>
                             </div>
@@ -214,7 +214,7 @@
                                     </thead>
                                     <tbody id="report-table-body-month"></tbody>
                                     <tfoot id="report-table-footer-month"
-                                        class="text-sm font-semibold text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
+                                        class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
                                     </tfoot>
                                 </table>
                             </div>
@@ -306,7 +306,7 @@
                                     </thead>
                                     <tbody id="report-table-body-year"></tbody>
                                     <tfoot id="report-table-footer-year"
-                                        class="text-sm font-semibold text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
+                                        class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
                                     </tfoot>
                                 </table>
                             </div>
@@ -328,7 +328,7 @@
                     <div>
                         <h1 class="text-3xl font-bold text-red-600 dark:text-red-500">PURCHASE VOUCHER</h1>
                         <p class="text-sm text-slate-500 mt-1">Invoice: <span id="purchase-invoice-no"
-                                class="font-semibold text-slate-700 dark:text-slate-300"></span></p>
+                                class=" text-slate-700 dark:text-slate-300"></span></p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="printPurchaseBtn" title="Print"
@@ -349,14 +349,14 @@
                 <div class="p-8">
                     <div class="grid md:grid-cols-2 gap-8 mb-8">
                         <div>
-                            <p class="text-sm font-semibold text-slate-500">SUPPLIER</p>
+                            <p class="text-sm  text-slate-500">SUPPLIER</p>
                             <p id="supplier-name" class="text-lg font-bold text-slate-900 dark:text-white mt-1"></p>
                             <p id="supplier-phone" class="text-sm text-slate-500"></p>
                         </div>
                         <div class="text-left md:text-right">
-                            <p class="text-sm font-semibold text-slate-500">DATE</p>
+                            <p class="text-sm  text-slate-500">DATE</p>
                             <p id="purchase-date" class="font-medium mt-1"></p>
-                            <p class="text-sm font-semibold text-slate-500 mt-4">Payment Method</p><span
+                            <p class="text-sm  text-slate-500 mt-4">Payment Method</p><span
                                 id="purchase-status-badge"
                                 class="px-3 py-1 text-xs font-bold rounded-full mt-1 inline-block"></span>
                         </div>
@@ -559,7 +559,7 @@
                                         <td class="p-4">
                                             <div class="flex items-center gap-3">
                                                 <img src="${imageUrl}" class="w-12 h-12 object-cover rounded-lg">
-                                                <div class="font-semibold text-slate-800 dark:text-white">${item.product.product_name}</div>
+                                                <div class=" text-slate-800 dark:text-white">${item.product.product_name}</div>
                                             </div>
                                         </td>
                                         <td class="p-4 text-center">${item.quantity}</td>

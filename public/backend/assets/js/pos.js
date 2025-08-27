@@ -353,21 +353,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div class="flex flex-col md:flex-row justify-between mb-4 p-4 print:p-0">
     <div class="w-full md:w-1/2 bg-gray-50 p-2 rounded shadow-sm md:mr-2 mb-2 md:mb-0">
-      <h4 class="font-semibold mb-1">Company: SR Gears</h4>
-      <h4 class="font-semibold mb-1 mt-2">Address:</h4>
+      <h4 class=" mb-1">Company: SR Gears</h4>
+      <h4 class=" mb-1 mt-2">Address:</h4>
       <p>#C02, St.Kompea Mother, MonduI I Village, Svay Dongkom Commune, SiemReap Town</p>
-      <h4 class="font-semibold mb-1 mt-2">Tel: 098 222 500, 017 3000 31</h4>
+      <h4 class=" mb-1 mt-2">Tel: 098 222 500, 017 3000 31</h4>
     </div>
     <div class="w-full md:w-1/2 bg-gray-50 p-2 rounded shadow-sm md:ml-2">
-      <h4 class="font-semibold mb-1">Quotation</h4>
-      <p><span class="font-semibold">Invoice Date:</span> ${invoiceDate}</p>
-      <p><span class="font-semibold">Customer Name:</span> ${
+      <h4 class=" mb-1">Quotation</h4>
+      <p><span class="">Invoice Date:</span> ${invoiceDate}</p>
+      <p><span class="">Customer Name:</span> ${
           customerName || "____________________"
       }</p>
-      <p><span class="font-semibold">Validity:</span> ${
+      <p><span class="">Validity:</span> ${
           validity || "______________________________"
       }</p>
-      <p><span class="font-semibold">Phone:</span> ${
+      <p><span class="">Phone:</span> ${
           phone || "_______________________________"
       }</p>
     </div>
@@ -412,23 +412,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div class="flex flex-col md:flex-row mb-4 gap-4 text-xs p-4 print:p-0">
     <div class="bg-gray-50 p-2 rounded shadow-sm md:w-1/2">
-      <h4 class="font-semibold mb-1">Note: Before receiving the goods, you must check the quality and quantity that cannot be returned.</h4>
+      <h4 class=" mb-1">Note: Before receiving the goods, you must check the quality and quantity that cannot be returned.</h4>
     </div>
     <div class="md:w-1/2 flex justify-end">
       <div class="w-48 bg-gray-50 p-2 rounded shadow-sm space-y-2">
-        <div class="flex justify-between"><span class="font-semibold">Subtotal:</span><span>${formatCurrency(
+        <div class="flex justify-between"><span class="">Subtotal:</span><span>${formatCurrency(
             subtotalSum
         )}</span></div>
-        <div class="flex justify-between"><span class="font-semibold">Tax (${taxPercent}%):</span><span>${formatCurrency(
+        <div class="flex justify-between"><span class="">Tax (${taxPercent}%):</span><span>${formatCurrency(
             taxAmount
         )}</span></div>
-        <div class="flex justify-between"><span class="font-semibold">Shipping:</span><span>${formatCurrency(
+        <div class="flex justify-between"><span class="">Shipping:</span><span>${formatCurrency(
             shippingVal
         )}</span></div>
-        <div class="flex justify-between"><span class="font-semibold">Discount:</span><span>${formatCurrency(
+        <div class="flex justify-between"><span class="">Discount:</span><span>${formatCurrency(
             discountVal
         )}</span></div>
-        <div class="flex justify-between"><span class="font-semibold">Total:</span><span>${formatCurrency(
+        <div class="flex justify-between"><span class="">Total:</span><span>${formatCurrency(
             totalDisplay
         )}</span></div>
       </div>

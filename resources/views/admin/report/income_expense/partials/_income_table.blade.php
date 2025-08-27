@@ -7,7 +7,7 @@
         </td>
         <td class="p-3 text-center">{{ $item->quantity }}</td>
         <td class="p-3 text-right">${{ number_format($item->unitcost, 2) }}</td>
-        <td class="p-3 text-right font-semibold text-green-600">${{ number_format($item->total, 2) }}</td>
+        <td class="p-3 text-right  text-green-600">${{ number_format($item->total, 2) }}</td>
     </tr>
 @empty
     <tr>

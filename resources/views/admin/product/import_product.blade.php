@@ -12,7 +12,7 @@
 
             <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <div class="flex justify-between">
-                    <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+                    <h2 class="text-xl  text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -63,7 +63,7 @@
                                         {{ __('messages.excell_file_import') }}
                                     </label>
                                     <input type="file" name="import_file" required
-                                        class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-500 file:text-white hover:file:bg-gray-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file: file:bg-gray-500 file:text-white hover:file:bg-gray-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     {{-- Image preview script can be added here if needed --}}
                                     <img id="image_preview" src="#" alt="Image Preview"
                                         class="mt-2 rounded-md max-h-40 hidden" />

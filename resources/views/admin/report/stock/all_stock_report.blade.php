@@ -20,19 +20,19 @@
             <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                 <ul class="flex items-center space-x-1" id="reportTab" role="tablist">
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors duration-300" 
+                        <button class="tab-button text-sm  px-6 py-2.5 rounded-lg transition-colors duration-300" 
                                 type="button" role="tab" data-tab-target="#day-tab-content">
                             {{ __('messages.by_day') }}
                         </button>
                     </li>
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors duration-300" 
+                        <button class="tab-button text-sm  px-6 py-2.5 rounded-lg transition-colors duration-300" 
                                 type="button" role="tab" data-tab-target="#month-tab-content">
                            {{ __('messages.by_month') }}
                         </button>
                     </li>
                     <li role="presentation">
-                        <button class="tab-button text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors duration-300" 
+                        <button class="tab-button text-sm  px-6 py-2.5 rounded-lg transition-colors duration-300" 
                                 type="button" role="tab" data-tab-target="#year-tab-content">
                             {{ __('messages.by_year') }}
                         </button>
@@ -66,7 +66,7 @@
     <div class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1 border border-gray-700 rounded-lg w-full max-w-3xl shadow-2xl bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 scale-95 transition-transform duration-300">
         <div class="mt-3">
             <div class="flex justify-between items-center mb-4 px-5 py-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-2xl font-semibold" id="modal-title">Transaction Details</h3>
+                <h3 class="text-2xl " id="modal-title">Transaction Details</h3>
                 <button id="closeModal" class="text-gray-400 hover:text-gray-700 dark:hover:text-white transition p-2 rounded-full -mr-2 text-2xl font-bold">&times;</button>
             </div>
             
@@ -324,7 +324,7 @@ $(document).ready(function() {
                             <tr>
                                 <td class="p-3 whitespace-nowrap">${formattedDate}</td>
                                 <td class="p-3">${trx.transaction_type}</td>
-                                <td class="p-3 text-right font-semibold ${quantityClass}">${quantityPrefix}${trx.quantity}</td>
+                                <td class="p-3 text-right  ${quantityClass}">${quantityPrefix}${trx.quantity}</td>
                                 <td class="p-3">${htmlspecialchars(trx.reference || 'N/A')}</td>
                             </tr>`;
                     });

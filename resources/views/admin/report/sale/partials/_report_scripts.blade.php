@@ -142,9 +142,9 @@ $(document).ready(function() {
                        
                         let itemStatusBadge = '';
                         if (item.item_status === 'pre_ordered') {
-                            itemStatusBadge = '<span class="px-2 py-1 text-xs font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">Pre-Order</span>';
+                            itemStatusBadge = '<span class="px-2 py-1 text-xs  leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">Pre-Order</span>';
                         } else { // 'fulfilled'
-                            itemStatusBadge = '<span class="px-2 py-1 text-xs font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Fulfilled</span>';
+                            itemStatusBadge = '<span class="px-2 py-1 text-xs  leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Fulfilled</span>';
                         }
 
                         
@@ -154,7 +154,7 @@ $(document).ready(function() {
                                     <img src="${item.product.product_image ? response.assetBaseUrl + item.product.product_image : response.assetBaseUrl + 'image/no_image.jpg'}"
                                     alt="${item.product.product_name}" class="w-12 h-12 object-cover rounded-lg">
                                     <div class="flex-grow">
-                                        <div class="font-semibold text-gray-800 dark:text-white">${item.product.product_name}</div>
+                                        <div class=" text-gray-800 dark:text-white">${item.product.product_name}</div>
                                         <div class="text-xs text-gray-500">${item.product.product_code}</div>
                                     </div>
                                 </div>

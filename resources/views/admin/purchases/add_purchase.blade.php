@@ -59,7 +59,7 @@
 
         {{-- Condition Filter Buttons --}}
         <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
-            <span class="text-sm font-semibold text-slate-500 dark:text-slate-400 mr-2">Condition:</span>
+            <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">Condition:</span>
             <button onclick="filterProducts('condition', 'all', this)" class="condition-btn filter-btn m-1 inline-block bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
                 {{ __('messages.all') }}
             </button>
@@ -72,7 +72,7 @@
 
         {{-- Category Filter Buttons --}}
         <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
-             <span class="text-sm font-semibold text-slate-500 dark:text-slate-400 mr-2">Category:</span>
+             <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">Category:</span>
             <button onclick="filterProducts('category', 'all', this)" class="category-btn filter-btn m-1 inline-block bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
                 {{ __('messages.all_category') }}
             </button>
@@ -98,7 +98,7 @@
 
         {{-- Add Product Button --}}
             <button id="add-product-btn" type="button" title="{{ __('messages.add_new_product') }}" aria-label="{{ __('messages.add_new_product') }}"
-                class="flex-shrink-0 bg-red-600 text-white text-xs px-3 py-0.5 rounded-md hover:bg-red-700 transition-colors font-semibold flex items-center gap-1 leading-none h-6 min-h-8">
+                class="flex-shrink-0 bg-red-600 text-white text-xs px-3 py-0.5 rounded-md hover:bg-red-700 transition-colors  flex items-center gap-1 leading-none h-6 min-h-8">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
@@ -112,10 +112,10 @@
             <table class="w-full text-sm">
                 <thead class="bg-slate-50 dark:bg-slate-900/50 sticky top-0 z-10">
                     <tr class="text-left text-slate-600 dark:text-slate-300">
-                        <th class="p-2 font-semibold">{{ __('messages.product') }}</th>
-                        <th class="p-2 font-semibold text-center">{{ __('messages.qty') }}</th>
-                        <th class="p-2 font-semibold text-right">{{ __('messages.subtotal') }}</th>
-                        <th class="p-2 font-semibold text-center">{{ __('messages.table_action') }}</th>
+                        <th class="p-2 ">{{ __('messages.product') }}</th>
+                        <th class="p-2  text-center">{{ __('messages.qty') }}</th>
+                        <th class="p-2  text-right">{{ __('messages.subtotal') }}</th>
+                        <th class="p-2  text-center">{{ __('messages.table_action') }}</th>
                     </tr>
                 </thead>
                 <tbody id="cart-table-body" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
@@ -192,7 +192,7 @@
 
             {{-- Submit Button --}}
             <div class="pt-2">
-                <button type="submit" class="w-full flex items-center justify-center gap-x-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                <button type="submit" class="w-full flex items-center justify-center gap-x-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm  text-white shadow-sm transition-all hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
                     {{ __('messages.complete_purchase') }}
                 </button>
@@ -300,7 +300,7 @@
                             <label for="product_image_input" class="form-label">{{ __('messages.image') }}</label>
                             <input type="file" name="product_image" id="product_image_input" class="block w-full text-sm text-gray-600 dark:text-gray-300
                                            file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
-                                           file:text-sm file:font-semibold file:bg-gray-300 dark:file:bg-gray-700
+                                           file:text-sm file: file:bg-gray-300 dark:file:bg-gray-700
                                            file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-400 dark:hover:file:bg-gray-600
                                            cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
                              <img id="image-preview" src="#" alt="Image Preview" class="mt-2 rounded-md max-h-40 hidden border border-slate-300 dark:border-slate-600" />
@@ -446,7 +446,7 @@ $(document).ready(function() {
                 <img class="w-full h-full object-cover" src="${imageUrl}" alt="${product.name}" onerror="this.onerror=null; this.src='${defaultImagePath}';">
             </div>
             <div class="p-3 text-left">
-                <h3 class="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">${product.name}</h3>
+                <h3 class=" text-sm text-slate-800 dark:text-slate-100 truncate">${product.name}</h3>
                 ${conditionText}
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Stock: ${product.stock}</p>
                 <p class="text-red-600 dark:text-red-400 font-bold text-lg mt-1">$${parseFloat(product.buying_price).toFixed(2)}</p>

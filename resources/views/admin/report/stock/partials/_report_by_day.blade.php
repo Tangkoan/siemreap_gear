@@ -133,7 +133,7 @@
            focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-colors duration-300;
 }
 .btn-gradient {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r text-white font-semibold 
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r text-white  
            shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 ease-in-out;
 }
 /* We can remove the old date picker style as it's no longer needed */

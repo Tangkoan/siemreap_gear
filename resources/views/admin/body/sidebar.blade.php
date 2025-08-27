@@ -18,7 +18,7 @@
         {{-- Dashboard --}}
             <a href="{{ route('dashboard') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ request()->routeIs('dashboard') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                {{ request()->routeIs('dashboard') ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                 @if(request()->routeIs('dashboard'))
                     <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                 @endif
@@ -40,7 +40,7 @@
                 <div id="categoryDropdown" class="relative group">
                     <a href="{{ route('all.category') }}"
                         class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                        {{ $isCategoryActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                        {{ $isCategoryActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                         @if($isCategoryActive)
                             <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                         @endif
@@ -79,7 +79,7 @@
                 @endphp
                 <a href="{{ route('all.product') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     
                     @if($isCustomerActive)
                         {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
@@ -100,7 +100,7 @@
                 @endphp
                 <a href="{{ route('all.stock') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     
                     @if($isCustomerActive)
                         {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
@@ -122,7 +122,7 @@
                 @endphp
                 <a href="{{ route('customer.all') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     
                     @if($isCustomerActive)
                         {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
@@ -144,7 +144,7 @@
                 @endphp
                 <a href="{{ route('all.supplier') }}"
                 class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                {{ $isCustomerActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     
                     @if($isCustomerActive)
                         {{-- បង្ហាញគំនូសពណ៌ក្រហមនៅពេល active --}}
@@ -171,7 +171,7 @@
                     @if ($purchaseMenu)
                         <a href="{{ route('purchase.page') }}"
                             class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                            {{ $isPurchaseActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                            {{ $isPurchaseActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                             @if($isPurchaseActive)
                                 <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                             @endif
@@ -207,7 +207,7 @@
                     @if ($orderMenu)
                         <a href="{{ route('pending.order') }}"
                             class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                            {{ $isOrderActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                            {{ $isOrderActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                             @if($isOrderActive)
                                 <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                             @endif
@@ -240,7 +240,7 @@
                 <div id="permissionDropdown" class="relative group">
                     <a href="{{ route('all.permission') }}"
                         class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                        {{ $isPermissionActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                        {{ $isPermissionActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                         @if($isPermissionActive)
                             <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                         @endif
@@ -273,7 +273,7 @@
                     @if ($reportMenu)
                         <a href="{{ route('all.reports') }}"
                             class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
-                            {{ $isReportActive ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                            {{ $isReportActive ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                             @if($isReportActive)
                                 <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                             @endif
@@ -305,7 +305,7 @@
             @if (Auth::user()->can('user.menu'))
                 <a href="{{ route('all.admin') }}"
                     class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                    {{ request()->routeIs('all.admin') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    {{ request()->routeIs('all.admin') ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     @if(request()->routeIs('all.admin'))
                         <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                     @endif
@@ -321,7 +321,7 @@
             @if (Auth::user()->can('backup.menu'))
                 <a href="{{ route('admin.backup') }}"
                     class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                    {{ request()->routeIs('admin.backup') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    {{ request()->routeIs('admin.backup') ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     @if(request()->routeIs('admin.backup'))
                         <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                     @endif
@@ -337,7 +337,7 @@
             @if (Auth::user()->can('setting.menu'))
                 <a href="{{ route('admin.setting') }}"
                     class="relative nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200
-                    {{ request()->routeIs('admin.setting', 'admin.setting_infromationshop') ? 'bg-red-500/10 text-red-600 font-semibold dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                    {{ request()->routeIs('admin.setting', 'admin.setting_infromationshop') ? 'bg-red-500/10 text-red-600   dark:text-red-400' : 'text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
                     @if(request()->routeIs('admin.setting'))
                         <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-red-500"></span>
                     @endif

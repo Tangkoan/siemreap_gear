@@ -8,7 +8,7 @@
         </td>
         <td class="p-3 text-center">{{ $item->quantity }}</td>
         <td class="p-3 text-right">${{ number_format($item->purchase_price, 2) }}</td>
-        <td class="p-3 text-right font-semibold text-red-600">${{ number_format($item->total, 2) }}</td>
+        <td class="p-3 text-right  text-red-600">${{ number_format($item->total, 2) }}</td>
     </tr>
 @endforeach
 
@@ -22,7 +22,7 @@
         </td>
         <td class="p-3 text-center">-</td>
         <td class="p-3 text-right">-</td>
-        <td class="p-3 text-right font-semibold text-red-600">${{ number_format($item->amount, 2) }}</td>
+        <td class="p-3 text-right  text-red-600">${{ number_format($item->amount, 2) }}</td>
     </tr>
 @endforeach
 

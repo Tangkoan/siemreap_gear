@@ -5,7 +5,7 @@
     <div class="container mx-auto p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
             <div class="rounded-lg shadow-xl p-6 bg-gray-100 dark:bg-gray-800 transition-all duration-300 transform">
-                <h2 class="text-xl font-semibold mb-6 flex items-center text-gray-800 dark:text-gray-100">
+                <h2 class="text-xl  mb-6 flex items-center text-gray-800 dark:text-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -107,7 +107,7 @@
                                     {{ __('messages.image') }} 
                                 </label>
                                 <input type="file" id="image" name="product_image"
-                                    class="block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+                                    class="block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file: file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
                                 <img id="image_preview" src="{{ asset($product->product_image) }}" alt="Image Preview"
                                     class="mt-2 rounded-md max-h-40 border border-gray-300 dark:border-gray-600" />
                                 @error('image')

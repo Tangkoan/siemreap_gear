@@ -26,7 +26,7 @@
 
         {{-- Right Side: Edit Profile Form --}}
         <div class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 transition-colors duration-300">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+            <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                 </svg>
@@ -71,7 +71,7 @@
                         
                         <div class="flex-grow">
                              <input type="file" name="photo" id="image" class="hidden">
-                             <label for="image" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 shadow-sm">
+                             <label for="image" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white  py-2 px-4 rounded-md transition-colors duration-200 shadow-sm">
                                  {{ __('messages.chosse_file') }}
                              </label>
                              <span id="file-name" class="text-gray-500 dark:text-gray-400 ml-3 text-sm">{{ __('messages.no_file_chosse') }}</span>

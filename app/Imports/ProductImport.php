@@ -22,7 +22,7 @@ class ProductImport implements ToModel
             'product_detail' => $row[4],
             'product_code' => $row[5],
             'product_image' => $row[6],
-            'product_store' => $row[7],
+            'product_store' => 0,
             'buying_price' => $row[8],
             'selling_price' => $row[9], 
         ]);

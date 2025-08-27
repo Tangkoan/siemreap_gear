@@ -70,7 +70,7 @@ class BackupController extends Controller
 
                 $table .= '
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                        <td class="p-4 py-5 font-semibold text-sm text-slate-800 dark:text-gray-200">' . ($startIndex + $key + 1) . '</td>
+                        <td class="p-4 py-5  text-sm text-slate-800 dark:text-gray-200">' . ($startIndex + $key + 1) . '</td>
                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $filename . '</td>
                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $size . '</td>
                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $path . '</td>
@@ -256,7 +256,7 @@ class BackupController extends Controller
 
                 $table .= '
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                        <td class="p-4 py-5 font-semibold text-sm text-slate-800 dark:text-gray-200">' . ($key + 1) . '</td>
+                        <td class="p-4 py-5  text-sm text-slate-800 dark:text-gray-200">' . ($key + 1) . '</td>
                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $filename . '</td>
                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $size . '</td>
                         <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $path . '</td>

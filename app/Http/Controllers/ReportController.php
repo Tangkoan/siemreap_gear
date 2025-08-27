@@ -239,8 +239,8 @@ class ReportController extends Controller
                                      data-active-tab="'. $activeTab .'">';
                 $tableHtml .= '<td class="p-2 text-gray-900 dark:text-white">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
                 $tableHtml .= '<td class="p-2 px-8 text-gray-700 dark:text-gray-300 text-center">'. $openingStock .'</td>';
-                $tableHtml .= '<td class="p-2 px-8 text-green-600 font-semibold text-center">+'. $stockIn .'</td>';
-                $tableHtml .= '<td class="p-2 px-8 text-red-600 font-semibold text-center">-'. $stockOut .'</td>';
+                $tableHtml .= '<td class="p-2 px-8 text-green-600  text-center">+'. $stockIn .'</td>';
+                $tableHtml .= '<td class="p-2 px-8 text-red-600  text-center">-'. $stockOut .'</td>';
                 $tableHtml .= '<td class="p-2 px-8 font-bold text-blue-600 dark:text-blue-400 text-center">'. $closingStock .'</td>';
                 $tableHtml .= '</tr>';
             }

@@ -6,7 +6,7 @@
         <div class="grid grid-cols-1">
             <div
                 class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl font-semibold mb-6 flex items-center text-gray-800 dark:text-gray-100">
+                <h2 class="text-xl  mb-6 flex items-center text-gray-800 dark:text-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -28,32 +28,32 @@
                         {{-- Column 1 --}}
                         <div class="space-y-4">
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.supplier_name') }} : <span class="font-semibold">{{ $purchase->supplier->name }}</span>
+                                {{ __('messages.supplier_name') }} : <span class="">{{ $purchase->supplier->name }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.email') }} : <span class="font-semibold">{{ $purchase->supplier->email ?? 'null' }}</span>
+                                {{ __('messages.email') }} : <span class="">{{ $purchase->supplier->email ?? 'null' }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.phone') }} : <span class="font-semibold">{{ $purchase->supplier->phone }}</span>
+                                {{ __('messages.phone') }} : <span class="">{{ $purchase->supplier->phone }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.purchase_date') }} : <span class="font-semibold">{{ $purchase->purchase_date }}</span>
+                                {{ __('messages.purchase_date') }} : <span class="">{{ $purchase->purchase_date }}</span>
                             </label>
                         </div>
 
                         {{-- Column 2 --}}
                         <div class="space-y-4">
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.invoice') }} : <span class="font-semibold">{{ $purchase->invoice_no }}</span>
+                                {{ __('messages.invoice') }} : <span class="">{{ $purchase->invoice_no }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.payment_status') }} ​: <span class="font-semibold">{{ $purchase->payment_status }}</span>
+                                {{ __('messages.payment_status') }} ​: <span class="">{{ $purchase->payment_status }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.paid_amount') }} ​: <span class="font-semibold">{{ $purchase->pay }}</span>
+                                {{ __('messages.paid_amount') }} ​: <span class="">{{ $purchase->pay }}</span>
                             </label>
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
-                                {{ __('messages.due_amount') }} ​: <span class="font-semibold">{{ $purchase->due }}</span>
+                                {{ __('messages.due_amount') }} ​: <span class="">{{ $purchase->due }}</span>
                             </label>
                         </div>
                     </div>

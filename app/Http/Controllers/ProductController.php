@@ -465,7 +465,7 @@ class ProductController extends Controller
                             : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
 
                         $statusDisplay = <<<HTML
-                            <span class="px-2 py-1 text-xs font-semibold rounded-md {$statusBadgeClass}">
+                            <span class="px-2 py-1 text-xs  rounded-md {$statusBadgeClass}">
                                 {$statusText}
                             </span>
                         HTML;
@@ -490,7 +490,7 @@ class ProductController extends Controller
                         <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
                         
                         <td class="p-4 py-5 text-center align-middle">
-                            <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm
+                            <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  shadow-sm
                                         ">
                                 '. $item->product_store  .'
                             </span>

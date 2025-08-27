@@ -6,7 +6,7 @@
 
             <div
                 class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center">
+                <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6 text-gray-700 dark:text-white">
                         <path stroke-linecap="round" stroke-linejoin="round"

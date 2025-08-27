@@ -460,7 +460,7 @@ class RoleController extends Controller
             // Loop through each permission for the current role
             foreach ($item->permissions as $index => $perm) {
                 // Append the permission tag span
-                $permissionTags .= '<span class="inline-block  bg-red-600 text-white    text-xs font-semibold px-2.5 py-1 rounded-md mr-3 mb-1">' . $perm->name . '</span>';
+                $permissionTags .= '<span class="inline-block  bg-red-600 text-white    text-xs  px-2.5 py-1 rounded-md mr-3 mb-1">' . $perm->name . '</span>';
                 $permissionCount++; // 2. Increment the counter
 
                 // 3. Check if the counter is a multiple of 8 and it's not the last permission
@@ -470,7 +470,7 @@ class RoleController extends Controller
             }
 
             $table .= '<tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">'
-                . '<td class="dark:text-white p-4 py-5 font-semibold text-sm text-slate-800">' . ($key + 1) . '</td>'
+                . '<td class="dark:text-white p-4 py-5  text-sm text-slate-800">' . ($key + 1) . '</td>'
                 . '<td class="dark:text-white  p-4 py-5 text-sm text-black">' . $item->name . '</td>'
                 . '<td  class=" text-sm">' . $permissionTags . '</td>'
                 . '<td class="dark:text-white  px-4 py-4 text-sm whitespace-nowrap">'

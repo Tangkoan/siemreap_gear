@@ -48,13 +48,13 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="bg-gray-100 dark:bg-slate-700 p-1 rounded-lg flex items-center">
                         <button
-                            class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300"
+                            class="report-tab w-full px-4 py-2 text-sm  rounded-md transition-colors duration-300"
                             data-type="daily">{{ __('messages.day') }}</button>
                         <button
-                            class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300"
+                            class="report-tab w-full px-4 py-2 text-sm  rounded-md transition-colors duration-300"
                             data-type="monthly">{{ __('messages.month') }}</button>
                         <button
-                            class="report-tab w-full px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-300"
+                            class="report-tab w-full px-4 py-2 text-sm  rounded-md transition-colors duration-300"
                             data-type="yearly">{{ __('messages.year') }}</button>
                     </div>
                     {{-- <div id="filter-inputs" class="flex items-center">
@@ -119,7 +119,7 @@
 
                     <div class="flex items-center gap-2">
                         <button id="export-excel-btn"
-                            class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white  rounded-lg shadow-md hover:bg-green-700 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -132,7 +132,7 @@
                             Excel
                         </button>
                         <button id="export-pdf-btn"
-                            class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white  rounded-lg shadow-md hover:bg-red-700 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -165,7 +165,7 @@
 
             <div id="report-content" style="display: none;">
                 <div id="report-summary" class="text-center mb-8">
-                    <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">
+                    <h2 class="text-2xl  mb-4 text-gray-700 dark:text-gray-300">
                         {{ __('messages.report_for') }}: <span id="report-title-date"
                             class="text-red-500 font-bold"></span></h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -322,7 +322,7 @@
                     },
                     error: (err) => {
                         $('#loading-spinner').html(
-                            '<p class="text-red-500 font-semibold">Error: Failed to load report data.</p>'
+                            '<p class="text-red-500 ">Error: Failed to load report data.</p>'
                             );
                         console.error("AJAX Error:", err);
                     }

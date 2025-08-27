@@ -6,7 +6,7 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
             <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 transition-all duration-300">
-                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+                <h2 class="text-2xl  text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -45,7 +45,7 @@
                         @endphp
 
                         <fieldset class="mb-6 border border-gray-200 dark:border-gray-700 p-4 rounded-md">
-                            <legend class="text-sm text-gray-800 dark:text-gray-100 font-semibold mb-4">
+                            <legend class="text-sm text-gray-800 dark:text-gray-100  mb-4">
                                 {{ $group->group_name }}
                             </legend>
 

@@ -206,7 +206,7 @@ class PurchaseController extends Controller
                 <td class="p-4 py-5">' . $item->invoice_no  . '</td>
                 <td class="p-4 py-5">' . $item->pay  . '</td>
                 <td class="p-4 py-5 text-center align-middle">
-                    <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  font-semibold shadow-sm">' . $item->purchase_status  . '</span>
+                    <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white   shadow-sm">' . $item->purchase_status  . '</span>
                 </td>
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
@@ -249,13 +249,13 @@ class PurchaseController extends Controller
                 <td class="p-4 py-5">' . $item->purchase_date  . '</td>
                 <td class="p-4 py-5">' . $item->payment_status  . '</td>
                 <td class="p-4 py-5">
-                    <span class="inline-block px-3 py-1 rounded-md bg-gray-500 text-white font-semibold shadow-sm">' . $item->total . ' $</span>
+                    <span class="inline-block px-3 py-1 rounded-md bg-gray-500 text-white  shadow-sm">' . $item->total . ' $</span>
                 </td>
                 <td class="p-4 py-5 ">
-                    <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white font-semibold shadow-sm">' . $item->pay . ' $</span>
+                    <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white  shadow-sm">' . $item->pay . ' $</span>
                 </td>
                 <td class="p-4 py-5 text-center align-middle">
-                    <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white font-semibold shadow-sm">' . $item->due . ' $</span>
+                    <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  shadow-sm">' . $item->due . ' $</span>
                 </td>
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">

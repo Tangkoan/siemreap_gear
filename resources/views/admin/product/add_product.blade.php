@@ -8,7 +8,7 @@
             <div
                 class="lg:col-span-full rounded-lg shadow-xl p-6 transition-all duration-300 transform
                        bg-white dark:bg-gray-900">
-                <h2 class="text-xl font-semibold mb-6 flex items-center text-gray-900 dark:text-gray-100">
+                <h2 class="text-xl  mb-6 flex items-center text-gray-900 dark:text-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -17,7 +17,7 @@
 
                     <div class="px-2">
                         <a href="{{ route('all.product') }}"
-                            class="text-black hover:text-indigo-500 dark:text-white dark:hover:text-indigo-300 font-semibold">
+                            class="text-black hover:text-indigo-500 dark:text-white dark:hover:text-indigo-300 ">
                             {{ __('messages.add_product') }}
                         </a>
                     </div>
@@ -103,7 +103,7 @@
                                 <input type="file" id="image" name="product_image"
                                     class="block w-full text-sm text-gray-600 dark:text-gray-300
                                            file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
-                                           file:text-sm file:font-semibold file:bg-gray-300 dark:file:bg-gray-700
+                                           file:text-sm file: file:bg-gray-300 dark:file:bg-gray-700
                                            file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-400 dark:hover:file:bg-gray-600
                                            cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                 <img id="image_preview" src="#" alt="Image Preview"

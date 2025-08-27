@@ -35,7 +35,7 @@
                 {{-- <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform "> --}}
                     <div class="lg:col-span-full p-0">
                     <div class="flex justify-between">
-                        <h2 class="text-xl font-semibold text-default mb-6 flex items-center">
+                        <h2 class="text-xl  text-default mb-6 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                 class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"

@@ -78,7 +78,7 @@
                     <img src="{{ asset('image/logo.jpg') }}" alt="SR Gears Logo" class="w-14 h-14 rounded-full">
                     <div>
                         <h1 class="font-khmer-muol text-xl font-bold text-gray-900">សៀមរាប ហ្គៀរ</h1>
-                        <p class="text-base font-semibold text-gray-700">Siem Reap Gears</p>
+                        <p class="text-base  text-gray-700">Siem Reap Gears</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -100,7 +100,7 @@
                     </div>
                     <div class="flex-1 text-right">
                         <div class="grid grid-cols-2 gap-x-4 gap-y-1">
-                            <span class="font-semibold text-gray-600">Date:</span>
+                            <span class=" text-gray-600">Date:</span>
                             <span class="text-gray-800">{{ \Carbon\Carbon::parse($quotation->quotation_date)->format('d-M-Y') }}</span>
                             
                         </div>
@@ -114,7 +114,7 @@
             <!-- ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ Margin ខាងលើពី mt-8 ទៅ mt-6 -->
             <section class="mt-6">
                 <table class="w-full text-left">
-                    <thead class="bg-red-50 text-red-800 text-xs uppercase font-semibold">
+                    <thead class="bg-red-50 text-red-800 text-xs uppercase ">
                         <tr>
                             <th class="p-2 w-8 text-center rounded-l-md">#</th>
                             <th class="p-2">Product</th>
@@ -130,7 +130,7 @@
                             <td class="p-2 font-medium text-gray-800">{{ optional($item->product)->product_name ?? 'Product not found' }}</td>
                             <td class="p-2 text-center text-gray-600">{{ $item->quantity }}</td>
                             <td class="p-2 text-right text-gray-600">${{ number_format($item->unitcost, 2) }}</td>
-                            <td class="p-2 text-right font-semibold text-gray-800">${{ number_format($item->total, 2) }}</td>
+                            <td class="p-2 text-right  text-gray-800">${{ number_format($item->total, 2) }}</td>
                         </tr>
                         @endforeach
                     </tbody>

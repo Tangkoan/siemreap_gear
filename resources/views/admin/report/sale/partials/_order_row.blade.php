@@ -12,7 +12,7 @@
         @endif
     </td>
     <td class="px-6 py-4 text-center">
-        <button type="button" class="view-details-btn font-semibold text-blue-600 dark:text-blue-400 " data-order-id="{{ $item->id }}">
+        <button type="button" class="view-details-btn  text-blue-600 dark:text-blue-400 " data-order-id="{{ $item->id }}">
             {{ __('messages.details') }}
         </button>
     </td>

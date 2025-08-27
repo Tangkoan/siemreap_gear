@@ -60,7 +60,7 @@
                     </tr>
                 </thead>
                 <tbody id="report-table-body-year"></tbody>
-                <tfoot id="report-table-footer-year" class="text-sm font-semibold text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700"></tfoot>
+                <tfoot id="report-table-footer-year" class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700"></tfoot>
             </table>
         </div>
         {{-- <div id="pagination-links-year" class="p-4 border-t border-slate-200 dark:border-slate-700"></div> --}}

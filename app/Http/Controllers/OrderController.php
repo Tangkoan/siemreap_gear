@@ -121,9 +121,9 @@
 
                 // បង្កើត Badge ដោយ​ផ្អែក​លើ​លក្ខខណ្ឌ​ខាង​លើ
                 if ($isPreOrder) {
-                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-blue-600 dark:bg-blue-900 text-white font-semibold shadow-sm">Pre-Order</span>';
+                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-blue-600 dark:bg-blue-900 text-white  shadow-sm">Pre-Order</span>';
                 } else {
-                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-green-600 dark:bg-green-900 text-white font-semibold shadow-sm">Sale</span>';
+                    $orderTypeBadge = '<span class="inline-block px-3 py-1 rounded-md bg-green-600 dark:bg-green-900 text-white  shadow-sm">Sale</span>';
                 }
                 
                 // --- 👇 កូដថ្មីទី១៖ បង្កើតប៊ូតុង "Pay" លុះត្រាតែមានទឹកប្រាក់ជំពាក់ ---
@@ -150,18 +150,18 @@
                     <td class="p-4 py-5">' . $item->pay  . '$</td>
                     
                     <td class="p-4 py-5">
-                        <span class="inline-block px-3 py-1 rounded-md ' . ($item->due > 0 ? 'bg-red-500 dark:bg-red-900 dark:text-white text-white' : 'bg-gray-500') . ' text-white text-xs font-semibold shadow-sm">
+                        <span class="inline-block px-3 py-1 rounded-md ' . ($item->due > 0 ? 'bg-red-500 dark:bg-red-900 dark:text-white text-white' : 'bg-gray-500') . ' text-white text-xs  shadow-sm">
                             '. $item->due .'$
                         </span>
                     </td>
                     
-                    <td class="px-2 py-1 text-xs font-semibold text-center align-middle">
+                    <td class="px-2 py-1 text-xs  text-center align-middle">
                         <span class="inline-block px-3 py-1 rounded-md bg-red-500  dark:bg-red-900 dark:text-white text-white">
                             '. $item->order_status  .'
                         </span>
                     </td>
 
-                    <td class="px-2 py-1 text-xs font-semibold text-center align-middle">
+                    <td class="px-2 py-1 text-xs  text-center align-middle">
                        
                         <span class="inline-block">
                         
@@ -334,7 +334,7 @@
                    
 
 
-                    <td class="py-1 text-xs font-semibold text-center align-middle">
+                    <td class="py-1 text-xs  text-center align-middle">
                         <span class="inline-block px-3 py-1 rounded-md bg-green-600  dark:bg-green-600 dark:text-white text-white">
                             '. $item->order_status  .'
                         </span>
@@ -399,13 +399,13 @@
                     <td class="p-4 py-5">' . $item->payment_status  . '</td>
                     
 
-                    <td class="text-xs font-semibold text-center align-middle">
+                    <td class="text-xs  text-center align-middle">
                         <span class="inline-block px-3 py-1 rounded-md bg-gray-500  dark:text-white text-white">
                             ' . $item->total  . ' $
                         </span>
                     </td>
 
-                    <td class="  text-xs font-semibold text-center align-middle">
+                    <td class="  text-xs  text-center align-middle">
                             <span class="inline-block px-3 py-1 rounded-md bg-green-600   dark:text-white text-white">
                                 '. $item->pay  .' $
                             </span>
@@ -413,7 +413,7 @@
                         
                     </td>
                     
-                    <td class=" text-xs font-semibold text-center align-middle">
+                    <td class=" text-xs  text-center align-middle">
                             <span class="inline-block px-3 py-1 rounded-md bg-red-500  dark:text-white text-white">
                                 '. $item->due  .' $
                             </span>

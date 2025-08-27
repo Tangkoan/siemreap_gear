@@ -53,7 +53,7 @@
 
             {{-- Condition Filter Buttons --}}
             <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
-                <span class="text-sm font-semibold text-slate-500 dark:text-slate-400 mr-2">Condition:</span>
+                <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">Condition:</span>
                 <button onclick="filterProducts('condition', 'all', this)" class="condition-btn filter-btn m-1 inline-block bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
                     {{ __('messages.all') }}
                 </button>
@@ -66,7 +66,7 @@
 
             {{-- Category Filter Buttons --}}
             <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
-                <span class="text-sm font-semibold text-slate-500 dark:text-slate-400 mr-2">Category:</span>
+                <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">Category:</span>
                 <button onclick="filterProducts('category', 'all', this)" class="category-btn filter-btn m-1 inline-block bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
                     {{ __('messages.all_category') }}
                 </button>
@@ -95,11 +95,11 @@
                 <table class="w-full text-sm">
                     <thead class="bg-slate-50 dark:bg-slate-900/50 sticky top-0 z-10">
                         <tr class="text-left text-slate-600 dark:text-slate-300">
-                            <th class="p-2 font-semibold">{{ __('messages.product') }}</th>
-                            <th class="p-2 font-semibold">{{ __('messages.price') }}</th>
-                            <th class="p-2 font-semibold text-center">{{ __('messages.qty') }}</th>
-                            <th class="p-2 font-semibold text-right">{{ __('messages.subtotal') }}</th>
-                            <th class="p-2 font-semibold text-center">{{ __('messages.table_action') }}</th>
+                            <th class="p-2 ">{{ __('messages.product') }}</th>
+                            <th class="p-2 ">{{ __('messages.price') }}</th>
+                            <th class="p-2  text-center">{{ __('messages.qty') }}</th>
+                            <th class="p-2  text-right">{{ __('messages.subtotal') }}</th>
+                            <th class="p-2  text-center">{{ __('messages.table_action') }}</th>
                         </tr>
                     </thead>
                     <tbody id="cart-table-body" class="divide-y divide-slate-100 dark:divide-slate-700">
@@ -178,7 +178,7 @@
                 <div class="sm:col-span-2 mt-2 flex items-center gap-3">
 
                         {{-- ប៊ូតុង Quotation (Secondary Action) --}}
-                        <button type="button" id="create-quotation-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                        <button type="button" id="create-quotation-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white  py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                             </svg>
@@ -186,7 +186,7 @@
                         </button>
 
                         {{-- ប៊ូតុង Pay Nows (Primary Action) --}}
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white  py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 21z" />
                             </svg>
@@ -316,7 +316,7 @@
             <img class="w-full h-full object-cover" src="${imageUrl}" alt="${product.name}" onerror="this.onerror=null; this.src='${defaultImagePath}';">
         </div>
         <div class="p-3 text-left">
-            <h3 class="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">${product.name}</h3>
+            <h3 class=" text-sm text-slate-800 dark:text-slate-100 truncate">${product.name}</h3>
             
             ${conditionText}
 

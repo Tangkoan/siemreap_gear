@@ -10,7 +10,7 @@
         <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
             
             <div class="flex justify-between">
-                                <h2 class="text-xl font-semibold text-default mb-0 flex items-center">
+                                <h2 class="text-xl  text-default mb-0 flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
                                     </svg>
@@ -70,7 +70,7 @@
                         
                         <div class="flex-grow">
                             <input type="file" name="logo" id="logo_input" class="hidden">
-                            <label for="logo_input" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm">
+                            <label for="logo_input" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white  py-2 px-4 rounded-md shadow-sm">
                                 {{ __('messages.choose') }}
                             </label>
                         </div>

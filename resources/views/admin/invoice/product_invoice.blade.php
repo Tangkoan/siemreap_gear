@@ -62,13 +62,13 @@
             <div class="grid grid-cols-2 gap-6 mt-6">
                 <div class="text-sm">
                     <h3 class="font-bold text-gray-700 mb-2">From:</h3>
-                    <p class="font-semibold">SR Gears</p>
+                    <p class="">SR Gears</p>
                     <p class="text-gray-600">#C02, St.Kompea Mother, MonduI I Village, Svay Dongkom Commune, SiemReap Town</p>
                     <p class="text-gray-600">Tel: 098 222 500 / 017 3000 31</p>
                 </div>
                 <div class="text-sm bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-bold text-gray-700 mb-2">To:</h3>
-                    <p class="font-semibold">{{ $customer->name }}</p>
+                    <p class="">{{ $customer->name }}</p>
                     <p class="text-gray-600">{{ $customer->address ?? 'N/A' }}</p>
                     <p class="text-gray-600">Phone: {{ $customer->phone }}</p>
                 </div>
@@ -93,7 +93,7 @@
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">{{ $item->name }}</th>
                                     <td class="px-4 py-3 text-right">{{ $item->qty }}</td>
                                     <td class="px-4 py-3 text-right">${{ number_format($item->price, 2) }}</td>
-                                    <td class="px-4 py-3 text-right font-semibold">${{ number_format($item->price * $item->qty, 2) }}</td>
+                                    <td class="px-4 py-3 text-right ">${{ number_format($item->price * $item->qty, 2) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

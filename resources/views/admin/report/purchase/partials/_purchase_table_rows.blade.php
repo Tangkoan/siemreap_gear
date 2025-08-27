@@ -16,7 +16,7 @@
         </td>
 
         <td class="px-6 py-4 text-center">
-            <button type="button" class="view-details-btn font-semibold text-cyan-600 dark:text-cyan-400" data-purchase-id="{{ $item->id }}">
+            <button type="button" class="view-details-btn  text-cyan-600 dark:text-cyan-400" data-purchase-id="{{ $item->id }}">
                 {{ __('messages.details') }}
             </button>
         </td>
