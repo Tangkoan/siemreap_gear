@@ -52,7 +52,7 @@
             @csrf
             <div class="mb-6">
                 <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
-                <input type="text" id="login" name="login"  placeholder="Please Enter your email" 
+                <input type="text" id="login" name="login"  placeholder="Enter username" 
                        class="@error('login') is-invalid @enderror
                        input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
                 @error('login')
@@ -63,7 +63,7 @@
             <div class="mb-6 relative">
                 <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
                 
-                <input type="password" id="password" name="password" placeholder="Please enter your password"
+                <input type="password" id="password" name="password" placeholder="Enter password"
                        class="@error('password') is-invalid @enderror
                              input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 pr-10">
                 @error('password')
