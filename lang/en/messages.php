@@ -469,6 +469,7 @@ return [
         'please_select_condition'=> 'Please Select Condition',
         // Validate
         'select_condition'=> 'Select Condition',
+        
        
 
 // ========================= Setting =========================s
@@ -482,7 +483,29 @@ return [
         'no_order' => 'No orders found',
         'total_order'=> 'Total Order',
         'close'=> 'Close',
-        ''=> '',
-        
+        'shop_name_kh'=> 'Shop Name (KH)',
+        'shop_name_en'=> 'Shop Name (EN)',
+        'terms_and_condition'=> 'Terms and Condition',
+        'logo'=> 'Logo',
+        'choose'=> 'Choose',
+        'total_pre_orders'=> 'TOTAL PRE-ORDERS',
 
+        'condition.all'=> 'condition.all',
+        'condition.add'=> 'condition.add',
+        'condition.edit'=> 'condition.edit',
+        'condition.delete'=> 'condition.delete',
+        'order.pending.pre.order'=> 'order.pending.pre.order',
+        'setting.menu'=> 'seting.menu',
+        'stock.menu'=> 'stock.menu',
+
+
+        'today_is_revenue'=> 'Today\'s Revenue',
+        'this_year_is_revenue'=>'This Year\'s Revenue',
+        'vs_yesterday'=>'vs yesterday',
+        'total_for'=>'Total for',
+        'all_time_completed'=>'All-time completed',
+        'sales_trend_last_30_days'=>'Sales Trend (Last 30 Days)',
+        'top5_best_selling_products'=>'Top 5 Best-Selling Products',
+        'monthly_sales_trend'=>'Monthly Sales Trend',
+        'order_distribution'=>'Order Distribution',
 ];

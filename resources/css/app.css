@@ -7,8 +7,8 @@
   /* ប្រកាស Font ថ្មីដែលយើងបានដាក់ក្នុង Folder public/fonts */
   @font-face {
     font-family: 'Khmer OS Siem Reap'; /* កំណត់ឈ្មោះ Font របស់យើង */
-    src: url('/fonts/KhmerOS_muollight.ttf') format('ttf'),
-         url('/fontsKhmerOS_siemreap.ttf') format('woff');
+    src: url('/fonts/fontsKhmerOS_siemreap.ttf') format('ttf'),
+         url('/fonts/KhmerOS_siemreap.ttf') format('ttf');
     font-weight: normal;
     font-style: normal;
     font-display: swap; /* ជួយឲ្យអក្សរឆាប់បង្ហាញ */

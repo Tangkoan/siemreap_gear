@@ -12,7 +12,7 @@ return [
     'loading_alerts' => 'កំពុងលោតសារ...',
 
     // Sidebar Menu Keys
-    'dashboard' => 'ផ្ទាំងគ្រប់គ្រង',
+    'dashboard' => 'ផ្ទាំងដើម',
     'category' => 'ប្រភេទផលិតផល',
     'product' => 'ផលិតផល',
     'customer' => 'អតិថិជន',
@@ -50,7 +50,7 @@ return [
         // Category Page
             'product_category' => 'បន្ថែមប្រភេទផលិតផល',
             'add_category' => 'បន្ថែមប្រភេទផលិតផល',
-            'search_for_category' => 'ស្វែងរកប្រភេទផលិតផល...',
+            'search_for_category' => 'ស្វែងរក...',
             'table_category_name' => 'ឈ្មោះប្រភេទផលិតផល',
             'table_category_slug' => 'ស្លាក (Slug)',
             // Add Category
@@ -156,7 +156,7 @@ return [
         'complete_purchase'=>'បញ្ជាក់ការបញ្ជារទិញ',
         // Create Purchase
         'all_category' => 'ប្រភេទនៃផលិតផលទាំងអស់',
-        'purchase_cart' => 'ផលិតផលដែលបំរុងទុកក្នុងការបញ្ជាទិញ',
+        'purchase_cart' => 'ផលិតផលបំរុងធ្វើទិញ',
         'total_payable'=> 'ប្រាក់ត្រូវបង់',
         'payment_method'=> 'បង់ប្រាក់តាមរយៈ',
         'pay_now'=> 'ចំនួនទឹកប្រាក់ដែលត្រូវបង់',
@@ -483,4 +483,29 @@ return [
         'no_order' => 'គ្មានទិន្នន័យលក់',
         'total_order'=>'សរុបការលក់',
         'close'=> 'បិទ',
+        'shop_name_kh'=> 'ឈ្មោះរបស់ហាងភាសាខ្មែរ',
+        'shop_name_en'=> 'ឈ្មោះរបស់ហាងជាភាសាអង់គ្លេស',
+        'terms_and_condition'=> 'លក្ខខណ្ឌ',
+        'logo'=> 'ផ្លាកយីហោ',
+        'choose'=> 'ជ្រើសរើស',
+        'total_pre_orders'=> 'សរុបការកម្មង់ទិញ',
+
+
+        'condition.all'=> 'លក្ខខណៈទាំងអស់',
+        'condition.add'=> 'បន្ថែមលក្ខខណៈ',
+        'condition.edit'=> 'កែប្រែលក្ខខណៈ',
+        'condition.delete'=> 'លុបលក្ខខណៈ',
+        'order.pending.pre.order'=> 'ការកម្មង់ទិញរបស់អតិថិជន',
+        'setting.menu'=> 'មុឺនុយការកំណត់',
+        'stock.menu'=> 'មុឺនុយស្ដុក',
+
+        'today_is_revenue'=> 'ប្រាក់ចំណូលថ្ងៃនេះ',
+        'this_year_is_revenue'=>'ប្រាក់ចំណូលឆ្នាំនេះ',
+        'vs_yesterday'=>'ធៀបនឹងម្សិលមិញ',
+        'total_for'=>'សរុបសម្រាប់',
+        'all_time_completed'=>'ការបញ្ជាទិញដែលសម្រេចតាំងពីដំដើមមក',
+        'sales_trend_last_30_days'=>'ការលក់ ៣០ថ្ងៃចុងក្រោយ',
+        'top5_best_selling_products'=>'ចំនួនផលិតផលទាំង5ដែលលក់ដាច់ជាងគេ',
+        'monthly_sales_trend'=>'ការលក់ក្នុងខែនីមួយៗក្នុងឆ្នាំ',
+        'order_distribution'=>'ការបញ្ជាទិញ',
 ];      

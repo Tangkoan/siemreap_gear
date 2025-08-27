@@ -12,8 +12,8 @@
         @endif
     </td>
     <td class="px-6 py-4 text-center">
-        <button type="button" class="view-details-btn font-semibold text-blue-600 dark:text-blue-400 hover:underline" data-order-id="{{ $item->id }}">
-            View
+        <button type="button" class="view-details-btn font-semibold text-blue-600 dark:text-blue-400 " data-order-id="{{ $item->id }}">
+            {{ __('messages.details') }}
         </button>
     </td>
 </tr>

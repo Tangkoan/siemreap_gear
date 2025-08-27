@@ -111,7 +111,8 @@
                     <img class="h-10 w-10 rounded-full object-cover border-2 border-transparent group-hover:border-blue-500 transition-colors" src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}" alt="User Profile">
                     <div class="font-medium text-left hidden lg:block">
                         <div class="text-sm text-slate-800 dark:text-slate-200 transition-colors">{{ $adminData->name }}</div>
-                        <div class="text-xs text-slate-500 dark:text-slate-400 transition-colors">Administrator</div>
+                        {{-- កែត្រង់នេះ --}}
+                        <div class="text-xs text-slate-500 dark:text-slate-400 transition-colors">{{ $adminData->roles->first()?->name }}</div>
                     </div>
                 </button>
                 <div x-show="open" x-transition class="absolute right-0 mt-2 w-56 rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">

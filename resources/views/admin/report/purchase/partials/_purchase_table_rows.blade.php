@@ -16,8 +16,8 @@
         </td>
 
         <td class="px-6 py-4 text-center">
-            <button type="button" class="view-details-btn font-semibold text-cyan-600 dark:text-cyan-400 hover:underline" data-purchase-id="{{ $item->id }}">
-                View
+            <button type="button" class="view-details-btn font-semibold text-cyan-600 dark:text-cyan-400" data-purchase-id="{{ $item->id }}">
+                {{ __('messages.details') }}
             </button>
         </td>
     </tr>

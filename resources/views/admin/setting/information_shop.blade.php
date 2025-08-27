@@ -26,43 +26,43 @@
 
                 {{-- Name (KH) --}}
                 <div>
-                    <label for="name_kh" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shop Name (KH)</label>
+                    <label for="name_kh" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.shop_name_kh') }}</label>
                     <input type="text" id="name_kh" name="name_kh" value="{{ $info->name_kh }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Name (EN) --}}
                 <div>
-                    <label for="name_en" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shop Name (EN)</label>
+                    <label for="name_en" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.shop_name_en') }}</label>
                     <input type="text" id="name_en" name="name_en" value="{{ $info->name_en }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Address --}}
                 <div>
-                    <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                    <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.address') }}</label>
                     <input type="text" id="address" name="address" value="{{ $info->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Phone --}}
                 <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.phone') }}</label>
                     <input type="text" id="phone" name="phone" value="{{ $info->phone }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Note --}}
                 <div>
-                    <label for="note" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Note</label>
+                    <label for="note" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.notes') }}</label>
                     <textarea id="note" name="note" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->note }}</textarea>
                 </div>
 
                 {{-- Terms and Condition --}}
                 <div>
-                        <label for="terms_and_condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Terms and Condition</label>
+                        <label for="terms_and_condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.terms_and_condition') }}</label>
                         <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
                     </div>
 
                 {{-- Shop Logo Upload --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shop Logo</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.logo') }}</label>
                     <div class="mt-2 flex items-center space-x-4">
                         <img class="h-24 w-24 rounded-lg object-cover border-2 border-gray-300" id="showLogo"
                              src="{{ (!empty($info->logo)) ? url('upload/shop_info/' . $info->logo) : url('upload/no_image.jpg') }}"
@@ -71,7 +71,7 @@
                         <div class="flex-grow">
                             <input type="file" name="logo" id="logo_input" class="hidden">
                             <label for="logo_input" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm">
-                                Choose File
+                                {{ __('messages.choose') }}
                             </label>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                 {{-- Submit Button --}}
                 <div class="flex justify-end pt-4">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md shadow-lg">
-                        Save Changes
+                        {{ __('messages.save') }}
                     </button>
                 </div>
             </form>

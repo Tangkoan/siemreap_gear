@@ -10,7 +10,7 @@
         {{-- បឋមកថា (Header) របស់ទំព័រ --}}
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white">{{ __('messages.dashboard') }}</h1>
                 {{-- <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">An overview of your business performance.</p> --}}
             </div>
             <div class="mt-4 sm:mt-0">
@@ -29,7 +29,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Today's Revenue</p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.today_is_revenue') }}</p>
                         <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($todays_revenue, 2) }}</p>
                     </div>
                     <div class="bg-indigo-100 dark:bg-indigo-900/50 p-3 rounded-full">
@@ -48,7 +48,7 @@
                             {{ number_format(abs($revenue_change), 1) }}%
                         </span>
                     @endif
-                    <span class="text-gray-500 dark:text-gray-400">vs yesterday</span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('messages.today_is_revenue') }}{{ __('messages.vs_yesterday') }}</span>
                 </div>
             </div>
             {{-- កាត៖ ចំណូលខែនេះ --}}
@@ -68,14 +68,14 @@
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Year's Revenue</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.this_year_is_revenue') }}</p>
                             <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_year_revenue, 2) }}</p>
                         </div>
                         <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
                             <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
                         </div>
                     </div>
-                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('Y') }}</p>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.total_for') }} {{ date('Y') }}</p>
                 </div>
             {{-- កាត៖ Total Paid --}}
              {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
@@ -107,14 +107,14 @@
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Complete Orders</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.complete_orders') }}</p>
                             <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">{{ number_format($complete_orders_count) }}</p>
                         </div>
                         <div class="bg-teal-100 dark:bg-teal-900/50 p-3 rounded-full">
                             <svg class="w-6 h-6 text-teal-600 dark:text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
                         </div>
                     </div>
-                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time completed</p>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.all_time_completed') }}</p>
                 </div>
         </div>
 
@@ -126,13 +126,13 @@
                 
                 {{-- តារាងក្រាហ្វិក៖ Sales Trend (30 Days) --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Sales Trend (Last 30 Days)</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
                     <div id="sales-line-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Monthly Sales Trend (This Year) --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Monthly Sales Trend ({{ $this_year_monthly_chart_data['year'] }})</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
                     <div id="this-year-monthly-sales-chart"></div>
                 </div>
 
@@ -186,13 +186,13 @@
                 
                 {{-- តារាងក្រាហ្វិក៖ Top 5 Best-Selling Products --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Top 5 Best-Selling Products</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
                     <div id="best-selling-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Order Distribution --}}
                 <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Order Distribution</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('messages.order_distribution') }}</h3>
                     <div id="order-status-doughnut-chart" class="flex justify-center"></div>
                 </div>
 
