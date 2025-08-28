@@ -54,30 +54,7 @@ class StockController extends Controller
                     $viewBtn = '';
                     
                     
-                    // ✅ Edit Button
                     
-                    
-                    // ✅ barcode Button
-                    if (Auth::user()->can('product.barcode')) {
-                        $barcodeBtn = '
-                        <button class="icon-edit dark:hover:text-blue-900  hover:text-blue-900  transition-colors duration-200  focus:outline-none">
-                            <a href="' . route('barcode.product', $item-> id) . '" >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5v14m3-14v14m4-14v14m4-14v14m3-14v14m3-14v14" />
-                                </svg>
-                            </a>
-                        </button>';
-                    } else {
-                        // Disabled Delete Button (grey)
-                        $barcodeBtn = '
-                        <button type="button" class=" text-gray-400 cursor-not-allowed" disabled title="No permission to delete">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5v14m3-14v14m4-14v14m4-14v14m3-14v14m3-14v14" />
-                                </svg>
-                        </button>';
-                    }
 
                     // ✅ View Button
                     if (Auth::user()->can('product.details')) {

@@ -47,7 +47,8 @@ return [
     'action'=>'Action',
 
     // Category page
-        'product_category' => 'Product Category',
+        'product_category' => 'Add Category',
+        'edit_product' => 'Edit Product',
         'add_category' => 'Add Category',
         'search_for_category' => 'Search for Category',
         'table_no' => 'N<sup>o</sup>',
