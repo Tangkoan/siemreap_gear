@@ -71,20 +71,20 @@ require __DIR__ . '/auth.php';
 // ចំណុចចាប់ផ្ដើមបន្ថែម web ថ្មី ដែលក្នុងLaravel គេតែងហៅថា Route បើនិយាយទៅប្រៀបដូច URL ផងដែរ ដោយសារយើងសរសេរវាជា (/) ដើម្បីជាផ្លូវពីកន្ឡែងនេះទៅកន្លែងថ្មី
 Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
 
-//Admin
-Route::middleware(['auth'])->group(callback: function () {
+    //Admin
+    Route::middleware(['auth'])->group(callback: function () {
 
-// =================== Stock =====================
- Route::get('/stock', [StockController::class, 'searchStock'])->name('search.stock');
- Route::get('/all/stock', [StockController::class, 'StockPage'])->name('all.stock')->middleware('permission:stock.menu');
- // Route::get('/stock', 'StockManage')->name('all.stock')->middleware('permission:stock.menu');
+    // =================== Stock =====================
+    Route::get('/stock', [StockController::class, 'searchStock'])->name('search.stock');
+    Route::get('/all/stock', [StockController::class, 'StockPage'])->name('all.stock')->middleware('permission:stock.menu');
+    // Route::get('/stock', 'StockManage')->name('all.stock')->middleware('permission:stock.menu');
 
     
-// ==================== Dashboard ==================== 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Route AJAX
-    Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
-// End
+    // ==================== Dashboard ==================== 
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        // Route AJAX
+        Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
+    // End
 
     Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.admin_profile_view');
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');

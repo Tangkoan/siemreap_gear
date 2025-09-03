@@ -107,47 +107,25 @@ class BackupController extends Controller
     //         return redirect()->back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
     //     }
     // }
+        public function backupNow()
+        {
+            try {
+                // បញ្ជូន​ការ Backup មូលដ្ឋាន​ទិន្នន័យ​ទៅ​គ្រប់​ទីតាំង​ដែល​បាន​កំណត់
+                Artisan::queue('backup:run', [
+                    '--only-db'               => true,
+                    '--disable-notifications' => true,
+                ]);
 
-
-    // កូដ backupNow ខាងក្រោមជា ការBackup ប៉ុន្ដែវាBackupដោយដៃហើយចូលទាំងLocal ចូលទាំងGoogle Drive
-
-        // public function backupNow()
-        // {
-        //     try {
-        //         // DB only + local only + បិទ notification
-        //         Artisan::queue('backup:run', [
-        //             '--only-db'       => true,
-        //             '--only-to-disk'  => 'backups',
-        //             '--disable-notifications' => true,
-        //         ]);
-
-        //         Log::info('Database backup job queued (DB-only → local).');
-        //         return back()->with('start_backup_check', true);
-        //     } catch (\Exception $e) {
-        //         Log::error('Failed to queue DB backup: '.$e->getMessage());
-        //         return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
-        //     }
-        // }
-
-
-    // ====================== Backup ដែលដើរតែ Local មិនទាក់ទងនឹង Google Drive =======================
-    public function backupNow()
-    {
-        try {
-            // ✅ Manual: DB only + LOCAL only
-            Artisan::queue('backup:run', [
-                '--only-db' => true,
-                '--only-to-disk' => 'backups',          // ⬅️ សំខាន់! local only
-                '--disable-notifications' => true,
-            ]);
-
-            \Log::info('Manual DB backup queued (local only).');
-            return back()->with('start_backup_check', true);
-        } catch (\Exception $e) {
-            \Log::error('Failed to queue DB backup: '.$e->getMessage());
-            return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+                Log::info('Database backup job queued to all configured disks.');
+                return back()->with('start_backup_check', true);
+            } catch (\Exception $e) {
+                Log::error('Failed to queue DB backup: '.$e->getMessage());
+                return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+            }
         }
-    }
+
+
+    
 
 
     public function getBackupStatus()
@@ -273,7 +251,7 @@ class BackupController extends Controller
     }
 
     /**
-     * ✅ [ថ្មី] Download ไฟล์ Project Backup
+     * ✅ [ថ្មី] Download  Project Backup
      */
     public function downloadProjectBackup($filename)
     {
@@ -284,7 +262,7 @@ class BackupController extends Controller
         abort(404, 'File not found.');
     }
     /**
-     * ✅ [ថ្មី] លុបไฟล์ Project Backup
+     * ✅ [ថ្មី] លុប Project Backup
      */
     public function deleteProjectBackup($filename)
     {

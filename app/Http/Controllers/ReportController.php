@@ -590,10 +590,7 @@ class ReportController extends Controller
         
         return response()->json($transactions);
     }
-    
-  
-    
-
+ 
 
     // Start Purchase Function
 

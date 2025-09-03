@@ -355,7 +355,7 @@ return [
             'keep_weekly_backups_for_weeks' => 0,
             'keep_monthly_backups_for_months' => 0,
             'keep_yearly_backups_for_years' => 0,
-            'delete_oldest_backups_when_using_more_megabytes_than' => 1,
+            'delete_oldest_backups_when_using_more_megabytes_than' => 12000,
         ],
 
         /*
