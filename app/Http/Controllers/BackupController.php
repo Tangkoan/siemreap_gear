@@ -96,30 +96,49 @@ class BackupController extends Controller
         return response()->json(['table' => $table, 'pagination' => $pagination]);
     }
 
-    // public function backupNow()
-    // {
-    //     try {
-    //         Artisan::queue('backup:run');
-    //         Log::info('Database backup job has been queued successfully.');
-    //         return redirect()->back()->with('start_backup_check', true);
-    //     } catch (\Exception $e) {
-    //         Log::error('Failed to queue the database backup job: ' . $e->getMessage());
-    //         return redirect()->back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
-    //     }
-    // }
-        public function backupNow()
+// ============ Fuction នេះសម្រាប់ Backup ដោយដៃគឺចូលតែ Local Drive ទេមិនចូល Google Dirve ឡើយ
+                                                                // public function backupNow()
+                                                                // {
+                                                                //     try {
+                                                                //         // បញ្ជូន​ការ Backup មូលដ្ឋាន​ទិន្នន័យ​ទៅ​គ្រប់​ទីតាំង​ដែល​បាន​កំណត់
+                                                                //         Artisan::queue('backup:run', [
+                                                                //             '--only-db'               => true,
+                                                                //             '--disable-notifications' => true,
+                                                                //         ]);
+
+                                                                //         Log::info('Database backup job queued to all configured disks.');
+                                                                //         return back()->with('start_backup_check', true);
+                                                                //     } catch (\Exception $e) {
+                                                                //         Log::error('Failed to queue DB backup: '.$e->getMessage());
+                                                                //         return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+                                                                //     }
+                                                                // }
+// ==================================== Function នេះគឺដំណើរការ Backup ដោយដៃប៉ុន្ដែគឺចូលទាំង Local Drive និង Google Drive ========================
+    public function backupNow()
         {
             try {
-                // បញ្ជូន​ការ Backup មូលដ្ឋាន​ទិន្នន័យ​ទៅ​គ្រប់​ទីតាំង​ដែល​បាន​កំណត់
-                Artisan::queue('backup:run', [
+                Artisan::call('backup:run', [
                     '--only-db'               => true,
                     '--disable-notifications' => true,
                 ]);
 
-                Log::info('Database backup job queued to all configured disks.');
+                // ស្វែងរកឯកសារ .zip ថ្មីបំផុតនៅលើ local
+                $diskLocal   = Storage::disk('backups');
+                $folderName  = str_replace(' ', '-', config('app.name'));
+                $files       = collect($diskLocal->files($folderName))
+                                ->filter(fn($f) => str_ends_with($f, '.zip'))
+                                ->sortByDesc(fn($f) => $diskLocal->lastModified($f));
+                $latest      = $files->first();
+
+                if ($latest) {
+                    $stream = $diskLocal->readStream($latest);
+                    Storage::disk('google')->put(basename($latest), $stream);
+                    if (is_resource($stream)) fclose($stream);
+                }
+
                 return back()->with('start_backup_check', true);
             } catch (\Exception $e) {
-                Log::error('Failed to queue DB backup: '.$e->getMessage());
+                Log::error('Failed to run+upload DB backup: '.$e->getMessage());
                 return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
             }
         }

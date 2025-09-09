@@ -315,11 +315,11 @@ class ReportController extends Controller
 
         $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
         $tableHtml = $this->renderStockTableRows($products, 'day');
-        $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+        // $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
         return response()->json([
             'table' => $tableHtml,
-            'pagination' => $paginationHtml,
+            // 'pagination' => $paginationHtml,
             'formattedDate' => Carbon::parse($date)->format('d F Y'),
             'totalStockIn' => (int)$totalStockIn,
             'totalStockOut' => (int)$totalStockOut,
@@ -391,11 +391,11 @@ class ReportController extends Controller
 
         $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
         $tableHtml = $this->renderStockTableRows($products, 'month');
-        $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+        // $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
         return response()->json([
             'table' => $tableHtml,
-            'pagination' => $paginationHtml,
+            // 'pagination' => $paginationHtml,
             'formattedDate' => $monthCarbon->format('F Y'),
             'totalStockIn' => (int)$totalStockIn,
             'totalStockOut' => (int)$totalStockOut,
@@ -468,11 +468,11 @@ class ReportController extends Controller
 
         $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
         $tableHtml = $this->renderStockTableRows($products, 'year');
-        $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
+        // $paginationHtml = ($perPage === 'all' || $products->isEmpty()) ? '' : $products->links()->toHtml();
 
         return response()->json([
             'table' => $tableHtml,
-            'pagination' => $paginationHtml,
+            // 'pagination' => $paginationHtml,
             'formattedDate' => $year,
             'totalStockIn' => (int)$totalStockIn,
             'totalStockOut' => (int)$totalStockOut,

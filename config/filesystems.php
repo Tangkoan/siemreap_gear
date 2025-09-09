@@ -46,20 +46,21 @@ return [
             'driver' => 'local', // កំណត់ driver ជា 'local'
             'root' => storage_path('app/backups'), //ទីតាំង 
         ],
-        // 'google' => [
-        //     'driver'        => 'google',
-        //     'clientId'      => env('GOOGLE_DRIVE_CLIENT_ID'),
-        //     'clientSecret'  => env('GOOGLE_DRIVE_CLIENT_SECRET'),
-        //     'refreshToken'  => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
-        //     'folderId'      => env('GOOGLE_DRIVE_FOLDER_ID'),
-        //     'cache'       => false, // <-- បន្ថែមកូដនេះដើម្បីបិទ Caching
-        // ],
-
         'google' => [
-            'driver' => 'google',
-            'folderId' => env('1y4Zl5UuRKA1vNKIcxXnowQzilfNzk2RK'), // ដាក់ Folder ID ដែលអ្នកបានចម្លង
-            'service_account_credentials_json' => storage_path('app/secrets/service-account.json'), // ទីតាំងរបស់ Key File
+            'driver'        => 'google',
+            'clientId'      => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret'  => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken'  => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId'      => env('GOOGLE_DRIVE_FOLDER_ID'),
+             'teamDriveId' => env('GOOGLE_DRIVE_TEAM_DRIVE_ID', null),
+            'cache'       => false, // <-- បន្ថែមកូដនេះដើម្បីបិទ Caching
         ],
+
+        // 'google' => [
+        //     'driver' => 'google',
+        //     'folderId' => env('1y4Zl5UuRKA1vNKIcxXnowQzilfNzk2RK'), // ដាក់ Folder ID ដែលអ្នកបានចម្លង
+        //     'service_account_credentials_json' => storage_path('app/secrets/service-account.json'), // ទីតាំងរបស់ Key File
+        // ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

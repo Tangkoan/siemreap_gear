@@ -29,6 +29,7 @@ use App\Http\Controllers\DashboardController;
 
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('language/{locale}', function ($locale) {
     app()->setLocale($locale);
