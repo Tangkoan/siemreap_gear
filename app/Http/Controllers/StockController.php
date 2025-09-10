@@ -9,6 +9,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
 use Illuminate\Support\Str;
 
+
+use App\Models\StockAdjustment; // បន្ថែមថ្មី
+use Illuminate\Support\Facades\DB; // បន្ថែមថ្មី
+
+use Exception; // បន្ថែមថ្មី
+
 class StockController extends Controller
 {
     //
@@ -52,6 +58,28 @@ class StockController extends Controller
                     $deleteBtn = '';
                     $barcodeBtn = '';
                     $viewBtn = '';
+                    $adjustStockBtn = ''; // បង្កើតตัวแปรใหม่
+
+                    // ✅ Adjust Stock Button
+                    if (Auth::user()->can('stock.manage')) { // អ្នកអាចបង្កើត Permission ថ្មី
+                        $adjustStockBtn = '
+                        <button type="button"
+                            class="open-modal-btn icon-adjust dark:hover:text-blue-500 hover:text-blue-700 transition-colors duration-200 focus:outline-none"
+                            data-product-id="' . $item->id . '"
+                            data-product-name="' . htmlspecialchars($item->product_name, ENT_QUOTES) . '"
+                            title="Adjust Stock">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-6-6h12" />
+                            </svg>
+                        </button>';
+                    } else {
+                        $adjustStockBtn = '
+                        <button type="button" class="text-gray-400 cursor-not-allowed" disabled title="No permission">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-6-6h12" />
+                            </svg>
+                        </button>';
+                    }
                     
                     
                     
@@ -173,7 +201,7 @@ class StockController extends Controller
                       
                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                             <div class="flex items-center gap-x-6">
-                                ' . $editBtn . $barcodeBtn . $viewBtn . $deleteBtn . '
+                                ' . $adjustStockBtn . $editBtn . $barcodeBtn . $viewBtn . $deleteBtn . '
                             </div>
                         </td>
                     </tr>';
@@ -186,5 +214,69 @@ class StockController extends Controller
                     'pagination' => $pagination
                 ]);
     }
+
+    public function adjustStock(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'type' => 'required|in:sale_return,purchase_return,clear_stock',
+        'quantity' => 'required|integer|min:1',
+        'notes' => 'required|string|max:255',
+    ]);
+
+    try {
+        DB::transaction(function () use ($request) {
+            $product = Product::findOrFail($request->product_id);
+            $before_quantity = $product->product_store;
+            $quantity = (int)$request->quantity;
+
+            switch ($request->type) {
+                case 'sale_return':
+                    // អតិថិជន επιστρέφειទំនិញ -> បូកស្តុកเข้า (+)
+                    $product->product_store += $quantity;
+                    break;
+                case 'purchase_return':
+                    // យើង επιστρέφειទំនិញទៅអ្នកផ្គត់ផ្គង់ -> ដកស្តុកออก (-)
+                    if ($product->product_store < $quantity) {
+                        throw new Exception('Cannot return more than available stock.');
+                    }
+                    $product->product_store -= $quantity;
+                    break;
+                case 'clear_stock':
+                    // ទំនិញខូច -> ដកស្តុកออก (-)
+                    if ($product->product_store < $quantity) {
+                        throw new Exception('Cannot clear more than available stock.');
+                    }
+                    $product->product_store -= $quantity;
+                    break;
+            }
+
+            $product->save(); // រក្សាទុកจำนวนស្តុកថ្មី
+
+            // បង្កើតประวัติการកែតម្រូវ
+            StockAdjustment::create([
+                'product_id' => $product->id,
+                'user_id' => Auth::id(),
+                'type' => $request->type,
+                'quantity' => $quantity,
+                'before_quantity' => $before_quantity,
+                'after_quantity' => $product->product_store,
+                'notes' => $request->notes,
+            ]);
+        });
+    } catch (Exception $e) {
+        $notification = [
+            'message' => 'Error: ' . $e->getMessage(),
+            'alert-type' => 'error'
+        ];
+        return redirect()->back()->with($notification);
+    }
+
+    $notification = [
+        'message' => 'Stock adjusted successfully!',
+        'alert-type' => 'success'
+    ];
+    return redirect()->back()->with($notification);
+}
     
 }
