@@ -3,8 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Product;
-use App\Models\purchase_details;
-use App\Models\OrderDetails;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -22,38 +21,36 @@ class StockByMonthExport implements FromCollection, WithHeadings, WithMapping, S
         $this->search = $search;
     }
 
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     public function collection()
     {
-        $monthCarbon = Carbon::parse($this->month);
-        $startDate = $monthCarbon->copy()->startOfMonth();
-        $endDate = $monthCarbon->copy()->endOfMonth();
-        
-        // ប្រើ Query ដូចគ្នានឹង Controller ដើម្បីធានាថាទិន្នន័យដូចគ្នា
+        $startDate = Carbon::parse($this->month)->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::parse($this->month)->endOfMonth()->format('Y-m-d');
+
+        // Copy same logic as Day export but change date filters to BETWEEN startDate & endDate
         $query = Product::query()
-            ->select('id', 'product_name', 'product_code')
+            ->select('id','product_name','product_code')
             ->addSelect([
-                'stock_in' => purchase_details::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-                    ->whereColumn('purchase_details.product_id', 'products.id')->whereBetween('purchases.purchase_date', [$startDate, $endDate])->where('purchases.purchase_status', 'complete'),
-                'stock_out' => OrderDetails::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-                    ->whereColumn('orderdetails.product_id', 'products.id')->whereBetween('orders.order_date', [$startDate, $endDate])->where('orders.order_status', 'complete'),
-                'total_purchased_before' => purchase_details::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-                    ->whereColumn('purchase_details.product_id', 'products.id')->where('purchases.purchase_date', '<', $startDate)->where('purchases.purchase_status', 'complete'),
-                'total_sold_before' => OrderDetails::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-                    ->whereColumn('orderdetails.product_id', 'products.id')->where('orders.order_date', '<', $startDate)->where('orders.order_status', 'complete'),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM purchase_details INNER JOIN purchases ON purchases.id = purchase_details.purchase_id WHERE purchase_details.product_id=products.id AND DATE(purchases.purchase_date) BETWEEN '{$startDate}' AND '{$endDate}' AND purchases.purchase_status='complete') as purchase_in"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id=products.id AND type='sale_return' AND DATE(created_at) BETWEEN '{$startDate}' AND '{$endDate}') as sale_return_in"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM orderdetails INNER JOIN orders ON orders.id = orderdetails.order_id WHERE orderdetails.product_id=products.id AND DATE(orders.order_date) BETWEEN '{$startDate}' AND '{$endDate}' AND orders.order_status='complete') as sale_out"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id=products.id AND type='purchase_return' AND DATE(created_at) BETWEEN '{$startDate}' AND '{$endDate}') as purchase_return_out"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id=products.id AND type='clear_stock' AND DATE(created_at) BETWEEN '{$startDate}' AND '{$endDate}') as clear_stock_out"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM purchase_details INNER JOIN purchases ON purchases.id = purchase_details.purchase_id WHERE purchase_details.product_id=products.id AND DATE(purchases.purchase_date)< '{$startDate}' AND purchases.purchase_status='complete') as total_purchased_before"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM orderdetails INNER JOIN orders ON orders.id = orderdetails.order_id WHERE orderdetails.product_id=products.id AND DATE(orders.order_date)< '{$startDate}' AND orders.order_status='complete') as total_sold_before"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id=products.id AND type='sale_return' AND DATE(created_at)< '{$startDate}') as total_sale_return_before"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id=products.id AND type='purchase_return' AND DATE(created_at)< '{$startDate}') as total_purchase_return_before"),
+                DB::raw("(SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id=products.id AND type='clear_stock' AND DATE(created_at)< '{$startDate}') as total_clear_stock_before"),
             ])
-            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (total_purchased_before - total_sold_before) > 0');
+            ->havingRaw('
+                (purchase_in + sale_return_in) > 0
+                OR (sale_out + purchase_return_out + clear_stock_out) > 0
+                OR ((total_purchased_before + total_sale_return_before) - (total_sold_before + total_purchase_return_before + total_clear_stock_before)) <> 0
+            ');
 
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('product_name', 'like', "%{$this->search}%")
-                  ->orWhere('product_code', 'like', "%{$this->search}%");
+            $query->where(function($q){
+                $q->where('product_name','like',"%{$this->search}%")
+                  ->orWhere('product_code','like',"%{$this->search}%");
             });
         }
 
@@ -66,27 +63,35 @@ class StockByMonthExport implements FromCollection, WithHeadings, WithMapping, S
             'Product Code',
             'Product Name',
             'Opening Stock',
-            'Stock In',
-            'Stock Out',
+            'Purchase In',
+            'Sale Return In',
+            'Total In',
+            'Sale Out',
+            'Purchase Return Out',
+            'Clear Stock Out',
+            'Total Out',
             'Closing Stock',
         ];
     }
 
     public function map($product): array
     {
-        // $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
-        $openingStock = (int)$product->total_purchased_before;
-
-        $stockIn = (int)$product->stock_in;
-        $stockOut = (int)$product->stock_out;
-        $closingStock = $openingStock + $stockIn - $stockOut;
+        $openingStock = (int)$product->total_purchased_before + (int)$product->total_sale_return_before - (int)$product->total_sold_before - (int)$product->total_purchase_return_before - (int)$product->total_clear_stock_before;
+        $totalIn = (int)$product->purchase_in + (int)$product->sale_return_in;
+        $totalOut = (int)$product->sale_out + (int)$product->purchase_return_out + (int)$product->clear_stock_out;
+        $closingStock = $openingStock + $totalIn - $totalOut;
 
         return [
             $product->product_code,
             $product->product_name,
             $openingStock,
-            $stockIn,
-            $stockOut,
+            (int)$product->purchase_in,
+            (int)$product->sale_return_in,
+            $totalIn,
+            (int)$product->sale_out,
+            (int)$product->purchase_return_out,
+            (int)$product->clear_stock_out,
+            $totalOut,
             $closingStock,
         ];
     }

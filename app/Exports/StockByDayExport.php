@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Models\Product;
 use App\Models\purchase_details;
 use App\Models\OrderDetails;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -22,73 +23,171 @@ class StockByDayExport implements FromCollection, WithHeadings, WithMapping, Sho
         $this->search = $search;
     }
 
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     public function collection()
     {
-        // ប្រើ Query ដូចគ្នានឹង Controller ដើម្បីធានាថាទិន្នន័យដូចគ្នា
+        $dateString = $this->date->format('Y-m-d');
+
         $query = Product::query()
-            ->select('id', 'product_name', 'product_code')
-            ->addSelect([
-                'stock_in' => purchase_details::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-                    ->whereColumn('purchase_details.product_id', 'products.id')->whereDate('purchases.purchase_date', $this->date)->where('purchases.purchase_status', 'complete'),
-                'stock_out' => OrderDetails::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-                    ->whereColumn('orderdetails.product_id', 'products.id')->whereDate('orders.order_date', $this->date)->where('orders.order_status', 'complete'),
-                'total_purchased_before' => purchase_details::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-                    ->whereColumn('purchase_details.product_id', 'products.id')->where('purchases.purchase_date', '<', $this->date)->where('purchases.purchase_status', 'complete'),
-                'total_sold_before' => OrderDetails::query()
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-                    ->whereColumn('orderdetails.product_id', 'products.id')->where('orders.order_date', '<', $this->date)->where('orders.order_status', 'complete'),
-            ])
-            ->havingRaw('stock_in > 0 OR stock_out > 0');
+    ->select('id', 'product_name', 'product_code')
+    ->addSelect([
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM purchase_details
+            INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
+            WHERE purchase_details.product_id = products.id
+              AND DATE(purchases.purchase_date) = '{$dateString}'
+              AND purchases.purchase_status = 'complete'
+        ) as purchase_in"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM stock_adjustments
+            WHERE product_id = products.id
+              AND type = 'sale_return'
+              AND DATE(created_at) = '{$dateString}'
+        ) as sale_return_in"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM orderdetails
+            INNER JOIN orders ON orders.id = orderdetails.order_id
+            WHERE orderdetails.product_id = products.id
+              AND DATE(orders.order_date) = '{$dateString}'
+              AND orders.order_status = 'complete'
+        ) as sale_out"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM stock_adjustments
+            WHERE product_id = products.id
+              AND type = 'purchase_return'
+              AND DATE(created_at) = '{$dateString}'
+        ) as purchase_return_out"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM stock_adjustments
+            WHERE product_id = products.id
+              AND type = 'clear_stock'
+              AND DATE(created_at) = '{$dateString}'
+        ) as clear_stock_out"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM purchase_details
+            INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
+            WHERE purchase_details.product_id = products.id
+              AND DATE(purchases.purchase_date) < '{$dateString}'
+              AND purchases.purchase_status = 'complete'
+        ) as total_purchased_before"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM orderdetails
+            INNER JOIN orders ON orders.id = orderdetails.order_id
+            WHERE orderdetails.product_id = products.id
+              AND DATE(orders.order_date) < '{$dateString}'
+              AND orders.order_status = 'complete'
+        ) as total_sold_before"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM stock_adjustments
+            WHERE product_id = products.id
+              AND type = 'sale_return'
+              AND DATE(created_at) < '{$dateString}'
+        ) as total_sale_return_before"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM stock_adjustments
+            WHERE product_id = products.id
+              AND type = 'purchase_return'
+              AND DATE(created_at) < '{$dateString}'
+        ) as total_purchase_return_before"),
+        DB::raw("(
+            SELECT COALESCE(SUM(quantity),0)
+            FROM stock_adjustments
+            WHERE product_id = products.id
+              AND type = 'clear_stock'
+              AND DATE(created_at) < '{$dateString}'
+        ) as total_clear_stock_before"),
+    ])
+    // ប្រើ full expressions នៅក្នុង havingRaw មិន rely លើ alias
+    ->havingRaw('
+        (
+            (SELECT COALESCE(SUM(quantity),0) FROM purchase_details INNER JOIN purchases ON purchases.id = purchase_details.purchase_id WHERE purchase_details.product_id = products.id AND DATE(purchases.purchase_date) = "'.$dateString.'" AND purchases.purchase_status = "complete")
+            +
+            (SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id = products.id AND type = "sale_return" AND DATE(created_at) = "'.$dateString.'")
+        ) > 0
+        OR
+        (
+            (SELECT COALESCE(SUM(quantity),0) FROM orderdetails INNER JOIN orders ON orders.id = orderdetails.order_id WHERE orderdetails.product_id = products.id AND DATE(orders.order_date) = "'.$dateString.'" AND orders.order_status = "complete")
+            +
+            (SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id = products.id AND type IN ("purchase_return","clear_stock") AND DATE(created_at) = "'.$dateString.'")
+        ) > 0
+        OR
+        (
+            (
+                (SELECT COALESCE(SUM(quantity),0) FROM purchase_details INNER JOIN purchases ON purchases.id = purchase_details.purchase_id WHERE purchase_details.product_id = products.id AND DATE(purchases.purchase_date) < "'.$dateString.'" AND purchases.purchase_status = "complete")
+                +
+                (SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id = products.id AND type = "sale_return" AND DATE(created_at) < "'.$dateString.'")
+            )
+            -
+            (
+                (SELECT COALESCE(SUM(quantity),0) FROM orderdetails INNER JOIN orders ON orders.id = orderdetails.order_id WHERE orderdetails.product_id = products.id AND DATE(orders.order_date) < "'.$dateString.'" AND orders.order_status = "complete")
+                +
+                (SELECT COALESCE(SUM(quantity),0) FROM stock_adjustments WHERE product_id = products.id AND type IN ("purchase_return","clear_stock") AND DATE(created_at) < "'.$dateString.'")
+            )
+        ) <> 0
+    ');
 
-        if ($this->search) {
-            $query->where(function($q) {
-                $q->where('product_name', 'like', "%{$this->search}%")
-                  ->orWhere('product_code', 'like', "%{$this->search}%");
-            });
-        }
+if ($this->search) {
+    $query->where(function($q) {
+        $q->where('product_name', 'like', "%{$this->search}%")
+          ->orWhere('product_code', 'like', "%{$this->search}%");
+    });
+}
 
-        return $query->get();
+return $query->get();
+
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return [
             'Product Code',
             'Product Name',
             'Opening Stock',
-            'Stock In',
-            'Stock Out',
+            'Purchase In',
+            'Sale Return In',
+            'Total In',
+            'Sale Out',
+            'Purchase Return Out',
+            'Clear Stock Out',
+            'Total Out',
             'Closing Stock',
         ];
     }
 
-    /**
-     * @param mixed $product
-     * @return array
-     */
     public function map($product): array
     {
-        // $openingStock = (int)$product->total_purchased_before - (int)$product->total_sold_before;
-        $openingStock = (int)$product->total_purchased_before;
-        $stockIn = (int)$product->stock_in;
-        $stockOut = (int)$product->stock_out;
-        $closingStock = $openingStock + $stockIn - $stockOut;
+        $openingStock = (int)$product->total_purchased_before + (int)$product->total_sale_return_before - (int)$product->total_sold_before - (int)$product->total_purchase_return_before - (int)$product->total_clear_stock_before;
+
+        $stockIn = (int)$product->purchase_in;
+        $saleReturnIn = (int)$product->sale_return_in;
+        $totalIn = $stockIn + $saleReturnIn;
+
+        $saleOut = (int)$product->sale_out;
+        $purchaseReturnOut = (int)$product->purchase_return_out;
+        $clearStockOut = (int)$product->clear_stock_out;
+        $totalOut = $saleOut + $purchaseReturnOut + $clearStockOut;
+
+        $closingStock = $openingStock + $totalIn - $totalOut;
 
         return [
             $product->product_code,
             $product->product_name,
             $openingStock,
             $stockIn,
-            $stockOut,
+            $saleReturnIn,
+            $totalIn,
+            $saleOut,
+            $purchaseReturnOut,
+            $clearStockOut,
+            $totalOut,
             $closingStock,
         ];
     }

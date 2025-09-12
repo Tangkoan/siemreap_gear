@@ -126,7 +126,7 @@ $(document).ready(function() {
         $.ajax({
             url: `{{ route('report.stock.by_day') }}?page=${page}`,
             type: 'GET',
-            data: { date: date, search: search, perPage: 15 },
+            data: { date: date, search: search, perPage: 100 },
             success: function(response) {
                 $('#report-table-body-day').html(response.table);
                 $('#pagination-links-day').html(response.pagination);
@@ -152,7 +152,7 @@ $(document).ready(function() {
         $.ajax({
             url: `{{ route('report.stock.by_month') }}?page=${page}`,
             type: 'GET',
-            data: { month: month, search: search, perPage: 15 },
+            data: { month: month, search: search, perPage: 100 },
             success: function(response) {
                 $('#report-table-body-month').html(response.table);
                 $('#pagination-links-month').html(response.pagination);
@@ -178,7 +178,7 @@ $(document).ready(function() {
         $.ajax({
             url: `{{ route('report.stock.by_year') }}?page=${page}`,
             type: 'GET',
-            data: { year: year, search: search, perPage: 15 },
+            data: { year: year, search: search, perPage: 100 },
             success: function(response) {
                 $('#report-table-body-year').html(response.table);
                 $('#pagination-links-year').html(response.pagination);
@@ -299,7 +299,7 @@ $(document).ready(function() {
         $('#modal-table-body').html('<tr><td colspan="4" class="text-center p-4 text-gray-500 dark:text-gray-400">Loading details...</td></tr>');
         
         const modal = $('#detailsModal');
-        modal.removeClass('hidden').css({opacity: 0});
+        modal.removeClass('hidden').css({opacity: 0, scrollTop:0});
         setTimeout(() => {
             modal.css({opacity: 1});
             modal.find('> div').removeClass('scale-95').addClass('scale-100');
