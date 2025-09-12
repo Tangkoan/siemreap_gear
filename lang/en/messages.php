@@ -372,6 +372,12 @@ return [
         'avg_purchase_value'=>'Avg. Purchase Value',
 
         // Stock Report
+        
+         'a_t'=>'Adjustment Type',
+         'quantity'=> 'Quantity',
+         'notes_reason'=> 'Notes (Reason)',
+         
+
         'stock_movement_report'=>'Stock Movement Report',
         'stock_movement_for'=>'Stock Movement for',
         'total_stock_in'=>'Total Stock In',

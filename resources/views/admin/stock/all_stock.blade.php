@@ -154,7 +154,7 @@
                         </h3>
                         <div class="mt-4 space-y-4">
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Adjustment Type</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.a_t') }}</label>
                                 <select id="type" name="type" required class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <option value="sale_return">Sale Return (+)</option>
                                     <option value="purchase_return">Purchase Return (-)</option>
@@ -162,21 +162,21 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+                                <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.quantity') }}</label>
                                 <input type="number" name="quantity" id="quantity" required min="1" class="block w-full px-3 py-2 mt-1 border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
                             <div>
-                                <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Notes (Reason)</label>
+                                <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.notes_reason') }}</label>
                                 <textarea id="notes" name="notes" rows="3" required class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                        <button type="submit" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
-                            Save Adjustment
+                    <div class="flex mt-4 justify-end">
+                        <button type="submit" class="my-5 mx-5 w-full py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-reds-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm">
+                            <span>{{ __('messages.save') }}</span>
                         </button>
-                        <button type="button" id="closeModalBtn" class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-600 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none sm:mt-0 sm:col-start-1 sm:text-sm">
-                            Cancel
+                        <button type="button" id="closeModalBtn" class="my-5 mx-5 w-full  py-2 mt-3 text-base font-medium text-gray-700 bg-white border dark:bg-gray-700 border-gray-300 dark:border-gray-700 rounded-md shadow-sm  dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-500 focus:outline-none sm:mt-0 sm:col-start-1 sm:text-sm">
+                            <span>{{ __('messages.cancel') }}</span>
                         </button>
                     </div>
                 </form>
