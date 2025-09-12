@@ -199,16 +199,16 @@ class PurchaseController extends Controller
         foreach ($purchases as $key => $item) {
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-4 py-5">' . ($key + 1) . '</td>
-                <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
-                <td class="p-4 py-5">' . $item->purchase_date  . '</td>
-                <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                <td class="p-4 py-5">' . $item->invoice_no  . '</td>
-                <td class="p-4 py-5">' . $item->pay  . '</td>
-                <td class="p-4 py-5 text-center align-middle">
+                <td class="p-2">' . ($key + 1) . '</td>
+                <td class="p-2">' . $item['supplier']['name'] . '</td>
+                <td class="p-2">' . $item->purchase_date  . '</td>
+                <td class="p-2">' . $item->payment_status  . '</td>
+                <td class="p-2">' . $item->invoice_no  . '</td>
+                <td class="p-2">' . $item->pay  . '</td>
+                <td class="p-2 text-center align-middle">
                     <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white   shadow-sm">' . $item->purchase_status  . '</span>
                 </td>
-                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                <td class="px-2 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                         <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
                             <a href="' . route('purchase.view.details', $item->id) . '" >
@@ -243,21 +243,21 @@ class PurchaseController extends Controller
         foreach ($purchases as $key => $item) {
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-4 py-5">' . ($key + 1) . '</td>
-                <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
-                <td class="p-4 py-5">' . $item->invoice_no. '</td>
-                <td class="p-4 py-5">' . $item->purchase_date  . '</td>
-                <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                <td class="p-4 py-5">
+                <td class="p-2">' . ($key + 1) . '</td>
+                <td class="p-2">' . $item['supplier']['name'] . '</td>
+                <td class="p-2">' . $item->invoice_no. '</td>
+                <td class="p-2">' . $item->purchase_date  . '</td>
+                <td class="p-2">' . $item->payment_status  . '</td>
+                <td class="p-2">
                     <span class="inline-block px-3 py-1 rounded-md bg-gray-500 text-white  shadow-sm">' . $item->total . ' $</span>
                 </td>
-                <td class="p-4 py-5 ">
+                <td class="p-2 ">
                     <span class="inline-block px-3 py-1 rounded-md bg-red-500 text-white  shadow-sm">' . $item->pay . ' $</span>
                 </td>
-                <td class="p-4 py-5 text-center align-middle">
+                <td class="p-2 text-center align-middle">
                     <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  shadow-sm">' . $item->due . ' $</span>
                 </td>
-                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                <td class="px-2 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                         <button type="button" class="icon-detail dark:hover:text-green-900  hover:text-green-900 text-gray-500 transition-colors duration-200   focus:outline-none">
                             <a href="' . route('purchase.view.details', $item->id) . '" >

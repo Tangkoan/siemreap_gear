@@ -147,11 +147,11 @@ class RoleController extends Controller
         foreach ($permissions as $key => $item) {
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-4 py-5">' . ($key + 1) . '</td>
+                <td class="p-2">' . ($key + 1) . '</td>
                 
                 
-                <td class="p-4 py-5">' . $item->name . '</td>
-                <td class="p-4 py-5">' . $item->group_name . '</td>
+                <td class="p-2">' . $item->name . '</td>
+                <td class="p-2">' . $item->group_name . '</td>
                 
                 
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
@@ -324,12 +324,12 @@ class RoleController extends Controller
         foreach ($roles as $key => $item) {
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-4 py-5">' . ($key + 1) . '</td>
+                <td class="p-2">' . ($key + 1) . '</td>
                 
                 
-                <td class="p-4 py-5">' . $item->name . '</td>
+                <td class="p-2">' . $item->name . '</td>
                 
-                <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
+                <td class="p-2">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
                 
                 
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
@@ -470,8 +470,8 @@ class RoleController extends Controller
             }
 
             $table .= '<tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">'
-                . '<td class="dark:text-white p-4 py-5  text-sm text-slate-800">' . ($key + 1) . '</td>'
-                . '<td class="dark:text-white  p-4 py-5 text-sm text-black">' . $item->name . '</td>'
+                . '<td class="dark:text-white p-2  text-sm text-slate-800">' . ($key + 1) . '</td>'
+                . '<td class="dark:text-white  p-2 text-sm text-black">' . $item->name . '</td>'
                 . '<td  class=" text-sm">' . $permissionTags . '</td>'
                 . '<td class="dark:text-white  px-4 py-4 text-sm whitespace-nowrap">'
                 . '<div class="flex items-center gap-x-6">'

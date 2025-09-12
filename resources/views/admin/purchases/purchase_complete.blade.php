@@ -117,7 +117,7 @@
                                                 {{ __(key: 'messages.pay') }}
                                             </p>
                                         </th>
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="sticky px top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {{ __(key: 'messages.status') }}
                                             </p>

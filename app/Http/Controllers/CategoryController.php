@@ -217,10 +217,10 @@ class CategoryController extends Controller
         
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-4 py-5">' . ($key + 1) . '</td>
-                <td class="p-4 py-5">' . $item->category_name . '</td>
-                <td class="p-4 py-5">' .( $item->category_slug ?? "null") . '</td>
-                <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
+                <td class="p-2">' . ($key + 1) . '</td>
+                <td class="p-2">' . $item->category_name . '</td>
+                <td class="p-2">' .( $item->category_slug ?? "null") . '</td>
+                <td class="p-2">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                         ' . $editBtn . $deleteBtn . '

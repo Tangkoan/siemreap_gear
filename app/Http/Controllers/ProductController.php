@@ -476,20 +476,20 @@ class ProductController extends Controller
 
                     $table .= '
                     <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                        <td class="p-4 py-5">' . ($key + 1) . '</td>
+                        <td class="p-2">' . ($key + 1) . '</td>
                         
-                        <td class="p-4 py-5">
+                        <td class="p-2">
                             <img src="' . asset($item->product_image ? $item->product_image : 'upload/no_image.jpg') . '" alt="Product Image" class="rounded-md" style="width: 40px; height: 40px; object-fit: cover; object-position: center;" />
                         </td>
 
-                        <td class="p-4 py-5">' . $item->product_code . '</td>
-                       <td class="p-4 py-5">' . Str::limit($item->product_name, 13) . '</td>
-                        <td class="p-4 py-5">' . $item['category']['category_name'] . '</td>
-                        <td class="p-4 py-5">' . $item['condition']['condition_name'] . '</td>
-                        <td class="p-4 py-5">' . $item->selling_price.'$'  . '</td>
-                        <td class="p-4 py-5">' . $item['supplier']['name'] . '</td>
+                        <td class="p-2">' . $item->product_code . '</td>
+                       <td class="p-2">' . Str::limit($item->product_name, 13) . '</td>
+                        <td class="p-2">' . $item['category']['category_name'] . '</td>
+                        <td class="p-2">' . $item['condition']['condition_name'] . '</td>
+                        <td class="p-2">' . $item->selling_price.'$'  . '</td>
+                        <td class="p-2">' . $item['supplier']['name'] . '</td>
                         
-                        <td class="p-4 py-5 text-center align-middle">
+                        <td class="p-2 text-center align-middle">
                             <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  shadow-sm
                                         ">
                                 '. $item->product_store  .'
@@ -498,7 +498,7 @@ class ProductController extends Controller
                         
                         </td>
 
-                        <td class="p-4 py-5">' . $statusDisplay . '</td>
+                        <td class="p-2">' . $statusDisplay . '</td>
                         
 
                       

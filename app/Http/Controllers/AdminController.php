@@ -181,20 +181,20 @@ class AdminController extends Controller
            
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-        <td class="p-4 py-5">' . ($key + 1) . '</td>
+        <td class="p-2">' . ($key + 1) . '</td>
         
-        <td class="p-4 py-5">
+        <td class="p-2">
             <img src="' . (!empty($item->photo) ? asset('upload/admin_image/' . $item->photo) : asset('upload/no_image.jpg')) . '" 
                  alt="Admin photo" 
                  class="rounded-md" 
-                 style="width: 64px; height: 64px; object-fit: cover; object-position: center;" />
+                 style="width: 46px; height: 46px; object-fit: cover; object-position: center;" />
         </td>
     
-        <td class="p-4 py-5">' . $item->name . '</td>
-        <td class="p-4 py-5">' . ($item->email ?? 'null') . '</td>
-        <td class="p-4 py-5">' . ($item->phone ?? 'null') . '</td> 
+        <td class="p-2">' . $item->name . '</td>
+        <td class="p-2">' . ($item->email ?? 'null') . '</td>
+        <td class="p-2">' . ($item->phone ?? 'null') . '</td> 
         
-       <td class="p-4 py-5 text-sm text-black dark:text-white ">' . implode(', ', $item->getRoleNames()->toArray()) . '</td>
+       <td class="p-2 text-sm text-black dark:text-white ">' . implode(', ', $item->getRoleNames()->toArray()) . '</td>
 
 
         

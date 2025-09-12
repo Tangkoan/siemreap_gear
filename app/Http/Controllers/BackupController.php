@@ -70,10 +70,10 @@ class BackupController extends Controller
 
                 $table .= '
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                        <td class="p-4 py-5  text-sm text-slate-800 dark:text-gray-200">' . ($startIndex + $key + 1) . '</td>
-                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $filename . '</td>
-                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $size . '</td>
-                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $path . '</td>
+                        <td class="p-2  text-sm text-slate-800 dark:text-gray-200">' . ($startIndex + $key + 1) . '</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $filename . '</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $size . '</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $path . '</td>
                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                             <div class="flex items-center gap-x-2">
                                 <a href="' . $downloadUrl . '" class="icon-download inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Download">
@@ -253,10 +253,10 @@ class BackupController extends Controller
 
                 $table .= '
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                        <td class="p-4 py-5  text-sm text-slate-800 dark:text-gray-200">' . ($key + 1) . '</td>
-                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $filename . '</td>
-                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $size . '</td>
-                        <td class="p-4 py-5 text-sm text-black dark:text-gray-200">' . $path . '</td>
+                        <td class="p-2  text-sm text-slate-800 dark:text-gray-200">' . ($key + 1) . '</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $filename . '</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $size . '</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $path . '</td>
                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                             <div class="flex items-center gap-x-2">
                                 <a href="' . $downloadUrl . '" class="icon-download inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Download"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg></a>

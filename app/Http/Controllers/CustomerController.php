@@ -229,12 +229,12 @@ class CustomerController extends Controller
 
         $table .= '
         <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-            <td class="p-4 py-5">' . ($key + 1) . '</td>
-            <td class="p-4 py-5">' . $item->name . '</td>
-            <td class="p-4 py-5"> '  . ($item->phone ?? 'null') . '</td>
-            <td class="p-4 py-5"> '  . ($item->notes ?? 'null') . '</td>
-            <td class="p-4 py-5"> '  . ($item->address ?? 'null') . '</td>
-            <td class="p-4 py-5">' . date('d/m/Y', strtotime($item->created_at) ?? 'null') . '</td>
+            <td class="p-2">' . ($key + 1) . '</td>
+            <td class="p-2">' . $item->name . '</td>
+            <td class="p-2"> '  . ($item->phone ?? 'null') . '</td>
+            <td class="p-2"> '  . ($item->notes ?? 'null') . '</td>
+            <td class="p-2"> '  . ($item->address ?? 'null') . '</td>
+            <td class="p-2">' . date('d/m/Y', strtotime($item->created_at) ?? 'null') . '</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
                         ' . $editBtn . $deleteBtn . '

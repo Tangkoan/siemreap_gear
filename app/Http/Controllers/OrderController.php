@@ -141,15 +141,15 @@
 
                 $table .= '
                 <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                    <td class="p-4 py-5">' . ($key + 1) . '</td>
-                    <td class="p-4 py-5">' . $item['customer']['name'] . '</td>
-                    <td class="p-4 py-5">' . $item->order_date  . '</td>
-                    <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                    <td class="p-4 py-5">' . $item->invoice_no  . '</td>
-                    <td class="p-4 py-5">' . $item->total  . '$</td>
-                    <td class="p-4 py-5">' . $item->pay  . '$</td>
+                    <td class="p-2">' . ($key + 1) . '</td>
+                    <td class="p-2">' . $item['customer']['name'] . '</td>
+                    <td class="p-2">' . $item->order_date  . '</td>
+                    <td class="p-2">' . $item->payment_status  . '</td>
+                    <td class="p-2">' . $item->invoice_no  . '</td>
+                    <td class="p-2">' . $item->total  . '$</td>
+                    <td class="p-2">' . $item->pay  . '$</td>
                     
-                    <td class="p-4 py-5">
+                    <td class="p-2">
                         <span class="inline-block px-3 py-1 rounded-md ' . ($item->due > 0 ? 'bg-red-500 dark:bg-red-900 dark:text-white text-white' : 'bg-gray-500') . ' text-white text-xs  shadow-sm">
                             '. $item->due .'$
                         </span>
@@ -320,16 +320,16 @@
 
                 $table .= '
                 <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                    <td class="p-4 py-5">' . ($key + 1) . '</td>
+                    <td class="p-2">' . ($key + 1) . '</td>
                     
                     
 
                     
-                    <td class="p-4 py-5">' . $item['customer']['name'] . '</td>
-                    <td class="p-4 py-5">' . $item->order_date  . '</td>
-                    <td class="p-4 py-5">' . $item->payment_status  . '</td>
-                    <td class="p-4 py-5">' . $item->invoice_no  . '</td>
-                    <td class="p-4 py-5">' . $item->pay  . '</td>
+                    <td class="p-2">' . $item['customer']['name'] . '</td>
+                    <td class="p-2">' . $item->order_date  . '</td>
+                    <td class="p-2">' . $item->payment_status  . '</td>
+                    <td class="p-2">' . $item->invoice_no  . '</td>
+                    <td class="p-2">' . $item->pay  . '</td>
                     
                    
 
@@ -389,14 +389,14 @@
             foreach ($orders as $key => $item) {
                 $table .= '
                 <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                    <td class="p-4 py-5">' . ($key + 1) . '</td>
+                    <td class="p-2">' . ($key + 1) . '</td>
                     
                     
 
                     
-                    <td class="p-4 py-5">' . $item['customer']['name'] . '</td>
-                    <td class="p-4 py-5">' . $item->order_date  . '</td>
-                    <td class="p-4 py-5">' . $item->payment_status  . '</td>
+                    <td class="p-2">' . $item['customer']['name'] . '</td>
+                    <td class="p-2">' . $item->order_date  . '</td>
+                    <td class="p-2">' . $item->payment_status  . '</td>
                     
 
                     <td class="text-xs  text-center align-middle">
