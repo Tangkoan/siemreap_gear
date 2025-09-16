@@ -5,16 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Income Expense Report</title>
     <style>
-        /* * ចំណុចសំខាន់៖ បញ្ចូល Khmer Font ដើម្បីឲ្យ PDF អាចបង្ហាញភាសាខ្មែរបាន 
-         * អ្នកត្រូវយកไฟล์ font .ttf មកដាក់ក្នុង Folder `public/fonts/` របស់អ្នក
-         */
-        @font-face {
-            font-family: 'Khmer OS Siemreap';
-            font-style: normal;
-            font-weight: normal;
-            src: url('{{ public_path('fonts/KhmerOS_siemreap.ttf') }}') format('truetype');
-        }
-
+        
         body {
             font-family: 'Khmer OS Siemreap', sans-serif; /* ប្រើ Font ខ្មែរជា Default */
             font-size: 12px;

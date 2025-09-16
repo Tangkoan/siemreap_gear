@@ -14,9 +14,14 @@ echo.
 echo =======================================================
 echo.
 
-REM Start npm run dev in a new window
-echo Starting: npm run dev
-start "NPM Dev Server" cmd /k "npm run dev"
+@REM REM Start npm run dev in a new window
+@REM echo Starting: npm run dev
+@REM start "NPM Dev Server" cmd /k "npm run dev"
+
+
+REM Start php php artisan schedule:work in another new window
+echo Starting: php artisan schedule:work
+start "Artisan Suchedule Worker" cmd /k "php artisan schedule:work"
 
 REM Start php artisan queue:work in another new window
 echo Starting: php artisan queue:work

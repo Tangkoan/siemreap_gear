@@ -1,7 +1,7 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
-{{-- ហៅប្រើ Library ApexCharts สำหรับสร้างក្រាហ្វិក --}}
+{{-- ហៅប្រើ Library ApexCharts ក្រាហ្វិក --}}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <div class="page-content bg-gray-100 dark:bg-gray-900">
