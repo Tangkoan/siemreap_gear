@@ -161,6 +161,19 @@
                         <td style="text-align:right;" class="expense-total">${{ number_format($item->amount, 2) }}</td>
                     </tr>
                 @endforeach
+                
+                {{-- ✅ ADD THIS NEW CODE BLOCK --}}
+                @foreach ($stock_adjustments->where('type', 'clear_stock') as $item)
+                    <tr>
+                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                        <td>{{ $item->product->product_name ?? 'N/A' }} (Cleared Stock (Loss))</td>
+                        <td style="text-align:center;">{{ $item->quantity }}</td>
+                        {{-- Price is the buying price, as it represents the cost of the lost stock --}}
+                        <td style="text-align:right;">${{ number_format($item->product->buying_price ?? 0, 2) }}</td>
+                        {{-- Total is quantity * buying_price --}}
+                        <td style="text-align:right;" class="expense-total">${{ number_format($item->quantity * ($item->product->buying_price ?? 0), 2) }}</td>
+                    </tr>
+                @endforeach
 
                 @if($purchase_details->isEmpty() && $other_expenses->isEmpty())
                      <tr>

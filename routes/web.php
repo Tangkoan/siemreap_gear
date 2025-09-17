@@ -72,8 +72,8 @@ require __DIR__ . '/auth.php';
 // ចំណុចចាប់ផ្ដើមបន្ថែម web ថ្មី ដែលក្នុងLaravel គេតែងហៅថា Route បើនិយាយទៅប្រៀបដូច URL ផងដែរ ដោយសារយើងសរសេរវាជា (/) ដើម្បីជាផ្លូវពីកន្ឡែងនេះទៅកន្លែងថ្មី
 Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
 
-    //Admin
-    Route::middleware(['auth'])->group(callback: function () {
+//Admin
+Route::middleware(['auth'])->group(callback: function () {
 
     // =================== Stock =====================
     Route::post('/stock/adjust', [StockController::class, 'adjustStock'])->name('stock.adjust');
@@ -82,11 +82,11 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
     Route::get('/all/stock', [StockController::class, 'StockPage'])->name('all.stock')->middleware('permission:stock.menu');
     // Route::get('/stock', 'StockManage')->name('all.stock')->middleware('permission:stock.menu');
 
-    
+
     // ==================== Dashboard ==================== 
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        // Route AJAX
-        Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route AJAX
+    Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
     // End
 
     Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.admin_profile_view');
@@ -114,10 +114,9 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         Route::get('/delete/condition/{id}', 'DeleteCondition')->name('delete.condition')->middleware('permission:condition.delete');
 
         Route::get('/search-condition',  'searchCondition')->name('search.condition');
+    }); /// End 
 
-    });/// End 
 
-    
 
     // Report Route
     Route::controller(ReportController::class)->group(function () {
@@ -136,27 +135,27 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         // Year Order Report
         Route::match(['get', 'post'], '/report/orders/by-year', 'orderReportByYear')->name('report.orders.by_year');
         Route::get('/report/orders/by-year/export', 'exportOrderByYear')->name('report.orders.export.year');
-      
+
         //  Export Sale(Order Report)
         Route::get('/report-order/export', 'SaleReportExport')->name('sale.report.export'); //->middleware('permission:report.order.export')
 
         // ============================= Report Stock ==================================================
-            Route::get('/stock/report', 'AllStockReports')->name('all.report.stock');
-            
-            // By Day
-            Route::get('/stock/report/by-day', 'stockReportByDay')->name('report.stock.by_day');
-            Route::get('/stock/report/export/by-day', 'exportStockByDay')->name('report.stock.export.day');
+        Route::get('/stock/report', 'AllStockReports')->name('all.report.stock');
 
-            // By Month
-            Route::get('/stock/report/by-month', 'stockReportByMonth')->name('report.stock.by_month');
-            Route::get('/stock/report/export/by-month', 'exportStockByMonth')->name('report.stock.export.month');
+        // By Day
+        Route::get('/stock/report/by-day', 'stockReportByDay')->name('report.stock.by_day');
+        Route::get('/stock/report/export/by-day', 'exportStockByDay')->name('report.stock.export.day');
 
-            // By Year
-            Route::get('/stock/report/by-year', 'stockReportByYear')->name('report.stock.by_year');
-            Route::get('/stock/report/export/by-year', 'exportStockByYear')->name('report.stock.export.year');
+        // By Month
+        Route::get('/stock/report/by-month', 'stockReportByMonth')->name('report.stock.by_month');
+        Route::get('/stock/report/export/by-month', 'exportStockByMonth')->name('report.stock.export.month');
 
-            // Route សម្រាប់ទាញយកទិន្នន័យលម្អិត (Details)
-            Route::get('/report/stock/details',  'getStockMovementDetails')->name('report.stock.details');
+        // By Year
+        Route::get('/stock/report/by-year', 'stockReportByYear')->name('report.stock.by_year');
+        Route::get('/stock/report/export/by-year', 'exportStockByYear')->name('report.stock.export.year');
+
+        // Route សម្រាប់ទាញយកទិន្នន័យលម្អិត (Details)
+        Route::get('/report/stock/details',  'getStockMovementDetails')->name('report.stock.details');
         // End Report Stock
 
         // ​===================================== Purchase Report ===============================================
@@ -164,31 +163,31 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         // --- Routes for Unified Purchase Report ---
         // Main view route
         Route::get('/report/purchases', 'purchaseReportView')->name('report.purchases.view');
-        
+
         // AJAX routes for fetching data by date, month, year
         Route::get('/report/purchases/by-date', 'getPurchaseReportByDate')->name('report.purchases.by_date');
         Route::get('/report/purchases/by-month', 'getPurchaseReportByMonth')->name('report.purchases.by_month');
         Route::get('/report/purchases/by-year', 'getPurchaseReportByYear')->name('report.purchases.by_year');
-        
+
         // AJAX route for fetching purchase details for the modal
         Route::get('/report/purchases/details', 'getPurchaseDetails')->name('report.purchases.details');
 
         // =================== Purchase Report Export Routes ===================
-            // Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
-            // Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
-            // Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
-            Route::get('/purchase/report/view', 'purchaseReportView')->name('purchase.report.view');
-                
-            // AJAX Routes for fetching data
-            Route::get('/report/purchases/by-date', 'getPurchaseReportByDate')->name('report.purchases.by_date');
-            Route::get('/report/purchases/by-month', 'getPurchaseReportByMonth')->name('report.purchases.by_month');
-            Route::get('/report/purchases/by-year', 'getPurchaseReportByYear')->name('report.purchases.by_year');
-            Route::get('/report/purchases/details', 'getPurchaseDetails')->name('report.purchases.details');
+        // Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
+        // Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
+        // Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
+        Route::get('/purchase/report/view', 'purchaseReportView')->name('purchase.report.view');
 
-            // Export Routes
-            Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
-            Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
-            Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
+        // AJAX Routes for fetching data
+        Route::get('/report/purchases/by-date', 'getPurchaseReportByDate')->name('report.purchases.by_date');
+        Route::get('/report/purchases/by-month', 'getPurchaseReportByMonth')->name('report.purchases.by_month');
+        Route::get('/report/purchases/by-year', 'getPurchaseReportByYear')->name('report.purchases.by_year');
+        Route::get('/report/purchases/details', 'getPurchaseDetails')->name('report.purchases.details');
+
+        // Export Routes
+        Route::get('/report/purchases/export/date', 'exportPurchasesByDate')->name('report.purchases.export.date');
+        Route::get('/report/purchases/export/month', 'exportPurchasesByMonth')->name('report.purchases.export.month');
+        Route::get('/report/purchases/export/year', 'exportPurchasesByYear')->name('report.purchases.export.year');
 
         // =================== Income Expense Report Routes =====================
         Route::get('/report/income-expense', 'incomeExpenseReportView')->name('report.income_expense.view');
@@ -196,10 +195,8 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         Route::get('/report/export',  'exportReport')->name('report.export');
         Route::get('/report/income-expense/export', 'exportIncomeExpense')->name('report.income_expense.export');
         Route::get('/report/income-expense/export-pdf', 'exportIncomeExpensePdf')->name('report.income_expense.export_pdf');
+    }); // End Report Route
 
-
-    });// End Report Route
-    
 
 
     // Start Product
@@ -211,8 +208,8 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
         // Notification Stock Alert API
         Route::get('/get-stock-alerts',  'getStockAlerts')->name('stock.alerts');
-            // API
-            Route::get('/get-product-details/{id}', 'getProductDetails')->name('get.product.details');
+        // API
+        Route::get('/get-product-details/{id}', 'getProductDetails')->name('get.product.details');
 
         // End
 
@@ -257,10 +254,10 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         Route::post('/category/update', 'CategoryUpdate')->name('category.update');
         // Dlete ប្រើ Ajax
         Route::delete('/category/ajax-delete/{id}', [CategoryController::class, 'ajaxDelete'])->name('ajax.delete.category');
-                
+
 
         Route::get('/delete/category/{id}', 'DeleteCategory')->name('delete.category')->middleware('permission:category.delete');
-    });/// End Category Route
+    }); /// End Category Route
 
     // supplier All Route 
     Route::controller(SupplierController::class)->group(function () {
@@ -291,8 +288,8 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         Route::post('/customer/update', 'CustomerUpdate')->name('customer.update');
 
         Route::get('/delete/customer/{id}', 'DeleteCustomer')->name('delete.customer')->middleware('permission:customer.delete');
-    });// End
-    
+    }); // End
+
 
 
     ///Expense All Route 
@@ -322,7 +319,7 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');
         Route::get('/pending/order', 'PendingOrder')->name('pending.order')->middleware('permission:order.pending');
-        
+
         Route::get('/order/details/{order_id}', 'OrderDetails')->name('order.details');
 
         // សម្រាប់ View Details ដែលមិនមាន​Button Compleate Order
@@ -332,7 +329,7 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
         Route::get('/complete/order', 'CompleteOrder')->name('complete.order')->middleware('permission:order.complete');
 
-        
+
 
 
 
@@ -352,7 +349,7 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 
 
-//===================================================== Purchase ==================================================================
+    //===================================================== Purchase ==================================================================
 
     Route::controller(PurchaseController::class)->group(function () {
 
@@ -362,7 +359,7 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
         Route::get('/purchase/details/{purchase_id}', 'PurchaseDetails')->name('purchase.details');
         // View Details for purchase page Don't have button complete purhcase
         Route::get('/purchase/view/details/{purchase_id}', 'PurchaseViewDetails')->name('purchase.view.details');
-        
+
         Route::get('/complete/purchase', 'CompletePurchase')->name('complete.purchase')->middleware('permission:purchase.complete');
         // PDF Complete Purchase
         Route::get('/purchase/invoice-download/{order_id}', 'PurchaseInvoice');
@@ -375,21 +372,20 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
         Route::post('/purchase/store-supplier', 'storeSupplierAjax')->name('store.supplier.ajax');
         Route::post('/purchase/store-product', 'storeProductAjax')->name('store.product.ajax');
-
     });
 
     //
     Route::controller(PurchaseController::class)->group(function () {
-            Route::get('/add/purchase', 'PurchasePage')->name('purchase.page')->middleware('permission:purchase.menu');
-            Route::get('/purchase/search-products', [PurchaseController::class, 'searchPurchaseProducts'])->name('purchase.search.products');
-            Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
-            Route::post('/purchase/add-to-cart', 'AddToCart');
-            Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
-            Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
-            Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
-            Route::get('/purchase/cart/remove/{rowId}', [PurchaseController::class, 'RemoveCartItem']);
+        Route::get('/add/purchase', 'PurchasePage')->name('purchase.page')->middleware('permission:purchase.menu');
+        Route::get('/purchase/search-products', [PurchaseController::class, 'searchPurchaseProducts'])->name('purchase.search.products');
+        Route::get('/api/purchase/products', 'getProductsForPurchase')->name('api.purchase.products');
+        Route::post('/purchase/add-to-cart', 'AddToCart');
+        Route::post('/purchase/store', 'StorePurchase')->name('purchase.store');
+        Route::post('/purchase/add-cart', [PurchaseController::class, 'AddToCart']);
+        Route::post('/purchase/cart/update/{rowId}', [PurchaseController::class, 'UpdateCartItem']);
+        Route::get('/purchase/cart/remove/{rowId}', [PurchaseController::class, 'RemoveCartItem']);
     });
-        
+
 
     // Start Permision
     Route::controller(RoleController::class)->group(function () {
@@ -442,45 +438,42 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 
     // =============================== Backup ================================================
-        Route::controller(BackupController::class)->group(function () {
-            // backup
-            Route::get('/backup/now', 'backupNow')->name('admin.backup.now');
-            Route::get('/backups/search',  'searchBackups')->name('backup.search');
-            Route::get('/backup-status', action: 'getBackupStatus')->name('backup.status');
-            Route::get('/delete/database/{getFilename}', 'DeleteDatabase');
-            Route::get('/admin/backup',  'DatabaseBackup')->name('admin.backup');
-            Route::get('/backup/delete/{getFilename}', 'DeleteBackup')->name('backup.delete');
-            Route::get('/backup/download/{getFilename}', 'downloadBackup')->name('backup.download');
-
-            
+    Route::controller(BackupController::class)->group(function () {
+        // backup
+        Route::get('/backup/now', 'backupNow')->name('admin.backup.now');
+        Route::get('/backups/search',  'searchBackups')->name('backup.search');
+        Route::get('/backup-status', action: 'getBackupStatus')->name('backup.status');
+        Route::get('/delete/database/{getFilename}', 'DeleteDatabase');
+        Route::get('/admin/backup',  'DatabaseBackup')->name('admin.backup');
+        Route::get('/backup/delete/{getFilename}', 'DeleteBackup')->name('backup.delete');
+        Route::get('/backup/download/{getFilename}', 'downloadBackup')->name('backup.download');
     });
     // End
 
 
     // =============================== Setting ================================================
-        Route::controller(SettingController::class)->group(function () {
-            // setting
-            Route::get('/setting', 'settingPage')->name('admin.setting');
-            // Information Shop
-            Route::get('/setting/shop', 'informationShop')->name('admin.setting_infromationshop');
-            Route::post('/admin/information-shop/update', 'update')->name('admin.info.update');
-            
+    Route::controller(SettingController::class)->group(function () {
+        // setting
+        Route::get('/setting', 'settingPage')->name('admin.setting');
+        // Information Shop
+        Route::get('/setting/shop', 'informationShop')->name('admin.setting_infromationshop');
+        Route::post('/admin/information-shop/update', 'update')->name('admin.info.update');
     });
     // End
 
-    
+
 
     // ==================================== Backup Project ===========================================
 
-            // ✅ [ថ្មី] Route សម្រាប់ Backup Project
-            Route::get('/admin/backup/project', [BackupController::class, 'backupProject'])->name('admin.backup.project');
-            Route::get('/project-backup-status', [BackupController::class, 'getProjectBackupStatus'])->name('project.backup.status');
+    // ✅ [ថ្មី] Route សម្រាប់ Backup Project
+    Route::get('/admin/backup/project', [BackupController::class, 'backupProject'])->name('admin.backup.project');
+    Route::get('/project-backup-status', [BackupController::class, 'getProjectBackupStatus'])->name('project.backup.status');
 
 
-            // --- ✅ [ថ្មី] Project Backup AJAX/Actions ---
-            Route::get('/project-backups/search', [BackupController::class, 'searchProjectBackups'])->name('backup.project.search');
-            Route::get('/project-backup/download/{filename}', [BackupController::class, 'downloadProjectBackup'])->name('backup.project.download');
-            Route::get('/project-backup/delete/{filename}', [BackupController::class, 'deleteProjectBackup'])->name('backup.project.delete');
+    // --- ✅ [ថ្មី] Project Backup AJAX/Actions ---
+    Route::get('/project-backups/search', [BackupController::class, 'searchProjectBackups'])->name('backup.project.search');
+    Route::get('/project-backup/download/{filename}', [BackupController::class, 'downloadProjectBackup'])->name('backup.project.download');
+    Route::get('/project-backup/delete/{filename}', [BackupController::class, 'deleteProjectBackup'])->name('backup.project.delete');
 
     // end
 
@@ -547,18 +540,18 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
     Route::get('/get-latest-exchange-rate', [PosController::class, 'getLatestExchangeRate'])->name('get.exchange.rate');
     Route::post('/exchange-rate/store', [App\Http\Controllers\PosController::class, 'storeExchangeRate'])->name('exchange-rate.store');
     Route::post('/exchange-rate/auto-fetch', [App\Http\Controllers\PosController::class, 'fetchAndStoreAutoRate'])->name('exchange-rate.auto-fetch');
-    
 
-   
-    
+
+
+
 
     // End POS
     ///POS All Route 
     Route::controller(PosController::class)->group(function () {
 
-         // quotation
-    Route::post('/generate-quotation-preview',  'generateQuotationPreview')->name('generate.quotation.preview');
-    Route::get('/clear-cart-and-redirect-pos',  'clearCartAndRedirect')->name('clear.cart.pos');
+        // quotation
+        Route::post('/generate-quotation-preview',  'generateQuotationPreview')->name('generate.quotation.preview');
+        Route::get('/clear-cart-and-redirect-pos',  'clearCartAndRedirect')->name('clear.cart.pos');
 
 
 
@@ -580,7 +573,6 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
         // ===== Create Customer in Page POS =====
         Route::post('/pos/store-customer', 'storeCustomerAjax')->name('store.customer.ajax');
-
     });
     // End
 
@@ -593,8 +585,6 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
     // Admin Role ACC
     Route::get('/search-admin', [AdminController::class, 'searchAdmin'])->name('search.admin');
-
-
 }); // End User Middleware
 
 
@@ -603,6 +593,3 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 Route::post('/store-sell', [POSController::class, 'FinalInvoice'])->name('store.sell');
 Route::get('/print-invoice/{id}', [POSController::class, 'PrintInvoice'])->name('print.invoice');
-
-
-

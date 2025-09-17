@@ -30,7 +30,7 @@
             border-color: #dc2626 !important;
         }
         .dark .active-filter {
-            background-color: #f87171 !important; /* red-400 */
+            background-color: #dc2626 !important; /* red-400 */
         }
     </style>
 
@@ -53,7 +53,7 @@
 
             {{-- Condition Filter Buttons --}}
             <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
-                <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">Condition:</span>
+                <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">{{ __('messages.condition') }}:</span>
                 <button onclick="filterProducts('condition', 'all', this)" class="condition-btn filter-btn m-1 inline-block bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
                     {{ __('messages.all') }}
                 </button>
@@ -66,7 +66,7 @@
 
             {{-- Category Filter Buttons --}}
             <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
-                <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">Category:</span>
+                <span class="text-sm  text-slate-500 dark:text-slate-400 mr-2">{{ __('messages.category') }}:</span>
                 <button onclick="filterProducts('category', 'all', this)" class="category-btn filter-btn m-1 inline-block bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
                     {{ __('messages.all_category') }}
                 </button>

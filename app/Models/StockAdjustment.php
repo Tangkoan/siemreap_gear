@@ -21,9 +21,14 @@ class StockAdjustment extends Model
     ];
 
     // Relationship ទៅ Product
+    // public function product()
+    // {
+    //     return $this->belongsTo(Product::class);
+    // }
+
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     // Relationship ទៅ User

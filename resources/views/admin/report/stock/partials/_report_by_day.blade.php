@@ -68,7 +68,7 @@
             {{-- ✨ សម្រាប់ Pick Date && Search --}}
             <div class="relative">
                  <div class="flex items-center gap-4 w-full md:w-auto">
-                    <input type="date" name="date" value="2025-09-12" id="date" class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-red-500 focus:border-red-500" value="{{ date('m/d/Y') }}">
+                    <input type="date" name="date" value="{{ date('Y-m-d') }}" id="date" class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-red-500 focus:border-red-500" value="{{ date('m/d/Y') }}">
                     <div class="relative w-full md:w-64">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
                         <input class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-red-500 focus:border-red-500" placeholder="Search..." id="search-day" type="text" />

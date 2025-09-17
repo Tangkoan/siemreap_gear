@@ -9,6 +9,11 @@ class product extends Model
     //
     protected $guarded = [];
 
+    protected $casts = [
+        'buying_price' => 'decimal:2',
+        'selling_price' => 'decimal:2',
+    ];
+
 
     // បង្កើត សម្រាប់ Join
     // public function category(){
