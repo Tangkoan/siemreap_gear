@@ -127,7 +127,7 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
         Route::match(['get', 'post'], '/report/orders/by-date', 'orderReportByDate')->name('report.orders.by_date');
         Route::get('/report/orders/by-date/export', [ReportController::class, 'exportOrderByDate'])->name('report.orders.export.date');
-        Route::get('/report/orders/details-modal/{id}', 'getOrderDetailsForModal')->name('report.orders.details_modal');
+        // Route::get('/report/orders/details-modal/{id}', 'getOrderDetailsForModal')->name('report.orders.details_modal');
 
         // ផ្លាស់ប្តូរ Route ចាស់របស់អ្នក ឬបន្ថែម Route ថ្មីទាំងពីរនេះ
         Route::match(['get', 'post'], '/report/orders/by-month', 'orderReportByMonth')->name('report.orders.by_month');

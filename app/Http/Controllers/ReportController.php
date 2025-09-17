@@ -491,7 +491,7 @@ class ReportController extends Controller
 
 
     public function stockReportByYear(Request $request)
-{
+    {
     if (!$request->ajax()) {
         $year = $request->input('year', Carbon::now()->format('Y'));
         $formattedDate = $year;
@@ -589,23 +589,23 @@ class ReportController extends Controller
         ])
         ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
 
-    if ($search) {
-        $query->where(function($q) use ($search) {
-            $q->where('product_name', 'like', "%{$search}%")
-              ->orWhere('product_code', 'like', "%{$search}%");
-        });
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('product_name', 'like', "%{$search}%")
+                ->orWhere('product_code', 'like', "%{$search}%");
+            });
+        }
+
+        $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+        $tableHtml = $this->renderStockTableRows($products, 'year');
+
+        return response()->json([
+            'table' => $tableHtml,
+            'formattedDate' => $year,
+            'totalStockIn' => (int)$totalStockIn,
+            'totalStockOut' => (int)$totalStockOut,
+        ]);
     }
-
-    $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-    $tableHtml = $this->renderStockTableRows($products, 'year');
-
-    return response()->json([
-        'table' => $tableHtml,
-        'formattedDate' => $year,
-        'totalStockIn' => (int)$totalStockIn,
-        'totalStockOut' => (int)$totalStockOut,
-    ]);
-}
 
 
     public function exportStockByDay(Request $request)
@@ -733,10 +733,10 @@ class ReportController extends Controller
 
     // Start Purchase Function
 
-        /**
-         * Display the main view for the purchase report.
-         */
-       public function purchaseReportView()
+    /**
+    * Display the main view for the purchase report.
+    */
+    public function purchaseReportView()
     {
         return view('admin.report.purchase.purchase_report');
     }
@@ -1031,7 +1031,7 @@ class ReportController extends Controller
             return redirect()->back()->with('error', $data['error']);
         }
 
-        // បង្កើតឈ្មោះไฟล์ແບບ Dynamic
+        // បង្កើតឈ្មោះ Dynamic
         $fileName = 'Income-Expense-Report-' . str_replace(' ', '-', $data['summary']['formattedDate']) . '.xlsx';
 
         // ហៅ Export class ហើយបញ្ជូនទិន្នន័យទៅឲ្យវា
@@ -1050,7 +1050,7 @@ public function exportReport(Request $request)
         $type = $request->query('type');
         $value = $request->query('value');
 
-        // 2. ទាញទិន្នន័យពី Database (កែសម្រួលส่วนนี้ឲ្យត្រូវនឹងโครงสร้างរបស់អ្នក)
+        // 2. ទាញទិន្នន័យពី Database (កែសម្រួលឲ្យត្រូវនឹងโครงสร้างរបស់អ្នក)
         $incomeQuery = Order::query();
         $expenseQuery = Expense::query();
         $formattedDate = '';
@@ -1091,7 +1091,7 @@ public function exportReport(Request $request)
         
         $fileName = 'Report-' . str_replace([' ', ','], '-', strtolower($formattedDate));
 
-        // 4. ពិនិត្យ Format ហើយបង្កើតไฟล์
+        // 4. ពិនិត្យ Format ហើយបង្កើត
         if ($format == 'excel') {
             return Excel::download(new IncomeExpenseReportExport($data), $fileName . '.xlsx');
         } 
@@ -1116,14 +1116,14 @@ public function exportReport(Request $request)
             return redirect()->back()->with('error', $data['error']);
         }
         
-        // 2. បង្កើតឈ្មោះไฟล์ແບບ Dynamic
+        // 2. បង្កើតឈ្មោះ Dynamic
         $fileName = 'Income-Expense-Report-' . str_replace([' ', 'to'], ['-', ''], $data['summary']['formattedDate']) . '.pdf';
 
         // 3. Load View សម្រាប់ PDF ហើយបញ្ជូនទិន្នន័យទៅឲ្យវា
         $pdf = Pdf::loadView('admin.report.income_expense.income_expense_pdf', $data);
         
 
-        // 4. បញ្ជាឲ្យ Browser ទាញយកไฟล์ PDF
+        // 4. បញ្ជាឲ្យ Browser ទាញយក PDF
         return $pdf->download($fileName);
     }
 }
