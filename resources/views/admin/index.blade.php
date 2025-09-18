@@ -349,7 +349,14 @@ document.addEventListener("DOMContentLoaded", function() {
         salesLineChart.updateOptions({
             grid: { borderColor: newGridColor },
             xaxis: { labels: { style: { colors: newForeColor }}},
-            yaxis: { labels: { style: { colors: newForeColor }}},
+            // ✅ START: កែប្រែចំណុចនេះ
+            yaxis: {
+                labels: {
+                    style: { colors: newForeColor },
+                    formatter: (value) => `$${Math.round(value)}` // <-- បន្ថែម formatter មកវិញ
+                }
+            },
+            // ✅ END: កែប្រែចំណុចនេះ
             tooltip: { theme: isDarkModeNow ? 'dark' : 'light' }
         });
 
@@ -363,7 +370,14 @@ document.addEventListener("DOMContentLoaded", function() {
         thisYearSalesChart.updateOptions({
             grid: { borderColor: newGridColor },
             xaxis: { labels: { style: { colors: newForeColor }}},
-            yaxis: { labels: { style: { colors: newForeColor }}},
+            // ✅ START: កែប្រែចំណុចនេះ
+            yaxis: {
+                labels: {
+                    style: { colors: newForeColor },
+                    formatter: (value) => `$${Math.round(value)}` // <-- បន្ថែម formatter មកវិញ
+                }
+            },
+            // ✅ END: កែប្រែចំណុចនេះ
             tooltip: { theme: isDarkModeNow ? 'dark' : 'light' }
         });
 
