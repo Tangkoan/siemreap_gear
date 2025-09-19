@@ -1,5 +1,7 @@
 /* resources/css/app.css */
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+/* ✅ FIX: ប្តូរពី Lora ទៅជា Poppins ហើយបន្ថែម weight ឲ្យបានគ្រប់គ្រាន់ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 
 @tailwind base;
@@ -18,6 +20,8 @@
   }
 
   body {
-  font-family: 'Lora', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, 'Khmer OS Siem Reap';
+    /* កូដនេះត្រឹមត្រូវហើយ ព្រោះអ្នកបានដាក់ Poppins នៅខាងដើម */
+    font-family: 'Poppins', 'Khmer OS Siem Reap', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  }
 }
-}
+
