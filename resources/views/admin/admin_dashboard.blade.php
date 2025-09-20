@@ -34,7 +34,7 @@
     <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
 </head>
 
-<body class="flex flex-col h-screen bg-gray-100 dark:bg-gray-800 overflow-hidden">
+<body class="flex flex-col h-screen  bg-gray-100 dark:bg-gray-800 overflow-hidden ">
 
     {{-- Topbar (Header) --}}
     @include('admin.body.header')
@@ -42,8 +42,10 @@
     <div class="flex flex-1 overflow-hidden">
 
         {{-- Sidebar Navigation --}}
-        {{-- មិនចាំបាច់បន្ថែម h-full នៅទីនេះទេ ព្រោះ Flexbox នឹងจัดการให้เอง --}}
-        @include('admin.body.sidebar')
+        <div class="static overflow-y-auto">
+            @include('admin.body.sidebar')
+        </div>
+            
 
         {{-- Main Content Wrapper --}}
         {{-- 

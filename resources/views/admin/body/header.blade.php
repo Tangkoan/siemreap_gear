@@ -12,7 +12,8 @@
 
         
         {{-- Left Side: Logo & Sidebar Toggle --}}
-        <div class="flex items-center space-x-2 w-full sm:w-auto">
+        <div class="flex items-center space-x-2">
+            
             <a href="{{ route('dashboard') }}" class="flex items-center">
                 <span class="px-2">
                     {{-- ✅ កែប្រែទីនេះ: Dynamic Logo --}}
@@ -35,7 +36,7 @@
         </div>
 
         {{-- Right Side: Actions --}}
-        <div class="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto justify-center sm:justify-end">
+        <div class="flex items-center space-x-2 sm:space-x-4">
 
             @php
                 // Get the active rate from the Database
@@ -95,7 +96,7 @@
                     <span id="notificationCount" class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/3 -translate-y-1/3">0</span>
                 </button>
                 <div id="messageDropdown" class="hidden absolute right-0 z-50 mt-2 w-72 origin-top-right rounded-lg bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl ring-1 ring-black ring-opacity-5">
-                    <div class="py-1" id="notificationContent">
+                    <div id="notificationContent" class="py-1 max-h-[500px] overflow-y-auto">
                         {{-- Notifications loaded by JS --}}
                     </div>
                 </div>

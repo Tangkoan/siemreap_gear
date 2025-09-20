@@ -7,14 +7,15 @@
 
             {{-- <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform "> --}}
                 <div class="lg:col-span-full p-0">
-                <div class="flex justify-between">
-                    <h2 class="text-xl  text-default mb-6 flex items-center">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                    <h2 class="text-xl text-default flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
                         </svg>
                         <div class="px-2">{{ __('messages.product') }}</div>
+                        
                     </h2>
                     <div>
 
@@ -96,7 +97,7 @@
                         </div>
 
                         <div class="ml-3">
-                            <div class="w-full max-w-sm min-w-[200px] relative">
+                            <div class="w-72 relative">
                                 <div class="relative">
                                     <input
                                         class="dark:text-white dark:bg-gray-800 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
@@ -115,7 +116,8 @@
                         </div>
                     </div>
 
-                    <div class="table-wrapper overflow-y-auto max-h-[500px]">
+                    
+                        <div class="table-wrapper overflow-x-auto overflow-y-auto max-h-[500px] lg:max-h-none">
                         <table class="w-full text-left table-auto min-w-max">
                             <thead>
                                 <tr>
@@ -249,6 +251,7 @@
                             </tbody>
                         </table>
                     </div>
+                    
 
 
                 </div>
