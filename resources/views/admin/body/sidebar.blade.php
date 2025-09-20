@@ -390,7 +390,7 @@
 
             const clearLeaveTimeout = () => clearTimeout(leaveTimeout);
             const scheduleHide = () => {
-                leaveTimeout = setTimeout(hideActiveDropdown, 600);
+                leaveTimeout = setTimeout(hideActiveDropdown, 800);
             };
 
             trigger.addEventListener('mouseleave', scheduleHide);

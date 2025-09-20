@@ -511,4 +511,12 @@ return [
         'top5_best_selling_products'=>'ចំនួនផលិតផលទាំង5ដែលលក់ដាច់ជាងគេ',
         'monthly_sales_trend'=>'ការលក់ក្នុងខែនីមួយៗក្នុងឆ្នាំ',
         'order_distribution'=>'ការបញ្ជាទិញ',
+
+
+        //
+        'are_uor_sure_to_complete_this_order' => 'តើអ្នកប្រកដក្នុងការប្ដូរទៅជាការបញ្ជាទិញដែលសម្រេច?',
+        'this_due_is' => 'ប្រាក់ដែលជំពាក់គឺ',
+        'confrim' => 'យល់ព្រម',
+        'due_amount_remaining_confirmation_required' => 'ទាមទារឱ្យបញ្ចូលប្រាក់ដែលនៅសល់',
+        
 ];      

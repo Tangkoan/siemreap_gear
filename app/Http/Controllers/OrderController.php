@@ -213,46 +213,110 @@
             $orderItem = Orderdetails::with('product')->where('order_id',$order_id)->orderBy('id','DESC')->get();
             return view('admin.order.order_details_due',compact('order','orderItem'));
 
-    }// End Method 
+    } // End Method 
 
 
 
-        
-    public function OrderStatusUpdate(Request $request){
+
+    // public function OrderStatusUpdate(Request $request){
+    //     $order_id = $request->id;
+    //     $order = Order::findOrFail($order_id);
+
+    //     // ✅ បើសិនថា due > 0 ត្រូវតែបាន Confirm មកពី client
+    //     if ($order->due > 0 && !$request->has('confirm_due')) {
+    //         $notification = array(
+    //             'message' => __('messages.due_amount_remaining_confirmation_required'),
+    //             'alert-type' => 'warning'
+    //         );
+    //         return redirect()->route('pending.order')->with($notification);
+    //     }
+
+    //     $orderProducts = Orderdetails::where('order_id', $order_id)->get();
+
+    //     foreach ($orderProducts as $item) {
+    //         $product = Product::find($item->product_id);
+
+    //         if ($product->product_store >= $item->quantity) {
+    //             $product->decrement('product_store', $item->quantity);
+    //         } else {
+    //             $notification = array(
+    //                 'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
+    //                 'alert-type' => 'error'
+    //             );
+    //             return redirect()->route('pending.order')->with($notification);
+    //         }
+    //     }
+
+    //     $order->update(['order_status' => 'complete']);
+
+    //     $notification = array(
+    //         'message' => __('messages.order_done_successfully'),
+    //         'alert-type' => 'success'
+    //     );
+
+    //     return redirect()->route('pending.order')->with($notification);
+    // }
+
+    public function OrderStatusUpdate(Request $request)
+    {
         $order_id = $request->id;
         $order = Order::findOrFail($order_id);
 
-        // ✅ បើសិនថា due > 0 ត្រូវតែបាន Confirm មកពី client
-        if ($order->due > 0 && !$request->has('confirm_due')) {
-            $notification = array(
-                'message' => __('messages.due_amount_remaining_confirmation_required'),
-                'alert-type' => 'warning'
-            );
-            return redirect()->route('pending.order')->with($notification);
-        }
-
-        $orderProducts = Orderdetails::where('order_id', $order_id)->get();
-
-        foreach ($orderProducts as $item) {
-            $product = Product::find($item->product_id);
-
-            if ($product->product_store >= $item->quantity) {
-                $product->decrement('product_store', $item->quantity);
-            } else {
-                $notification = array(
-                    'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
-                    'alert-type' => 'error'
-                );
-                return redirect()->route('pending.order')->with($notification);
-            }
-        }
-
-        $order->update(['order_status' => 'complete']);
-
+        // កំណត់ Notification បឋម ក្នុងករណីបង់រំលស់
         $notification = array(
-            'message' => __('messages.order_done_successfully'),
+            'message' => __('messages.payment_successful'), // អ្នកអាចបន្ថែម 'Payment Successful' ទៅក្នុងไฟล์ភាសា
             'alert-type' => 'success'
         );
+
+        // ពិនិត្យមើលថាតើមានការបង់ប្រាក់ពី Popup ដែរឬទេ
+        if ($request->has('final_payment_amount')) {
+
+            $payment_made = (float)$request->final_payment_amount;
+            $payment_method = $request->final_payment_method;
+
+            // គណនាទឹកប្រាក់ដែលបានបង់ និងទឹកប្រាក់ជំពាក់ថ្មី
+            $new_pay = (float)$order->pay + $payment_made;
+            $new_due = (float)$order->due - $payment_made;
+
+            // កំណត់តម្លៃថ្មីទៅឲ្យ Order
+            $order->pay = $new_pay;
+            $order->due = $new_due < 0 ? 0 : $new_due;
+            $order->payment_status = $payment_method;
+        }
+
+        // ✅✅✅ Logic ត្រួតពិនិត្យសំខាន់ ✅✅✅
+        // ពិនិត្យមើលថាតើប្រាក់ជំពាក់បានសូន្យហើយឬនៅ
+        if ($order->due <= 0) {
+
+            // បើបង់អស់ហើយ ទើបដំណើរការកូដកាត់ Stock និងប្តូរ Status
+            $orderProducts = Orderdetails::where('order_id', $order_id)->get();
+            foreach ($orderProducts as $item) {
+                $product = Product::find($item->product_id);
+
+                if ($product->product_store >= $item->quantity) {
+                    $product->decrement('product_store', $item->quantity);
+                } else {
+                    $notification = array(
+                        'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
+                        'alert-type' => 'error'
+                    );
+                    return redirect()->route('pending.order')->with($notification);
+                }
+            }
+
+            // ប្តូរ Status ទៅជា complete
+            $order->order_status = 'complete';
+
+            // ប្តូរសារ Notification សម្រាប់ Order ដែលបាន Complete
+            $notification = array(
+                'message' => __('messages.order_done_successfully'),
+                'alert-type' => 'success'
+            );
+        }
+        // បើបង់មិនទាន់អស់ទេ កូដផ្នែកខាងលើនេះនឹងមិនដំណើរការទេ ហើយ Status នឹងនៅតែ pending
+
+        // រក្សាទុកការផ្លាស់ប្តូរទាំងអស់ (pay, due, និង status ប្រសិនបើមានការផ្លាស់ប្តូរ)
+        $order->save();
 
         return redirect()->route('pending.order')->with($notification);
     }

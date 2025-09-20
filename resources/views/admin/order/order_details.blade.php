@@ -123,7 +123,7 @@
 
         // 👨‍💻 SCRIPT FOR ORDER COMPLETION WITH CUSTOM MODAL
         $('#complete-order-btn').on('click', function(e) {
-            e.preventDefault(); 
+            e.preventDefault(); // បញ្ឈប់ការ submit form ដោយស្វ័យប្រវត្តិ
 
             let due = $(this).data('due');
             let form = $(this).closest('form');
@@ -131,14 +131,14 @@
             if (due > 0) {
                 // ប្រសិនបើនៅជំពាក់លុយ, បង្ហាញ SweetAlert2 Modal
                 Swal.fire({
-                    title: 'Are you sure to complete this order?',
+                    title: '{{ __('messages.are_uor_sure_to_complete_this_order') }}',
                     html: `
-                        <p>this order have due <strong>${due} $</strong>. please enter you due</p>
+                        <p>{{ __('messages.this_due_is') }} <strong>${due} $</strong></p>
                         <div class="mt-4 text-left">
-                            <label for="swal-payment-amount" class="block text-sm font-medium text-gray-700">Pay Now ($)</label>
+                            <label for="swal-payment-amount" class="block text-sm font-medium text-gray-700">{{ __('messages.pay_now') }}($)</label>
                             <input id="swal-payment-amount" type="number" value="${due}" class="swal2-input w-full" placeholder="pay now...">
 
-                            <label for="swal-payment-method" class="block text-sm font-medium text-gray-700 mt-2">Payment Method</label>
+                            <label for="swal-payment-method" class="block text-sm font-medium text-gray-700 mt-2">{{ __('messages.payment_method') }}</label>
                             <select id="swal-payment-method" class="swal2-input w-full">
                                 <option value="Cash">Handcash</option>
                                 <option value="or_code">qr code</option>
@@ -149,8 +149,8 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'យល់ព្រម & បញ្ចប់',
-                    cancelButtonText: 'ยกเลิก',
+                    confirmButtonText: '{{ __('messages.confrim') }}',
+                    cancelButtonText: '{{ __('messages.cancel') }}',
                     
                    
                     preConfirm: () => {

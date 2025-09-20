@@ -515,4 +515,11 @@ return [
         'top5_best_selling_products'=>'Top 5 Best-Selling Products',
         'monthly_sales_trend'=>'Monthly Sales Trend',
         'order_distribution'=>'Order Distribution',
+
+
+        //
+        'are_uor_sure_to_complete_this_order'=>'Are you sure to complete this order?',
+        'this_due_is' => 'This Due Is',
+        'confrim' => 'Confrim',
+        'due_amount_remaining_confirmation_required'=> 'Due Amout Remaining Confirmation Required',
 ];
