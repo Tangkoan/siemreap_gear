@@ -215,14 +215,15 @@ class ReportController extends Controller
         $search = $request->input('search', null);
         return Excel::download(new OrdersByYearExport($year, $search), 'orders-report-' . $year . '.xlsx');
     }
-    
-////////////////////////////////////////// Stock ////////////////////////////////
+
+
+    ////////////////////////////////////////// Stock ////////////////////////////////
     public function AllStockReports()
     {
         return view('admin.report.stock.all_stock_report');
     }
 
-     protected function renderStockTableRows($products, string $activeTab): string
+    protected function renderStockTableRows($products, string $activeTab): string
     {
         $tableHtml = '';
         if ($products->isEmpty()) {
@@ -235,74 +236,81 @@ class ReportController extends Controller
                 $closingStock = $openingStock + $stockIn - $stockOut;
 
                 $tableHtml .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row transition-colors duration-150"
-                                     data-product-id="'. $product->id .'"
-                                     data-product-name="'. htmlspecialchars($product->product_name) .'"
-                                     data-active-tab="'. $activeTab .'">';
-                $tableHtml .= '<td class="p-2 text-gray-900 dark:text-white">'. htmlspecialchars($product->product_name) .' <span class="text-xs text-gray-500">('.htmlspecialchars($product->product_code).')</span></td>';
-                $tableHtml .= '<td class="p-2 px-8 text-gray-700 dark:text-gray-300 text-center">'. $openingStock .'</td>';
-                $tableHtml .= '<td class="p-2 px-8 text-green-600  text-center">+'. $stockIn .'</td>';
-                $tableHtml .= '<td class="p-2 px-8 text-red-600  text-center">-'. $stockOut .'</td>';
-                $tableHtml .= '<td class="p-2 px-8 font-bold text-blue-600 dark:text-blue-400 text-center">'. $closingStock .'</td>';
+                                     data-product-id="' . $product->id . '"
+                                     data-product-name="' . htmlspecialchars($product->product_name) . '"
+                                     data-active-tab="' . $activeTab . '">';
+                $tableHtml .= '<td class="p-2 text-gray-900 dark:text-white">' . htmlspecialchars($product->product_name) . ' <span class="text-xs text-gray-500">(' . htmlspecialchars($product->product_code) . ')</span></td>';
+                $tableHtml .= '<td class="p-2 px-8 text-gray-700 dark:text-gray-300 text-center">' . $openingStock . '</td>';
+                $tableHtml .= '<td class="p-2 px-8 text-green-600  text-center">+' . $stockIn . '</td>';
+                $tableHtml .= '<td class="p-2 px-8 text-red-600  text-center">-' . $stockOut . '</td>';
+                $tableHtml .= '<td class="p-2 px-8 font-bold text-blue-600 dark:text-blue-400 text-center">' . $closingStock . '</td>';
                 $tableHtml .= '</tr>';
             }
         }
         return $tableHtml;
     }
 
-    public function stockReportByDay(Request $request) 
-{
-    if (!$request->ajax()) {
-        $date = $request->input('date', Carbon::now()->format('Y-m-d'));
-        $formattedDate = Carbon::parse($date)->format('d F Y');
-        return view('admin.report.stock.stock_report_by_day', compact('date', 'formattedDate'));
-    }
+    // ✅ [GEMINI] START: កែសម្រួលកូដ Stock Report ទាំងអស់
+    public function stockReportByDay(Request $request)
+    {
+        if (!$request->ajax()) {
+            $date = $request->input('date', Carbon::now()->format('Y-m-d'));
+            $formattedDate = Carbon::parse($date)->format('d F Y');
+            return view('admin.report.stock.stock_report_by_day', compact('date', 'formattedDate'));
+        }
 
-    // ---- កែទីនេះ ----
-    $date = Carbon::parse($request->date); // Carbon object
-    $dateString = $date->format('Y-m-d');  // string សម្រាប់ SQL
-    // -------------------
+        $date = Carbon::parse($request->date);
+        $dateString = $date->format('Y-m-d');
 
-    $search = $request->search;
-    $perPage = $request->perPage ?? 15;
+        $search = $request->search;
+        $perPage = $request->perPage ?? 15;
 
-    // --- SUM TOTAL IN ---
-    $purchaseIn = purchase_details::query()
-        ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-        ->whereDate('purchases.purchase_date', $dateString)
-        ->where('purchases.purchase_status', 'complete')
-        ->sum('quantity');
+        // --- SUM TOTAL IN (មិនមានការផ្លាស់ប្តូរ) ---
+        $purchaseIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->whereDate('purchases.purchase_date', $dateString)
+            ->where('purchases.purchase_status', 'complete')
+            ->sum('quantity');
 
-    $saleReturnIn = DB::table('stock_adjustments')
-        ->where('type', 'sale_return')
-        ->whereDate('created_at', $dateString)
-        ->sum('quantity');
+        $saleReturnIn = DB::table('stock_adjustments')
+            ->where('type', 'sale_return')
+            ->whereDate('created_at', $dateString)
+            ->sum('quantity');
 
-    $totalStockIn = $purchaseIn + $saleReturnIn;
+        $totalStockIn = $purchaseIn + $saleReturnIn;
 
-    // --- SUM TOTAL OUT ---
-    $saleOut = OrderDetails::query()
-        ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-        ->whereDate('orders.order_date', $dateString)
-        ->where('orders.order_status', 'complete')
-        ->sum('quantity');
+        // --- SUM TOTAL OUT (កែសម្រួល Query ឲ្យបត់បែន) ---
+        $saleOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orders.order_status', 'complete')
+            ->where(function ($query) use ($dateString) {
+                $query->whereDate('orders.completion_date', $dateString)
+                    ->orWhere(function ($query) use ($dateString) {
+                        $query->whereNull('orders.completion_date')
+                            ->whereDate('orders.order_date', $dateString);
+                    });
+            })
+            ->sum('quantity');
 
-    $purchaseReturnOut = DB::table('stock_adjustments')
-        ->where('type', 'purchase_return')
-        ->whereDate('created_at', $dateString)
-        ->sum('quantity');
 
-    $clearStockOut = DB::table('stock_adjustments')
-        ->where('type', 'clear_stock')
-        ->whereDate('created_at', $dateString)
-        ->sum('quantity');
+        $purchaseReturnOut = DB::table('stock_adjustments')
+            ->where('type', 'purchase_return')
+            ->whereDate('created_at', $dateString)
+            ->sum('quantity');
 
-    $totalStockOut = $saleOut + $purchaseReturnOut + $clearStockOut;
+        $clearStockOut = DB::table('stock_adjustments')
+            ->where('type', 'clear_stock')
+            ->whereDate('created_at', $dateString)
+            ->sum('quantity');
 
-    // --- PER PRODUCT ---
-    $query = Product::query()
-        ->select('id', 'product_name', 'product_code')
-        ->addSelect([
-            DB::raw("(
+        $totalStockOut = $saleOut + $purchaseReturnOut + $clearStockOut;
+
+        // --- PER PRODUCT QUERY ---
+        $query = Product::query()
+            ->select('id', 'product_name', 'product_code')
+            ->addSelect([
+                // stock_in (មិនមានការផ្លាស់ប្តូរ)
+                DB::raw("(
                 (SELECT COALESCE(SUM(quantity), 0)
                  FROM purchase_details
                  INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
@@ -317,13 +325,18 @@ class ReportController extends Controller
                    AND DATE(created_at) = '{$dateString}')
             ) as stock_in"),
 
-            DB::raw("(
+                // stock_out (កែសម្រួល Query ឲ្យបត់បែន)
+                DB::raw("(
                 (SELECT COALESCE(SUM(quantity), 0)
                  FROM orderdetails
                  INNER JOIN orders ON orders.id = orderdetails.order_id
                  WHERE orderdetails.product_id = products.id
-                   AND DATE(orders.order_date) = '{$dateString}'
-                   AND orders.order_status = 'complete')
+                   AND orders.order_status = 'complete'
+                   AND (
+                        DATE(orders.completion_date) = '{$dateString}'
+                        OR (orders.completion_date IS NULL AND DATE(orders.order_date) = '{$dateString}')
+                   )
+                )
                 +
                 (SELECT COALESCE(SUM(quantity), 0)
                  FROM stock_adjustments
@@ -332,7 +345,8 @@ class ReportController extends Controller
                    AND DATE(created_at) = '{$dateString}')
             ) as stock_out"),
 
-            DB::raw("(
+                // total_purchased_before (មិនមានការផ្លាស់ប្តូរ)
+                DB::raw("(
                 SELECT COALESCE(SUM(quantity), 0)
                 FROM purchase_details
                 INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
@@ -341,90 +355,100 @@ class ReportController extends Controller
                   AND purchases.purchase_status = 'complete'
             ) as total_purchased_before"),
 
-            DB::raw("(
+                // total_sold_before (កែសម្រួល Query ឲ្យបត់បែន)
+                DB::raw("(
                 SELECT COALESCE(SUM(quantity), 0)
                 FROM orderdetails
                 INNER JOIN orders ON orders.id = orderdetails.order_id
                 WHERE orderdetails.product_id = products.id
-                  AND DATE(orders.order_date) < '{$dateString}'
                   AND orders.order_status = 'complete'
+                  AND (
+                      DATE(orders.completion_date) < '{$dateString}'
+                      OR (orders.completion_date IS NULL AND DATE(orders.order_date) < '{$dateString}')
+                  )
             ) as total_sold_before"),
-        ])
-        ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
+            ])
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
 
-    if ($search) {
-        $query->where(function($q) use ($search) {
-            $q->where('product_name', 'like', "%{$search}%")
-              ->orWhere('product_code', 'like', "%{$search}%");
-        });
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('product_name', 'like', "%{$search}%")
+                    ->orWhere('product_code', 'like', "%{$search}%");
+            });
+        }
+
+        $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+        $tableHtml = $this->renderStockTableRows($products, 'day');
+
+        return response()->json([
+            'table' => $tableHtml,
+            'pagination' => ($perPage !== 'all' && $products->hasPages()) ? $products->links()->toHtml() : '',
+            'formattedDate' => $date->format('d F Y'),
+            'totalStockIn' => (int)$totalStockIn,
+            'totalStockOut' => (int)$totalStockOut,
+        ]);
     }
-
-    $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-    $tableHtml = $this->renderStockTableRows($products, 'day');
-
-    return response()->json([
-        'table' => $tableHtml,
-        'formattedDate' => $date->format('d F Y'),
-        'totalStockIn' => (int)$totalStockIn,
-        'totalStockOut' => (int)$totalStockOut,
-    ]);
-}
-
-
 
 
     public function stockReportByMonth(Request $request)
-{
-    if (!$request->ajax()) {
-        $month = $request->input('month', Carbon::now()->format('Y-m'));
-        $formattedDate = Carbon::parse($month)->format('F Y');
-        return view('admin.report.stock.stock_report_by_month', compact('month', 'formattedDate'));
-    }
+    {
+        if (!$request->ajax()) {
+            $month = $request->input('month', Carbon::now()->format('Y-m'));
+            $formattedDate = Carbon::parse($month)->format('F Y');
+            return view('admin.report.stock.stock_report_by_month', compact('month', 'formattedDate'));
+        }
 
-    $monthCarbon = Carbon::parse($request->month);
-    $startDate = $monthCarbon->copy()->startOfMonth();
-    $endDate = $monthCarbon->copy()->endOfMonth();
-    $search = $request->search;
-    $perPage = $request->perPage ?? 15;
+        $monthCarbon = Carbon::parse($request->month);
+        $startDate = $monthCarbon->copy()->startOfMonth();
+        $endDate = $monthCarbon->copy()->endOfMonth();
+        $search = $request->search;
+        $perPage = $request->perPage ?? 15;
 
-    // --- SUM TOTAL IN ---
-    $purchaseIn = purchase_details::query()
-        ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-        ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
-        ->where('purchases.purchase_status', 'complete')
-        ->sum('quantity');
+        // --- SUM TOTAL IN ---
+        $purchaseIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+            ->where('purchases.purchase_status', 'complete')
+            ->sum('quantity');
 
-    $saleReturnIn = DB::table('stock_adjustments')
-        ->where('type', 'sale_return')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('quantity');
+        $saleReturnIn = DB::table('stock_adjustments')
+            ->where('type', 'sale_return')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('quantity');
 
-    $totalStockIn = $purchaseIn + $saleReturnIn;
+        $totalStockIn = $purchaseIn + $saleReturnIn;
 
-    // --- SUM TOTAL OUT ---
-    $saleOut = OrderDetails::query()
-        ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-        ->whereBetween('orders.order_date', [$startDate, $endDate])
-        ->where('orders.order_status', 'complete')
-        ->sum('quantity');
+        // --- SUM TOTAL OUT (កែសម្រួល Query ឲ្យបត់បែន) ---
+        $saleOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orders.order_status', 'complete')
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween(DB::raw('DATE(orders.completion_date)'), [$startDate, $endDate])
+                    ->orWhere(function ($query) use ($startDate, $endDate) {
+                        $query->whereNull('orders.completion_date')
+                            ->whereBetween(DB::raw('DATE(orders.order_date)'), [$startDate, $endDate]);
+                    });
+            })
+            ->sum('quantity');
 
-    $purchaseReturnOut = DB::table('stock_adjustments')
-        ->where('type', 'purchase_return')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('quantity');
 
-    $clearStockOut = DB::table('stock_adjustments')
-        ->where('type', 'clear_stock')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('quantity');
+        $purchaseReturnOut = DB::table('stock_adjustments')
+            ->where('type', 'purchase_return')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('quantity');
 
-    $totalStockOut = $saleOut + $purchaseReturnOut + $clearStockOut;
+        $clearStockOut = DB::table('stock_adjustments')
+            ->where('type', 'clear_stock')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('quantity');
 
-    // --- PER PRODUCT ---
-    $query = Product::query()
-        ->select('id', 'product_name', 'product_code')
-        ->addSelect([
-            DB::raw("(
+        $totalStockOut = $saleOut + $purchaseReturnOut + $clearStockOut;
+
+        // --- PER PRODUCT ---
+        $query = Product::query()
+            ->select('id', 'product_name', 'product_code')
+            ->addSelect([
+                DB::raw("(
                 (SELECT COALESCE(SUM(quantity),0)
                  FROM purchase_details
                  INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
@@ -438,13 +462,17 @@ class ReportController extends Controller
                    AND type='sale_return'
                    AND DATE(created_at) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}')
             ) as stock_in"),
-            DB::raw("(
+                DB::raw("(
                 (SELECT COALESCE(SUM(quantity),0)
                  FROM orderdetails
                  INNER JOIN orders ON orders.id = orderdetails.order_id
                  WHERE orderdetails.product_id = products.id
-                   AND DATE(orders.order_date) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}'
-                   AND orders.order_status='complete')
+                   AND orders.order_status='complete'
+                   AND (
+                       DATE(orders.completion_date) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}'
+                       OR (orders.completion_date IS NULL AND DATE(orders.order_date) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}')
+                   )
+                )
                 +
                 (SELECT COALESCE(SUM(quantity),0)
                  FROM stock_adjustments
@@ -452,7 +480,7 @@ class ReportController extends Controller
                    AND type IN ('purchase_return','clear_stock')
                    AND DATE(created_at) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}')
             ) as stock_out"),
-            DB::raw("(
+                DB::raw("(
                 SELECT COALESCE(SUM(quantity),0)
                 FROM purchase_details
                 INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
@@ -460,89 +488,99 @@ class ReportController extends Controller
                   AND DATE(purchases.purchase_date) < '{$startDate->format('Y-m-d')}'
                   AND purchases.purchase_status='complete'
             ) as total_purchased_before"),
-            DB::raw("(
+                DB::raw("(
                 SELECT COALESCE(SUM(quantity),0)
                 FROM orderdetails
                 INNER JOIN orders ON orders.id = orderdetails.order_id
                 WHERE orderdetails.product_id = products.id
-                  AND DATE(orders.order_date) < '{$startDate->format('Y-m-d')}'
                   AND orders.order_status='complete'
+                  AND (
+                      DATE(orders.completion_date) < '{$startDate->format('Y-m-d')}'
+                      OR (orders.completion_date IS NULL AND DATE(orders.order_date) < '{$startDate->format('Y-m-d')}')
+                  )
             ) as total_sold_before")
-        ])
-        ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
+            ])
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
 
-    if ($search) {
-        $query->where(function($q) use ($search) {
-            $q->where('product_name', 'like', "%{$search}%")
-              ->orWhere('product_code', 'like', "%{$search}%");
-        });
-    }
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('product_name', 'like', "%{$search}%")
+                    ->orWhere('product_code', 'like', "%{$search}%");
+            });
+        }
 
-    $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
-    $tableHtml = $this->renderStockTableRows($products, 'month');
+        $products = ($perPage === 'all') ? $query->get() : $query->paginate((int)$perPage);
+        $tableHtml = $this->renderStockTableRows($products, 'month');
 
-    return response()->json([
-        'table' => $tableHtml,
-        'formattedDate' => $monthCarbon->format('F Y'),
-        'totalStockIn' => (int)$totalStockIn,
-        'totalStockOut' => (int)$totalStockOut,
-    ]);
+        return response()->json([
+            'table' => $tableHtml,
+            'pagination' => ($perPage !== 'all' && $products->hasPages()) ? $products->links()->toHtml() : '',
+            'formattedDate' => $monthCarbon->format('F Y'),
+            'totalStockIn' => (int)$totalStockIn,
+            'totalStockOut' => (int)$totalStockOut,
+        ]);
     }
 
 
     public function stockReportByYear(Request $request)
     {
-    if (!$request->ajax()) {
-        $year = $request->input('year', Carbon::now()->format('Y'));
-        $formattedDate = $year;
-        return view('admin.report.stock.stock_report_by_year', compact('year', 'formattedDate'));
-    }
+        if (!$request->ajax()) {
+            $year = $request->input('year', Carbon::now()->format('Y'));
+            $formattedDate = $year;
+            return view('admin.report.stock.stock_report_by_year', compact('year', 'formattedDate'));
+        }
 
-    $year = $request->year;
-    $search = $request->search;
-    $perPage = $request->perPage ?? 15;
+        $year = $request->year;
+        $search = $request->search;
+        $perPage = $request->perPage ?? 15;
 
-    $startDate = Carbon::create($year, 1, 1)->startOfYear();
-    $endDate = Carbon::create($year, 12, 31)->endOfYear();
+        $startDate = Carbon::create($year, 1, 1)->startOfYear();
+        $endDate = Carbon::create($year, 12, 31)->endOfYear();
 
-    // --- SUM TOTAL IN ---
-    $purchaseIn = purchase_details::query()
-        ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
-        ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
-        ->where('purchases.purchase_status', 'complete')
-        ->sum('quantity');
+        // --- SUM TOTAL IN ---
+        $purchaseIn = purchase_details::query()
+            ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
+            ->whereBetween('purchases.purchase_date', [$startDate, $endDate])
+            ->where('purchases.purchase_status', 'complete')
+            ->sum('quantity');
 
-    $saleReturnIn = DB::table('stock_adjustments')
-        ->where('type', 'sale_return')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('quantity');
+        $saleReturnIn = DB::table('stock_adjustments')
+            ->where('type', 'sale_return')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('quantity');
 
-    $totalStockIn = $purchaseIn + $saleReturnIn;
+        $totalStockIn = $purchaseIn + $saleReturnIn;
 
-    // --- SUM TOTAL OUT ---
-    $saleOut = OrderDetails::query()
-        ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
-        ->whereBetween('orders.order_date', [$startDate, $endDate])
-        ->where('orders.order_status', 'complete')
-        ->sum('quantity');
+        // --- SUM TOTAL OUT (កែសម្រួល Query ឲ្យបត់បែន) ---
+        $saleOut = OrderDetails::query()
+            ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
+            ->where('orders.order_status', 'complete')
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween(DB::raw('DATE(orders.completion_date)'), [$startDate, $endDate])
+                    ->orWhere(function ($query) use ($startDate, $endDate) {
+                        $query->whereNull('orders.completion_date')
+                            ->whereBetween(DB::raw('DATE(orders.order_date)'), [$startDate, $endDate]);
+                    });
+            })
+            ->sum('quantity');
 
-    $purchaseReturnOut = DB::table('stock_adjustments')
-        ->where('type', 'purchase_return')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('quantity');
+        $purchaseReturnOut = DB::table('stock_adjustments')
+            ->where('type', 'purchase_return')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('quantity');
 
-    $clearStockOut = DB::table('stock_adjustments')
-        ->where('type', 'clear_stock')
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->sum('quantity');
+        $clearStockOut = DB::table('stock_adjustments')
+            ->where('type', 'clear_stock')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('quantity');
 
-    $totalStockOut = $saleOut + $purchaseReturnOut + $clearStockOut;
+        $totalStockOut = $saleOut + $purchaseReturnOut + $clearStockOut;
 
-    // --- PER PRODUCT ---
-    $query = Product::query()
-        ->select('id', 'product_name', 'product_code')
-        ->addSelect([
-            DB::raw("(
+        // --- PER PRODUCT ---
+        $query = Product::query()
+            ->select('id', 'product_name', 'product_code')
+            ->addSelect([
+                DB::raw("(
                 (SELECT COALESCE(SUM(quantity),0)
                  FROM purchase_details
                  INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
@@ -556,13 +594,17 @@ class ReportController extends Controller
                    AND type='sale_return'
                    AND DATE(created_at) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}')
             ) as stock_in"),
-            DB::raw("(
+                DB::raw("(
                 (SELECT COALESCE(SUM(quantity),0)
                  FROM orderdetails
                  INNER JOIN orders ON orders.id = orderdetails.order_id
                  WHERE orderdetails.product_id = products.id
-                   AND DATE(orders.order_date) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}'
-                   AND orders.order_status='complete')
+                   AND orders.order_status='complete'
+                    AND (
+                       DATE(orders.completion_date) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}'
+                       OR (orders.completion_date IS NULL AND DATE(orders.order_date) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}')
+                   )
+                )
                 +
                 (SELECT COALESCE(SUM(quantity),0)
                  FROM stock_adjustments
@@ -570,7 +612,7 @@ class ReportController extends Controller
                    AND type IN ('purchase_return','clear_stock')
                    AND DATE(created_at) BETWEEN '{$startDate->format('Y-m-d')}' AND '{$endDate->format('Y-m-d')}')
             ) as stock_out"),
-            DB::raw("(
+                DB::raw("(
                 SELECT COALESCE(SUM(quantity),0)
                 FROM purchase_details
                 INNER JOIN purchases ON purchases.id = purchase_details.purchase_id
@@ -578,21 +620,24 @@ class ReportController extends Controller
                   AND DATE(purchases.purchase_date) < '{$startDate->format('Y-m-d')}'
                   AND purchases.purchase_status='complete'
             ) as total_purchased_before"),
-            DB::raw("(
+                DB::raw("(
                 SELECT COALESCE(SUM(quantity),0)
                 FROM orderdetails
                 INNER JOIN orders ON orders.id = orderdetails.order_id
                 WHERE orderdetails.product_id = products.id
-                  AND DATE(orders.order_date) < '{$startDate->format('Y-m-d')}'
                   AND orders.order_status='complete'
+                  AND (
+                      DATE(orders.completion_date) < '{$startDate->format('Y-m-d')}'
+                      OR (orders.completion_date IS NULL AND DATE(orders.order_date) < '{$startDate->format('Y-m-d')}')
+                  )
             ) as total_sold_before")
-        ])
-        ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
+            ])
+            ->havingRaw('stock_in > 0 OR stock_out > 0 OR (COALESCE(total_purchased_before,0) - COALESCE(total_sold_before,0)) <> 0');
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('product_name', 'like', "%{$search}%")
-                ->orWhere('product_code', 'like', "%{$search}%");
+                    ->orWhere('product_code', 'like', "%{$search}%");
             });
         }
 
@@ -601,11 +646,13 @@ class ReportController extends Controller
 
         return response()->json([
             'table' => $tableHtml,
+            'pagination' => ($perPage !== 'all' && $products->hasPages()) ? $products->links()->toHtml() : '',
             'formattedDate' => $year,
             'totalStockIn' => (int)$totalStockIn,
             'totalStockOut' => (int)$totalStockOut,
         ]);
     }
+    // ✅ [GEMINI] END: កែសម្រួលកូដ Stock Report ទាំងអស់
 
 
     public function exportStockByDay(Request $request)
@@ -617,7 +664,7 @@ class ReportController extends Controller
         return Excel::download(new StockByDayExport($date, $search), $fileName);
     }
 
-    
+
 
     public function exportStockByMonth(Request $request)
     {
@@ -628,7 +675,7 @@ class ReportController extends Controller
         return Excel::download(new StockByMonthExport($month, $search), $fileName);
     }
 
-    
+
     public function exportStockByYear(Request $request)
     {
         $year = $request->input('year', Carbon::now()->format('Y'));
@@ -637,11 +684,8 @@ class ReportController extends Controller
         return Excel::download(new StockByYearExport($year, $search), $fileName);
     }
 
-    // ✅ ==================== START: CODE ដែលបានកែសម្រួល ====================
-
     /**
      * Get detailed stock movement for a product for a specific period (day, month, or year).
-     * This single method replaces the three separate methods for day, month, and year.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -659,16 +703,18 @@ class ReportController extends Controller
         $type      = $validated['type'];
         $value     = $validated['value'];
 
-        // Calculate date range
+        // ✅ កែសម្រួល Logic សម្រាប់កំណត់ថ្ងៃ
         if ($type === 'day') {
-            $startDate = $endDate = Carbon::parse($value)->startOfDay();
-        } elseif ($type === 'month') {
-            $carbonDate = Carbon::parse($value);
-            $startDate = $carbonDate->copy()->startOfMonth();
-            $endDate = $carbonDate->copy()->endOfMonth();
-        } else { // year
-            $startDate = Carbon::create($value)->startOfYear();
-            $endDate = Carbon::create($value)->endOfYear();
+            $dateForWhere = Carbon::parse($value); // ប្រើสำหรับ whereDate
+        } else { // month or year
+            if ($type === 'month') {
+                $carbonDate = Carbon::parse($value);
+                $startDate = $carbonDate->copy()->startOfMonth();
+                $endDate = $carbonDate->copy()->endOfMonth();
+            } else { // year
+                $startDate = Carbon::create($value)->startOfYear();
+                $endDate = Carbon::create($value)->endOfYear();
+            }
         }
 
         // --- Stock In: Purchase ---
@@ -676,47 +722,72 @@ class ReportController extends Controller
             ->join('purchases', 'purchases.id', '=', 'purchase_details.purchase_id')
             ->where('purchase_details.product_id', $productId)
             ->where('purchases.purchase_status', 'complete')
-            ->when($type === 'day', fn($q) => $q->whereDate('purchases.purchase_date', $startDate))
-            ->when($type !== 'day', fn($q) => $q->whereBetween('purchases.purchase_date', [$startDate, $endDate]))
             ->select('purchases.purchase_date as transaction_date', 'purchase_details.quantity', 'purchases.invoice_no as reference')
-            ->selectRaw("'Stock In' as transaction_type");
+            ->selectRaw("'Stock In (Purchase)' as transaction_type")
+            ->selectRaw("'in' as movement_type"); // ✅ ADDED
 
         // --- Stock In: Sale Return ---
         $saleReturnQuery = DB::table('stock_adjustments')
             ->where('product_id', $productId)
             ->where('type', 'sale_return')
-            ->when($type === 'day', fn($q) => $q->whereDate('created_at', $startDate))
-            ->when($type !== 'day', fn($q) => $q->whereBetween('created_at', [$startDate, $endDate]))
             ->select('created_at as transaction_date', 'quantity', DB::raw("'Sale Return' as reference"))
-            ->selectRaw("'Stock In' as transaction_type");
+            ->selectRaw("'Stock In (Sale Return)' as transaction_type")
+            ->selectRaw("'in' as movement_type"); // ✅ ADDED
 
         // --- Stock Out: Sale ---
         $saleOutQuery = OrderDetails::query()
             ->join('orders', 'orders.id', '=', 'orderdetails.order_id')
             ->where('orderdetails.product_id', $productId)
             ->where('orders.order_status', 'complete')
-            ->when($type === 'day', fn($q) => $q->whereDate('orders.order_date', $startDate))
-            ->when($type !== 'day', fn($q) => $q->whereBetween('orders.order_date', [$startDate, $endDate]))
-            ->select('orders.order_date as transaction_date', 'orderdetails.quantity', 'orders.invoice_no as reference')
-            ->selectRaw("'Stock Out (Sale)' as transaction_type");
+            ->select(DB::raw('COALESCE(orders.completion_date, orders.order_date) as transaction_date'), 'orderdetails.quantity', 'orders.invoice_no as reference')
+            ->selectRaw("'Stock Out (Sale)' as transaction_type")
+            ->selectRaw("'out' as movement_type"); // ✅ ADDED
 
         // --- Stock Out: Purchase Return ---
         $purchaseReturnQuery = DB::table('stock_adjustments')
             ->where('product_id', $productId)
             ->where('type', 'purchase_return')
-            ->when($type === 'day', fn($q) => $q->whereDate('created_at', $startDate))
-            ->when($type !== 'day', fn($q) => $q->whereBetween('created_at', [$startDate, $endDate]))
             ->select('created_at as transaction_date', 'quantity', DB::raw("'Purchase Return' as reference"))
-            ->selectRaw("'Stock Out (Purchase Return)' as transaction_type");
+            ->selectRaw("'Stock Out (Purchase Return)' as transaction_type")
+            ->selectRaw("'out' as movement_type"); // ✅ ADDED
 
         // --- Stock Out: Clear Stock ---
         $clearStockQuery = DB::table('stock_adjustments')
             ->where('product_id', $productId)
             ->where('type', 'clear_stock')
-            ->when($type === 'day', fn($q) => $q->whereDate('created_at', $startDate))
-            ->when($type !== 'day', fn($q) => $q->whereBetween('created_at', [$startDate, $endDate]))
             ->select('created_at as transaction_date', 'quantity', DB::raw("'Clear Stock' as reference"))
-            ->selectRaw("'Stock Out (Clear Stock)' as transaction_type");
+            ->selectRaw("'Stock Out (Clear Stock)' as transaction_type")
+            ->selectRaw("'out' as movement_type"); // ✅ ADDED
+
+
+        // ✅ កែសម្រួល Logic ការ Filter ថ្ងៃឲ្យ Report ធំ
+        if ($type === 'day') {
+            $purchaseInQuery->whereDate('purchases.purchase_date', $dateForWhere);
+            $saleReturnQuery->whereDate('created_at', $dateForWhere);
+            $purchaseReturnQuery->whereDate('created_at', $dateForWhere);
+            $clearStockQuery->whereDate('created_at', $dateForWhere);
+
+            $saleOutQuery->where(function ($query) use ($dateForWhere) {
+                $query->whereDate('orders.completion_date', $dateForWhere)
+                    ->orWhere(function ($query) use ($dateForWhere) {
+                        $query->whereNull('orders.completion_date')
+                            ->whereDate('orders.order_date', $dateForWhere);
+                    });
+            });
+        } else { // month or year
+            $purchaseInQuery->whereBetween('purchases.purchase_date', [$startDate, $endDate]);
+            $saleReturnQuery->whereBetween('created_at', [$startDate, $endDate]);
+            $purchaseReturnQuery->whereBetween('created_at', [$startDate, $endDate]);
+            $clearStockQuery->whereBetween('created_at', [$startDate, $endDate]);
+
+            $saleOutQuery->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('orders.completion_date', [$startDate, $endDate])
+                    ->orWhere(function ($query) use ($startDate, $endDate) {
+                        $query->whereNull('orders.completion_date')
+                            ->whereBetween('orders.order_date', [$startDate, $endDate]);
+                    });
+            });
+        }
 
         // --- Combine all queries ---
         $transactions = $purchaseInQuery
@@ -729,13 +800,12 @@ class ReportController extends Controller
 
         return response()->json($transactions);
     }
- 
 
     // Start Purchase Function
 
     /**
-    * Display the main view for the purchase report.
-    */
+     * Display the main view for the purchase report.
+     */
     public function purchaseReportView()
     {
         return view('admin.report.purchase.purchase_report');

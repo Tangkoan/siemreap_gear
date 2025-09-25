@@ -318,7 +318,7 @@ Route::middleware(['auth'])->group(callback: function () {
         // End
 
         Route::post('/final-invoice', 'FinalInvoice')->middleware('permission:order.menu');
-        Route::get('/pending/order', 'PendingOrder')->name('pending.order')->middleware('permission:order.pending');
+        
 
         Route::get('/order/details/{order_id}', 'OrderDetails')->name('order.details');
 
@@ -339,7 +339,8 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
         //// Due All Route Add commentMore actions
-        Route::get('/order/pending/due', 'PendingDue')->name('pending.due');
+        // Route::get('/order/pending/due', 'PendingDue')->name('pending.due');
+        Route::get('/pending/order', 'PendingOrder')->name('pending.order')->middleware('permission:order.pending');
         // Route::get('/order/due/{id}','OrderDueAjax');
         Route::get('/order/due/{id}', 'getDue'); // ← This will never be reached!
         Route::get('/order/paydue/{id}', 'payDueModel')->name('order.paydue.due');

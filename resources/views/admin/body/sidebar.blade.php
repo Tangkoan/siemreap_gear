@@ -173,10 +173,10 @@
                 $orderMenu = Auth::user()->can('order.menu');
                 $orderPending = Auth::user()->can('order.pending');
                 $orderComplete = Auth::user()->can('order.complete');
-                $orderPendingDue = Auth::user()->can('order.pending.due');
+                // $orderPendingDue = Auth::user()->can('order.pending.due');
                 $isOrderActive = isRouteActive(['pending.order', 'complete.order', 'pending.due']);
             @endphp
-            @if ($orderMenu || $orderPending || $orderComplete || $orderPendingDue )
+            @if ($orderMenu || $orderPending || $orderComplete  )
                 <div class="relative" data-dropdown-trigger>
                     <a href="{{ route('pending.order') }}"
                         class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
@@ -196,9 +196,9 @@
                         @if ($orderComplete)
                             <a href="{{ route('complete.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.complete') }}</a>
                         @endif
-                        @if ($orderPendingDue)
+                        {{-- @if ($orderPendingDue)
                             <a href="{{ route('pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending_due_sale') }}</a>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             @endif

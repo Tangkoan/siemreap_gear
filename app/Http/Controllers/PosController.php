@@ -419,11 +419,8 @@ public function fetchAndStoreAutoRate(Request $request)
     } // End Method 
 
 
- public function FinalInvoice(Request $request)
+    public function FinalInvoice(Request $request)
     {
-
-        
-
         $cartItems = Cart::content();
 
         if ($cartItems->isEmpty()) {
@@ -481,11 +478,16 @@ public function fetchAndStoreAutoRate(Request $request)
                 'pay' => $pay,
                 'due' => max(0, $due),
                 'created_at' => Carbon::now(),
-                // ✅ START: បន្ថែម Exchange Rate ទៅក្នុង Data Array
                 'exchange_rate_khr' => $request->exchange_rate_khr,
-                // ✅ END: បញ្ចប់ការបន្ថែម
             ];
-            
+
+            // ✅ START: កូដដែលបានបន្ថែម
+            // ពិនិត្យមើល បើ Order Status គឺ complete ត្រូវបន្ថែម completion_date
+            if ($orderStatus === 'complete') {
+                $data['completion_date'] = Carbon::now();
+            }
+            // ✅ END: កូដដែលបានបន្ថែម
+
             $order_id = Order::insertGetId($data);
 
             foreach ($cartItems as $item) {
@@ -517,11 +519,10 @@ public function fetchAndStoreAutoRate(Request $request)
                 'message' => __('messages.order_completed_successfully'),
                 'alert-type' => 'success'
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with([
-                'message' => __('messages.something_went_wrong'). ': ' . $e->getMessage(),
+                'message' => __('messages.something_went_wrong') . ': ' . $e->getMessage(),
                 'alert-type' => 'error'
             ]);
         }

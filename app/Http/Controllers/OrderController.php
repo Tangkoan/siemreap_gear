@@ -264,7 +264,7 @@
 
         // កំណត់ Notification បឋម ក្នុងករណីបង់រំលស់
         $notification = array(
-            'message' => __('messages.payment_successful'), // អ្នកអាចបន្ថែម 'Payment Successful' ទៅក្នុងไฟล์ភាសា
+            'message' => __('messages.payment_successful'),
             'alert-type' => 'success'
         );
 
@@ -293,19 +293,32 @@
             foreach ($orderProducts as $item) {
                 $product = Product::find($item->product_id);
 
-                if ($product->product_store >= $item->quantity) {
-                    $product->decrement('product_store', $item->quantity);
-                } else {
-                    $notification = array(
-                        'message' => __('messages.stock_not_enough_for_the_product') . ' ' . $product->product_name,
-                        'alert-type' => 'error'
-                    );
-                    return redirect()->route('pending.order')->with($notification);
+                // ត្រូវប្រាកដថា Stock ត្រូវបានកាត់តែម្តងគត់
+                // เราจะเช็ค item_status เพื่อให้แน่ใจว่ามันยังไม่ได้ถูก Fulfilled
+                if ($item->item_status !== 'fulfilled') {
+                    if ($product && $product->product_store >= $item->quantity) {
+                        $product->decrement('product_store', $item->quantity);
+                        // Update item status to fulfilled
+                        $item->item_status = 'fulfilled';
+                        $item->save();
+                    } else {
+                        // បញ្ឈប់ដំណើរការភ្លាម បើ Stock មិនគ្រប់
+                        $notification = array(
+                            'message' => __('messages.stock_not_enough_for_the_product') . ' ' . ($product->product_name ?? 'N/A'),
+                            'alert-type' => 'error'
+                        );
+                        return redirect()->route('pending.order')->with($notification);
+                    }
                 }
             }
 
             // ប្តូរ Status ទៅជា complete
             $order->order_status = 'complete';
+
+            // ✅ START: កូដដែលបានបន្ថែម
+            // កំណត់ថ្ងៃដែល Order នេះបាន Complete
+            $order->completion_date = \Carbon\Carbon::now();
+            // ✅ END: កូដដែលបានបន្ថែម
 
             // ប្តូរសារ Notification សម្រាប់ Order ដែលបាន Complete
             $notification = array(
@@ -313,9 +326,8 @@
                 'alert-type' => 'success'
             );
         }
-        // បើបង់មិនទាន់អស់ទេ កូដផ្នែកខាងលើនេះនឹងមិនដំណើរការទេ ហើយ Status នឹងនៅតែ pending
 
-        // រក្សាទុកការផ្លាស់ប្តូរទាំងអស់ (pay, due, និង status ប្រសិនបើមានការផ្លាស់ប្តូរ)
+        // រក្សាទុកការផ្លាស់ប្តូរទាំងអស់ (pay, due, និង status/completion_date ប្រសិនបើមានការផ្លាស់ប្តូរ)
         $order->save();
 
         return redirect()->route('pending.order')->with($notification);
@@ -532,41 +544,95 @@
 
     public function payDueModel(Request $request, $id){
             $paydue = Order::findOrFail($id);
-            
-
             return view('admin.order.order_payduepage',compact('paydue',));
-
     }
 
-    public function UpdateDue(Request $request){
-            $order_id = $request->id;
-            $due_amount = $request->due;
-            $pay_amount = $request->pay;
+    public function UpdateDue(Request $request)
+    {
+        // ធ្វើ Validation ដើម្បីឲ្យប្រាកដថា Client បានបញ្ជូនទិន្នន័យមកត្រឹមត្រូវ
+        $request->validate([
+            'id' => 'required|integer|exists:orders,id',
+            'due' => 'required|numeric|min:0.01', // យើងនឹងចាត់ទុក 'due' ជា 'payment_amount'
+        ]);
 
-            $allorder = Order::findOrFail($order_id);
-            $maindue = $allorder->due;
-            $maindpay = $allorder->pay;
-    
-            $paid_due = $maindue - $due_amount;
-            $paid_pay = $maindpay + $due_amount;
+        $order_id = $request->id;
+        $payment_made = (float)$request->due; // យកតម្លៃដែល User បង់ពី Input Field 'due'
 
-            Order::findOrFail($order_id)->update([
-                'due' => $paid_due,
-                'pay' => $paid_pay, 
-            ]);
+        $order = Order::findOrFail($order_id);
 
+        // ការពារការបង់ប្រាក់លើសពីចំនួនដែលជំពាក់
+        if ($payment_made > $order->due) {
             $notification = array(
-                'message' => __('messages.due_amount_updated_successfully'),
+                'message' => __('messages.payment_exceeds_due_amount'), // អ្នកប្រហែលជាត្រូវបន្ថែមពាក្យនេះទៅក្នុងไฟล์ភាសា
+                'alert-type' => 'error'
+            );
+            return redirect()->back()->with($notification);
+        }
+
+        // --- ចាប់ផ្តើម Transaction ---
+        // ការប្រើ DB::transaction() គឺដើម្បីធានាថា បើមាន Error កើតឡើងនៅចន្លោះពេលណាមួយ
+        // ការផ្លាស់ប្តូរទាំងអស់ (ទាំងការបង់ប្រាក់ និងការកាត់ Stock) នឹងត្រូវបាន Rollback ត្រឡប់ទៅសភាពដើមវិញ
+        DB::beginTransaction();
+
+        try {
+            // Update pay และ due amounts ជាបណ្តោះអាសន្ន
+            $order->pay += $payment_made;
+            $order->due -= $payment_made;
+
+            // កំណត់ Notification បឋមសម្រាប់ការបង់រំលស់
+            $notification = array(
+                'message' => __('messages.payment_successful'),
                 'alert-type' => 'success'
-            ); 
+            );
+
+            // ពិនិត្យមើលថាតើ Order ត្រូវបានបង់ផ្តាច់ហើយឬនៅ
+            if ($order->due <= 0) {
+                $order->due = 0; // ធានាថា due មិនអាចមានតម្លៃជាលេខអវិជ្ជមាន
+
+                // កាត់ Stock សម្រាប់តែទំនិញដែលមិនទាន់បាន Fulfilled
+                $orderProducts = Orderdetails::where('order_id', $order_id)->get();
+                foreach ($orderProducts as $item) {
+                    if ($item->item_status !== 'fulfilled') {
+                        $product = Product::find($item->product_id);
+
+                        // ពិនិត្យ Stock យ៉ាងតឹងរ៉ឹង
+                        if ($product && $product->product_store >= $item->quantity) {
+                            $product->decrement('product_store', $item->quantity);
+                            $item->item_status = 'fulfilled';
+                            $item->save(); // Save การเปลี่ยนแปลงของ Order Detail แต่ละรายการ
+                        } else {
+                            // បើ Stock មិនគ្រប់, បោះ Error ហើយវានឹង Rollback Transaction ទាំងមូល
+                            throw new \Exception(__('messages.stock_not_enough_for_the_product') . ' ' . ($product->product_name ?? 'N/A'));
+                        }
+                    }
+                }
+
+                // Update status និង completion date
+                $order->order_status = 'complete';
+                $order->completion_date = \Carbon\Carbon::now();
+
+                // Update សារ Notification សម្រាប់ Order ដែលបាន Complete
+                $notification['message'] = __('messages.order_done_successfully');
+            }
+
+            // រក្សាទុកការផ្លាស់ប្តូរទាំងអស់ទៅលើ Order หลัก
+            $order->save();
+
+            // បើអ្វីៗដំណើរការរលូន, Commit Transaction (Save ការផ្លាស់ប្តូរទាំងអស់ជាអចិន្ត្រៃយ៍)
+            DB::commit();
 
             return redirect()->route('pending.order')->with($notification);
-            
-            
+        } catch (\Exception $e) {
+            // បើមាន Error កើតឡើងនៅកន្លែងណាមួយ, Rollback Transaction (ยกเลิกการเปลี่ยนแปลงทั้งหมด)
+            DB::rollBack();
 
-
-
-    }// End Method 
+            $notification = array(
+                'message' => $e->getMessage(), // បង្ហាញ Error message ដែលបានកើតឡើង
+                'alert-type' => 'error'
+            );
+            return redirect()->route('pending.order')->with($notification);
+        }
+    } // End Method
 
     // Printe OrderPending
     public function getInvoiceHtml($id)

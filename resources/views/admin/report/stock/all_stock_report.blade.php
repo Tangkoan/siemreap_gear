@@ -317,14 +317,17 @@ $(document).ready(function() {
                         let dateObj = new Date(trx.transaction_date);
                         let formattedDate = dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
                         
-                        let quantityClass = trx.transaction_type === 'Stock In' ? 'text-green-600' : 'text-red-600';
-                        let quantityPrefix = trx.transaction_type === 'Stock In' ? '+' : '-';
+                        // ✅✅✅ START: កូដដែលបានកែតម្រូវ ✅✅✅
+                        // ប្រើ trx.movement_type ជំនួស trx.transaction_type ដើម្បីកំណត់ពណ៌
+                        let quantityClass = trx.movement_type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
+                        let quantityPrefix = trx.movement_type === 'in' ? '+' : '-';
+                        // ✅✅✅ END: កូដដែលបានកែតម្រូវ ✅✅✅
                         
                         detailsHtml += `
-                            <tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
                                 <td class="p-3 whitespace-nowrap">${formattedDate}</td>
-                                <td class="p-3">${trx.transaction_type}</td>
-                                <td class="p-3 text-right  ${quantityClass}">${quantityPrefix}${trx.quantity}</td>
+                                <td class="p-3">${htmlspecialchars(trx.transaction_type)}</td>
+                                <td class="p-3 text-right font-semibold ${quantityClass}">${quantityPrefix}${trx.quantity}</td>
                                 <td class="p-3">${htmlspecialchars(trx.reference || 'N/A')}</td>
                             </tr>`;
                     });
