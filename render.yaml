@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: siemreap-gear # <--- ប្តូរឈ្មោះនេះជាឈ្មោះ Project របស់អ្នក
+    env: php # <--- បន្ទាត់នេះសំខាន់បំផុត! វាបង្ខំឲ្យប្រើ PHP Environment
+    plan: free
+    region: singapore
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php artisan storage:link
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_URL
+        value: https://siemreap-gear.onrender.com # <--- ប្តូរ URL នេះបន្ទាប់ពី Deploy រួច
+      - key: APP_KEY
+        generateValue: true # <--- Render នឹងបង្កើត Key ឲ្យដោយស្វ័យប្រវត្តិ
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: my-sales-db # <--- ប្តូរជាឈ្មោះ Database របស់អ្នកบน Render
+          property: internalUrl

@@ -1,0 +1,17 @@
+# Ignore vendor and node_modules folders
+vendor/
+node_modules/
+
+# Ignore Git files
+.git/
+.gitignore
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore environment file (for security)
+.env
+
+# !! IGNORE DATABASE DATA TO FIX THE BUILD ERROR !!
+docker/dbdata/
