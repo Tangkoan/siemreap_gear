@@ -17,14 +17,14 @@
             <a href="{{ route('dashboard') }}" class="flex items-center">
                 <span class="px-2">
                     {{-- ✅ កែប្រែទីនេះ: Dynamic Logo --}}
-                    {{-- កូដនេះនឹងពិនិត្យមើលថា $shopInfo មានข้อมูล และมี logo ឬអត់ --}}
+                    {{-- កូដនេះនឹងពិនិត្យមើលថា $shopInfo មាន logo ឬអត់ --}}
                     <img class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" 
                          src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}" 
                          alt="Shop Logo">
                 </span>
                 <span class="text-2xl font-bold text-slate-800 dark:text-slate-100">
                     {{-- ✅ កែប្រែទីនេះ: Dynamic Shop Name --}}
-                    {{-- បើ $shopInfo មានข้อมูล ให้แสดง name_en, បើไม่มี ให้แสดงค่า Default --}}
+                    {{-- បើ $shopInfo មាន name_en, បើ Default --}}
                     {{ $shopInfo->name_en ?? 'Siem Reap Gear' }}
                 </span>
             </a>
@@ -40,7 +40,7 @@
 
             @php
                 // Get the active rate from the Database
-                // ទាញយកអត្រាដែលកំពុង Active ពី Database
+                // ទាញយកអត្រាប្ដូរប្រាក់ដែលកំពុង Active ពី Database
                 $activeRate = \App\Models\ExchangeRate::where('is_active', true)->latest()->first();
             @endphp
 
@@ -177,7 +177,7 @@
             </button>
 
             {{-- Separator --}}
-            {{-- ខ្សែបន្ទាត់ខั่น --}}
+            {{-- ខ្សែបន្ទាត់ --}}
             <div class="relative">
                 <div class="absolute inset-0 flex items-center" aria-hidden="true">
                     <div class="w-full border-t border-slate-300 dark:border-slate-600"></div>

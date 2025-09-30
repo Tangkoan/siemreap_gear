@@ -60,7 +60,7 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_binary_path' => 'D:/RunProgram/wamp64/bin/mysql/mysql8.3.0/bin', // Use forward slashes
+                'dump_binary_path' => 'C:/RunProgram/wamp64/bin/mysql/mysql9.1.0/bin', // Use forward slashes
         
                 'use_single_transaction',
                 'timeout' => 60 * 5, // 5 minute timeout
