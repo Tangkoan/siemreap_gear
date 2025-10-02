@@ -11,10 +11,13 @@ class Shift extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'opening_cash',
+        'opening_cash_usd', // ✅ NEW
+        'opening_cash_khr', // ✅ NEW
+        'exchange_rate',    // ✅ NEW
         'opened_at',
         'closed_at',
-        'closing_cash',
+        'closing_cash_usd', // ✅ NEW
+        'closing_cash_khr', // ✅ NEW
         'notes',
         'status',
     ];

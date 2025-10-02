@@ -77,7 +77,7 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 Route::middleware(['auth'])->group(callback: function () {
 
     // ==================== OpenShift ====================
-    
+
         // Shift Routes
         Route::post('/shift/open', [ShiftController::class, 'openShift'])->name('shift.open');
         Route::get('/shift/check', [ShiftController::class, 'checkActiveShift'])->name('shift.check'); // សម្រាប់ពិនិត្យមើល
@@ -569,7 +569,10 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
         // Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
-        Route::get('/pos', 'PosPage')->name('pos')->middleware('check.shift');
+        Route::get('/pos', 'PosPage')
+        ->name('pos')
+        ->middleware('check.shift')
+        ->middleware('permission:pos.menu');
 
         // Route::post('/add-cart', 'AddCart');
         // Route::get('/allitem', 'AllItem');

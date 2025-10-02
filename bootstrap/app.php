@@ -25,10 +25,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-        ]);
-
-        // ✅ ចុះឈ្មោះ Middleware Alias សម្រាប់ Shift Check
-        $middleware->alias([
             //... alias ផ្សេងៗដែល Laravel មានស្រាប់
             'check.shift' => CheckShift::class,
         ]);

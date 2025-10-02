@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shift;
+use App\Models\ExchangeRate; // ✅ Import ExchangeRate Model
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -29,20 +31,31 @@ class ShiftController extends Controller
     /**
      * បើកវេនថ្មី (Open a new shift)
      */
-    public function openShift(Request $request)
+     public function openShift(Request $request)
     {
         $request->validate([
-            'opening_cash' => 'required|numeric|min:0',
+            'opening_cash_usd' => 'required|numeric|min:0',
+            'opening_cash_khr' => 'required|numeric|min:0',
+            'exchange_rate' => 'required|integer|min:1', // ត្រូវតែមាន Rate
         ]);
 
         // ពិនិត្យម្តងទៀតថាតើមានវេនបើកឬអត់?
         if (Shift::where('user_id', Auth::id())->where('status', 'open')->exists()) {
             return response()->json(['status' => 'error', 'message' => 'You already have an active shift open.'], 400);
         }
+        
+        // ពិនិត្យមើល Exchange Rate ដែលកំពុង Active
+        $currentRate = ExchangeRate::where('is_active', true)->latest()->first();
+        if (!$currentRate || (int)$currentRate->rate_khr != (int)$request->exchange_rate) {
+            // ដើម្បីធានាថា Exchange Rate ដែល User បញ្ជូនមក គឺត្រូវនឹង Rate កំពុង Active
+            return response()->json(['status' => 'error', 'message' => 'Exchange rate mismatch. Please refresh and try again.'], 400);
+        }
 
         $shift = Shift::create([
             'user_id' => Auth::id(),
-            'opening_cash' => $request->opening_cash,
+            'opening_cash_usd' => $request->opening_cash_usd,
+            'opening_cash_khr' => $request->opening_cash_khr,
+            'exchange_rate' => $request->exchange_rate, // រក្សាទុក Rate ពេលបើកវេន
             'opened_at' => Carbon::now(),
             'status' => 'open',
         ]);
@@ -58,13 +71,11 @@ class ShiftController extends Controller
     public function closeShift(Request $request)
     {
         $request->validate([
-            // ត្រូវតែបញ្ចូលចំនួនលុយនៅពេលបិទ
-            'closing_cash' => 'required|numeric|min:0', 
-            // ស្រេចចិត្ត៖ បើមានកំណត់ចំណាំពេលបិទ
+            'closing_cash_usd' => 'required|numeric|min:0', // ✅ NEW
+            'closing_cash_khr' => 'required|numeric|min:0', // ✅ NEW
             'notes' => 'nullable|string|max:500', 
         ]);
 
-        // ១. ស្វែងរកវេនដែលកំពុង Active សម្រាប់ User បច្ចុប្បន្ន
         $activeShift = Shift::where('user_id', Auth::id())
                             ->where('status', 'open')
                             ->latest('opened_at')
@@ -77,18 +88,13 @@ class ShiftController extends Controller
             ], 404);
         }
         
-        // ២. អាប់ដេតទិន្នន័យបិទវេន
         $activeShift->update([
-            'closing_cash' => $request->closing_cash,
+            'closing_cash_usd' => $request->closing_cash_usd, // ✅ UPDATED
+            'closing_cash_khr' => $request->closing_cash_khr, // ✅ UPDATED
             'closed_at' => Carbon::now(),
             'notes' => $request->notes,
             'status' => 'closed',
         ]);
-
-        // ៣. (ស្រេចចិត្ត) ដំណើរការ Logic សម្រាប់ផ្ទៀងផ្ទាត់សាច់ប្រាក់
-        // អ្នកអាចបន្ថែម Logic ស្មុគស្មាញនៅទីនេះដើម្បីប្រៀបធៀប
-        // 'opening_cash' + 'sales_total' - 'expenses' ជាមួយនឹង 'closing_cash'។
-        // ដោយសារយើងមិនទាន់មាន Sales Total ក្នុង Shift Table ទេ យើងនឹងរំលងត្រង់នេះសិន។
 
         return response()->json([
             'status' => 'success',
