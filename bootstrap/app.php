@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\CheckShift; // ✅ កុំភ្លេច Import Middleware របស់អ្នក!
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -23,6 +25,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        ]);
+
+        // ✅ ចុះឈ្មោះ Middleware Alias សម្រាប់ Shift Check
+        $middleware->alias([
+            //... alias ផ្សេងៗដែល Laravel មានស្រាប់
+            'check.shift' => CheckShift::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

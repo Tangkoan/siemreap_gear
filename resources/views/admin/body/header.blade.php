@@ -47,8 +47,24 @@
             <button id="exchange-rate-btn" class="hidden sm:block bg-teal-500 hover:bg-teal-600 text-white   py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                 1$ = <span id="current-rate-display">{{ $activeRate->rate_khr ?? '?' }}</span>៛
             </button>
+
+            {{-- ✅ NEW: Open/Close Shift Button --}}
+            {{-- ✅ ថ្មី៖ ប៊ូតុងបើក/បិទវេន --}}
+            <button id="shift-toggle-btn" class="hidden sm:block text-white py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                <span id="shift-btn-text">Open Shift</span>
+            </button>
             
             @can('pos.menu')
+                <a href="{{ route('pos') }}" id="pos-link-btn" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                    {{ __('messages.pos') }}
+                </a>
+            @else
+                <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400  py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="You don't have permission to access POS">
+                    {{ __('messages.pos') }}
+                </button>
+            @endcan
+            
+            {{-- @can('pos.menu')
                 <a href="{{ route('pos') }}" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     {{ __('messages.pos') }}
                 </a>
@@ -56,7 +72,7 @@
                 <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400   py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="You don't have permission to access POS">
                     {{ __('messages.pos') }}
                 </button>
-            @endcan
+            @endcan --}}
 
             {{-- Theme Toggle --}}
             <button id="theme-toggle" class="w-16 h-8 rounded-full bg-slate-200 dark:bg-slate-700 relative flex items-center transition-colors duration-500">
@@ -149,6 +165,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
             </button>
+
+
+
+            
+
         </div>
     </div>
 </header>
@@ -205,6 +226,88 @@
     </div>
 </div>
 {{-- ✅ END: Exchange Rate Modal --}}
+
+            {{-- ✅ START: Open Shift Modal --}}
+            {{-- ✅ START: Modal សម្រាប់បើកវេន --}}
+            <div id="open-shift-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
+                <div class="relative top-10 sm:top-20 mx-auto w-full max-w-sm transform rounded-xl bg-white p-6 shadow-2xl transition-all duration-300 dark:bg-slate-800 border dark:border-slate-700">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Open New Shift</h3>
+                        <button id="cancel-open-shift-x" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    <div class="mt-4 text-left space-y-4">
+                        <form id="openShiftForm" class="space-y-4">
+                            @csrf
+                            <div>
+                                <label for="opening_cash_input" class="block text-sm font-medium text-slate-700 dark:text-gray-200">Starting Cash (KHR)</label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <input type="number" name="opening_cash" id="opening_cash_input" class="block w-full pr-10 pl-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-slate-700" placeholder="e.g., 50000" required step="0.01">
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <span class="text-gray-500 sm:text-sm">៛</span>
+                                    </div>
+                                </div>
+                                <div id="shift_error" class="text-red-500 text-sm mt-1"></div>
+                            </div>
+                            <div class="pt-4 flex justify-end gap-x-3">
+                                <button id="cancel-open-shift" type="button" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-md hover:bg-slate-200 focus:outline-none dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600">Cancel</button>
+                                <button id="save-open-shift-btn" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none disabled:opacity-75">Open Shift</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- ✅ END: Open Shift Modal --}}
+
+
+
+            {{-- ✅ START: Close Shift Modal --}}
+            {{-- ✅ START: Modal សម្រាប់បិទវេន --}}
+            <div id="close-shift-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
+                <div class="relative top-10 sm:top-20 mx-auto w-full max-w-sm transform rounded-xl bg-white p-6 shadow-2xl transition-all duration-300 dark:bg-slate-800 border dark:border-slate-700">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Close Shift Now</h3>
+                        <button id="cancel-close-shift-x" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    <div class="mt-4 text-left space-y-4">
+                        <form id="closeShiftForm" class="space-y-4">
+                            @csrf
+                            
+                            {{-- Field សម្រាប់លុយពេលបិទវេន --}}
+                            <div>
+                                <label for="closing_cash_input" class="block text-sm font-medium text-slate-700 dark:text-gray-200">Ending Cash Count (KHR)</label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <input type="number" name="closing_cash" id="closing_cash_input" class="block w-full pr-10 pl-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-slate-700" placeholder="Total cash in drawer" required step="0.01">
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <span class="text-gray-500 sm:text-sm">៛</span>
+                                    </div>
+                                </div>
+                                <div id="closing_error" class="text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            {{-- Field សម្រាប់កំណត់ចំណាំ --}}
+                            <div>
+                                <label for="notes_input" class="block text-sm font-medium text-slate-700 dark:text-gray-200">Notes (Optional)</label>
+                                <textarea name="notes" id="notes_input" rows="3" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-slate-700" placeholder="Any issues or comments during the shift..."></textarea>
+                            </div>
+
+                            <div class="pt-4 flex justify-end gap-x-3">
+                                <button id="cancel-close-shift" type="button" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-md hover:bg-slate-200 focus:outline-none dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600">Cancel</button>
+                                <button id="save-close-shift-btn" type="submit" class="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 focus:outline-none disabled:opacity-75">Confirm Close Shift</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- ✅ END: Close Shift Modal --}}
+
+            
+
 
 
 <script>
@@ -432,6 +535,192 @@ document.addEventListener("DOMContentLoaded", () => {
             .finally(() => {
                 saveBtn.disabled = false;
                 saveBtn.innerText = 'Save Rate';
+            });
+        });
+    }
+
+
+    // --- PART 4: Shift Management Logic (UPDATED FOR CLOSE SHIFT) ---
+    // --- ផ្នែកទី៤៖ Logic សម្រាប់គ្រប់គ្រងវេន (បានកែប្រែសម្រាប់ Close Shift) ---
+    const openShiftModal = document.getElementById('open-shift-modal'); // Modal បើក
+    const closeShiftModal = document.getElementById('close-shift-modal'); // ✅ NEW: Modal បិទ
+    const shiftToggleBtn = document.getElementById('shift-toggle-btn');
+    const shiftBtnText = document.getElementById('shift-btn-text');
+    const openShiftForm = document.getElementById('openShiftForm');
+    const closeShiftForm = document.getElementById('closeShiftForm'); // ✅ NEW: Close Form
+    const posLinkBtn = document.getElementById('pos-link-btn');
+
+    if (shiftToggleBtn && openShiftModal && closeShiftModal) {
+        // Open Modal Close buttons
+        const cancelOpenBtnX = document.getElementById('cancel-open-shift-x');
+        const cancelOpenBtn = document.getElementById('cancel-open-shift');
+        const saveOpenBtn = document.getElementById('save-open-shift-btn');
+
+        // ✅ NEW: Close Modal Close buttons
+        const cancelCloseBtnX = document.getElementById('cancel-close-shift-x');
+        const cancelCloseBtn = document.getElementById('cancel-close-shift');
+        const saveCloseBtn = document.getElementById('save-close-shift-btn');
+
+        let isShiftOpen = false;
+
+        // Function to update the button's appearance and state
+        const updateShiftButtonUI = (isOpen) => {
+            isShiftOpen = isOpen;
+            shiftToggleBtn.classList.remove('bg-green-600', 'hover:bg-green-700', 'bg-orange-600', 'hover:bg-orange-700');
+            
+            if (isOpen) {
+                // ស្ថានភាពបើកហើយ: ពណ៌ទឹកក្រូច, បង្ហាញ "Close Shift"
+                shiftToggleBtn.classList.add('bg-orange-600', 'hover:bg-orange-700');
+                shiftBtnText.textContent = 'Close Shift';
+                // បើកដំណើរការប៊ូតុង POS
+                if (posLinkBtn) {
+                    posLinkBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    posLinkBtn.href = "{{ route('pos') }}"; // បញ្ចូល link ត្រឡប់មកវិញ
+                }
+
+            } else {
+                // ស្ថានភាពបិទហើយ: ពណ៌បៃតង, បង្ហាញ "Open Shift"
+                shiftToggleBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                shiftBtnText.textContent = 'Open Shift';
+                // បិទដំណើរការប៊ូតុង POS
+                if (posLinkBtn) {
+                    posLinkBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    posLinkBtn.removeAttribute('href'); // ដក href ចេញ
+                }
+            }
+        };
+
+        // Function to check the current shift status from the server
+        const checkShiftStatus = async () => {
+            try {
+                const response = await fetch("{{ route('shift.check') }}");
+                const data = await response.json();
+                if (data.status === 'success') {
+                    updateShiftButtonUI(data.is_open);
+                }
+            } catch (error) {
+                console.error('Error checking shift status:', error);
+                updateShiftButtonUI(false); 
+            }
+        };
+        
+        // Check status on page load
+        checkShiftStatus(); 
+
+        // Event Listener for the main toggle button
+        shiftToggleBtn.addEventListener('click', () => {
+            if (isShiftOpen) {
+                // បើក Modal បិទវេន
+                closeShiftModal.classList.remove('hidden');
+            } else {
+                // បើក Modal បើកវេន
+                openShiftModal.classList.remove('hidden');
+            }
+        });
+
+        // Close Modal functions for Open Shift Modal
+        const closeOpenModal = () => {
+            openShiftModal.classList.add('hidden');
+            openShiftForm.reset();
+            document.getElementById('shift_error').textContent = '';
+        };
+
+        cancelOpenBtnX.addEventListener('click', closeOpenModal);
+        cancelOpenBtn.addEventListener('click', closeOpenModal);
+
+        // ✅ NEW: Close Modal functions for Close Shift Modal
+        const closeCloseModal = () => {
+            closeShiftModal.classList.add('hidden');
+            closeShiftForm.reset();
+            document.getElementById('closing_error').textContent = '';
+        };
+
+        cancelCloseBtnX.addEventListener('click', closeCloseModal);
+        cancelCloseBtn.addEventListener('click', closeCloseModal);
+
+        // Close Modals on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target === openShiftModal) closeOpenModal();
+            if (e.target === closeShiftModal) closeCloseModal(); // ✅ NEW
+        });
+
+        // --------------------------------------------------
+        // 1. Handle Open Shift Form Submission (Unchanged)
+        // --------------------------------------------------
+        openShiftForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveOpenBtn.disabled = true;
+            saveOpenBtn.innerText = 'Opening...';
+            document.getElementById('shift_error').textContent = ''; 
+
+            fetch("{{ route('shift.open') }}", {
+                method: 'POST',
+                body: new FormData(this),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.json().then(data => ({ status: response.status, data })))
+            .then(({ status, data }) => {
+                if (status >= 400) {
+                    if (data.errors && data.errors.opening_cash) {
+                        document.getElementById('shift_error').textContent = data.errors.opening_cash[0];
+                    } else {
+                        toastr.error(data.message || 'Failed to open shift.');
+                    }
+                    throw new Error('Shift opening failed.');
+                }
+                
+                toastr.success(data.message);
+                updateShiftButtonUI(true); 
+                closeOpenModal();
+                checkShiftStatus(); 
+            })
+            .catch(error => {
+                console.error('Open Shift Error:', error);
+            })
+            .finally(() => {
+                saveOpenBtn.disabled = false;
+                saveOpenBtn.innerText = 'Open Shift';
+            });
+        });
+
+        // --------------------------------------------------
+        // ✅ NEW: 2. Handle Close Shift Form Submission 
+        // --------------------------------------------------
+        closeShiftForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveCloseBtn.disabled = true;
+            saveCloseBtn.innerText = 'Closing...';
+            document.getElementById('closing_error').textContent = ''; // Clear previous error
+
+            fetch("{{ route('shift.close') }}", {
+                method: 'POST',
+                body: new FormData(this),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.json().then(data => ({ status: response.status, data })))
+            .then(({ status, data }) => {
+                if (status >= 400) {
+                    // Handle Validation or Server Error
+                    if (data.errors && data.errors.closing_cash) {
+                        document.getElementById('closing_error').textContent = data.errors.closing_cash[0];
+                    } else {
+                        toastr.error(data.message || 'Failed to close shift.');
+                    }
+                    throw new Error('Shift closing failed.');
+                }
+                
+                // Success: Update UI and close modal
+                toastr.success(data.message);
+                updateShiftButtonUI(false); // Update button to 'Open Shift'
+                closeCloseModal();
+                checkShiftStatus(); // Rerun to ensure POS link is inactive
+            })
+            .catch(error => {
+                console.error('Close Shift Error:', error);
+            })
+            .finally(() => {
+                saveCloseBtn.disabled = false;
+                saveCloseBtn.innerText = 'Confirm Close Shift';
             });
         });
     }

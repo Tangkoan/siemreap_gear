@@ -26,6 +26,7 @@ use App\Http\Controllers\LanguageController;
 
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ShiftController;
 
 
 use Illuminate\Support\Facades\Auth;
@@ -74,6 +75,16 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
+    // ==================== OpenShift ====================
+    
+        // Shift Routes
+        Route::post('/shift/open', [ShiftController::class, 'openShift'])->name('shift.open');
+        Route::get('/shift/check', [ShiftController::class, 'checkActiveShift'])->name('shift.check'); // សម្រាប់ពិនិត្យមើល
+        // ✅ NEW: Route សម្រាប់បិទវេន
+        Route::post('/shift/close', [ShiftController::class, 'closeShift'])->name('shift.close'); 
+        
+    // Route សម្រាប់បិទវេន (Close Shift) នឹងត្រូវបន្ថែមនៅពេលក្រោយ
 
     // =================== Stock =====================
     Route::post('/stock/adjust', [StockController::class, 'adjustStock'])->name('stock.adjust');
@@ -557,7 +568,9 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
 
-        Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
+        // Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
+        Route::get('/pos', 'PosPage')->name('pos')->middleware('check.shift');
+
         // Route::post('/add-cart', 'AddCart');
         // Route::get('/allitem', 'AllItem');
         // Route::post('/cart-update/{rowId}', 'CartUpdate');
