@@ -183,7 +183,13 @@ return [
 
         
 
-// =========================== Order ===========================
+// =========================== Order ==========================='
+
+        // ផ្សេងៗ
+        'payment_exceeds_due_amount'=> 'Payment Exceeds Due Amount',
+        'payment_successful'=> 'Payment Successfull',
+        'product_not_found' => 'Product Not Found',
+
         // Pending Orders
         'pending_orders'=> 'Pending Orders',
         'order_date'=> 'Order Date',

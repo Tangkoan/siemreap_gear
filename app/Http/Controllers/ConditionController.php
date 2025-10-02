@@ -67,7 +67,7 @@ class ConditionController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * អាប់ដេតข้อมูล Condition ដែលមានស្រាប់
+     * Update Condition ដែលមានស្រាប់
      */
     public function ConditionUpdate(Request $request)
     {
@@ -105,7 +105,7 @@ class ConditionController extends Controller
         $condition = Condition::findOrFail($id);
 
         // ពិនិត្យមើលថាតើ Condition នេះត្រូវបានប្រើប្រាស់ដោយ Product ដែរឬទេ
-        // អ្នកអាចកែសម្រួល `products()` ទៅតាម relationship ដែលអ្នកបានបង្កើតใน Model
+        // អាចកែសម្រួល `products()` ទៅតាម relationship បានបង្កើត Model
         if ($condition->products()->exists()) {
             $notification = array(
                 'message' => __('messages.condition_delete_error_has_products'), // ✅ ប្តូរសារ Notification
@@ -114,7 +114,7 @@ class ConditionController extends Controller
             return redirect()->route('all.condition')->with($notification);
         }
 
-        // ប្រសិនបើไม่มี Product ใช้งานទេ គឺអាចលុបបាន
+        // ប្រសិនបើ Product អត់មានជាប់ Reletionship គឺអាចលុបបាន
         $condition->delete();
 
         $notification = array(
@@ -126,7 +126,7 @@ class ConditionController extends Controller
 
     /**
      * Search for a resource.
-     * មុខងារស្វែងរកแบบ AJAX
+     * មុខងារស្វែងរក AJAX
      */
     public function searchCondition(Request $request)
     {

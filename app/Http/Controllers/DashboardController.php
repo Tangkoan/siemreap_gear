@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\Product; // ត្រូវប្រាកដថាបានហៅប្រើ Model Product
+use App\Models\Product;
 use App\Models\Orderdetails;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;

@@ -3,41 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
-
 use Carbon\Carbon;
+use Illuminate\Http\Request; // បញ្ជាក់ Auth class
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
     //
-
-    public function CustomerPage(){
+    public function CustomerPage()
+    {
         $customer = Customer::latest()->get();
+
         return view('admin.customer.admin_customer', compact('customer'));
     }
 
-
-
-    public function AddCustomer(){
+    public function AddCustomer()
+    {
         return view('admin.customer.add_customer');
     } // End Method
 
-    public function EditCustomer($id){
+    public function EditCustomer($id)
+    {
         $customer = Customer::findOrFail($id);
+
         return view('admin.customer.edit_customer', compact('customer'));
     } // End Method
 
-
     public function StoreCustomer(Request $request)
     {
-        
 
         $request->validate([
             'name' => 'required|max:200|unique:customers,name',
         ]);
-
 
         Customer::insert([
             'name' => $request->name,
@@ -46,9 +43,7 @@ class CustomerController extends Controller
             'address' => $request->address,
             'created_at' => Carbon::now(),
         ]);
-       
 
-        
         // Notification
         $notification = [
             'message' => __('messages.customer_inserted_successfully'),
@@ -56,15 +51,16 @@ class CustomerController extends Controller
         ];
 
         return redirect()->route('all.customer')->with($notification);
-       
+
     }
     // End
 
-    public function CustomerUpdate(Request $request){
+    public function CustomerUpdate(Request $request)
+    {
         $customer_id = $request->id;
 
         $request->validate([
-            'name' => 'required|max:200|unique:customers,name,'. $customer_id,
+            'name' => 'required|max:200|unique:customers,name,'.$customer_id,
         ]);
 
         Customer::findOrFail($customer_id)->update([
@@ -72,9 +68,8 @@ class CustomerController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'notes' => $request->notes,
-            'updated_at' => Carbon::now(), 
+            'updated_at' => Carbon::now(),
         ]);
-       
 
         // Notification
         $notification = [
@@ -83,79 +78,74 @@ class CustomerController extends Controller
         ];
 
         return redirect()->route('all.customer')->with($notification);
-       
+
     }// End Method
 
-
-    
-
     public function DeleteCustomer($id)
-{
-    $customer = Customer::findOrFail($id);
+    {
+        $customer = Customer::findOrFail($id);
 
-    // ✅ ពិនិត្យថា customer មាន order ឬទិន្នន័យផ្សេងទៀតទេ
-    $hasOrders = $customer->orders()->exists(); // បើអ្នកមាន table orders
-    // $hasInvoices = $customer->invoices()->exists(); // ឧទាហរណ៍បើមាន table invoices
+        // ✅ ពិនិត្យថា customer មាន order ឬទិន្នន័យផ្សេងទៀតទេ
+        $hasOrders = $customer->orders()->exists(); // បើអ្នកមាន table orders
+        // $hasInvoices = $customer->invoices()->exists(); // ឧទាហរណ៍បើមាន table invoices
 
-    if ($hasOrders) {
-        
-        $notification = array(
+        if ($hasOrders) {
+
+            $notification = [
                 'message' => __('messages.customer_delete_error_has_related_records_exist'),
-                'alert-type' => 'error'
-        );
+                'alert-type' => 'error',
+            ];
+
+            return redirect()->back()->with($notification);
+        }
+
+        $customer->delete();
+
+        $notification = [
+            'message' => 'Customer Deleted Successfully',
+            'alert-type' => 'success',
+        ];
+
+        $notification = [
+            'message' => __('messages.customer_deleted_successfully'),
+            'alert-type' => 'success',
+        ];
 
         return redirect()->back()->with($notification);
     }
 
-    $customer->delete();
-
-    $notification = array(
-        'message' => 'Customer Deleted Successfully',
-        'alert-type' => 'success'
-    );
-
-    $notification = array(
-                'message' => __('messages.customer_deleted_successfully'),
-                'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification);
-}
-
-
-
-
     public function searchCustomer(Request $request)
-{
-    $query = Customer::query();
+    {
+        $query = Customer::query();
 
-    if ($request->has('search') && $request->search != '') {
-        $query->where('name', 'LIKE', '%' . $request->search . '%')
-        ->orWhere('phone', 'LIKE', '%' . $request->search . '%')
-        ->orWhere('address', 'LIKE', '%' . $request->search . '%');
-    }
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('phone', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('address', 'LIKE', '%'.$request->search.'%');
+        }
 
-    // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
-    $query->orderBy('created_at', 'desc');
+        // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
+        $query->orderBy('created_at', 'desc');
 
-    $perPage = $request->perPage ?? 10; // ✅ Default = 10
-    $isAll = $perPage === 'all';
+        $perPage = $request->perPage ?? 10; // ✅ Default = 10
+        $isAll = $perPage === 'all';
 
-    if ($isAll) {
-        $customers = $query->get();
-    } else {
-        $customers = $query->paginate((int)$perPage);
-    }
+        if ($isAll) {
+            $customers = $query->get();
+        } else {
+            $customers = $query->paginate((int) $perPage);
+        }
 
-    $table = '';
-    foreach ($customers as $key => $item) {
-        $editBtn = '';
-        $deleteBtn = '';
+        $table = '';
+        foreach ($customers as $key => $item) {
+            $editBtn = '';
+            $deleteBtn = '';
 
-        // ✅ Edit Button
-        if (Auth::user()->can('customer.edit')) {
-            $editBtn = '
+            // ✅ Edit Button
+            if (Auth::user()->can('customer.edit')) {
+                $editBtn = '
             <button class="icon-edit  transition-colors duration-200  focus:outline-none">
-                <a href="' . route('edit.customer', $item->id) . '">
+                <a href="'.route('edit.customer', $item->id).'">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -167,9 +157,9 @@ class CustomerController extends Controller
                     </svg>
                 </a>
             </button>';
-        } else {
-            // Disabled Edit Button (grey)
-            $editBtn = '
+            } else {
+                // Disabled Edit Button (grey)
+                $editBtn = '
             <button class=" text-gray-400 cursor-not-allowed" disabled title="No permission to edit">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -181,13 +171,13 @@ class CustomerController extends Controller
                         A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                 </svg>
             </button>';
-        }
-        
-        // ✅ Delete Button
-        if (Auth::user()->can('customer.delete')) {
-            $deleteBtn = '
+            }
+
+            // ✅ Delete Button
+            if (Auth::user()->can('customer.delete')) {
+                $deleteBtn = '
                 <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-red-500  hover:text-red-500 focus:outline-none">
-                <a href="' . route('delete.customer', $item->id) . '" id="delete">
+                <a href="'.route('delete.customer', $item->id).'" id="delete">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -205,9 +195,9 @@ class CustomerController extends Controller
                     </svg>
                 </a>
             </button>';
-        } else {
-            // Disabled Delete Button (grey)
-            $deleteBtn = '
+            } else {
+                // Disabled Delete Button (grey)
+                $deleteBtn = '
             <button type="button" class=" text-gray-400 cursor-not-allowed" disabled title="No permission to delete">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -225,29 +215,29 @@ class CustomerController extends Controller
                         m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
             </button>';
-        }
+            }
 
-        $table .= '
+            $table .= '
         <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-            <td class="p-2">' . ($key + 1) . '</td>
-            <td class="p-2">' . $item->name . '</td>
-            <td class="p-2"> '  . ($item->phone ?? 'null') . '</td>
-            <td class="p-2"> '  . ($item->notes ?? 'null') . '</td>
-            <td class="p-2"> '  . ($item->address ?? 'null') . '</td>
-            <td class="p-2">' . date('d/m/Y', strtotime($item->created_at) ?? 'null') . '</td>
+            <td class="p-2">'.($key + 1).'</td>
+            <td class="p-2">'.$item->name.'</td>
+            <td class="p-2"> '.($item->phone ?? 'null').'</td>
+            <td class="p-2"> '.($item->notes ?? 'null').'</td>
+            <td class="p-2"> '.($item->address ?? 'null').'</td>
+            <td class="p-2">'.date('d/m/Y', strtotime($item->created_at) ?? 'null').'</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
-                        ' . $editBtn . $deleteBtn . '
+                        '.$editBtn.$deleteBtn.'
                     </div>
             </td>
         </tr>';
-    }
+        }
 
-    $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $customers->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $customers->links('pagination::tailwind')->toHtml();
 
-    return response()->json([
-        'table' => $table,
-        'pagination' => $pagination
-    ]);
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination,
+        ]);
     }
 }

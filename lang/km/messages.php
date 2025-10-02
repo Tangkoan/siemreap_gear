@@ -186,6 +186,12 @@ return [
         'enter_invoice_no'=> 'សូមបញ្ចូលលេខវិក្ដយបត្រ',
 
 // ============== Order ==================================
+
+        // ផ្សេងៗ
+        'payment_exceeds_due_amount'=> 'ការទូទាត់លើសចំនួនកំណត់',
+        'payment_successful'=> 'ការបង់ប្រាក់ទទួលបានជោគជ័យ',
+        'product_not_found' => 'រកទំនិញមិនឃើញ',
+
         // Pending Orders
         'pending_orders'=> 'ការបញ្ជាទិញដែលមិនទាន់សម្រេច',
         'order_date'=> 'ថ្ងៃបញ្ជាទិញ',

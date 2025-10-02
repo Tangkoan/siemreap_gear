@@ -61,25 +61,25 @@ class BackupController extends Controller
                 $filename = $file->getFilename();
                 $sizeInBytes = $file->getSize();
                 $size = $sizeInBytes > (1024 * 1024)
-                    ? number_format($sizeInBytes / (1024 * 1024), 2) . ' MB'
-                    : number_format($sizeInBytes / 1024, 2) . ' KB';
-                
+                    ? number_format($sizeInBytes / (1024 * 1024), 2).' MB'
+                    : number_format($sizeInBytes / 1024, 2).' KB';
+
                 $path = $file->getPath();
                 $downloadUrl = route('backup.download', ['getFilename' => $filename]);
                 $deleteUrl = route('backup.delete', ['getFilename' => $filename]);
 
                 $table .= '
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                        <td class="p-2  text-sm text-slate-800 dark:text-gray-200">' . ($startIndex + $key + 1) . '</td>
-                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $filename . '</td>
-                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $size . '</td>
-                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $path . '</td>
+                        <td class="p-2  text-sm text-slate-800 dark:text-gray-200">'.($startIndex + $key + 1).'</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">'.$filename.'</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">'.$size.'</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">'.$path.'</td>
                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                             <div class="flex items-center gap-x-2">
-                                <a href="' . $downloadUrl . '" class="icon-download inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Download">
+                                <a href="'.$downloadUrl.'" class="icon-download inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Download">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg>
                                 </a>
-                                <a href="' . $deleteUrl . '" id="delete" class="icon-delete inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Delete">
+                                <a href="'.$deleteUrl.'" id="delete" class="icon-delete inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Delete">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                 </a>
                             </div>
@@ -89,31 +89,33 @@ class BackupController extends Controller
         }
 
         $pagination = '';
-        if (!$isAll) {
-            $pagination = '<div class="text-sm text-slate-500 p-4">Showing ' . $paginatedFiles->count() . ' of ' . $allFiles->count() . ' results.</div>';
+        if (! $isAll) {
+            $pagination = '<div class="text-sm text-slate-500 p-4">Showing '.$paginatedFiles->count().' of '.$allFiles->count().' results.</div>';
         }
 
         return response()->json(['table' => $table, 'pagination' => $pagination]);
     }
 
-// ============ Fuction នេះសម្រាប់ Backup ដោយដៃគឺចូលតែ Local Drive ទេមិនចូល Google Dirve ឡើយ
-                                                                public function backupNow()
-                                                                {
-                                                                    try {
-                                                                        // បញ្ជូន​ការ Backup មូលដ្ឋាន​ទិន្នន័យ​ទៅ​គ្រប់​ទីតាំង​ដែល​បាន​កំណត់
-                                                                        Artisan::queue('backup:run', [
-                                                                            '--only-db'               => true,
-                                                                            '--disable-notifications' => true,
-                                                                        ]);
+    // ============ Fuction នេះសម្រាប់ Backup ដោយដៃគឺចូលតែ Local Drive ទេមិនចូល Google Dirve ឡើយ
+    public function backupNow()
+    {
+        try {
+            // បញ្ជូន​ការ Backup មូលដ្ឋាន​ទិន្នន័យ​ទៅ​គ្រប់​ទីតាំង​ដែល​បាន​កំណត់
+            Artisan::queue('backup:run', [
+                '--only-db' => true,
+                '--disable-notifications' => true,
+            ]);
 
-                                                                        Log::info('Database backup job queued to all configured disks.');
-                                                                        return back()->with('start_backup_check', true);
-                                                                    } catch (\Exception $e) {
-                                                                        Log::error('Failed to queue DB backup: '.$e->getMessage());
-                                                                        return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
-                                                                    }
-                                                                }
-// ==================================== Function នេះគឺដំណើរការ Backup ដោយដៃប៉ុន្ដែគឺចូលទាំង Local Drive និង Google Drive ========================
+            Log::info('Database backup job queued to all configured disks.');
+
+            return back()->with('start_backup_check', true);
+        } catch (\Exception $e) {
+            Log::error('Failed to queue DB backup: '.$e->getMessage());
+
+            return back()->with(['notification' => ['message' => 'Failed to start database backup.', 'alert-type' => 'error']]);
+        }
+    }
+    // ==================================== Function នេះគឺដំណើរការ Backup ដោយដៃប៉ុន្ដែគឺចូលទាំង Local Drive និង Google Drive ========================
     // public function backupNow()
     //     {
     //         try {
@@ -143,26 +145,27 @@ class BackupController extends Controller
     //         }
     //     }
 
-
-    
-
-
     public function getBackupStatus()
     {
         $disk = $this->getBackupDisk();
         $folderName = $this->getBackupFolderName();
         $files = $disk->files($folderName);
 
-        if (empty($files)) return response()->json(['status' => 'pending']);
+        if (empty($files)) {
+            return response()->json(['status' => 'pending']);
+        }
 
         $latestFile = collect($files)->sortByDesc(fn ($file) => $disk->lastModified($file))->first();
 
-        if (!$latestFile) return response()->json(['status' => 'pending']);
+        if (! $latestFile) {
+            return response()->json(['status' => 'pending']);
+        }
 
         $lastModified = $disk->lastModified($latestFile);
         if (time() - $lastModified < 15) {
             return response()->json(['status' => 'completed', 'message' => 'Database Backup Successfully!', 'alert-type' => 'success']);
         }
+
         return response()->json(['status' => 'pending']);
     }
 
@@ -171,9 +174,11 @@ class BackupController extends Controller
         try {
             BackupProjectJob::dispatch();
             Log::info('Project backup job has been queued successfully.');
+
             return redirect()->back()->with('start_project_backup_check', true);
         } catch (\Exception $e) {
-            Log::error('Failed to queue the project backup job: ' . $e->getMessage());
+            Log::error('Failed to queue the project backup job: '.$e->getMessage());
+
             return redirect()->back()->with(['notification' => ['message' => 'Failed to start project backup.', 'alert-type' => 'error']]);
         }
     }
@@ -184,16 +189,21 @@ class BackupController extends Controller
         $folderPath = 'project-backups';
         $files = $disk->files($folderPath);
 
-        if (empty($files)) return response()->json(['status' => 'pending']);
+        if (empty($files)) {
+            return response()->json(['status' => 'pending']);
+        }
 
         $latestFile = collect($files)->sortByDesc(fn ($file) => $disk->lastModified($file))->first();
 
-        if (!$latestFile) return response()->json(['status' => 'pending']);
-        
+        if (! $latestFile) {
+            return response()->json(['status' => 'pending']);
+        }
+
         $lastModified = $disk->lastModified($latestFile);
         if (time() - $lastModified < 60) {
             return response()->json(['status' => 'completed', 'message' => 'Project Backup Successfully!', 'alert-type' => 'success']);
         }
+
         return response()->json(['status' => 'pending']);
     }
 
@@ -201,9 +211,11 @@ class BackupController extends Controller
     {
         $disk = $this->getBackupDisk();
         $folderName = $this->getBackupFolderName();
-        $filePath = $folderName . '/' . $getFilename;
+        $filePath = $folderName.'/'.$getFilename;
 
-        if ($disk->exists($filePath)) return $disk->download($filePath);
+        if ($disk->exists($filePath)) {
+            return $disk->download($filePath);
+        }
         abort(404, 'File not found.');
     }
 
@@ -211,12 +223,14 @@ class BackupController extends Controller
     {
         $disk = $this->getBackupDisk();
         $folderName = $this->getBackupFolderName();
-        $filePath = $folderName . '/' . $getFilename;
+        $filePath = $folderName.'/'.$getFilename;
 
         if ($disk->exists($filePath)) {
             $disk->delete($filePath);
+
             return redirect()->back()->with(['notification' => ['message' => 'Backup file deleted!', 'alert-type' => 'success']]);
         }
+
         return redirect()->back()->with(['notification' => ['message' => 'File not found!', 'alert-type' => 'error']]);
     }
 
@@ -246,26 +260,27 @@ class BackupController extends Controller
         } else {
             foreach ($allFiles as $key => $file) {
                 $filename = $file->getFilename();
-                $size = number_format($file->getSize() / (1024 * 1024), 2) . ' MB';
+                $size = number_format($file->getSize() / (1024 * 1024), 2).' MB';
                 $path = $file->getPath();
                 $downloadUrl = route('backup.project.download', ['filename' => $filename]);
                 $deleteUrl = route('backup.project.delete', ['filename' => $filename]);
 
                 $table .= '
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-200 dark:border-gray-700">
-                        <td class="p-2  text-sm text-slate-800 dark:text-gray-200">' . ($key + 1) . '</td>
-                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $filename . '</td>
-                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $size . '</td>
-                        <td class="p-2 text-sm text-black dark:text-gray-200">' . $path . '</td>
+                        <td class="p-2  text-sm text-slate-800 dark:text-gray-200">'.($key + 1).'</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">'.$filename.'</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">'.$size.'</td>
+                        <td class="p-2 text-sm text-black dark:text-gray-200">'.$path.'</td>
                         <td class="px-4 py-4 text-sm whitespace-nowrap">
                             <div class="flex items-center gap-x-2">
-                                <a href="' . $downloadUrl . '" class="icon-download inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Download"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg></a>
-                                <a href="' . $deleteUrl . '" id="delete" class="icon-delete inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg></a>
+                                <a href="'.$downloadUrl.'" class="icon-download inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Download"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg></a>
+                                <a href="'.$deleteUrl.'" id="delete" class="icon-delete inline-flex items-center px-3 py-1 text-white text-sm rounded-md transition-colors duration-200" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg></a>
                             </div>
                         </td>
                     </tr>';
             }
         }
+
         return response()->json(['table' => $table]);
     }
 
@@ -275,23 +290,28 @@ class BackupController extends Controller
     public function downloadProjectBackup($filename)
     {
         $disk = Storage::disk('local');
-        $filePath = 'project-backups/' . $filename;
+        $filePath = 'project-backups/'.$filename;
 
-        if ($disk->exists($filePath)) return $disk->download($filePath);
+        if ($disk->exists($filePath)) {
+            return $disk->download($filePath);
+        }
         abort(404, 'File not found.');
     }
+
     /**
      * ✅ [ថ្មី] លុប Project Backup
      */
     public function deleteProjectBackup($filename)
     {
         $disk = Storage::disk('local');
-        $filePath = 'project-backups/' . $filename;
+        $filePath = 'project-backups/'.$filename;
 
         if ($disk->exists($filePath)) {
             $disk->delete($filePath);
+
             return redirect()->back()->with(['notification' => ['message' => 'Project backup file deleted!', 'alert-type' => 'success']]);
         }
+
         return redirect()->back()->with(['notification' => ['message' => 'File not found!', 'alert-type' => 'error']]);
     }
 }

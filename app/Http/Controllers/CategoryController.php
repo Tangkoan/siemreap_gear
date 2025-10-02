@@ -2,93 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use App\Models\Category;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
-
-use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str; // បញ្ជាក់ Auth class
 
 class CategoryController extends Controller
 {
     //
 
-    public function AllCategory(){
+    public function AllCategory()
+    {
         $category = Category::latest()->get();
-        return view('admin.category.all_category',compact('category'));
+
+        return view('admin.category.all_category', compact('category'));
     }// End Method
 
-    public function AddCategory(){
+    public function AddCategory()
+    {
         return view('admin.category.add_category');
     } // End Method
 
-
-
     public function StoreCategory(Request $request)
-{
-    // លុប Array ទីពីរចេញ
-    $request->validate([
-        'category_name' => 'required|max:200|unique:categories,category_name',
-    ]);
+    {
+        // លុប Array ទីពីរចេញ
+        $request->validate([
+            'category_name' => 'required|max:200|unique:categories,category_name',
+        ]);
 
-    // Generate slug
-    $slug = Str::slug($request->category_name);
+        // Generate slug
+        $slug = Str::slug($request->category_name);
 
-    // Insert into DB
-    Category::insert([
-        'category_name' => $request->category_name,
-        'category_slug' => $slug,
-        'created_at' => Carbon::now(),
-    ]);
+        // Insert into DB
+        Category::insert([
+            'category_name' => $request->category_name,
+            'category_slug' => $slug,
+            'created_at' => Carbon::now(),
+        ]);
 
-    // Notification
-    $notification = [
-        'message' => __('messages.category_inserted_successfully'),
-        'alert-type' => 'success',
-    ];
+        // Notification
+        $notification = [
+            'message' => __('messages.category_inserted_successfully'),
+            'alert-type' => 'success',
+        ];
 
-    return redirect()->route('all.category')->with($notification);
-}
-    
+        return redirect()->route('all.category')->with($notification);
+    }
 
-
-
-    public function EditCategory($id){
+    public function EditCategory($id)
+    {
         $category = Category::findOrFail($id);
-        return view('admin.category.edit_category',compact('category'));
-    } // End Method 
 
+        return view('admin.category.edit_category', compact('category'));
+    } // End Method
 
     public function CategoryUpdate(Request $request)
-{
-    $category_id = $request->id;
+    {
+        $category_id = $request->id;
 
-    // លុប Array ទីពីរចេញ
-    $request->validate([
-        'category_name' => 'required|max:200|unique:categories,category_name,' . $category_id,
-    ]);
+        // លុប Array ទីពីរចេញ
+        $request->validate([
+            'category_name' => 'required|max:200|unique:categories,category_name,'.$category_id,
+        ]);
 
-    // Generate new slug
-    $slug = Str::slug($request->category_name);
+        // Generate new slug
+        $slug = Str::slug($request->category_name);
 
-    // Update category
-    Category::findOrFail($category_id)->update([
-        'category_name' => $request->category_name,
-        'category_slug' => $slug,
-        'updated_at' => Carbon::now(),
-    ]);
+        // Update category
+        Category::findOrFail($category_id)->update([
+            'category_name' => $request->category_name,
+            'category_slug' => $slug,
+            'updated_at' => Carbon::now(),
+        ]);
 
-    // Notification
-    $notification = [
-        'message' => __('messages.category_updated_successfully'),
-        'alert-type' => 'success',
-    ];
+        // Notification
+        $notification = [
+            'message' => __('messages.category_updated_successfully'),
+            'alert-type' => 'success',
+        ];
 
-    return redirect()->route('all.category')->with($notification); 
-}
-
+        return redirect()->route('all.category')->with($notification);
+    }
 
     public function DeleteCategory($id)
     {
@@ -96,21 +91,23 @@ class CategoryController extends Controller
 
         // Check if any product is using this category
         if ($category->products()->exists()) {
-            $notification = array(
+            $notification = [
                 'message' => __('messages.category_delete_error_has_products'),
-                'alert-type' => 'error'
-            );
+                'alert-type' => 'error',
+            ];
+
             return redirect()->route('all.category')->with($notification);
         }
 
         // If no products, proceed to delete
         $category->delete();
 
-        $notification = array(
+        $notification = [
             'message' => __('messages.category_deleted_successfully'),
-            'alert-type' => 'success'
-        );
-        return redirect()->route('all.category')->with($notification); 
+            'alert-type' => 'success',
+        ];
+
+        return redirect()->route('all.category')->with($notification);
     }
 
     public function searchCategory(Request $request)
@@ -118,7 +115,7 @@ class CategoryController extends Controller
         $query = Category::query();
 
         if ($request->has('search') && $request->search != '') {
-            $query->where('category_name', 'LIKE', '%' . $request->search . '%');
+            $query->where('category_name', 'LIKE', '%'.$request->search.'%');
         }
 
         // 👉 កំណត់អោយចេញតាម created_at ថ្មីជាងគេ
@@ -130,19 +127,19 @@ class CategoryController extends Controller
         if ($isAll) {
             $categories = $query->get();
         } else {
-            $categories = $query->paginate((int)$perPage);
+            $categories = $query->paginate((int) $perPage);
         }
 
         $table = '';
         foreach ($categories as $key => $item) {
             $editBtn = '';
             $deleteBtn = '';
-            
+
             // ✅ Edit Button
             if (Auth::user()->can('category.edit')) {
                 $editBtn = '
                 <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
-                    <a href="' . route('edit.category', $item->id) . '">
+                    <a href="'.route('edit.category', $item->id).'">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -169,12 +166,12 @@ class CategoryController extends Controller
                     </svg>
                 </button>';
             }
-            
+
             // ✅ Delete Button
             if (Auth::user()->can('category.delete')) {
                 $deleteBtn = '
                 <button type="button" class="icon-delete text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-red-500  hover:text-red-500 focus:outline-none">
-                    <a href="' . route('delete.category', $item->id) . '" id="delete">
+                    <a href="'.route('delete.category', $item->id).'" id="delete">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -213,17 +210,16 @@ class CategoryController extends Controller
                     </svg>
                 </button>';
             }
-            
-        
+
             $table .= '
             <tr class="hover:bg-slate-50 border-b border-slate-200 dark:hover:bg-gray-700">
-                <td class="p-2">' . ($key + 1) . '</td>
-                <td class="p-2">' . $item->category_name . '</td>
-                <td class="p-2">' .( $item->category_slug ?? "null") . '</td>
-                <td class="p-2">' . date('d/m/Y', strtotime($item->created_at)) . '</td>
+                <td class="p-2">'.($key + 1).'</td>
+                <td class="p-2">'.$item->category_name.'</td>
+                <td class="p-2">'.($item->category_slug ?? 'null').'</td>
+                <td class="p-2">'.date('d/m/Y', strtotime($item->created_at)).'</td>
                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center gap-x-6">
-                        ' . $editBtn . $deleteBtn . '
+                        '.$editBtn.$deleteBtn.'
                     </div>
                 </td>
             </tr>';
@@ -233,8 +229,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'table' => $table,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ]);
     }
-
 }
