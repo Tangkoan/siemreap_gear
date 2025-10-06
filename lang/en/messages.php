@@ -528,4 +528,24 @@ return [
         'this_due_is' => 'This Due Is',
         'confrim' => 'Confrim',
         'due_amount_remaining_confirmation_required'=> 'Due Amout Remaining Confirmation Required',
+
+// ============================= Stock Controller =========================================
+        
+        'no_permission' => 'You do not have permission to adjust stock.',
+        'adjustment_success' => 'Stock adjusted successfully!',
+        'adjustment_failed' => 'Stock Adjustment Failed! ', // Note the space at the end
+        'invalid_type' => 'Invalid stock adjustment type provided.',
+        
+        // Sale Return Errors
+        'return_sales_fail' => 'Cannot process Sale Return: Product has no prior sales records.',
+        'return_qty_exceeds_sold' => 'Sale Return Failed: Requested quantity (:requested) exceeds total quantity sold (:sold).',
+        
+        // Purchase Return Errors
+        'return_purchase_fail' => 'Cannot process Purchase Return: Product has no prior purchase records.',
+        'return_qty_exceeds_purchased' => 'Purchase Return Failed: Requested quantity (:requested) exceeds total quantity purchased (:purchased).',
+        'insufficient_stock_pr' => 'Purchase Return Failed. Requested quantity (:requested) is more than current stock (:current).',
+        
+        // Clear Stock Errors
+        'insufficient_stock_cs' => 'Clear Stock Failed. Requested quantity (:requested) is more than current stock (:current).',
+    
 ];

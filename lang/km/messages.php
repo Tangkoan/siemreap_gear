@@ -525,4 +525,24 @@ return [
         'confrim' => 'យល់ព្រម',
         'due_amount_remaining_confirmation_required' => 'ទាមទារឱ្យបញ្ចូលប្រាក់ដែលនៅសល់',
         
+
+// ============================= Stock Controller =========================================
+        
+        'no_permission' => 'អ្នកមិនមានសិទ្ធិគ្រប់គ្រងស្តុកទេ។',
+        'adjustment_success' => 'កែសម្រួលស្តុកបានជោគជ័យ!',
+        'adjustment_failed' => 'បរាជ័យក្នុងការកែសម្រួលស្តុក! ', // ត្រូវទុកដកឃ្លា
+        'invalid_type' => 'ប្រភេទនៃការកែសម្រួលស្តុកមិនត្រឹមត្រូវ។',
+        
+        // Sale Return Errors
+        'return_sales_fail' => 'មិនអាចធ្វើ Sale Return បានទេ៖ ផលិតផលនេះមិនទាន់មានកំណត់ត្រាលក់សោះឡើយ។',
+        'return_qty_exceeds_sold' => 'បរាជ័យ Sale Return៖ ចំនួនដែលស្នើសុំត្រឡប់ (:requested) លើសពីចំនួនសរុបដែលធ្លាប់បានលក់ (:sold)។',
+        
+        // Purchase Return Errors
+        'return_purchase_fail' => 'មិនអាចធ្វើ Purchase Return បានទេ៖ ផលិតផលនេះមិនទាន់មានកំណត់ត្រាទិញចូលសោះឡើយ។',
+        'return_qty_exceeds_purchased' => 'បរាជ័យ Purchase Return៖ ចំនួនដែលស្នើសុំត្រឡប់ (:requested) លើសពីចំនួនសរុបដែលធ្លាប់បានទិញចូល (:purchased)។',
+        'insufficient_stock_pr' => 'បរាជ័យ Purchase Return. ចំនួនដែលស្នើសុំត្រឡប់ (:requested) លើសពីស្តុកបច្ចុប្បន្ន (:current)។',
+        
+        // Clear Stock Errors
+        'insufficient_stock_cs' => 'បរាជ័យ Clear Stock. ចំនួនដែលស្នើសុំ (:requested) លើសពីស្តុកបច្ចុប្បន្ន (:current)។',
+    
 ];      
