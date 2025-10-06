@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\product;
+use App\Models\purchase_details;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Auth;
@@ -285,5 +286,42 @@ class StockController extends Controller
             'alert-type' => 'success'
         ];
         return redirect()->back()->with($notification);
+    }
+
+    // NEW METHOD: ប្រើសម្រាប់ទាញយកទិន្នន័យលក់/ទិញសម្រាប់ការត្រឡប់
+    public function getReturnDetails(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'type' => 'required|string|in:sale_return,purchase_return',
+        ]);
+
+        $product_id = $request->product_id;
+        $type = $request->type;
+        $data = [];
+
+        if ($type === 'sale_return') {
+        // នេះគឺត្រឹមត្រូវហើយ
+        $data = DB::table('orderdetails')
+            ->select('orderdetails.id', 'orderdetails.quantity', 'orders.invoice_no', 'orders.order_date')
+            ->join('orders', 'orderdetails.order_id', '=', 'orders.id')
+            ->where('orderdetails.product_id', $product_id)
+            ->orderBy('orders.order_date', 'desc')
+            ->get();
+
+    } elseif ($type === 'purchase_return') {
+        // ✅ កែសម្រួល៖ ប្រើ purchases.invoice_no ហើយ Alias វាទៅជា invoice_no ដើម្បីឲ្យ JavaScript ប្រើ Key តែមួយ
+        // purchase_date គឺត្រឹមត្រូវហើយ
+        $data = DB::table('purchase_details')
+            ->select('purchase_details.id', 'purchase_details.quantity', 'purchases.invoice_no', 'purchases.purchase_date')
+            ->join('purchases', 'purchase_details.purchase_id', '=', 'purchases.id')
+            ->where('purchase_details.product_id', $product_id)
+            ->orderBy('purchases.purchase_date', 'desc')
+            ->get();
+    }
+
+    return response()->json($data);
+
+        return response()->json($data);
     }
 }

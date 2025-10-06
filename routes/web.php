@@ -63,10 +63,15 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 Route::middleware(['auth'])->group(callback: function () {
 
     // =================== Stock =====================
+
+    // ✅ NEW Route សម្រាប់ទាញយកទិន្នន័យលក់/ទិញ
+    Route::get('/stock/get-return-details', [StockController::class, 'getReturnDetails'])->name('stock.get_return_details');
     Route::post('/stock/adjust', [StockController::class, 'adjustStock'])->name('stock.adjust');
 
     Route::get('/stock', [StockController::class, 'searchStock'])->name('search.stock');
     Route::get('/all/stock', [StockController::class, 'StockPage'])->name('all.stock')->middleware('permission:stock.menu');
+
+
     // Route::get('/stock', 'StockManage')->name('all.stock')->middleware('permission:stock.menu');
     
     // ==================== Dashboard ==================== 
