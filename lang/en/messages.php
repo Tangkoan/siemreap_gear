@@ -548,4 +548,9 @@ return [
         // Clear Stock Errors
         'insufficient_stock_cs' => 'Clear Stock Failed. Requested quantity (:requested) is more than current stock (:current).',
     
+        'select_adj_type'=> 'Select Adjustment Type',
+        'adjust_stock_for'=> 'Adjustment Stock For',
+        'search_transaction_by_invoice'=> 'Seach Transaction By Invoice',
+        'select_sale_transaction'=>'Select Sale Transaction',
+        'select_purchase_transaction'=>'Select Purchase Transaction',
 ];

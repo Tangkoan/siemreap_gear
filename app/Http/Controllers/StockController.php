@@ -14,6 +14,10 @@ use App\Models\StockAdjustment;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
+use App\Models\Order; // ត្រូវបន្ថែម
+use App\Models\Orderdetail; // ត្រូវបន្ថែម
+use App\Models\Customer; // ត្រូវបន្ថែម (ប្រសិនបើអ្នកមានតារាង 'customers')
+
 class StockController extends Controller
 {
     //
@@ -122,7 +126,7 @@ class StockController extends Controller
                 
                 <td class="p-2  text-center align-middle">
                     <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  shadow-sm
-                                 ">
+                                     ">
                         '. $item->product_store  .'
                     </span>
                 </td>
@@ -165,6 +169,15 @@ class StockController extends Controller
             'quantity' => 'required|integer|min:1',
             'notes' => 'required|string|max:255',
         ]);
+        
+        // ត្រូវបន្ថែម validation សម្រាប់ Sale/Purchase ID ពេលមាន return
+        if ($request->type === 'sale_return') {
+             $request->validate(['sale_detail_id' => 'required|exists:orderdetails,id']);
+        }
+        if ($request->type === 'purchase_return') {
+            $request->validate(['purchase_detail_id' => 'required|exists:purchase_details,id']);
+        }
+
 
         try {
             DB::transaction(function () use ($request) {
@@ -179,45 +192,30 @@ class StockController extends Controller
 
                 switch ($request->type) {
                     case 'sale_return':
-                        $total_sold = DB::table('orderdetails')
-                                        ->where('product_id', $product_id)
-                                        ->sum('quantity');
-                                    
-                        if ($total_sold == 0) {
-                            // Key: return_sales_fail
-                            $error_message = __('messages.return_sales_fail');
-                            throw new Exception($error_message);
-                        }
+                        // អាចពិនិត្យ quantity ត្រឡប់មកវិញត្រឹមត្រូវតាម transaction ដែរ
+                        $transaction_qty = DB::table('orderdetails')->where('id', $request->sale_detail_id)->value('quantity');
                         
-                        if ($quantity > $total_sold) {
-                            // Key: return_qty_exceeds_sold
-                            $error_message = __('messages.return_qty_exceeds_sold', [
+                        if ($quantity > $transaction_qty) {
+                            $error_message = __('messages.return_qty_exceeds_transaction', [
                                 'requested' => $quantity, 
-                                'sold' => $total_sold
+                                'transaction' => $transaction_qty
                             ]);
                             throw new Exception($error_message);
                         }
-
+                        
+                        // មិនចាំបាច់ពិនិត្យ total_sold ទៀតទេ ព្រោះយើងទាមទារ transaction ID រួចហើយ
                         $new_quantity = $before_quantity + $quantity;
-                        $action_message = 'Sale Return: Added ' . $quantity . ' unit(s)';
+                        $action_message = 'Sale Return: Added ' . $quantity . ' unit(s) from Sale ID: ' . $request->sale_detail_id;
                         break;
                         
                     case 'purchase_return':
-                        $total_purchased = DB::table('purchase_details')
-                                        ->where('product_id', $product_id)
-                                        ->sum('quantity');
-
-                        if ($total_purchased == 0) {
-                            // Key: return_purchase_fail
-                            $error_message = __('messages.return_purchase_fail');
-                            throw new Exception($error_message);
-                        }
+                         // អាចពិនិត្យ quantity ត្រឡប់មកវិញត្រឹមត្រូវតាម transaction ដែរ
+                        $transaction_qty = DB::table('purchase_details')->where('id', $request->purchase_detail_id)->value('quantity');
                         
-                        if ($quantity > $total_purchased) {
-                            // Key: return_qty_exceeds_purchased
-                            $error_message = __('messages.return_qty_exceeds_purchased', [
+                        if ($quantity > $transaction_qty) {
+                            $error_message = __('messages.return_qty_exceeds_transaction', [
                                 'requested' => $quantity, 
-                                'purchased' => $total_purchased
+                                'transaction' => $transaction_qty
                             ]);
                             throw new Exception($error_message);
                         }
@@ -232,7 +230,7 @@ class StockController extends Controller
                             throw new Exception($error_message);
                         }
                         
-                        $action_message = 'Purchase Return: Subtracted ' . $quantity . ' unit(s)';
+                        $action_message = 'Purchase Return: Subtracted ' . $quantity . ' unit(s) for Purchase ID: ' . $request->purchase_detail_id;
                         break;
 
                     case 'clear_stock':
@@ -269,6 +267,8 @@ class StockController extends Controller
                     'before_quantity' => $before_quantity,
                     'after_quantity' => $product->product_store,
                     'notes' => $request->notes . ' (' . $action_message . ')',
+                    // សម្រាប់ជាឯកសារ
+                    'related_id' => $request->type === 'sale_return' ? $request->sale_detail_id : ($request->type === 'purchase_return' ? $request->purchase_detail_id : null),
                 ]);
             });
         } catch (Exception $e) {
@@ -288,40 +288,77 @@ class StockController extends Controller
         return redirect()->back()->with($notification);
     }
 
-    // NEW METHOD: ប្រើសម្រាប់ទាញយកទិន្នន័យលក់/ទិញសម្រាប់ការត្រឡប់
+    // NEW METHOD: ប្រើសម្រាប់ទាញយកទិន្នន័យលក់/ទិញសម្រាប់ការត្រឡប់ (ប្រើ AJAX/Select2)
     public function getReturnDetails(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'type' => 'required|string|in:sale_return,purchase_return',
+            // ✅ NEW: ទទួលយកពាក្យដែលគេ Search
+            'searchTerm' => 'nullable|string',
+            // ✅ NEW: ទទួលយក Pagination (Select2 ប្រើ page)
+            'page' => 'nullable|integer',
+            // ⭐ NEW: ទទួលយកទំហំ Pagination (e.g., 10, 25, 50)
+            'pageSize' => 'nullable|integer|min:1', 
         ]);
 
         $product_id = $request->product_id;
         $type = $request->type;
-        $data = [];
-
+        $searchTerm = $request->searchTerm;
+ 
+        // ⭐ UPDATED: កំណត់ទំហំទំព័រ (Pagination Size) ប្រើតម្លៃដែល request ផ្ញើមក ឬ 10 ជា default
+        $pageSize = $request->input('pageSize', 10);
+        
+        // Logic Query
         if ($type === 'sale_return') {
-        // នេះគឺត្រឹមត្រូវហើយ
-        $data = DB::table('orderdetails')
-            ->select('orderdetails.id', 'orderdetails.quantity', 'orders.invoice_no', 'orders.order_date')
-            ->join('orders', 'orderdetails.order_id', '=', 'orders.id')
-            ->where('orderdetails.product_id', $product_id)
-            ->orderBy('orders.order_date', 'desc')
-            ->get();
+            $query = DB::table('orderdetails')
+                ->select('orderdetails.id as id', 'orderdetails.quantity as quantity', 'orders.invoice_no as invoice_no', 'orders.order_date as date')
+                ->join('orders', 'orderdetails.order_id', '=', 'orders.id')
+                ->where('orderdetails.product_id', $product_id)
+                ->whereNull('orderdetails.status'); // អាចបន្ថែម filter ផ្សេងទៀត
 
-    } elseif ($type === 'purchase_return') {
-        // ✅ កែសម្រួល៖ ប្រើ purchases.invoice_no ហើយ Alias វាទៅជា invoice_no ដើម្បីឲ្យ JavaScript ប្រើ Key តែមួយ
-        // purchase_date គឺត្រឹមត្រូវហើយ
-        $data = DB::table('purchase_details')
-            ->select('purchase_details.id', 'purchase_details.quantity', 'purchases.invoice_no', 'purchases.purchase_date')
-            ->join('purchases', 'purchase_details.purchase_id', '=', 'purchases.id')
-            ->where('purchase_details.product_id', $product_id)
-            ->orderBy('purchases.purchase_date', 'desc')
-            ->get();
+            // បន្ថែម Search តាម Invoice No
+            if ($searchTerm) {
+                $query->where('orders.invoice_no', 'like', '%' . $searchTerm . '%');
+            }
+
+            $data = $query->orderBy('orders.order_date', 'desc')->paginate($pageSize);
+
+        } elseif ($type === 'purchase_return') {
+            $query = DB::table('purchase_details')
+                ->select('purchase_details.id as id', 'purchase_details.quantity as quantity', 'purchases.invoice_no as invoice_no', 'purchases.purchase_date as date')
+                ->join('purchases', 'purchase_details.purchase_id', '=', 'purchases.id')
+                ->where('purchase_details.product_id', $product_id)
+                ->whereNull('purchase_details.status'); // អាចបន្ថែម filter ផ្សេងទៀត
+
+            // បន្ថែម Search តាម Invoice No
+            if ($searchTerm) {
+                $query->where('purchases.invoice_no', 'like', '%' . $searchTerm . '%');
+            }
+
+            $data = $query->orderBy('purchases.purchase_date', 'desc')->paginate($pageSize);
+        } else {
+             return response()->json(['results' => [], 'pagination' => ['more' => false]]);
+        }
+        
+        // ✅ Format Output សម្រាប់ Select2
+        $formattedData = [];
+        foreach ($data->items() as $item) {
+            $formattedData[] = [
+                'id' => $item->id,
+                // ប្រើ `text` សម្រាប់ Select2 ដំណើរការ
+                'text' => ($type === 'sale_return' ? 'SALE' : 'PURCHASE') . ' # ' . ($item->invoice_no ?? 'N/A') . ' | Qty: ' . $item->quantity . ' | Date: ' . ($item->date ?? 'N/A'),
+                'qty' => $item->quantity
+            ];
+        }
+        
+        // ត្រូវ return តាម format របស់ Select2
+        return response()->json([
+            'results' => $formattedData,
+            'pagination' => [
+                'more' => $data->hasMorePages()
+            ]
+        ]);
     }
-
-    return response()->json($data);
-
-        return response()->json($data);
-    }
+    
 }

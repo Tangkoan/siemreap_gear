@@ -510,3 +510,6 @@ Route::middleware(['auth'])->group(callback: function () {
 
 Route::post('/store-sell', [POSController::class, 'FinalInvoice'])->name('store.sell');
 Route::get('/print-invoice/{id}', [POSController::class, 'PrintInvoice'])->name('print.invoice');
+
+
+

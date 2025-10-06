@@ -9,7 +9,6 @@ class StockAdjustment extends Model
 {
     use HasFactory;
 
-    // បន្ថែមส่วนนี้เข้าไป
     protected $fillable = [
         'product_id',
         'user_id',

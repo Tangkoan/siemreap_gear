@@ -544,5 +544,11 @@ return [
         
         // Clear Stock Errors
         'insufficient_stock_cs' => 'បរាជ័យ Clear Stock. ចំនួនដែលស្នើសុំ (:requested) លើសពីស្តុកបច្ចុប្បន្ន (:current)។',
+
+        'select_adj_type'=> 'សូមជ្រើសរើសប្រភេទកែតម្រូវស្ដុក',
+        'adjust_stock_for'=> 'កែតម្រូវស្ដុកនៃទំនិញឈ្មោះ',
+        'search_transaction_by_invoice'=> 'ស្វែងរកតាមរយៈវិក្ដយបត្តិ',
+        'select_sale_transaction'=>'ជ្រើសរើសប្រតិបត្តិការលក់',
+        'select_purchase_transaction'=>'ជ្រើសរើសប្រតិបត្តិការទិញ',
     
 ];      
