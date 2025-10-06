@@ -545,6 +545,7 @@ class ProductController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification); 
+        // return view('admin.product.all_product')->with($notification);
     }
 
 
