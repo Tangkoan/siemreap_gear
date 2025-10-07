@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Income Expense Report</title>
+    <title>Income & Expense Report</title>
     <style>
-        
+        /* Font setup (Kept Khmer font for compatibility with previous reports) */
+        @font-face {
+            font-family: 'Khmer OS Siemreap';
+            font-style: normal;
+            font-weight: normal;
+            src: url({{ storage_path('fonts/KhmerOS_siemreap.ttf') }}) format('truetype');
+        }
+
         body {
-            font-family: 'Khmer OS Siemreap', sans-serif; /* ប្រើ Font ខ្មែរជា Default */
-            font-size: 12px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 11px;
             color: #333;
         }
         .container {
@@ -34,7 +41,7 @@
         }
         th, td {
             border: 1px solid #ccc;
-            padding: 8px;
+            padding: 6px;
             text-align: left;
         }
         th {
@@ -43,37 +50,29 @@
         }
         .summary-table td:first-child {
             font-weight: bold;
-            width: 40%;
+            width: 70%;
         }
         .section-header {
             background-color: #e6e6e6;
             font-weight: bold;
             font-size: 14px;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
         }
-        .income-total {
-            color: green;
-            font-weight: bold;
-        }
-        .expense-total {
-            color: red;
-            font-weight: bold;
-        }
-        .profit {
-             color: green;
-             font-weight: bold;
-        }
-        .loss {
-            color: red;
-            font-weight: bold;
-        }
+        .text-right { text-align: right !important; }
+        .text-center { text-align: center !important; }
+        .income-total { color: #28a745; font-weight: bold; }
+        .expense-total { color: #dc3545; font-weight: bold; }
+        .credit-total { color: #28a745; font-weight: bold; }
+
+        .profit { color: #28a745; font-weight: bold; }
+        .loss { color: #dc3545; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="report-header">
-            <h1>Report Income & Outcome</h1>
+            <h1>Income & Expense Report</h1>
             <p>{{ $summary['formattedDate'] }}</p>
         </div>
 
@@ -81,107 +80,143 @@
         <table class="summary-table">
             <tr>
                 <td>Total Revenue</td>
-                <td class="income-total">${{ $summary['total_revenue'] }}</td>
+                <td class="text-right income-total">${{ $summary['total_revenue'] }}</td>
             </tr>
             <tr>
                 <td>Total Expenses</td>
-                <td class="expense-total">${{ $summary['total_expenses'] }}</td>
+                <td class="text-right expense-total">${{ $summary['total_expenses'] }}</td>
             </tr>
             <tr>
                 <td>Profit / Loss</td>
-                <td class="{{ $summary['is_profit'] ? 'profit' : 'loss' }}">${{ $summary['profit_or_loss'] }}</td>
+                @php $is_profit = (float)str_replace(',', '', $summary['profit_or_loss']) >= 0; @endphp
+                <td class="text-right {{ $is_profit ? 'profit' : 'loss' }}">${{ $summary['profit_or_loss'] }}</td>
             </tr>
         </table>
 
-        {{-- Income Details --}}
+        {{-- ✅ START: REVISED INCOME DETAILS --}}
+        @php
+            $incomeItems = collect();
+            foreach ($sales_details as $item) {
+                $incomeItems->push(['date' => $item->order->order_date, 'type' => 'Sale', 'item' => $item]);
+            }
+            foreach ($stock_adjustments->where('type', 'sale_return') as $item) {
+                $incomeItems->push(['date' => $item->created_at, 'type' => 'Sale Return', 'item' => $item]);
+            }
+            $sortedIncome = $incomeItems->sortBy('date');
+        @endphp
         <table>
             <thead>
-                <tr>
-                    <th colspan="5" class="section-header">
-                        Income Details
-                    </th>
-                </tr>
+                <tr><th colspan="5" class="section-header">Income Details</th></tr>
                 <tr>
                     <th>Date</th>
-                    <th>Disciption</th>
-                    <th style="text-align:center;">QTY</th>
-                    <th style="text-align:right;">Price</th>
-                    <th style="text-align:right;">Total</th>
+                    <th>Description</th>
+                    <th class="text-center">QTY</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Total</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($sales_details as $item)
-                    <tr>
-                        <td>{{ \Carbon\Carbon::parse($item->order->order_date)->format('d-m-Y') }}</td>
-                        <td>{{ $item->product->product_name ?? 'N/A' }} (Invoice: {{ $item->order->invoice_no ?? 'N/A' }})</td>
-                        <td style="text-align:center;">{{ $item->quantity }}</td>
-                        <td style="text-align:right;">${{ number_format($item->unitcost, 2) }}</td>
-                        <td style="text-align:right;" class="income-total">${{ number_format($item->total, 2) }}</td>
-                    </tr>
+                @forelse ($sortedIncome as $income)
+                    @if ($income['type'] == 'Sale')
+                        @php $item = $income['item']; @endphp
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($item->order->order_date)->format('d-m-Y') }}</td>
+                            <td>{{ $item->product->product_name ?? 'N/A' }}<br><small>(Invoice: {{ $item->order->invoice_no ?? 'N/A' }})</small></td>
+                            <td class="text-center">{{ $item->quantity }}</td>
+                            <td class="text-right">${{ number_format($item->unitcost, 2) }}</td>
+                            <td class="text-right income-total">${{ number_format($item->total, 2) }}</td>
+                        </tr>
+                    @elseif ($income['type'] == 'Sale Return')
+                        @php $item = $income['item']; @endphp
+                        <tr style="background-color: #fbebeb;">
+                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                            <td>{{ $item->product->product_name ?? 'N/A' }}<br><small>(Sale Return - Credit)</small></td>
+                            <td class="text-center">{{ $item->quantity }}</td>
+                            <td class="text-right">${{ number_format($item->product->selling_price ?? 0, 2) }}</td>
+                            <td class="text-right expense-total">-${{ number_format($item->quantity * ($item->product->selling_price ?? 0), 2) }}</td>
+                        </tr>
+                    @endif
                 @empty
-                    <tr>
-                        <td colspan="5" style="text-align:center;">dont's have Income</td>
-                    </tr>
+                    <tr><td colspan="5" class="text-center">No income data available</td></tr>
                 @endforelse
             </tbody>
         </table>
+        {{-- ✅ END: REVISED INCOME DETAILS --}}
 
-        {{-- Expense Details --}}
+
+        {{-- ✅ START: REVISED EXPENSE DETAILS --}}
+        @php
+            $expenseItems = collect();
+            foreach ($purchase_details as $item) {
+                $expenseItems->push(['date' => $item->purchase->purchase_date, 'type' => 'Purchase', 'item' => $item]);
+            }
+            foreach ($other_expenses as $item) {
+                $expenseItems->push(['date' => $item->date, 'type' => 'Other Expense', 'item' => $item]);
+            }
+            foreach ($stock_adjustments->where('type', 'clear_stock') as $item) {
+                $expenseItems->push(['date' => $item->created_at, 'type' => 'Clear Stock', 'item' => $item]);
+            }
+            foreach ($stock_adjustments->where('type', 'purchase_return') as $item) {
+                $expenseItems->push(['date' => $item->created_at, 'type' => 'Purchase Return', 'item' => $item]);
+            }
+            $sortedExpenses = $expenseItems->sortBy('date');
+        @endphp
         <table>
-             <thead>
-                <tr>
-                    <th colspan="5" class="section-header">
-                       Expense Details
-                    </th>
-                </tr>
+            <thead>
+                <tr><th colspan="5" class="section-header">Expense Details</th></tr>
                 <tr>
                     <th>Date</th>
-                    <th>Disciption</th>
-                    <th style="text-align:center;">QTY</th>
-                    <th style="text-align:right;">Price</th>
-                    <th style="text-align:right;">Total</th>
+                    <th>Description</th>
+                    <th class="text-center">QTY</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Total</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($purchase_details as $item)
-                    <tr>
-                        <td>{{ \Carbon\Carbon::parse($item->purchase->purchase_date)->format('d-m-Y') }}</td>
-                        <td>{{ $item->product->product_name ?? 'N/A' }} (Purchase: {{ $item->purchase->invoice_no ?? 'N/A' }})</td>
-                        <td style="text-align:center;">{{ $item->quantity }}</td>
-                        <td style="text-align:right;">${{ number_format($item->purchase_price, 2) }}</td>
-                        <td style="text-align:right;" class="expense-total">${{ number_format($item->total, 2) }}</td>
-                    </tr>
-                @endforeach
-                @foreach ($other_expenses as $item)
-                    <tr>
-                        <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }}</td>
-                        <td>{{ $item->details }}</td>
-                        <td style="text-align:center;">-</td>
-                        <td style="text-align:right;">-</td>
-                        <td style="text-align:right;" class="expense-total">${{ number_format($item->amount, 2) }}</td>
-                    </tr>
-                @endforeach
-                
-                {{-- ✅ ADD THIS NEW CODE BLOCK --}}
-                @foreach ($stock_adjustments->where('type', 'clear_stock') as $item)
-                    <tr>
-                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
-                        <td>{{ $item->product->product_name ?? 'N/A' }} (Cleared Stock (Loss))</td>
-                        <td style="text-align:center;">{{ $item->quantity }}</td>
-                        {{-- Price is the buying price, as it represents the cost of the lost stock --}}
-                        <td style="text-align:right;">${{ number_format($item->product->buying_price ?? 0, 2) }}</td>
-                        {{-- Total is quantity * buying_price --}}
-                        <td style="text-align:right;" class="expense-total">${{ number_format($item->quantity * ($item->product->buying_price ?? 0), 2) }}</td>
-                    </tr>
-                @endforeach
-
-                @if($purchase_details->isEmpty() && $other_expenses->isEmpty())
-                     <tr>
-                        <td colspan="5" style="text-align:center;">don't have Expense</td>
-                    </tr>
-                @endif
+                @forelse ($sortedExpenses as $expense)
+                    @if ($expense['type'] == 'Purchase')
+                        @php $item = $expense['item']; @endphp
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($item->purchase->purchase_date)->format('d-m-Y') }}</td>
+                            <td>{{ $item->product->product_name ?? 'N/A' }}<br><small>(Purchase: {{ $item->purchase->purchase_no ?? 'N/A' }})</small></td>
+                            <td class="text-center">{{ $item->quantity }}</td>
+                            <td class="text-right">${{ number_format($item->unitcost, 2) }}</td>
+                            <td class="text-right expense-total">${{ number_format($item->total, 2) }}</td>
+                        </tr>
+                    @elseif ($expense['type'] == 'Other Expense')
+                        @php $item = $expense['item']; @endphp
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }}</td>
+                            <td>{{ $item->details }}<br><small>(Other Expense)</small></td>
+                            <td class="text-center">-</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right expense-total">${{ number_format($item->amount, 2) }}</td>
+                        </tr>
+                    @elseif ($expense['type'] == 'Clear Stock')
+                        @php $item = $expense['item']; @endphp
+                        <tr style="background-color: #fbebeb;">
+                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                            <td>{{ $item->product->product_name ?? 'N/A' }}<br><small>(Cleared Stock - Loss)</small></td>
+                            <td class="text-center">{{ $item->quantity }}</td>
+                            <td class="text-right">${{ number_format($item->product->buying_price ?? 0, 2) }}</td>
+                            <td class="text-right expense-total">${{ number_format($item->quantity * ($item->product->buying_price ?? 0), 2) }}</td>
+                        </tr>
+                    @elseif ($expense['type'] == 'Purchase Return')
+                        @php $item = $expense['item']; @endphp
+                        <tr style="background-color: #eafaf1;">
+                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                            <td>{{ $item->product->product_name ?? 'N/A' }}<br><small>(Purchase Return - Debit)</small></td>
+                            <td class="text-center">{{ $item->quantity }}</td>
+                            <td class="text-right">${{ number_format($item->product->buying_price ?? 0, 2) }}</td>
+                            <td class="text-right credit-total">-${{ number_format($item->quantity * ($item->product->buying_price ?? 0), 2) }}</td>
+                        </tr>
+                    @endif
+                @empty
+                    <tr><td colspan="5" class="text-center">No expense data available</td></tr>
+                @endforelse
             </tbody>
         </table>
+        {{-- ✅ END: REVISED EXPENSE DETAILS --}}
     </div>
 </body>
 </html>

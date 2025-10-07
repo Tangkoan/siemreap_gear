@@ -959,157 +959,122 @@ class ReportController extends Controller
 
     // End 
 
-    // ======================== Income & OutCome =======================
-        public function incomeExpenseReportView()
-        {
-            return view('admin.report.income_expense.income_expense_report');
+    public function incomeExpenseReportView()
+    {
+        return view('admin.report.income_expense.income_expense_report');
+    }
+
+    private function getFilteredData(Request $request)
+    {
+        $type = $request->input('type', 'daily');
+        $startValue = $request->input('start_value');
+        $endValue = $request->input('end_value', $startValue);
+
+        if (!$startValue) {
+            if ($type === 'monthly') {
+                $startValue = $endValue = now()->format('Y-m');
+            } else if ($type === 'yearly') {
+                $startValue = $endValue = now()->year;
+            } else {
+                $startValue = $endValue = now()->format('Y-m-d');
+            }
+        }
+        
+        if (\Carbon\Carbon::parse($startValue)->gt(\Carbon\Carbon::parse($endValue))) {
+            [$startValue, $endValue] = [$endValue, $startValue];
+        }
+        
+        $salesQuery = \App\Models\OrderDetails::with('product', 'order');
+        $purchasesQuery = \App\Models\purchase_details::with('product', 'purchase.supplier');
+        $expensesQuery = \App\Models\Expense::query();
+        $adjustmentsQuery = \App\Models\StockAdjustment::with('product');
+
+        $formattedDate = '';
+
+        try {
+            switch ($type) {
+                case 'monthly':
+                    $startMonth = \Carbon\Carbon::parse($startValue)->startOfMonth();
+                    $endMonth = \Carbon\Carbon::parse($endValue)->endOfMonth();
+                    $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startMonth, $endMonth]));
+                    $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startMonth, $endMonth]));
+                    $expensesQuery->whereBetween('date', [$startMonth, $endMonth]);
+                    $adjustmentsQuery->whereBetween('created_at', [$startMonth, $endMonth]);
+                    $formattedDate = $startMonth->isSameMonth($endMonth) ? $startMonth->format('F Y') : $startMonth->format('F Y') . ' to ' . $endMonth->format('F Y');
+                    break;
+                case 'yearly':
+                    $startYear = \Carbon\Carbon::createFromDate($startValue)->startOfYear();
+                    $endYear = \Carbon\Carbon::createFromDate($endValue)->endOfYear();
+                    $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startYear, $endYear]));
+                    $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startYear, $endYear]));
+                    $expensesQuery->whereBetween('date', [$startYear, $endYear]);
+                    $adjustmentsQuery->whereBetween('created_at', [$startYear, $endYear]);
+                    $formattedDate = $startYear->format('Y') . ($startYear->format('Y') != $endYear->format('Y') ? ' to ' . $endYear->format('Y') : '');
+                    break;
+                default: // daily
+                    $startDate = \Carbon\Carbon::parse($startValue);
+                    $endDate = \Carbon\Carbon::parse($endValue);
+                    $salesQuery->whereHas('order', fn($q) => $q->whereDate('order_date', '>=', $startDate)->whereDate('order_date', '<=', $endDate));
+                    $purchasesQuery->whereHas('purchase', fn($q) => $q->whereDate('purchase_date', '>=', $startDate)->whereDate('purchase_date', '<=', $endDate));
+                    $expensesQuery->whereDate('date', '>=', $startDate)->whereDate('date', '<=', $endDate);
+                    $adjustmentsQuery->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
+                    $formattedDate = $startDate->isSameDay($endDate) ? $startDate->format('d F Y') : $startDate->format('d M Y') . ' to ' . $endDate->format('d M Y');
+                    break;
+            }
+        } catch (\Exception $e) {
+            \Log::error('Income Expense Report Error: ' . $e->getMessage());
+            return ['error' => 'An error occurred while processing dates.'];
         }
 
-        /**
-         * Fetch and calculate income, expense, and profit data via AJAX.
-         */
-        // នៅក្នុងឯកសារ app/Http/Controllers/ReportController.php
+        $sales_details = $salesQuery->get();
+        $purchase_details = $purchasesQuery->get();
+        $other_expenses = $expensesQuery->get();
+        $stock_adjustments = $adjustmentsQuery->get();
 
-        // 3. បង្កើត Private Function ដើម្បីទាញទិន្នន័យ (Refactor)
-        private function getFilteredData(Request $request)
-        {
-            
-            $type = $request->input('type', 'daily');
-            $startValue = $request->input('start_value');
-            $endValue = $request->input('end_value', $startValue);
+        // ✅ START: CORRECTED CALCULATION LOGIC
+        
+        // 1. Calculate Revenue
+        $total_gross_revenue = $sales_details->sum('total');
+        $total_sale_returns_value = $stock_adjustments
+            ->where('type', 'sale_return')
+            ->sum(fn($item) => $item->quantity * ($item->product->selling_price ?? 0));
+        
+        // Net Revenue is Gross Revenue MINUS Sale Returns
+        $net_revenue = $total_gross_revenue - $total_sale_returns_value;
 
-            if (!$startValue) {
-                if ($type === 'monthly') {
-                    $startValue = $endValue = now()->format('Y-m');
-                } else if ($type === 'yearly') {
-                    $startValue = $endValue = now()->year;
-                } else {
-                    $startValue = $endValue = now()->format('Y-m-d');
-                }
-            }
-            
-            if (\Carbon\Carbon::parse($startValue)->gt(\Carbon\Carbon::parse($endValue))) {
-                [$startValue, $endValue] = [$endValue, $startValue];
-            }
-            
-            $salesQuery = \App\Models\OrderDetails::with('product', 'order');
-            $purchasesQuery = \App\Models\purchase_details::with('product', 'purchase.supplier');
-            $expensesQuery = \App\Models\Expense::query();
-            $adjustmentsQuery = \App\Models\StockAdjustment::with('product');
+        // 2. Calculate Expenses
+        $total_gross_purchases = $purchase_details->sum('total');
+        $total_other_expenses_sum = $other_expenses->sum('amount');
+        $total_cleared_stock_loss = $stock_adjustments
+            ->where('type', 'clear_stock')
+            ->sum(fn($item) => $item->quantity * ($item->product->buying_price ?? 0));
+        
+        $total_purchase_returns_value = $stock_adjustments
+            ->where('type', 'purchase_return')
+            ->sum(fn($item) => $item->quantity * ($item->product->buying_price ?? 0));
 
-            $formattedDate = '';
+        // Total Expense = (Purchases + Other Expenses + Stock Loss) MINUS Purchase Returns
+        $total_expenses = ($total_gross_purchases + $total_other_expenses_sum + $total_cleared_stock_loss) - $total_purchase_returns_value;
 
-            try {
-                switch ($type) {
-                    case 'monthly':
-                        $startMonth = \Carbon\Carbon::parse($startValue)->startOfMonth();
-                        $endMonth = \Carbon\Carbon::parse($endValue)->endOfMonth();
-                        $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startMonth, $endMonth]));
-                        $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startMonth, $endMonth]));
-                        $expensesQuery->whereBetween('date', [$startMonth, $endMonth]);
-                        $adjustmentsQuery->whereBetween('created_at', [$startMonth, $endMonth]);
-                        $formattedDate = $startMonth->isSameMonth($endMonth) ? $startMonth->format('F Y') : $startMonth->format('F Y') . ' to ' . $endMonth->format('F Y');
-                        break;
-                    case 'yearly':
-                        $startYear = \Carbon\Carbon::createFromDate($startValue)->startOfYear();
-                        $endYear = \Carbon\Carbon::createFromDate($endValue)->endOfYear();
-                        $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startYear, $endYear]));
-                        $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startYear, $endYear]));
-                        $expensesQuery->whereBetween('date', [$startYear, $endYear]);
-                        $adjustmentsQuery->whereBetween('created_at', [$startYear, $endYear]);
-                        $formattedDate = $startYear->format('Y') . ($startYear->format('Y') != $endYear->format('Y') ? ' to ' . $endYear->format('Y') : '');
-                        break;
-                    default: // daily
-                        $startDate = \Carbon\Carbon::parse($startValue);
-                        $endDate = \Carbon\Carbon::parse($endValue);
-                        $salesQuery->whereHas('order', fn($q) => $q->whereDate('order_date', '>=', $startDate)->whereDate('order_date', '<=', $endDate));
-                        $purchasesQuery->whereHas('purchase', fn($q) => $q->whereDate('purchase_date', '>=', $startDate)->whereDate('purchase_date', '<=', $endDate));
-                        $expensesQuery->whereDate('date', '>=', $startDate)->whereDate('date', '<=', $endDate);
-                        $adjustmentsQuery->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
-                        $formattedDate = $startDate->isSameDay($endDate) ? $startDate->format('d F Y') : $startDate->format('d M Y') . ' to ' . $endDate->format('d M Y');
-                        break;
-                }
-            } catch (\Exception $e) {
-                \Log::error('Income Expense Report Error: ' . $e->getMessage());
-                return ['error' => 'An error occurred while processing dates.'];
-            }
+        // 3. Calculate Profit or Loss
+        $profit_or_loss = $net_revenue - $total_expenses; 
 
-            $sales_details = $salesQuery->get();
-            $purchase_details = $purchasesQuery->get();
-            $other_expenses = $expensesQuery->get();
-            $stock_adjustments = $adjustmentsQuery->get();
+        // ✅ END: CORRECTED CALCULATION LOGIC
 
-            $total_sale_returns_value = $stock_adjustments
-                ->where('type', 'sale_return')
-                ->sum(fn($item) => $item->quantity * ($item->product->selling_price ?? 0));
+        return [
+            'sales_details' => $sales_details,
+            'purchase_details' => $purchase_details,
+            'other_expenses' => $other_expenses,
+            'stock_adjustments' => $stock_adjustments,
+            'summary' => [
+                'total_revenue' => number_format($net_revenue, 2),
+                'total_expenses' => number_format($total_expenses, 2),
+                'profit_or_loss' => number_format($profit_or_loss, 2),
+                'formattedDate' => $formattedDate,
+            ]
+        ];
+    }
 
-            $total_purchase_returns_value = $stock_adjustments
-                ->where('type', 'purchase_return')
-                ->sum(fn($item) => $item->quantity * ($item->product->buying_price ?? 0));
-                
-            $total_cleared_stock = $stock_adjustments
-                ->where('type', 'clear_stock')
-                ->sum(fn($item) => $item->quantity * ($item->product->buying_price ?? 0));
-
-            $total_gross_revenue = $sales_details->sum('total');
-            // $net_revenue = $total_gross_revenue - $total_sale_returns_value;
-            $net_revenue = $total_gross_revenue;
-            
-            $total_gross_purchases = $purchase_details->sum('total');
-            // $net_purchases = $total_gross_purchases - $total_purchase_returns_value;
-            $net_purchases = $total_gross_purchases - $total_purchase_returns_value; // ការទិញចូលសុទ្ធ (ប្រើសម្រាប់បង្ហាញ)
-
-            
-            $total_other_expenses_sum = $other_expenses->sum('amount');
-            
-            $total_expenses = 0;
-            // 1. Add all gross purchases
-            $total_gross_purchases = $purchase_details->sum('total');
-            $total_expenses += $total_gross_purchases;
-            // 2. Add other expenses
-            $total_other_expenses_sum = $other_expenses->sum('amount');
-            $total_expenses += $total_other_expenses_sum;
-
-            // 3. Add value of cleared stock (as an expense/loss)
-            $total_expenses += $total_cleared_stock;
-
-            // 4. Subtract the value of purchase returns (as a credit)
-                // $total_expenses -= $total_purchase_returns_value;
-
-
-            // --- END: NEW CALCULATION LOGIC ---
-            // Net purchases are for display purposes only, not for the final profit/loss calculation.
-            $net_purchases = $total_gross_purchases ;
-
-            // Profit/Loss calculation remains the same, but now uses the corrected $total_expenses
-            // $profit_or_loss = ($net_revenue)-($total_expenses + $total_cleared_stock); 
-
-            $profit_or_loss = $net_revenue - $total_expenses; 
-
-            return [
-                'sales_details' => $sales_details,
-                'purchase_details' => $purchase_details,
-                'other_expenses' => $other_expenses,
-                'stock_adjustments' => $stock_adjustments,
-                'summary' => [
-                    'total_revenue' => number_format($net_revenue, 2),
-                    'total_purchases' => number_format($net_purchases, 2), 
-                    'total_other_expenses' => number_format($total_other_expenses_sum, 2),
-                    'total_sale_returns' => number_format($total_sale_returns_value, 2),
-                    'total_cleared_stock' => number_format($total_cleared_stock, 2),
-                    'total_expenses_before_sum_with_clearstock' => number_format($total_expenses, 2),
-                    
-                    // ✅ កែไขបន្ទាត់នេះ
-                    'total_expenses' => number_format($total_expenses, 2), // យក `+ $total_cleared_stock`
-
-                    'profit_or_loss' => number_format($profit_or_loss, 2),
-                    'is_profit' => $profit_or_loss >= 0,
-                    'formattedDate' => $formattedDate,
-                ]
-            ];
-        }
-
-    
     public function getIncomeExpenseData(Request $request)
     {
         $data = $this->getFilteredData($request);
@@ -1120,22 +1085,19 @@ class ReportController extends Controller
 
         $incomeTableHtml = view('admin.report.income_expense.partials._income_table', [
             'sales_details' => $data['sales_details'],
-            'stock_adjustments' => $data['stock_adjustments'] // ส่งข้อมูล sale_return ไปด้วย
+            'stock_adjustments' => $data['stock_adjustments'], // Pass adjustments
         ])->render();
 
-        // ✅ ส่งข้อมูลทั้งหมดที่จำเป็นไปยัง View ของตารางค่าใช้จ่าย
         $expenseTableHtml = view('admin.report.income_expense.partials._expense_table', [
             'purchase_details' => $data['purchase_details'],
             'other_expenses' => $data['other_expenses'],
-            'stock_adjustments' => $data['stock_adjustments']
+            'stock_adjustments' => $data['stock_adjustments'], // Pass adjustments
         ])->render();
 
-        $response_data = array_merge($data['summary'], [
+        return response()->json(array_merge($data['summary'], [
             'income_table_html' => $incomeTableHtml,
             'expense_table_html' => $expenseTableHtml,
-        ]);
-        
-        return response()->json($response_data);
+        ]));
     }
     
     // 4. បង្កើត Function ថ្មីសម្រាប់ Export
@@ -1157,75 +1119,92 @@ class ReportController extends Controller
             $data['sales_details'],
             $data['purchase_details'],
             $data['other_expenses'],
-            $data['stock_adjustments'], // បន្ថែមอันนี้
-            $data['summary']             // កែไขอันนี้
+            $data['stock_adjustments'], 
+            $data['summary']             
         ), $fileName);
 
        
     }
 
-public function exportReport(Request $request)
-    {
-        // 1. ទទួល Input ពី URL
-        $format = $request->query('format'); // 'excel' or 'pdf'
-        $type = $request->query('type');
-        $value = $request->query('value');
+    public function exportReport(Request $request)
+{
+    $format = $request->query('format'); // excel | pdf
+    $type = $request->query('type');
+    $value = $request->query('value');
 
-        // 2. ទាញទិន្នន័យពី Database (កែសម្រួលឲ្យត្រូវនឹងโครงสร้างរបស់អ្នក)
-        $incomeQuery = Order::query();
-        $expenseQuery = Expense::query();
-        $formattedDate = '';
-        
+    $incomeQuery = Order::query();
+    $expenseQuery = Expense::query();
+    $formattedDate = '';
 
-        switch ($type) {
-            case 'daily':
-                $incomeQuery->whereDate('created_at', $value);
-                $expenseQuery->whereDate('created_at', $value);
-                $formattedDate = Carbon::parse($value)->format('F j, Y');
-                break;
-            case 'monthly':
-                $year = substr($value, 0, 4);
-                $month = substr($value, 5, 2);
-                $incomeQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
-                $expenseQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
-                $formattedDate = Carbon::createFromFormat('Y-m', $value)->format('F Y');
-                break;
-            case 'yearly':
-                $incomeQuery->whereYear('created_at', $value);
-                $expenseQuery->whereYear('created_at', $value);
-                $formattedDate = 'Year ' . $value;
-                break;
-        }
+    switch ($type) {
+        case 'daily':
+            $incomeQuery->whereDate('created_at', $value);
+            $expenseQuery->whereDate('created_at', $value);
+            $formattedDate = Carbon::parse($value)->format('F j, Y');
+            break;
 
-        $incomes = $incomeQuery->get();
-        $expenses = $expenseQuery->get();
-        
-        // 3. រៀបចំទិន្នន័យជា Array
-        $data = [
-            'incomes'       => $incomes,
-            'expenses'      => $expenses,
-            'totalRevenue'  => $incomes->sum('total_price'), // កែ field ឲ្យត្រូវ
-            'totalExpenses' => $expenses->sum('total_price'), // កែ field ឲ្យត្រូវ
-            'profitOrLoss'  => $incomes->sum('total_price') - $expenses->sum('total_price'),
-            'formattedDate' => $formattedDate,
-        ];
-        
-        $fileName = 'Report-' . str_replace([' ', ','], '-', strtolower($formattedDate));
+        case 'monthly':
+            $year = substr($value, 0, 4);
+            $month = substr($value, 5, 2);
+            $incomeQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            $expenseQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            $formattedDate = Carbon::createFromFormat('Y-m', $value)->format('F Y');
+            break;
 
-        // 4. ពិនិត្យ Format ហើយបង្កើត
-        if ($format == 'excel') {
-            return Excel::download(new IncomeExpenseReportExport($data), $fileName . '.xlsx');
-        } 
-        
-        if ($format == 'pdf') {
-            // សម្រាប់ PDF យើង render view ដោយផ្ទាល់
-            $pdf = Pdf::loadView('admin.report.income_expense.export_template', ['data' => $data]);
-            
-            return $pdf->download($fileName . '.pdf');
-        }
-
-        return redirect()->back()->with('error', 'Invalid Format.');
+        case 'yearly':
+            $incomeQuery->whereYear('created_at', $value);
+            $expenseQuery->whereYear('created_at', $value);
+            $formattedDate = 'Year ' . $value;
+            break;
     }
+
+    $incomes = $incomeQuery->get();
+    $expenses = $expenseQuery->get();
+
+    // ✅ ការគណនាប្រាក់ចំណូល និងចំណាយត្រឹមត្រូវ
+    $totalRevenue = 0;
+    foreach ($incomes as $income) {
+        if ($income->type === 'sale') {
+            $totalRevenue += $income->total_price;
+        } elseif ($income->type === 'sale_return') {
+            $totalRevenue -= $income->total_price; // ដកចេញពីចំណូល
+        }
+    }
+
+    $totalExpenses = 0;
+    foreach ($expenses as $expense) {
+        if ($expense->type === 'purchase') {
+            $totalExpenses += $expense->total_price;
+        } elseif ($expense->type === 'purchase_return') {
+            $totalExpenses -= $expense->total_price; // ដកចេញពីចំណាយ
+        } elseif ($expense->type === 'stock_loss') {
+            $totalExpenses += $expense->total_price;
+        }
+    }
+
+    // ✅ គណនា​ប្រាក់​ចំណេញ ឬ​ខាត
+    $profitOrLoss = $totalRevenue - $totalExpenses;
+
+    $data = [
+        'incomes' => $incomes,
+        'expenses' => $expenses,
+        
+    ];
+
+    $fileName = 'Report-' . str_replace([' ', ','], '-', strtolower($formattedDate));
+
+    if ($format == 'excel') {
+        return Excel::download(new IncomeExpenseReportExport($data), $fileName . '.xlsx');
+    } 
+
+    if ($format == 'pdf') {
+        $pdf = Pdf::loadView('admin.report.income_expense.export_template', ['data' => $data]);
+        return $pdf->download($fileName . '.pdf');
+    }
+
+    return redirect()->back()->with('error', 'Invalid Format.');
+}
+
 
     // Function ថ្មីសម្រាប់ Export ជា PDF
     public function exportIncomeExpensePdf(Request $request)

@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Carbon\Carbon;
 
+
 class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
 {
     protected $sales_details;
@@ -30,7 +31,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
         $this->sales_details = $sales_details;
         $this->purchase_details = $purchase_details;
         $this->other_expenses = $other_expenses;
-        $this->stock_adjustments = $stock_adjustments; // ✅ ទទួលค่า stock_adjustments
+        $this->stock_adjustments = $stock_adjustments; 
         $this->summary = $summary;
     }
 
@@ -63,7 +64,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             ];
         });
 
-        // ✅ បន្ថែមข้อมูล Sale Returns (ជាការកាត់បន្ថយចំណូល)
+        // ✅ បន្ថែម Sale Returns (ជាការកាត់បន្ថយចំណូល)
         $saleReturnData = $this->stock_adjustments->where('type', 'sale_return')->map(function ($item) {
             return [
                 'type' => 'DATA_ROW',
@@ -71,7 +72,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
                 'details' => "{$item->product->product_name} (Sale Return)",
                 'qty' => $item->quantity,
                 'price' => $item->product->selling_price ?? 0,
-                'total' => -1 * $item->quantity * ($item->product->selling_price ?? 0) // តម្លៃติดลบ
+                'total' => -1 * $item->quantity * ($item->product->selling_price ?? 0) 
             ];
         });
 
@@ -104,7 +105,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             ];
         });
 
-        // ✅ បន្ថែមข้อมูล Cleared Stock (ជាការចំណាយ)
+        
         $clearedStockData = $this->stock_adjustments->where('type', 'clear_stock')->map(function ($item) {
             return [
                 'type' => 'DATA_ROW',
@@ -116,17 +117,17 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             ];
         });
 
-        // ✅ បន្ថែមข้อมูล Purchase Returns (ជាការកាត់បន្ថយចំណាយ)
-            // $purchaseReturnData = $this->stock_adjustments->where('type', 'purchase_return')->map(function ($item) {
-            //     return [
-            //         'type' => 'DATA_ROW',
-            //         'date' => Carbon::parse($item->created_at)->format('d-m-Y'),
-            //         'details' => "{$item->product->product_name} (Purchase Return)",
-            //         'qty' => $item->quantity,
-            //         'price' => $item->product->buying_price ?? 0,
-            //         'total' => -1 * $item->quantity * ($item->product->buying_price ?? 0) // តម្លៃติดลบ
-            //     ];
-            // });
+        // ✅ បន្ថែម Purchase Returns (ជាការកាត់បន្ថយចំណាយ)
+            $purchaseReturnData = $this->stock_adjustments->where('type', 'purchase_return')->map(function ($item) {
+                return [
+                    'type' => 'DATA_ROW',
+                    'date' => Carbon::parse($item->created_at)->format('d-m-Y'),
+                    'details' => "{$item->product->product_name} (Purchase Return)",
+                    'qty' => $item->quantity,
+                    'price' => $item->product->buying_price ?? 0,
+                    'total' => -1 * $item->quantity * ($item->product->buying_price ?? 0) 
+                ];
+            });
 
 
         // 4. បញ្ចូល Collection ទាំងអស់ចូលគ្នាតាមលំដាប់
@@ -137,8 +138,8 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             ->merge($expenseCollection)
             ->merge($purchaseData)
             ->merge($otherExpenseData)
-            ->merge($clearedStockData);
-            // ->merge($purchaseReturnData);
+            ->merge($clearedStockData)
+            ->merge($purchaseReturnData);
     }
 
     /**
@@ -184,8 +185,10 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
                     $row['date'] ?? '',
                     $row['details'] ?? '',
                     $row['qty'] ?? '',
-                    isset($row['price']) && is_numeric($row['price']) ? '$' . number_format($row['price'], 2) : $row['price'],
-                    isset($row['total']) && is_numeric($row['total']) ? '$' . number_format($row['total'], 2) : $row['total'],
+                    $row['price'] ?? 0.00,
+                    $row['total'] ?? 0.00,
+                    // isset($row['price']) && is_numeric($row['price'])?number_format($row['price'], 2) : $row['price'],
+                    // isset($row['total']) && is_numeric($row['total'])?number_format($row['total'], 2) : $row['total'],
                 ];
             case 'SPACER':
             default:
@@ -195,7 +198,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
 
     public function styles(Worksheet $sheet)
     {
-        // กำหนด Style สำหรับ Header หลัก
+        
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
 
         $currentRow = 1;
@@ -210,15 +213,15 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             if ($row['type'] === 'SUMMARY_ROW') {
                 $sheet->getStyle("A{$currentRow}:B{$currentRow}")->getFont()->setBold(true);
             }
-            // ทำให้แถว Profit/Loss ដិត
+            
             if ($row['type'] === 'SUMMARY_ROW' && strpos($row['details'], 'Profit') !== false) {
                 $sheet->getStyle("A{$currentRow}:B{$currentRow}")->getFont()->setBold(true)->setSize(12);
             }
             $currentRow++;
         }
 
-        // กำหนด Style สำหรับ Header ของตารางข้อมูล
-        $sheet->getStyle('A6:E6')->getFont()->setBold(true); // สมมติว่า Header ของ Income เริ่มที่แถว 6
+        
+        $sheet->getStyle('A6:E6')->getFont()->setBold(true); 
         $sheet->getStyle('A' . ($this->sales_details->count() + $this->stock_adjustments->where('type', 'sale_return')->count() + 9) . ':E' . ($this->sales_details->count() + $this->stock_adjustments->where('type', 'sale_return')->count() + 9))->getFont()->setBold(true); // Style header ของ Expense
 
         return [];
