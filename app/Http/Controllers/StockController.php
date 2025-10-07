@@ -170,13 +170,13 @@ class StockController extends Controller
             'notes' => 'required|string|max:255',
         ]);
         
-        // ត្រូវបន្ថែម validation សម្រាប់ Sale/Purchase ID ពេលមាន return
-        if ($request->type === 'sale_return') {
-             $request->validate(['sale_detail_id' => 'required|exists:orderdetails,id']);
-        }
-        if ($request->type === 'purchase_return') {
-            $request->validate(['purchase_detail_id' => 'required|exists:purchase_details,id']);
-        }
+        // ត្រួតពិនិត្យ Validation (OK)
+if ($request->type === 'sale_return') {
+     $request->validate(['sale_detail_id' => 'required|exists:orderdetails,id']);
+}
+if ($request->type === 'purchase_return') {
+     $request->validate(['purchase_detail_id' => 'required|exists:purchase_details,id']);
+}
 
 
         try {
@@ -260,16 +260,16 @@ class StockController extends Controller
 
                 // 5. បង្កើតប្រវត្តិការកែតម្រូវ
                 StockAdjustment::create([
-                    'product_id' => $product->id,
-                    'user_id' => Auth::id(),
-                    'type' => $request->type, 
-                    'quantity' => $quantity,
-                    'before_quantity' => $before_quantity,
-                    'after_quantity' => $product->product_store,
-                    'notes' => $request->notes . ' (' . $action_message . ')',
-                    // សម្រាប់ជាឯកសារ
-                    'related_id' => $request->type === 'sale_return' ? $request->sale_detail_id : ($request->type === 'purchase_return' ? $request->purchase_detail_id : null),
-                ]);
+    'product_id' => $product->id,
+    'user_id' => Auth::id(),
+    'type' => $request->type, 
+    'quantity' => $quantity,
+    'before_quantity' => $before_quantity,
+    'after_quantity' => $product->product_store,
+    'notes' => $request->notes . ' (' . $action_message . ')',
+    // ✅ ផ្នែកនេះគឺត្រឹមត្រូវហើយសម្រាប់ការបញ្ចូល related_id
+    'related_id' => $request->type === 'sale_return' ? $request->sale_detail_id : ($request->type === 'purchase_return' ? $request->purchase_detail_id : null),
+]);
             });
         } catch (Exception $e) {
             $notification = [

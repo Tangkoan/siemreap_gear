@@ -222,312 +222,198 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
-// ----------------------------------------------------------------------
-// 1. DOM ELEMENT REFERENCES
-// ----------------------------------------------------------------------
-const saleReturnContainer = $('#saleReturnListContainer');
-const purchaseReturnContainer = $('#purchaseReturnListContainer');
-const saleDetailSelect = $('#sale_detail_id');
-const purchaseDetailSelect = $('#purchase_detail_id');
-const hiddenSaleDetailId = $('#hidden_sale_detail_id');
-const hiddenPurchaseDetailId = $('#hidden_purchase_detail_id');
-const quantityInput = $('#quantity');
-const typeSelect = $('#type');
-const notesInput = $('#notes'); 
+    // ----------------------------------------------------------------------
+    // 1. DOM ELEMENT REFERENCES
+    // ----------------------------------------------------------------------
+    const saleReturnContainer = $('#saleReturnListContainer');
+    const purchaseReturnContainer = $('#purchaseReturnListContainer');
+    const returnPerPageContainer = $('#returnPerPageContainer');
+    const typeSelect = $('#type');
+    const quantityInput = $('#quantity');
+    const modal = $('#stockAdjustmentModal');
+    const form = $('#stockAdjustmentForm');
 
-// ✅ NEW: REFERENCES សម្រាប់ទំហំទំព័រ
-const returnPerPageContainer = $('#returnPerPageContainer');
-const returnPerPageSelect = $('#returnPerPage');
-
-
-// ----------------------------------------------------------------------
-// 2. HELPER FUNCTIONS
-// ----------------------------------------------------------------------
-
-/**
- * មុខងារសម្រាប់កំណត់ Modal ត្រឡប់ទៅសភាពដើមវិញ (Reset)
- */
-function resetReturnContainers() {
-    saleReturnContainer.addClass('hidden');
-    purchaseReturnContainer.addClass('hidden');
-    // ✅ NEW: លាក់ container សម្រាប់រើសទំហំទំព័រ
-    returnPerPageContainer.addClass('hidden'); 
-    
-    // បំផ្លាញ Select2 ចោលពេលបិទ ឬប្តូរ Type
-    if (saleDetailSelect.hasClass("select2-hidden-accessible")) {
-        saleDetailSelect.select2('destroy');
-    }
-    if (purchaseDetailSelect.hasClass("select2-hidden-accessible")) {
-        purchaseDetailSelect.select2('destroy');
-    }
-    
-    // កំណត់តម្លៃ input ត្រឡប់ទៅទទេវិញ
-    saleDetailSelect.html('');
-    purchaseDetailSelect.html('');
-    hiddenSaleDetailId.val('');
-    hiddenPurchaseDetailId.val('');
-    quantityInput.val(1).prop('disabled', true).prop('max', '');
-    notesInput.val('');
-}
-
-/**
- * មុខងារសម្រាប់បង្កើត Select2 AJAX Searchable Dropdown
- * @param {jQuery} selectElement - Element របស់ Select (ឧ. #sale_detail_id)
- * @param {string} type - ប្រភេទ (sale_return/purchase_return)
- * @param {number} productId - ID របស់ផលិតផល
- */
-function initSelect2(selectElement, type, productId) {
-    // ✅ NEW: ទាញយកទំហំទំព័រពី select field ថ្មី
-    const pageSize = returnPerPageSelect.val(); 
-
-    // បំផ្លាញ Select2 ចាស់បើមាន
-    if (selectElement.hasClass("select2-hidden-accessible")) {
-        selectElement.select2('destroy');
-    }
-    
-    selectElement.select2({
-        dropdownParent: $('#stockAdjustmentModal'), // ត្រូវកំណត់ Dropdown Parent នេះ
-        placeholder: '{{ __('messages.search_transaction_by_invoice') }}',
-        allowClear: true,
-        ajax: {
-            url: "{{ route('stock.get_return_details') }}", // ប្រើ Route ដដែល
-            dataType: 'json',
-            delay: 250, 
-            data: function (params) {
-                return {
-                    searchTerm: params.term, // ពាក្យដែលគេវាយ (Live Search)
-                    page: params.page || 1, // ទំព័រ (Pagination)
-                    pageSize: pageSize, // ✅ NEW: បញ្ជូនទំហំទំព័រថ្មី
-                    product_id: productId,
-                    type: type,
-                };
-            },
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-                
-                // ត្រូវបញ្ជូនលទ្ធផលត្រឡប់មកវិញតាម format របស់ Select2
-                return {
-                    results: data.results, 
-                    pagination: {
-                        more: data.pagination.more
-                    }
-                };
-            },
-            cache: true
-        },
-        // ខ្ញុំលុប minimumInputLength: 1 ចេញដើម្បីឲ្យវាបង្ហាញ 10 ចុងក្រោយពេលចុចដំបូង
-        // minimumInputLength: 1, 
-        templateSelection: function(data, container) {
-            // ប្រើ data.text សម្រាប់បង្ហាញតម្លៃដែលបានជ្រើសរើស
-            return data.text;
-        }
-    });
-}
-
-
-// ----------------------------------------------------------------------
-// 3. EVENT LISTENERS
-// ----------------------------------------------------------------------
-
-// Event ពេលបើក Modal
-$(document).on('click', '.open-modal-btn', function() {
-    const productId = $(this).data('product-id');
-    const productName = $(this).data('product-name');
-    
-    $('#modal_product_id').val(productId);
-    $('#modal_product_name').text(productName);
-    
-    $('#stockAdjustmentForm')[0].reset(); 
-    typeSelect.val(''); 
-    resetReturnContainers(); // Reset ទាំងអស់ពេលបើក Modal
-    $('#stockAdjustmentModal').removeClass('hidden'); 
-});
-
-// Event ពេលបិទ Modal
-$('#closeModalBtn').on('click', function() {
-    resetReturnContainers(); // ត្រូវ Reset ពេលបិទផងដែរ
-    $('#stockAdjustmentModal').addClass('hidden');
-    $('#stockAdjustmentForm')[0].reset(); // Clear the form
-});
-
-
-// Event ពេលអ្នកប្រើផ្លាស់ប្តូរប្រភេទ (Type)
-typeSelect.on('change', function() {
-    const selectedType = $(this).val();
-    const productId = $('#modal_product_id').val();
-    
-    resetReturnContainers(); // Reset ទាំងអស់មុនពេលកំណត់ថ្មី
-    
-    // ✅ NEW: បង្ហាញ Select field សម្រាប់ទំហំទំព័រ ពេលជ្រើសរើស Return
-    if (selectedType === 'sale_return' || selectedType === 'purchase_return') {
-        returnPerPageContainer.removeClass('hidden');
-
-        if (selectedType === 'sale_return') {
-            saleReturnContainer.removeClass('hidden');
-            // ហៅ Select2 សម្រាប់ Sale
-            initSelect2(saleDetailSelect, 'sale_return', productId); 
-            
-        } else if (selectedType === 'purchase_return') {
-            purchaseReturnContainer.removeClass('hidden');
-            // ហៅ Select2 សម្រាប់ Purchase
-            initSelect2(purchaseDetailSelect, 'purchase_return', productId); 
-        }
-        
-    } else if (selectedType === 'clear_stock') {
-        // Clear Stock មិនត្រូវការ Select2
-        quantityInput.prop('disabled', false).prop('max', '').val(1); 
-    }
-});
-
-// ✅ NEW: Event ពេលអ្នកប្រើផ្លាស់ប្តូរទំហំទំព័រ (Pagination Size)
-returnPerPageSelect.on('change', function() {
-    const selectedType = typeSelect.val();
-    const productId = $('#modal_product_id').val();
-    
-    // បង្កើត Select2 ឡើងវិញដើម្បី reload ទិន្នន័យថ្មី
-    if (selectedType === 'sale_return') {
-        // Clear Select2 value ដើម្បីចាប់ផ្តើមថ្មី
-        saleDetailSelect.val(null).trigger('change');
-        initSelect2(saleDetailSelect, 'sale_return', productId); 
-    } else if (selectedType === 'purchase_return') {
-         // Clear Select2 value ដើម្បីចាប់ផ្តើមថ្មី
-        purchaseDetailSelect.val(null).trigger('change');
-        initSelect2(purchaseDetailSelect, 'purchase_return', productId); 
-    }
-});
-
-
-// Event ពេលអ្នកប្រើជ្រើសរើស Sale Detail (ពី Select2)
-saleDetailSelect.on('select2:select', function(e) {
-    const data = e.params.data;
-    const selectedQty = data.qty;
-    const selectedId = data.id;
-
-    if (selectedId) {
-        quantityInput.val(selectedQty).prop('max', selectedQty).prop('disabled', false);
-        hiddenSaleDetailId.val(selectedId);
-        hiddenPurchaseDetailId.val(''); // Clear the other hidden field
-    } else {
-        // Fallback for empty selection
-        quantityInput.val(1).prop('max', '').prop('disabled', true);
-        hiddenSaleDetailId.val('');
-    }
-});
-
-// Event ពេលអ្នកប្រើជ្រើសរើស Purchase Detail (ពី Select2)
-purchaseDetailSelect.on('select2:select', function(e) {
-    const data = e.params.data;
-    const selectedQty = data.qty;
-    const selectedId = data.id;
-
-    if (selectedId) {
-        quantityInput.val(selectedQty).prop('max', selectedQty).prop('disabled', false);
-        hiddenPurchaseDetailId.val(selectedId);
-        hiddenSaleDetailId.val(''); // Clear the other hidden field
-    } else {
-        // Fallback for empty selection
-        quantityInput.val(1).prop('max', '').prop('disabled', true);
-        hiddenPurchaseDetailId.val('');
-    }
-});
-
-// Event ពេល Clear Selection (ពី Select2)
-saleDetailSelect.on('select2:unselect', function(e) {
-    quantityInput.val(1).prop('max', '').prop('disabled', true);
-    hiddenSaleDetailId.val('');
-});
-
-purchaseDetailSelect.on('select2:unselect', function(e) {
-    quantityInput.val(1).prop('max', '').prop('disabled', true);
-    hiddenPurchaseDetailId.val('');
-});
-
-
-// ----------------------------------------------------------------------
-// 4. Stock Table (Short data / Pagination) - កូដនៅដដែល
-// ----------------------------------------------------------------------
-
-$(document).ready(function() {
-    // ⭐ NEW: Global variables សម្រាប់តាមដានការ Short
-    let currentSortBy = 'id'; // ប្រើ ID ជា default
-    let currentSortOrder = 'asc'; 
-    
-    // ⭐ UPDATED: fetchData ទទួលយក sort parameters
-    function fetchData(page = 1) {
-        let query = $('#search').val();
-        let perPage = $('#perPage').val();
+    // ----------------------------------------------------------------------
+    // 2. STOCK TABLE AJAX (Keep the original logic)
+    // ----------------------------------------------------------------------
+    function searchStock() {
+        const search = $('#search').val();
+        const perPage = $('#perPage').val();
 
         $.ajax({
-            url: "{{ route('search.stock') }}?page=" + page,
-            type: "GET",
+            url: "{{ route('search.stock') }}",
+            type: 'GET',
             data: {
-                search: query,
-                perPage: perPage,
-                // ✅ NEW: បន្ថែម Sort Parameters
-                sortBy: currentSortBy,
-                sortOrder: currentSortOrder
+                search: search,
+                perPage: perPage
             },
-            success: function(data) {
-                $('tbody').html(data.table);
-                // ត្រូវផ្លាស់ប្តូរ ID/Class នៃតំបន់ pagination របស់អ្នក
-                $('.pagination-container').html(data.pagination); 
-                
-                // ⭐ NEW: បន្ថែម Icon Short ទៅលើ Header
-                updateSortIcons();
+            success: function(response) {
+                $('tbody').html(response.table);
+                $('.pagination-wrapper').html(response.pagination); // Make sure you have a wrapper for pagination
+            },
+            error: function(xhr) {
+                console.error("Error fetching data: ", xhr);
             }
         });
     }
 
-    // ⭐ NEW: មុខងារសម្រាប់បន្ថែម Icon ទៅលើ Header
-    function updateSortIcons() {
-        $('th[data-sortable]').each(function() {
-            $(this).find('.sort-icon').remove();
-            if ($(this).data('sort-by') === currentSortBy) {
-                const icon = currentSortOrder === 'asc' 
-                    ? '<svg class="w-4 h-4 ml-1 inline sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>' 
-                    : '<svg class="w-4 h-4 ml-1 inline sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
-                $(this).append(icon);
-            } else {
-                // Icon សម្រាប់ Column ដែលមិនទាន់ Short
-                const defaultIcon = '<svg class="w-4 h-4 ml-1 inline sort-icon opacity-30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zM12 18.17L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"/></svg>';
-                $(this).append(defaultIcon);
-            }
+    // Initial load and event listeners for search/pagination
+    $(document).ready(function() {
+        searchStock(); // Initial load
+
+        $('#search, #perPage').on('input change', function() {
+            searchStock();
         });
-    }
 
+        // Event listener for pagination links (requires wrapper class)
+        $(document).on('click', '.pagination-wrapper a', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    $('tbody').html(response.table);
+                    $('.pagination-wrapper').html(response.pagination);
+                }
+            });
+        });
 
-    // ⭐ NEW: Event Listener សម្រាប់ Short
-    $(document).on('click', 'th[data-sortable]', function() {
-        const newSortBy = $(this).data('sort-by');
+    });
+
+    // ----------------------------------------------------------------------
+    // 3. STOCK ADJUSTMENT MODAL & SELECT2 LOGIC
+    // ----------------------------------------------------------------------
+
+    // A. Open Modal Event
+    $(document).on('click', '.open-modal-btn', function() {
+        const productId = $(this).data('product-id');
+        const productName = $(this).data('product-name');
+
+        // Reset the form and modal state
+        form[0].reset();
+        $('#modal_product_id').val(productId);
+        $('#modal_product_name').text(productName);
+        modal.removeClass('hidden');
         
-        if (newSortBy === currentSortBy) {
-            // ប្ដូរទិសដៅ Short 
-            currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
-        } else {
-            // Short លើ Column ថ្មី
-            currentSortBy = newSortBy;
-            currentSortOrder = 'asc'; // អាចកំណត់ 'desc' វិញក៏បាន តែ 'asc' ជាទូទៅ
+        // Reset dynamic fields
+        saleReturnContainer.addClass('hidden');
+        purchaseReturnContainer.addClass('hidden');
+        returnPerPageContainer.addClass('hidden');
+        quantityInput.prop('disabled', false); // Allow quantity input for Clear Stock
+        
+        // Re-initialize Select2 to ensure product_id is set for the AJAX call
+        initReturnSelect2('sale_return'); 
+        initReturnSelect2('purchase_return'); 
+    });
+
+    // B. Close Modal Event
+    $('#closeModalBtn').on('click', function() {
+        modal.addClass('hidden');
+    });
+    
+    // C. Type Change Event
+    typeSelect.on('change', function() {
+        const type = $(this).val();
+        
+        // Hide all extra fields by default
+        saleReturnContainer.addClass('hidden');
+        purchaseReturnContainer.addClass('hidden');
+        returnPerPageContainer.addClass('hidden');
+        quantityInput.prop('disabled', false).val(''); // Reset and enable for Clear Stock
+        
+        // Clear hidden IDs and remove required attributes on hidden fields
+        $('#hidden_sale_detail_id').val('');
+        $('#hidden_purchase_detail_id').val('');
+        $('#sale_detail_id').prop('required', false);
+        $('#purchase_detail_id').prop('required', false);
+
+        if (type === 'sale_return') {
+            saleReturnContainer.removeClass('hidden');
+            returnPerPageContainer.removeClass('hidden');
+            quantityInput.prop('disabled', true).val(''); // Disable quantity until a Sale ID is selected
+            $('#sale_detail_id').prop('required', true); // Add required attribute
+            
+        } else if (type === 'purchase_return') {
+            purchaseReturnContainer.removeClass('hidden');
+            returnPerPageContainer.removeClass('hidden');
+            quantityInput.prop('disabled', true).val(''); // Disable quantity until a Purchase ID is selected
+            $('#purchase_detail_id').prop('required', true); // Add required attribute
+            
+        } else if (type === 'clear_stock') {
+            // Clear Stock: Quantity is enabled and is the only required field
+            // No action needed on return containers
         }
+    });
+
+    // D. Select2 Initialization Function
+    function initReturnSelect2(type) {
+        let selectElement = (type === 'sale_return') ? $('#sale_detail_id') : $('#purchase_detail_id');
+        let hiddenInput = (type === 'sale_return') ? $('#hidden_sale_detail_id') : $('#hidden_purchase_detail_id');
         
-        fetchData(1); // ត្រឡប់ទៅទំព័រទី 1 ពេល Short
+        // Destroy previous Select2 instance before re-initializing
+        if (selectElement.data('select2')) {
+            selectElement.select2('destroy');
+        }
+
+        selectElement.select2({
+            dropdownParent: modal, // Important for modal display
+            placeholder: (type === 'sale_return') ? 'Search by Sale Invoice No.' : 'Search by Purchase Invoice No.',
+            allowClear: true,
+            ajax: {
+                url: "{{ route('stock.get_return_details') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        searchTerm: params.term, // Search term
+                        page: params.page || 1, // Page number
+                        pageSize: $('#returnPerPage').val(), // Items per page from custom select
+                        product_id: $('#modal_product_id').val(),
+                        type: type
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results,
+                        pagination: {
+                            more: data.pagination.more
+                        }
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1 // Search only starts after 1 character
+        });
+
+        // E. Select2 Change Event
+        selectElement.on('select2:select', function (e) {
+            const data = e.params.data;
+            if (data && data.qty) {
+                // Set Quantity input to the Max Qty from the transaction
+                quantityInput.val(data.qty).attr('max', data.qty).prop('disabled', false);
+                // Set the hidden input value (ID of the transaction detail)
+                hiddenInput.val(data.id);
+            }
+        });
+        
+        // Clear Quantity and Hidden ID when selection is cleared
+        selectElement.on('select2:unselect select2:clear', function (e) {
+             quantityInput.val('').attr('max', '').prop('disabled', true);
+             hiddenInput.val('');
+        });
+    }
+
+    // F. Return Per Page Change Event (Re-initialize Select2 on change)
+    $('#returnPerPage').on('change', function() {
+        const type = typeSelect.val();
+        if (type === 'sale_return') {
+            initReturnSelect2('sale_return');
+        } else if (type === 'purchase_return') {
+            initReturnSelect2('purchase_return');
+        }
     });
 
-
-    // Trigger fetch on load
-    fetchData(); 
-
-    // Search or perPage change
-    $('#search, #perPage').on('keyup change', function() {
-        fetchData(); // Always page 1 when changed
-    });
-
-    // Pagination click (ត្រូវបន្ថែម class 'pagination-container' នៅជុំវិញ pagination links របស់អ្នក)
-    $(document).on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        // ប្រើ regExp ដើម្បីទាញ page number
-        let page = $(this).attr('href').split('page=')[1].split('&')[0]; 
-        fetchData(page);
-    });
-});
 </script>
 @endsection
