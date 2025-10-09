@@ -171,12 +171,12 @@ class StockController extends Controller
         ]);
         
         // ត្រួតពិនិត្យ Validation (OK)
-if ($request->type === 'sale_return') {
-     $request->validate(['sale_detail_id' => 'required|exists:orderdetails,id']);
-}
-if ($request->type === 'purchase_return') {
-     $request->validate(['purchase_detail_id' => 'required|exists:purchase_details,id']);
-}
+    if ($request->type === 'sale_return') {
+        $request->validate(['sale_detail_id' => 'required|exists:orderdetails,id']);
+    }
+    if ($request->type === 'purchase_return') {
+        $request->validate(['purchase_detail_id' => 'required|exists:purchase_details,id']);
+    }
 
 
         try {

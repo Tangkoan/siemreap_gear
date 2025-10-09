@@ -156,7 +156,7 @@ return [
         'complete_purchase'=>'បញ្ជាក់ការបញ្ជារទិញ',
         // Create Purchase
         'all_category' => 'ប្រភេទនៃផលិតផលទាំងអស់',
-        'purchase_cart' => 'ផលិតផលបំរុងធ្វើទិញ',
+        'purchase_cart' => 'ផលិតផលបំរុងធ្វើការទិញ',
         'total_payable'=> 'ប្រាក់ត្រូវបង់',
         'payment_method'=> 'បង់ប្រាក់តាមរយៈ',
         'pay_now'=> 'ចំនួនទឹកប្រាក់ដែលត្រូវបង់',
