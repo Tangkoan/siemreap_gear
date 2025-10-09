@@ -487,7 +487,7 @@ class ProductController extends Controller
                         <td class="p-2">' . $item['category']['category_name'] . '</td>
                         <td class="p-2">' . $item['condition']['condition_name'] . '</td>
                         <td class="p-2">' . $item->selling_price.'$'  . '</td>
-                        <td class="p-2">' . $item['supplier']['name'] . '</td>
+                        <td class="p-2">' . ($item['supplier']['name'] ?? 'null') . '</td>
                         
                         <td class="p-2 text-center align-middle">
                             <span class="inline-block px-3 py-1 rounded-md bg-green-600 text-white  shadow-sm
