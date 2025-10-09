@@ -12,6 +12,7 @@ class StockAdjustment extends Model
     protected $fillable = [
         'product_id',
         'user_id',
+        'related_id', 
         'type',
         'quantity',
         'before_quantity',
