@@ -355,73 +355,73 @@ class PurchaseController extends Controller
     }
 
     public function StorePurchase(Request $request){
-        $cartItems = Cart::content();
+            $cartItems = Cart::content();
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->back()->with([
-                'message' => __('messages.please_select_product_for_purchase'),
-                'alert-type' => 'error',
-            ]);
-        }
+            if ($cartItems->isEmpty()) {
+                return redirect()->back()->with([
+                    'message' => __('messages.please_select_product_for_purchase'),
+                    'alert-type' => 'error',
+                ]);
+            }
 
-        $subTotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->qty;
-        });
+            $subTotal = $cartItems->sum(function ($item) {
+                return $item->price * $item->qty;
+            });
 
-        $discount = floatval($request->discount ?? 0);
-        $paid = floatval($request->pay);
+            $discount = floatval($request->discount ?? 0);
+            $paid = floatval($request->pay);
 
-        if ($discount >= $subTotal) {
-            return redirect()->back()->withInput()->with([
-                'message' => __('messages.discount_cannot_exceed_subtotal') . ' (' . number_format($subTotal, 2) . ')',
-                'alert-type' => 'error',
-            ]);
-        }
+            if ($discount >= $subTotal) {
+                return redirect()->back()->withInput()->with([
+                    'message' => __('messages.discount_cannot_exceed_subtotal') . ' (' . number_format($subTotal, 2) . ')',
+                    'alert-type' => 'error',
+                ]);
+            }
 
-        $finalTotal = $subTotal - $discount;
-        $due = max($finalTotal - $paid, 0);
+            $finalTotal = $subTotal - $discount;
+            $due = max($finalTotal - $paid, 0);
 
-        $data = [
-            'supplier_id' => $request->supplier_id,
-            'purchase_date' => Carbon::now(),
-            'invoice_no' => $request->invoice_no, // ✅ បញ្ចូលដោយដៃ
-            'purchase_status' => 'complete', // ✅ ប្តូរទៅ complete ដោយស្វ័យប្រវត្តិ
-            'discount' => $discount,
-            'total_products' => $cartItems->count(),
-            'sub_total' => $subTotal,
-            'vat' => 0,
-            'total' => $finalTotal,
-            'payment_status' => $request->payment_status,
-            'pay' => $paid,
-            'due' => $due,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ];
-
-        $purchase_id = Purchase::insertGetId($data);
-
-        foreach ($cartItems as $item) {
-            purchase_details::create([
-                'purchase_id' => $purchase_id,
-                'product_id' => $item->id,
-                'purchase_price' => $item->price,
-                'unitcost' => $item->price,
-                'quantity' => $item->qty,
-                'total' => $item->price * $item->qty,
+            $data = [
+                'supplier_id' => $request->supplier_id,
+                'purchase_date' => Carbon::now(),
+                'invoice_no' => $request->invoice_no, // ✅ បញ្ចូលដោយដៃ
+                'purchase_status' => 'complete', // ✅ ប្តូរទៅ complete ដោយស្វ័យប្រវត្តិ
+                'discount' => $discount,
+                'total_products' => $cartItems->count(),
+                'sub_total' => $subTotal,
+                'vat' => 0,
+                'total' => $finalTotal,
+                'payment_status' => $request->payment_status,
+                'pay' => $paid,
+                'due' => $due,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-            ]);
+            ];
 
-            // ✅ បន្ថែមចំនួនចូលក្នុងស្តុក
-            Product::where('id', $item->id)->increment('product_store', $item->qty);
-    }
+            $purchase_id = Purchase::insertGetId($data);
 
-    Cart::destroy();
+            foreach ($cartItems as $item) {
+                purchase_details::create([
+                    'purchase_id' => $purchase_id,
+                    'product_id' => $item->id,
+                    'purchase_price' => $item->price,
+                    'unitcost' => $item->price,
+                    'quantity' => $item->qty,
+                    'total' => $item->price * $item->qty,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
 
-    return redirect()->route('purchase.page')->with([
-        'message' => __('messages.purchase_completed_successfully'),
-        'alert-type' => 'success',
-    ]);
+                // ✅ បន្ថែមចំនួនចូលក្នុងស្តុក
+                Product::where('id', $item->id)->increment('product_store', $item->qty);
+        }
+
+        Cart::destroy();
+
+        return redirect()->route('purchase.page')->with([
+            'message' => __('messages.purchase_completed_successfully'),
+            'alert-type' => 'success',
+        ]);
     }
 
     // Pay due amount modal page

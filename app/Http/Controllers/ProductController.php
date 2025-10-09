@@ -14,17 +14,12 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification; 
 use App\Notifications\StockAlertNotification;
-
-
 use App\Models\Category;
 use App\Models\Supplier;
 use App\Models\Condition;
-
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-
 use Illuminate\Support\Facades\Auth; // បញ្ជាក់ Auth class
 use Illuminate\Support\Str;
-
 use App\Exports\ProductExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductImport;
