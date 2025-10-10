@@ -158,7 +158,7 @@
 <div id="exchange-rate-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300">
     <div class="relative top-10 sm:top-20 mx-auto w-full max-w-sm transform rounded-xl bg-white p-6 shadow-2xl transition-all duration-300 dark:bg-slate-800 border dark:border-slate-700">
         <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-700">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Set Today's Exchange Rate</h3>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">{{ __('messages.set_today_s_exchange_rate') }}</h3>
             <button id="cancel-exchange-rate-x" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -172,7 +172,7 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span id="fetch-btn-text">Fetch Rate from MEF</span>
+                <span id="fetch-btn-text">{{ __('messages.f_r_f_e') }}</span>
                 
             </button>
 
@@ -183,7 +183,7 @@
                     <div class="w-full border-t border-slate-300 dark:border-slate-600"></div>
                 </div>
                 <div class="relative flex justify-center">
-                    <span class="bg-white dark:bg-slate-800 px-2 text-sm text-slate-500 dark:text-slate-400">Or enter manually</span>
+                    <span class="bg-white dark:bg-slate-800 px-2 text-sm text-slate-500 dark:text-slate-400">{{ __('messages.o_e_m') }}</span>
                 </div>
             </div>
 
@@ -193,12 +193,12 @@
                 @csrf
                 <div>
                     <label for="exchange_rate_input" class="block text-sm font-medium text-slate-700 dark:text-gray-200">1 USD = KHR</label>
-                    <input type="number" name="rate" id="exchange_rate_input" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm dark:bg-slate-700" placeholder="e.g., 4150" required>
+                    <input type="number" name="rate" id="exchange_rate_input" class="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm dark:bg-slate-700" placeholder="{{ __('messages.please_enter') }}" required>
                     <div id="rate_error" class="text-red-500 text-sm mt-1"></div>
                 </div>
                 <div class="pt-4 flex justify-end gap-x-3">
-                    <button id="cancel-exchange-rate" type="button" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-md hover:bg-slate-200 focus:outline-none dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600">Cancel</button>
-                    <button id="save-exchange-rate-btn" type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none disabled:opacity-75">Save Rate</button>
+                    <button id="cancel-exchange-rate" type="button" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-md hover:bg-slate-200 focus:outline-none dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600">{{ __('messages.cancel') }}</button>
+                    <button id="save-exchange-rate-btn" type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none disabled:opacity-75">{{ __('messages.save') }}</button>
                 </div>
             </form>
         </div>

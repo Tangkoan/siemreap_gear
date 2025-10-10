@@ -553,4 +553,10 @@ return [
         'search_transaction_by_invoice'=> 'Seach Transaction By Invoice',
         'select_sale_transaction'=>'Select Sale Transaction',
         'select_purchase_transaction'=>'Select Purchase Transaction',
+
+        'set_today_s_exchange_rate' => 'Set Today\'s Exchange Rate',
+        'f_r_f_e'=>'Fetch Rate from MEF',
+        'o_e_m'=>'Or enter manually',
+        'please_enter' => 'Please Enter',
+        
 ];

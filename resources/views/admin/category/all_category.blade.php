@@ -28,7 +28,7 @@
                         <div>
                             <div class="flex items-center space-x-2">
                                 <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
-                                <select id="perPage" name="perPage" class="dark:bg-gray-900 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                <select id="perPage" name="perPage" class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="10" selected>10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>

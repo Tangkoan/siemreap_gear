@@ -282,8 +282,31 @@ class PurchaseController extends Controller
     {
         $products = Product::latest()->get();
         $categories = Category::all();
-        $conditions = Condition::orderBy('condition_name', 'asc')->get();
-        $supplier = Supplier::orderBy('name', 'ASC')->get();
+        // $conditions = Condition::orderBy('condition_name', 'asc')->get();
+            // highlight-start
+        $conditions = Condition::orderBy(DB::raw("
+            CASE
+                WHEN condition_name = 'New' THEN 1
+                WHEN condition_name = 'Used' THEN 2
+                WHEN condition_name = 'Second Hand' THEN 3
+                ELSE 4
+            END
+        "))->orderBy('condition_name', 'asc')->get();
+        // highlight-endឮ
+
+        
+        // $supplier = Supplier::orderBy('name', 'ASC')->get();
+        // ✅ កូដដែលបានកែប្រែ
+        // highlight-start
+        $supplier = Supplier::orderBy(DB::raw("
+            CASE 
+                WHEN name = 'Genral' THEN 1 
+                WHEN name = 'genral' THEN 1 
+                ELSE 2 
+            END
+        "))->orderBy('name', 'ASC')->get();
+        // highlight-end
+
         return view('admin.purchases.add_purchase', compact('products', 'supplier', 'categories', 'conditions'));
     }
 

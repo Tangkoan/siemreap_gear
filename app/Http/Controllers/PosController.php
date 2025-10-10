@@ -263,7 +263,17 @@ public function fetchAndStoreAutoRate(Request $request)
         $product = Product::where('status', '1')->latest()->get();
         
         $categories = Category::all();
-        $conditions = Condition::orderBy('condition_name', 'asc')->get();
+        // ✅ កូដដែលបានកែប្រែ
+        // highlight-start
+        $conditions = Condition::orderBy(DB::raw("
+            CASE
+                WHEN condition_name = 'New' THEN 1
+                WHEN condition_name = 'Used' THEN 2
+                WHEN condition_name = 'Second Hand' THEN 3
+                ELSE 4
+            END
+        "))->orderBy('condition_name', 'asc')->get();
+        // highlight-end
         $activeRate = ExchangeRate::where('is_active', true)->latest()->first();
         
         $walkInCustomer = Customer::where('name', 'Walk-In')->first();
@@ -271,7 +281,17 @@ public function fetchAndStoreAutoRate(Request $request)
         
         $customers = collect();
         if ($walkInCustomer) { $customers->push($walkInCustomer); }
-        $customers = $customers->merge($otherCustomers);
+        // ✅ កូដដែលបានកែប្រែ (សាមញ្ញ និងមានប្រសិទ្ធភាពជាងមុន)
+        // highlight-start
+        $customers = Customer::orderBy(DB::raw("
+            CASE
+                WHEN name = 'Walk-In' THEN 1
+                WHEN name = 'general' THEN 2
+                WHEN name = 'General' THEN 3
+                ELSE 4
+            END
+        "))->orderBy('name', 'ASC')->get();
+        // highlight-end
 
         return view('admin.pos.pos', compact('product', 'customers', 'categories', 'conditions', 'activeRate'));
     }
