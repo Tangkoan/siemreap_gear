@@ -154,12 +154,30 @@
                     
                    
                     preConfirm: () => {
-                        const amount = document.getElementById('swal-payment-amount').value;
+                        const amount = parseFloat(document.getElementById('swal-payment-amount').value);
                         const method = document.getElementById('swal-payment-method').value;
-                        if (!amount || amount <= 0) {
-                            Swal.showValidationMessage(`Pay Now`);
+                        
+                        // The 'due' variable is accessible from the outer scope
+                        const dueAmount = parseFloat(due); 
+
+                        // Validation 1: Check if amount is a valid positive number
+                        if (isNaN(amount) || amount <= 0) {
+                            // ✅ កែប្រើ Translation Helper របស់ Laravel
+                            Swal.showValidationMessage(`{{ __('messages.enter_valid_amount') }}`);
                             return false;
                         }
+
+                        // Validation 2: Add validation to prevent overpayment
+                        if (amount > dueAmount) {
+                            // ✅ កែប្រើ Translation Helper សម្រាប់ផ្នែកមួយនៃសារ
+                            // យើងបំបែកផ្នែក Static របស់ Message ដើម្បីបកប្រែ
+                            let errorText = `{{ __('messages.payment_cannot_exceed_due') }}`;
+                            
+                            // ហើយភ្ជាប់ជាមួយส่วน Dynamic (${dueAmount}) ដោយប្រើ JavaScript
+                            Swal.showValidationMessage(`${errorText} (${dueAmount.toFixed(2)}$)`);
+                            return false; // Prevent the form from submitting
+                        }
+
                         return { amount: amount, method: method };
                     }
 

@@ -558,6 +558,10 @@ return [
         'f_r_f_e'=>'Fetch Rate from MEF',
         'o_e_m'=>'Or enter manually',
         'please_enter' => 'Please Enter',
-        'previous'=>'Previous',
+        
+
+        'payment_exceeds_due_amount' => 'The payment amount exceeds the amount due.',
+        'enter_valid_amount' => 'Please enter a valid amount.',
+        'payment_cannot_exceed_due' => 'Payment cannot exceed the due amount', // Message without the value
         
 ];
