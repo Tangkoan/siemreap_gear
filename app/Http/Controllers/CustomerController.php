@@ -233,7 +233,7 @@ class CustomerController extends Controller
         </tr>';
         }
 
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $customers->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $customers->links('pagination::tailwind')->toHtml();
 
         return response()->json([
             'table' => $table,

@@ -220,7 +220,7 @@ class ConditionController extends Controller
         }
 
         // ✅ 6. Generate pagination links HTML
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $conditions->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $conditions->links('pagination::tailwind')->toHtml();
 
         // ✅ 7. Return the final JSON response
         return response()->json([

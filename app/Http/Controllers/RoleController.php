@@ -185,7 +185,7 @@ class RoleController extends Controller
             </tr>';
         }
 
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $permissions->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $permissions->links('pagination::tailwind')->toHtml();
 
         return response()->json([
             'table' => $table,
@@ -363,7 +363,7 @@ class RoleController extends Controller
             </tr>';
         }
 
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $roles->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $roles->links('pagination::tailwind')->toHtml();
 
         return response()->json([
             'table' => $table,
@@ -510,7 +510,7 @@ class RoleController extends Controller
                 . '</tr>';
         }
 
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $roles->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $roles->links('pagination::tailwind')->toHtml();
 
         return response()->json([
             'table' => $table,

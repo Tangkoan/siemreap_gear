@@ -225,7 +225,7 @@ class CategoryController extends Controller
             </tr>';
         }
 
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $categories->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $categories->links('pagination::tailwind')->toHtml();
 
         return response()->json([
             'table' => $table,

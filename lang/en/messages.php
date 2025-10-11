@@ -558,5 +558,6 @@ return [
         'f_r_f_e'=>'Fetch Rate from MEF',
         'o_e_m'=>'Or enter manually',
         'please_enter' => 'Please Enter',
+        'previous'=>'Previous',
         
 ];

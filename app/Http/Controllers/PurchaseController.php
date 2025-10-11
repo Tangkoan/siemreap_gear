@@ -220,7 +220,7 @@ class PurchaseController extends Controller
                 </td>
             </tr>';
         }
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $purchases->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $purchases->links('pagination::tailwind')->toHtml();
         return response()->json(['table' => $table, 'pagination' => $pagination]);
     }
 
@@ -273,7 +273,7 @@ class PurchaseController extends Controller
                 </td>
             </tr>';
         }
-        $pagination = $isAll ? '<div class="text-sm text-slate-500">Showing all results</div>' : $purchases->links('pagination::tailwind')->toHtml();
+        $pagination = $isAll ? '<div class="text-sm text-slate-500"></div>' : $purchases->links('pagination::tailwind')->toHtml();
         return response()->json(['table' => $table, 'pagination' => $pagination]);
     }
     
