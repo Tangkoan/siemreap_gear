@@ -15,12 +15,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Khmer+OS+Siemreap:wght@400;700&family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
 
-    <style>
+   <style>
+        /* This rule removes the browser's default print header and footer */
         @page {
             size: A5;
             margin: 0; 
         }
 
+        /* This rule adds a margin back to the content when printing */
+        @media print {
+            body {
+                background-color: #fff;
+            }
+             .quotation-paper {
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            
+            /* 👇 បន្ថែម padding វិញ ដើម្បីកុំឲ្យអក្សរស្អិតនឹងขอบក្រដាស */
+            padding: 1.5cm; /* អ្នកអាចปรับขนาดได้ตามใจ เช่น 1cm ឬ 20mm */
+        }
+            .print-hidden {
+                display: none;
+            }
+        }
+
+        /* The rest of your existing styles... */
         body {
             background-color: #f3f4f6; 
             font-family: 'Inter', 'Khmer OS Siemreap', sans-serif;
@@ -29,37 +51,18 @@
         }
         .quotation-paper {
             width: 148mm; 
-            /* ✅ ADJUSTED: Reduced min-height to better fit content */
-            /* ✅ បានកែសម្រួល៖ បានកាត់បន្ថយ min-height ដើម្បីឲ្យសមនឹងเนื้อหา */
             min-height: 190mm; 
             margin: 2rem auto;
             background-color: white;
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             border-radius: 0.25rem;
-            border-top: 6px solid red; /* Teal-600 color */
+            border-top: 6px solid red;
         }
         .font-khmer-muol {
             font-family: 'Khmer OS Muol Light', sans-serif;
         }
         .font-khmer-siemreap {
             font-family: 'Khmer OS Siemreap', sans-serif;
-        }
-
-        @media print {
-            body {
-                background-color: #fff;
-            }
-            .quotation-paper {
-                margin: 0;
-                padding: 1cm; 
-                box-shadow: none;
-                border-radius: 0;
-                width: 100%;
-                height: 100%;
-            }
-            .print-hidden {
-                display: none;
-            }
         }
     </style>
 </head>
