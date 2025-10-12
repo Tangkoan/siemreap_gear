@@ -391,6 +391,12 @@ Route::middleware(['auth'])->group(callback: function () {
                 Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin')->middleware('permission:user.edit');
                 Route::post('/update/admin', 'UpdateAdmin')->name('admin.update');
                 Route::get('/delete/admin/{id}', 'DeleteAdmin')->name('delete.admin')->middleware('permission:user.delete');
+                
+                // Route សម្រាប់ Dashboard
+                Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
+                
+                // ✅ Route ថ្មីសម្រាប់ AJAX Filter
+                Route::get('/admin/dashboard/filter-data', [AdminController::class, 'getFilteredDashboardData'])->name('admin.dashboard.filter');
             });
 
 

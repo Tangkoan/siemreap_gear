@@ -16,55 +16,68 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Khmer+OS+Siemreap:wght@400;700&family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
 
    <style>
-        /* This rule removes the browser's default print header and footer */
-        @page {
-            size: A5;
-            margin: 0; 
-        }
+    /* 1. Base Styles (Print First Approach) */
+    /* កំណត់ Style មូលដ្ឋានដែលនឹងប្រើសម្រាប់ Print */
+    @page {
+        size: A5; /* កំណត់ទំហំក្រដាសពេល Print */
+        margin: 0;
+    }
 
-        /* This rule adds a margin back to the content when printing */
-        @media print {
-            body {
-                background-color: #fff;
-            }
-             .quotation-paper {
-            margin: 0;
-            box-shadow: none;
-            border-radius: 0;
-            width: 100%;
-            height: 100%;
-            
-            /* 👇 បន្ថែម padding វិញ ដើម្បីកុំឲ្យអក្សរស្អិតនឹងขอบក្រដាស */
-            padding: 1.5cm; /* អ្នកអាចปรับขนาดได้ตามใจ เช่น 1cm ឬ 20mm */
-        }
-            .print-hidden {
-                display: none;
-            }
-        }
+    body {
+        font-family: 'Inter', 'Khmer OS Siemreap', sans-serif;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        background-color: #fff; /* កំណត់ផ្ទៃខាងក្រោយឲ្យពណ៌សជា Default */
+    }
 
-        /* The rest of your existing styles... */
+    .quotation-paper {
+        background-color: white;
+        padding: 1.5cm; /* បន្ថែមช่องว่างข้างในแทน margin របស់ @page */
+        border-top: 6px solid red;
+    }
+
+    .font-khmer-muol {
+        font-family: 'Khmer OS Muol Light', sans-serif;
+    }
+
+    .font-khmer-siemreap {
+        font-family: 'Khmer OS Siemreap', sans-serif;
+    }
+    
+    .print-hidden {
+        display: none; /* លាក់ Element នេះពេល Print */
+    }
+
+    /* 2. Screen-Only Styles */
+    /* កំណត់ Style សម្រាប់តែពេលមើលលើអេក្រង់ប៉ុណ្ណោះ */
+    @media screen {
         body {
-            background-color: #f3f4f6; 
-            font-family: 'Inter', 'Khmer OS Siemreap', sans-serif;
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
+            background-color: #f3f4f6; /* ដាក់พื้นหลังสีเทาសម្រាប់តែលើ Screen */
         }
+
         .quotation-paper {
             width: 148mm; 
             min-height: 190mm; 
-            margin: 2rem auto;
-            background-color: white;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            border-radius: 0.25rem;
-            border-top: 6px solid red;
+            margin: 2rem auto; /* ដាក់ក្រដាសនៅកណ្តាលសម្រាប់តែលើ Screen */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* បង្ហាញเงาសម្រាប់តែលើ Screen */
+            border-radius: 0.25rem; /* ធ្វើឲ្យขอบมนសម្រាប់តែលើ Screen */
         }
-        .font-khmer-muol {
-            font-family: 'Khmer OS Muol Light', sans-serif;
+        
+        /* ពេលមើលលើ Screen ត្រូវបង្ហាញข้อความนี้វិញ */
+        .print-hidden {
+            display: block; 
         }
-        .font-khmer-siemreap {
-            font-family: 'Khmer OS Siemreap', sans-serif;
+    }
+    
+    /* 3. Print-Specific Adjustments (Optional & Minimal) */
+    /* ការปรับកែបន្ថែមอีกเล็กน้อยសម្រាប់តែពេល Print */
+    @media print {
+        .quotation-paper {
+            /* មិនចាំបាច់ដាក់អ្វីច្រើនទេ ព្រោះ Base Style ត្រឹមត្រូវសម្រាប់ Print រួចแล้ว */
+            /* អាចបន្ថែម padding หรือ margin បន្តិចបន្តួចបើចាំបាច់ */
         }
-    </style>
+    }
+</style>
 </head>
 <body>
 
