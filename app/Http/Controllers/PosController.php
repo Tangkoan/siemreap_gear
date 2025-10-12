@@ -29,7 +29,75 @@ class PosController extends Controller
     
     // In app/Http/Controllers/PosController.php
 
-public function fetchAndStoreAutoRate(Request $request)
+    // public function fetchAndStoreAutoRate(Request $request)
+    // {
+    //     try {
+    //         $response = Http::timeout(20)->get('https://data.mef.gov.kh/api/v1/realtime-api/exchange-rate?currency_id=USD');
+
+    //         if (!$response->successful()) {
+    //             return response()->json(['success' => false, 'message' => 'Could not connect to API. Please enter manually.'], 502);
+    //         }
+
+    //         $data = $response->json();
+    //         \Log::info('MEF API Response:', $data);
+
+    //         // ✅ FIXED: Changed 'rate_buy' to 'bid' to match the actual API response.
+    //         // ✅ បានកែប្រែ៖ បានប្តូរ 'rate_buy' ទៅជា 'bid' ដើម្បីឲ្យត្រូវនឹង Response ពិតរបស់ API។
+    //         if (!empty($data['data']) && isset($data['data']['bid']) && !empty($data['data']['bid'])) {
+                
+    //             // --- Case 1: Today's rate is available ---
+    //             // --- ករណីទី១៖ អត្រាថ្ងៃនេះមាន ---
+    //             $rate = (float) $data['data']['bid']; // Use 'bid' instead of 'rate_buy'
+
+    //             if ($rate <= 0) {
+    //                 return response()->json(['success' => false, 'message' => 'API returned an invalid rate value.'], 500);
+    //             }
+
+    //             DB::transaction(function () use ($rate) {
+    //                 ExchangeRate::where('rate_date', '!=', now()->toDateString())->update(['is_active' => false]);
+    //                 ExchangeRate::updateOrCreate(
+    //                     ['rate_date' => now()->toDateString()],
+    //                     ['rate_khr' => $rate, 'is_active' => true]
+    //                 );
+    //             });
+
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'is_fallback' => false, // Flag indicating it's a fresh rate
+    //                 'message' => 'Successfully fetched today\'s exchange rate!',
+    //                 'new_rate' => $rate
+    //             ]);
+
+    //         } else {
+                
+    //             // --- Case 2: Today's rate is NOT available (Weekend/Holiday) ---
+    //             // --- ករណីទី២៖ អត្រាថ្ងៃនេះមិនមាន (ចុងសប្តាហ៍/ថ្ងៃបុណ្យ) ---
+    //             $lastActiveRate = ExchangeRate::latest('rate_date')->first();
+
+    //             if ($lastActiveRate) {
+    //                 // Fallback to the most recent rate in the database
+    //                 // ប្តូរទៅប្រើអត្រាចុងក្រោយបំផុតនៅក្នុង Database
+    //                 return response()->json([
+    //                     'success' => true,
+    //                     'is_fallback' => true, // Flag indicating it's a fallback rate
+    //                     'message' => "Using last rate from " . Carbon::parse($lastActiveRate->rate_date)->format('d-M-Y'),
+    //                     'new_rate' => $lastActiveRate->rate_khr
+    //                 ]);
+    //             } else {
+    //                 // No rate for today, and no previous rate found in the DB.
+    //                 // គ្មានអត្រាសម្រាប់ថ្ងៃនេះទេ ហើយក៏គ្មានអត្រាមុននៅក្នុង DB ដែរ។
+    //                 return response()->json([
+    //                     'success' => false,
+    //                     'message' => 'No rate available. Please enter one manually to begin.'
+    //                 ], 404);
+    //             }
+    //         }
+    //     } catch (\Exception $e) {
+    //         \Log::error('Auto fetch exchange rate error: ' . $e->getMessage());
+    //         return response()->json(['success' => false, 'message' => 'An unexpected error occurred.'], 500);
+    //     }
+    // }
+    public function fetchAndStoreAutoRate(Request $request)
     {
         try {
             $response = Http::timeout(20)->get('https://data.mef.gov.kh/api/v1/realtime-api/exchange-rate?currency_id=USD');
@@ -97,6 +165,50 @@ public function fetchAndStoreAutoRate(Request $request)
             return response()->json(['success' => false, 'message' => 'An unexpected error occurred.'], 500);
         }
     }
+
+    // public function storeExchangeRate(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'rate' => 'required|numeric|min:1',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+    //     }
+
+    //     try {
+    //         DB::transaction(function () use ($request) {
+                
+    //             // Deactivate អត្រាផ្សេងៗទាំងអស់
+    //             ExchangeRate::where('rate_date', '!=', now()->toDateString())
+    //                 ->update(['is_active' => false]);
+
+    //             // រកមើល Record ដែលមានកាលបរិច្ឆេទថ្ងៃនេះ បើមានគឺ Update បើមិនមានគឺ Create
+    //             ExchangeRate::updateOrCreate(
+    //                 [
+    //                     'rate_date' => now()->toDateString()
+    //                 ],
+    //                 [
+    //                     'rate_khr' => $request->rate,
+    //                     'is_active' => true
+    //                 ]
+    //             );
+    //         });
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Exchange rate updated successfully!',
+    //             'new_rate' => $request->rate,
+    //         ]);
+
+    //     } catch (\Exception $e) {
+    //         \Log::error('Error saving exchange rate: ' . $e->getMessage());
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Failed to update exchange rate.'
+    //         ], 500);
+    //     }
+    // }
 
     public function storeExchangeRate(Request $request)
     {
@@ -197,12 +309,64 @@ public function fetchAndStoreAutoRate(Request $request)
 
     public function clearCartAndRedirect()
     {
-    
         Cart::destroy();
         return redirect()->back(); 
     }
 
     
+
+    // public function storeCustomerAjax(Request $request)
+    //     {
+    //         // === ផ្នែកទី១៖ ការធ្វើ Validation ===
+    //         // យើងប្រើ Validator::make() ជំនួសឱ្យ $request->validate() ដើម្បីគ្រប់គ្រង Response ដោយខ្លួនឯង
+    //         $validator = Validator::make($request->all(), [
+    //             'name' => 'required|string|max:255|unique:customers,name',
+    //             'notes' => 'nullable|string|max:255',
+    //             'phone' => 'nullable|string|max:20',
+    //             'address' => 'nullable|string|max:500', 
+    //         ], [
+    //             // អ្នកអាចដាក់ Custom Message នៅទីនេះបានដូចគ្នា
+    //             'name.required' => __('validation.required', ['attribute' => __('validation.attributes.name')]),
+    //             'name.unique'   => __('validation.unique', ['attribute' => __('validation.attributes.name')]),
+    //         ]);
+
+    //         // ពិនិត្យមើលបើ Validation Fails
+    //         if ($validator->fails()) {
+    //             // បញ្ជូន Error JavaScript ជា JSON ជាមួយ Status Code 422
+    //             return response()->json(['errors' => $validator->errors()], 422);
+    //         }
+
+
+    //         // === ផ្នែកទី២៖ ការរក្សាទុកទិន្នន័យ និង Response ពេលជោគជ័យ ===
+    //         // យើងប្រើ try...catch ដើម្បីចាប់ Error ពី Database
+    //         try {
+    //             // ប្រើ customer::create() ជំនួសឱ្យ insert() ព្រោះវាជា Eloquent best practice
+    //             $customer = Customer::create([
+    //                 'name' => $request->name,
+    //                 'notes' => $request->notes,
+    //                 'phone' => $request->phone,
+    //                 'address' => $request->address,
+    //                 // create() នឹងបំពេញ created_at ដោយស្វ័យប្រវត្តិ មិនចាំបាច់reload page
+    //             ]);
+                
+    //             // ប្តូរពី redirect() ទៅជា response()->json()
+    //             return response()->json([
+    //                 'message' => __('messages.customer_inserted_successfully'),
+    //                 'newCustomer' => [ // ត្រូវបញ្ជូនទិន្នន័យនេះ JS
+    //                     'id' => $customer->id,
+    //                     'name' => $customer->name,
+    //                 ]
+    //             ], 200);
+
+    //         } catch (\Exception $e) {
+    //             // === ផ្នែកទី៣៖ ការដោះស្រាយ Exception ===
+    //             \Log::error('Error saving Customer: ' . $e->getMessage()); 
+                
+    //             return response()->json([
+    //                 'errors' => ['database' => __('messages.customer_insert_failed')]
+    //             ], 500);
+    //         }
+    // }
 
     public function storeCustomerAjax(Request $request)
         {
@@ -328,7 +492,7 @@ public function fetchAndStoreAutoRate(Request $request)
             return response()->json(['products' => $products]);
         }
     // PosController.php
-  public function searchProducts(Request $request)
+    public function searchProducts(Request $request)
     {
         $keyword = $request->input('keyword');
 
@@ -358,40 +522,83 @@ public function fetchAndStoreAutoRate(Request $request)
         return response()->json(['products' => $products]);
     }
     
+    // public function AddCart(Request $request){
+    //     // ពិនិត្យ Stock ម្តងទៀតនៅ Backend ដើម្បីសុវត្ថិភាព
+    //     $product = Product::find($request->id);
+    //     $cart = Cart::content();
+    //     $existingItem = $cart->where('id', $product->id)->first();
+    //     $newQty = $request->qty;
+
+    //     if ($existingItem) {
+    //         $newQty += $existingItem->qty;
+    //     }
+        
+    //     // បើជាផលិតផលដែលមានក្នុងស្តុក ត្រូវប្រាកដថាចំនួនដែលสั่งซื้อไม่เกินចំនួនស្តុក
+    //     if ($product->product_store > 0 && $newQty > $product->product_store) {
+    //         return response()->json([
+    //             'error' => 'Not enough stock for ' . $product->product_name . '. Only ' . $product->product_store . ' left.',
+    //             'alert-type' => 'error'
+    //         ]);
+    //     }
+        
+    //     Cart::add([
+    //         'id' => $request->id,
+    //         'name' => $request->name,
+    //         'qty' => $request->qty,
+    //         'price' => $request->price,
+    //         'weight' => 20, // អ្នកអាចកែប្រែតាមความเหมาะสม
+    //         'options' => $request->options ?? [] // ទទួល Options ពី Request
+    //     ]);
+
+    //     return response()->json([
+    //         'alert-type' => 'success',
+    //         'cart_content' => Cart::content(),
+    //         'cart_subtotal' => Cart::subtotal(),
+    //     ]);
+    // }
+    // START: កូដដែលបានកែប្រែ
     public function AddCart(Request $request){
-        // ពិនិត្យ Stock ម្តងទៀតនៅ Backend ដើម្បីសុវត្ថិភាព
-        $product = Product::find($request->id);
-        $cart = Cart::content();
-        $existingItem = $cart->where('id', $product->id)->first();
-        $newQty = $request->qty;
-
-        if ($existingItem) {
-            $newQty += $existingItem->qty;
-        }
-        
-        // បើជាផលិតផលដែលមានក្នុងស្តុក ត្រូវប្រាកដថាចំនួនដែលสั่งซื้อไม่เกินចំនួនស្តុក
-        if ($product->product_store > 0 && $newQty > $product->product_store) {
-            return response()->json([
-                'error' => 'Not enough stock for ' . $product->product_name . '. Only ' . $product->product_store . ' left.',
-                'alert-type' => 'error'
-            ]);
-        }
-        
-        Cart::add([
-            'id' => $request->id,
-            'name' => $request->name,
-            'qty' => $request->qty,
-            'price' => $request->price,
-            'weight' => 20, // អ្នកអាចកែប្រែតាមความเหมาะสม
-            'options' => $request->options ?? [] // ទទួល Options ពី Request
-        ]);
-
-        return response()->json([
-            'alert-type' => 'success',
-            'cart_content' => Cart::content(),
-            'cart_subtotal' => Cart::subtotal(),
-        ]);
+    // ពិនិត្យ Stock ម្តងទៀតនៅ Backend ដើម្បីសុវត្ថិភាព
+    $product = Product::find($request->id);
+    if (!$product) {
+        return response()->json(['error' => 'រកមិនឃើញផលិតផលនេះទេ!'], 404);
     }
+    
+    $cart = Cart::content();
+    $existingItem = $cart->where('id', $product->id)->first();
+    $newQty = $request->qty;
+
+    if ($existingItem) {
+        $newQty += $existingItem->qty;
+    }
+    
+    // លក្ខខណ្ឌនេះនៅតែត្រូវរក្សាទុក៖ 
+    // ត្រួតពិនិត្យ Stock សម្រាប់តែផលិតផលណាที่มีក្នុងស្តុក (product_store > 0)
+    if ($product->product_store > 0 && $newQty > $product->product_store) {
+        return response()->json([
+            // 'error' =>  {{ __('messages.stock_not_engout') }} . $product->product_name .  {{ __('messages.only') }} . $product->product_store .  {{ __('messages.items_left') }},
+            'error' => __('messages.stock_not_enough') . $product->product_name . __('messages.only') . $product->product_store . __('messages.items_left'),
+            'alert-type' => 'error'
+        ], 422); // ប្រើ Status 422
+    }
+    
+    // បន្ថែមទៅ Cart ដោយគ្មានការត្រួតពិនិត្យ Mixed Cart
+    Cart::add([
+        'id' => $request->id,
+        'name' => $request->name,
+        'qty' => $request->qty,
+        'price' => $request->price,
+        'weight' => 20,
+        'options' => $request->options ?? []
+    ]);
+
+    return response()->json([
+        'alert-type' => 'success',
+        'cart_content' => Cart::content(),
+        'cart_subtotal' => Cart::subtotal(),
+    ]);
+}
+    // END: កូដដែលបានកែប្រែ
 
     public function CartRemove($rowId){
         Cart::remove($rowId);
@@ -406,17 +613,42 @@ public function fetchAndStoreAutoRate(Request $request)
     }
 
 
+    // public function CartUpdate(Request $request, $rowId){
+    //     $qty = $request->qty;
+    //     Cart::update($rowId, $qty);
+
+    //     return response()->json([
+    //         // 'message' => 'Cart Updated Successfully',
+    //         'alert-type' => 'success',
+    //         'cart_content' => Cart::content(),
+    //         'cart_subtotal' => Cart::subtotal(),
+    //     ]);
+    // }
+    // START: កូដដែលបានកែប្រែ
     public function CartUpdate(Request $request, $rowId){
-        $qty = $request->qty;
-        Cart::update($rowId, $qty);
+        $newQty = $request->qty;
+        $cartItem = Cart::get($rowId);
+        $product = Product::find($cartItem->id);
+
+        // ពិនិត្យ Stock ពេល Update ចំនួន
+        if ($product && $product->product_store > 0 && $newQty > $product->product_store) {
+            return response()->json([
+                'error' => 'ស្តុកមិនគ្រប់គ្រាន់។ នៅសល់តែ ' . $product->product_store . ' គ្រឿងប៉ុណ្ណោះ។',
+                'alert-type' => 'error',
+                'cart_content' => Cart::content(), // បញ្ជូន Cart ចាស់ត្រឡប់ទៅវិញ
+                'cart_subtotal' => Cart::subtotal(),
+            ], 422); // ប្រើ HTTP Status 422 សម្រាប់ Validation Error
+        }
+
+        Cart::update($rowId, $newQty);
 
         return response()->json([
-            // 'message' => 'Cart Updated Successfully',
             'alert-type' => 'success',
             'cart_content' => Cart::content(),
             'cart_subtotal' => Cart::subtotal(),
         ]);
     }
+    // END: កូដដែលបានកែប្រែ
 
     public function CreateInvoice(Request $request){
 
@@ -439,114 +671,241 @@ public function fetchAndStoreAutoRate(Request $request)
     } // End Method 
 
 
-    public function FinalInvoice(Request $request)
-    {
-        $cartItems = Cart::content();
+    // public function FinalInvoice(Request $request)
+    // {
+    //     $cartItems = Cart::content();
 
-        if ($cartItems->isEmpty()) {
-            return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
-        }
+    //     if ($cartItems->isEmpty()) {
+    //         return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
+    //     }
 
-        $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
-        $discount = floatval($request->discount ?? 0);
+    //     $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+    //     $discount = floatval($request->discount ?? 0);
 
-        if ($discount > $subTotal) {
-            return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
-        }
+    //     if ($discount > $subTotal) {
+    //         return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
+    //     }
 
-        $pay = floatval($request->pay);
-        $total = $subTotal - $discount;
-        $due = $total - $pay;
+    //     $pay = floatval($request->pay);
+    //     $total = $subTotal - $discount;
+    //     $due = $total - $pay;
 
-        // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
-        $hasPreOrder = false;
-        foreach ($cartItems as $item) {
-            $product = Product::find($item->id);
-            if (!$product || $product->product_store < $item->qty) {
-                $hasPreOrder = true;
-                break;
-            }
-        }
+    //     // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
+    //     $hasPreOrder = false;
+    //     foreach ($cartItems as $item) {
+    //         $product = Product::find($item->id);
+    //         if (!$product || $product->product_store < $item->qty) {
+    //             $hasPreOrder = true;
+    //             break;
+    //         }
+    //     }
 
-        // B2: កំណត់ Order Status និង Order Type
-        $orderStatus = '';
-        $orderType = '';
+    //     // B2: កំណត់ Order Status និង Order Type
+    //     $orderStatus = '';
+    //     $orderType = '';
 
-        if ($hasPreOrder) {
-            $orderStatus = 'pending';
-            $orderType = 'pre_order';
+    //     if ($hasPreOrder) {
+    //         $orderStatus = 'pending';
+    //         $orderType = 'pre_order';
+    //     } else {
+    //         $orderStatus = ($due <= 0) ? 'complete' : 'pending';
+    //         $orderType = 'sale';
+    //     }
+
+    //     DB::beginTransaction();
+
+    //     try {
+    //         $data = [
+    //             'customer_id' => $request->customer_id,
+    //             'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+    //             'order_status' => $orderStatus,
+    //             'order_type' => $orderType,
+    //             'discount' => $discount,
+    //             'total_products' => Cart::count(),
+    //             'sub_total' => $subTotal,
+    //             'vat' => 0,
+    //             'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+    //             'total' => $total,
+    //             'payment_status' => $request->payment_status,
+    //             'pay' => $pay,
+    //             'due' => max(0, $due),
+    //             'created_at' => Carbon::now(),
+    //             'exchange_rate_khr' => $request->exchange_rate_khr,
+    //         ];
+
+    //         // ✅ START: កូដដែលបានបន្ថែម
+    //         // ពិនិត្យមើល បើ Order Status គឺ complete ត្រូវបន្ថែម completion_date
+    //         if ($orderStatus === 'complete') {
+    //             $data['completion_date'] = Carbon::now();
+    //         }
+    //         // ✅ END: កូដដែលបានបន្ថែម
+
+    //         $order_id = Order::insertGetId($data);
+
+    //         foreach ($cartItems as $item) {
+    //             $product = Product::find($item->id);
+
+    //             if ($product && $product->product_store >= $item->qty) {
+    //                 $item_status = 'fulfilled';
+    //                 if ($orderStatus === 'complete') {
+    //                     $product->decrement('product_store', $item->qty);
+    //                 }
+    //             } else {
+    //                 $item_status = 'pre_ordered';
+    //             }
+
+    //             Orderdetails::insert([
+    //                 'order_id' => $order_id,
+    //                 'product_id' => $item->id,
+    //                 'quantity' => $item->qty,
+    //                 'unitcost' => $item->price,
+    //                 'total' => $item->qty * $item->price,
+    //                 'item_status' => $item_status,
+    //             ]);
+    //         }
+
+    //         DB::commit();
+    //         Cart::destroy();
+
+    //         return redirect()->route('print.invoice', $order_id)->with([
+    //             'message' => __('messages.order_completed_successfully'),
+    //             'alert-type' => 'success'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return back()->with([
+    //             'message' => __('messages.something_went_wrong') . ': ' . $e->getMessage(),
+    //             'alert-type' => 'error'
+    //         ]);
+    //     }
+    // }
+
+    // In PosController.php
+
+public function FinalInvoice(Request $request)
+{
+    $cartItems = Cart::content();
+
+    if ($cartItems->isEmpty()) {
+        return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
+    }
+
+    // ✅ START: កូដថ្មីសម្រាប់ត្រួតពិនិត្យ MIXED CART
+    $hasInStockItems = false;
+    $hasPreOrderItems = false;
+
+    foreach ($cartItems as $item) {
+        $product = Product::find($item->id);
+        // ពិនិត្យមើលថាទំនិញនេះជា Pre-Order ឬ In-stock
+        if ($product && $product->product_store > 0 && $product->product_store >= $item->qty) {
+            $hasInStockItems = true;
         } else {
-            $orderStatus = ($due <= 0) ? 'complete' : 'pending';
-            $orderType = 'sale';
-        }
-
-        DB::beginTransaction();
-
-        try {
-            $data = [
-                'customer_id' => $request->customer_id,
-                'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
-                'order_status' => $orderStatus,
-                'order_type' => $orderType,
-                'discount' => $discount,
-                'total_products' => Cart::count(),
-                'sub_total' => $subTotal,
-                'vat' => 0,
-                'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
-                'total' => $total,
-                'payment_status' => $request->payment_status,
-                'pay' => $pay,
-                'due' => max(0, $due),
-                'created_at' => Carbon::now(),
-                'exchange_rate_khr' => $request->exchange_rate_khr,
-            ];
-
-            // ✅ START: កូដដែលបានបន្ថែម
-            // ពិនិត្យមើល បើ Order Status គឺ complete ត្រូវបន្ថែម completion_date
-            if ($orderStatus === 'complete') {
-                $data['completion_date'] = Carbon::now();
-            }
-            // ✅ END: កូដដែលបានបន្ថែម
-
-            $order_id = Order::insertGetId($data);
-
-            foreach ($cartItems as $item) {
-                $product = Product::find($item->id);
-
-                if ($product && $product->product_store >= $item->qty) {
-                    $item_status = 'fulfilled';
-                    if ($orderStatus === 'complete') {
-                        $product->decrement('product_store', $item->qty);
-                    }
-                } else {
-                    $item_status = 'pre_ordered';
-                }
-
-                Orderdetails::insert([
-                    'order_id' => $order_id,
-                    'product_id' => $item->id,
-                    'quantity' => $item->qty,
-                    'unitcost' => $item->price,
-                    'total' => $item->qty * $item->price,
-                    'item_status' => $item_status,
-                ]);
-            }
-
-            DB::commit();
-            Cart::destroy();
-
-            return redirect()->route('print.invoice', $order_id)->with([
-                'message' => __('messages.order_completed_successfully'),
-                'alert-type' => 'success'
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with([
-                'message' => __('messages.something_went_wrong') . ': ' . $e->getMessage(),
-                'alert-type' => 'error'
-            ]);
+            $hasPreOrderItems = true;
         }
     }
+
+    // បើមានទាំងពីរប្រភេទក្នុង Cart តែមួយ => បដិសេធការលក់
+    if ($hasInStockItems && $hasPreOrderItems) {
+        Cart::destroy(); // 🧹 Clear all items from cart
+
+        return back()->with([
+            'message' => __('messages.cannot_mix_sale'), 
+            'alert-type' => 'error'
+        ]);
+    }
+    // ✅ END: កូដថ្មីសម្រាប់ត្រួតពិនិត្យ MIXED CART
+
+    $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
+    $discount = floatval($request->discount ?? 0);
+
+    if ($discount > $subTotal) {
+        return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
+    }
+
+    $pay = floatval($request->pay);
+    $total = $subTotal - $discount;
+    $due = $total - $pay;
+
+    // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Logic នេះអាចទុកដដែល ឬកែសម្រួលបន្តិច)
+    // យើងអាចប្រើ $hasPreOrderItems ពីខាងលើបាន
+    $hasPreOrder = $hasPreOrderItems; 
+
+    // B2: កំណត់ Order Status និង Order Type
+    $orderStatus = '';
+    $orderType = '';
+
+    if ($hasPreOrder) {
+        $orderStatus = 'pending';
+        $orderType = 'pre_order';
+    } else {
+        $orderStatus = ($due <= 0) ? 'complete' : 'pending';
+        $orderType = 'sale';
+    }
+
+    DB::beginTransaction();
+
+    try {
+        $data = [
+            'customer_id' => $request->customer_id,
+            'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
+            'order_status' => $orderStatus,
+            'order_type' => $orderType,
+            'discount' => $discount,
+            'total_products' => Cart::count(),
+            'sub_total' => $subTotal,
+            'vat' => 0,
+            'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
+            'total' => $total,
+            'payment_status' => $request->payment_status,
+            'pay' => $pay,
+            'due' => max(0, $due),
+            'created_at' => Carbon::now(),
+            'exchange_rate_khr' => $request->exchange_rate_khr,
+        ];
+
+        if ($orderStatus === 'complete') {
+            $data['completion_date'] = Carbon::now();
+        }
+
+        $order_id = Order::insertGetId($data);
+
+        foreach ($cartItems as $item) {
+            $product = Product::find($item->id);
+
+            if ($product && $product->product_store >= $item->qty) {
+                $item_status = 'fulfilled';
+                if ($orderStatus === 'complete') {
+                    $product->decrement('product_store', $item->qty);
+                }
+            } else {
+                $item_status = 'pre_ordered';
+            }
+
+            Orderdetails::insert([
+                'order_id' => $order_id,
+                'product_id' => $item->id,
+                'quantity' => $item->qty,
+                'unitcost' => $item->price,
+                'total' => $item->qty * $item->price,
+                'item_status' => $item_status,
+            ]);
+        }
+
+        DB::commit();
+        Cart::destroy();
+
+        return redirect()->route('print.invoice', $order_id)->with([
+            'message' => __('messages.order_completed_successfully'),
+            'alert-type' => 'success'
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with([
+            'message' => __('messages.something_went_wrong') . ': ' . $e->getMessage(),
+            'alert-type' => 'error'
+        ]);
+    }
+}
 
 
 

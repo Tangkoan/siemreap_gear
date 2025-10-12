@@ -563,5 +563,11 @@ return [
         'payment_exceeds_due_amount' => 'The payment amount exceeds the amount due.',
         'enter_valid_amount' => 'Please enter a valid amount.',
         'payment_cannot_exceed_due' => 'Payment cannot exceed the due amount', // Message without the value
+
+        'stock_not_enough'=>'Not enough stock for',
+        'only'=> 'Only',
+        'items_left'=>'item(s) left.',
+        'cannot_mix_sale' => 'You cannot sell normal products and Pre-Order items at the same time. Please create a quotation or separate the purchase.',
+
         
 ];

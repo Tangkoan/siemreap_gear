@@ -519,6 +519,9 @@
             addCustomerBtn.addEventListener('click', () => customerModal.classList.remove('hidden'));
             cancelCustomerBtn.addEventListener('click', closeCustomerModal);
             cancelCustomerBtnX.addEventListener('click', closeCustomerModal);
+
+
+            
             window.addEventListener('click', (e) => {
                 if (e.target == customerModal) closeCustomerModal();
             });
@@ -561,6 +564,36 @@
             });
             const detailsModal = document.getElementById('product-details-modal');
             const closeDetailsBtn = document.getElementById('close-details-modal-btn');
+            
+            const modalLoading = document.getElementById('modal-loading-state');
+            const modalContent = document.getElementById('modal-content-state');
+            window.showProductDetails = function(productId, event) {
+                event.stopPropagation();
+                detailsModal.classList.remove('hidden');
+                modalLoading.classList.remove('hidden');
+                modalContent.classList.add('hidden');
+                fetch(`/get-product-details/${productId}`)
+                    .then(response => response.ok ? response.json() : Promise.reject('Product not found'))
+                    .then(data => {
+                        document.getElementById('details-modal-image').src = data.imageUrl || defaultImagePath;
+                        document.getElementById('details-modal-name').innerText = data.product_name || 'N/A';
+                        document.getElementById('details-modal-price').innerText = `$${parseFloat(data.selling_price || 0).toFixed(2)}`;
+                        document.getElementById('details-modal-category').innerText = data.category ? data.category.category_name : 'N/A';
+                        document.getElementById('details-modal-supplier').innerText = data.supplier ? data.supplier.name : 'N/A';
+                        document.getElementById('details-modal-code').innerText = data.product_code || 'N/A';
+                        document.getElementById('details-modal-stock').innerText = data.product_store || '0';
+                        modalLoading.classList.add('hidden');
+                        modalContent.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching product details:', error);
+                        modalLoading.innerHTML = `<p class="text-red-500 p-8">Could not load details. Please try again.</p>`;
+                    });
+            }
+            function closeDetailsModal() { detailsModal.classList.add('hidden'); }
+            closeDetailsBtn.addEventListener('click', closeDetailsModal);
+            detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
+
             //...
 
             // --- jQuery Form Validation (Complete with Overpayment Protection) ---
