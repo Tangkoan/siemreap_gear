@@ -23,6 +23,9 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 
+use App\Http\Controllers\DatabaseImportController;
+
+
 Route::get('language/{locale}', function ($locale) {
     app()->setLocale($locale);
     session()->put('locale', $locale);
@@ -61,6 +64,11 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
+    // Import Database
+        Route::get('/database/import', [DatabaseImportController::class, 'showForm'])->name('db.import.form');
+        Route::post('/database/import', [DatabaseImportController::class, 'handleImport'])->name('db.import.handle');
+    // End Import Database
 
     // =================== Stock =====================
 

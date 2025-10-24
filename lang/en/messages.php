@@ -569,5 +569,23 @@ return [
         'items_left'=>'item(s) left.',
         'cannot_mix_sale' => 'You cannot sell normal products and Pre-Order items at the same time. Please create a quotation or separate the purchase.',
 
-        
+        // Import DB 
+        'title' => 'Import Database',
+        'subtitle' => 'Please select a backed-up .sql file to restore your database.',
+        'success_title' => 'Success!',
+        'error_title' => 'Error!',
+        'form_label' => 'SQL File (.sql)',
+        'upload_click' => 'Click to upload',
+        'upload_drag' => 'or drag and drop',
+        'upload_file_type' => 'File Type: .SQL',
+        'warning_title' => 'Warning!',
+        'warning_message' => 'This import process will overwrite all existing data with data from the backup file. Please ensure you have a recent backup of the current data before proceeding.',
+        'submit_button' => 'Start Import',
+        'selected_file_label' => 'Selected file:',
+
+        'alert_no_file_title' => 'No File Selected',
+        'alert_no_file_text' => 'Please select an SQL file before proceeding.',
+
+
+        'import_db' => 'Import Database',
 ];
