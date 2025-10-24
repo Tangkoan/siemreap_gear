@@ -40,8 +40,7 @@
 }
 </style>
 
-<div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full bg-slate-100 dark:bg-slate-900 p-4">
-
+<div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full  container mx-auto p-4">
     {{-- Left Side - Product Selection --}}
     <div class="lg:w-3/5 xl:w-2/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
         {{-- Header & Search --}}

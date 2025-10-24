@@ -19,7 +19,8 @@
         }
     </style>
 
-    <div class="page-content bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full">
+    {{-- <div class="page-content bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full"> --}}
+    <div class="container mx-auto p-4 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
             <div class="flex justify-between items-center mb-8">

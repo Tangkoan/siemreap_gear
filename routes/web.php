@@ -22,6 +22,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\AppearanceController;
 
 use App\Http\Controllers\DatabaseImportController;
 
@@ -64,6 +65,10 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
+    //
+    Route::post('/appearance/update', [AppearanceController::class, 'update'])->name('appearance.update');
+
 
     // Import Database
         Route::get('/database/import', [DatabaseImportController::class, 'showForm'])->name('db.import.form');

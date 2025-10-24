@@ -32,6 +32,9 @@ class User extends Authenticatable
         'password',
         'phone',
         'photo',
+
+        'background_type', // ✅ បន្ថែមទីនេះ
+        'background_value', // ✅ បន្ថែមទីនេះ
     ];
 
     /**

@@ -96,6 +96,64 @@
             </form>
         </div>
     </div>
+
+
+    {{-- បន្ថែមផ្នែកនេះទៅក្នុងទំព័រ Profile របស់អ្នក --}}
+<div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Customize Background</h3>
+
+    <form id="appearanceForm" enctype="multipart/form-data">
+        @csrf
+        <div class="space-y-4">
+
+            <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+                <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="background_type" value="default" class="form-radio text-blue-600" {{ Auth::user()->background_type == 'default' ? 'checked' : '' }}>
+                    <span class="ml-2 dark:text-slate-300">Default</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="background_type" value="color" class="form-radio text-blue-600" {{ Auth::user()->background_type == 'color' ? 'checked' : '' }}>
+                    <span class="ml-2 dark:text-slate-300">Color</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="background_type" value="image" class="form-radio text-blue-600" {{ Auth::user()->background_type == 'image' ? 'checked' : '' }}>
+                    <span class="ml-2 dark:text-slate-300">Image</span>
+                </label>
+            </div>
+
+            <div id="colorPickerWrapper" class="hidden pt-2">
+                <label for="background_color" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Choose Color</label>
+                <input type="color" id="background_color" name="background_color" 
+                       value="{{ Auth::user()->background_type == 'color' ? Auth::user()->background_value : '#ffffff' }}" 
+                       class="mt-1 block w-full h-10 p-1 border border-slate-300 dark:border-slate-600 rounded-md cursor-pointer">
+            </div>
+
+            <div id="imageUploaderWrapper" class="hidden pt-2">
+                <label for="background_image" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Upload Image</label>
+                <input type="file" id="background_image" name="background_image" accept="image/*"
+                       class="mt-1 block w-full text-sm text-slate-500
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-md file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-blue-50 file:text-blue-700
+                              hover:file:bg-blue-100
+                              dark:file:bg-slate-700 dark:file:text-slate-300 dark:hover:file:bg-slate-600"/>
+                <img id="imagePreview" src="{{ (Auth::user()->background_type == 'image' && Auth::user()->background_value) ? asset(Auth::user()->background_value) : '' }}" alt="Image Preview" 
+                     class="mt-4 rounded-lg max-h-48 {{ (Auth::user()->background_type == 'image' && Auth::user()->background_value) ? '' : 'hidden' }}">
+            </div>
+
+            <div id="appearance_error" class="text-red-500 text-sm"></div>
+
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <button type="submit" id="saveAppearanceBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none disabled:opacity-75 transition-all">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
 </div>
 
 <script type="text/javascript">
@@ -144,6 +202,118 @@
             resetImageUpload();
         });
     });
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('appearanceForm');
+    if (!form) return;
+
+    const typeRadios = form.querySelectorAll('input[name="background_type"]');
+    const colorWrapper = document.getElementById('colorPickerWrapper');
+    const imageWrapper = document.getElementById('imageUploaderWrapper');
+    const imageInput = document.getElementById('background_image');
+    const imagePreview = document.getElementById('imagePreview');
+    const saveBtn = document.getElementById('saveAppearanceBtn');
+    const errorDiv = document.getElementById('appearance_error');
+
+    // Function ដើម្បីបង្ហាញ/លាក់ Input
+    function toggleInputs() {
+        const selectedType = form.querySelector('input[name="background_type"]:checked').value;
+        colorWrapper.classList.toggle('hidden', selectedType !== 'color');
+        imageWrapper.classList.toggle('hidden', selectedType !== 'image');
+    }
+
+    // ហៅ Function ពេលទំព័របើក
+    toggleInputs();
+
+    // ថែម Event Listeners ទៅលើ Radio Buttons
+    typeRadios.forEach(radio => radio.addEventListener('change', toggleInputs));
+
+    // Logic សម្រាប់បង្ហាញរូប Preview
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+                imagePreview.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ដំណើរការ Form បែប AJAX
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+        errorDiv.textContent = '';
+
+        const formData = new FormData(this);
+
+        fetch("{{ route('appearance.update') }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                // CSRF token ត្រូវបានរួមបញ្ចូលក្នុង FormData រួចហើយ
+            }
+        })
+        .then(response => response.json().then(data => ({ status: response.status, data })))
+        .then(({ status, data }) => {
+            if (status >= 400) { 
+                // ដោះស្រាយ Validation errors
+                if (data.errors) {
+                    let errorMsg = Object.values(data.errors).flat().join(' ');
+                    errorDiv.textContent = errorMsg;
+                    toastr.error(errorMsg); // អ្នកកំពុងប្រើ Toastr
+                } else {
+                    errorDiv.textContent = data.message || 'An error occurred.';
+                    toastr.error(data.message || 'An error occurred.');
+                }
+                throw new Error(data.message);
+            }
+
+            // --- ជោគជ័យ ---
+            toastr.success(data.message);
+
+            // អាប់ដេត Background ភ្លាមៗដោយមិនបាច់ Reload ទំព័រ
+            if (data.background_type === 'color') {
+                document.body.style.backgroundImage = 'none';
+                document.body.style.backgroundColor = data.background_value;
+            } else if (data.background_type === 'image') {
+                document.body.style.backgroundColor = '';
+                document.body.style.backgroundImage = `url(${data.background_value})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundRepeat = 'no-repeat';
+                document.body.style.backgroundAttachment = 'fixed';
+            } else {
+                // Default
+                document.body.removeAttribute('style'); // លុប inline style ចោល
+            }
+
+            // អាប់ដេត src របស់ Preview ក្នុងករណី Upload រូបថ្មី
+            if (data.background_type === 'image') {
+                imagePreview.src = data.background_value;
+                imagePreview.classList.remove('hidden');
+            } else {
+                imagePreview.classList.add('hidden');
+            }
+
+        })
+        .catch(error => {
+            console.error('Appearance Update Error:', error);
+            toastr.error('An unexpected error occurred. Please try again.');
+        })
+        .finally(() => {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Changes';
+        });
+    });
+});
 </script>
 
 @endsection

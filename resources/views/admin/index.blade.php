@@ -4,7 +4,8 @@
 {{-- ហៅប្រើ Library ApexCharts ក្រាហ្វិក --}}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<div class="page-content bg-gray-100 dark:bg-gray-900">
+{{-- <div class="page-content bg-gray-100 dark:bg-gray-900"> --}}
+<div class="container mx-auto p-4 sm:p-6">
     <div class="container mx-auto p-4 md:p-6 lg:p-8 space-y-8">
 
         {{-- បឋមកថា (Header) របស់ទំព័រ --}}

@@ -37,8 +37,34 @@
     <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
 </head>
 
-<body class="flex flex-col h-screen  bg-gray-100 dark:bg-gray-900 overflow-hidden ">
+@php
+    $bgStyle = '';
+    // កំណត់ Class លំនាំដើម
+    $bodyClass = 'font-sans antialiased bg-slate-100 dark:bg-slate-900 transition-colors duration-300'; 
+    
+    if (Auth::check()) {
+        $user = Auth::user();
+        if ($user->background_type === 'color' && $user->background_value) {
+            // បើ User ជ្រើសរើស 'color'
+            $bgStyle = 'background-color: ' . e($user->background_value) . ';';
+            // ដក Background លំនាំដើមចេញពី body
+            $bodyClass = 'font-sans antialiased'; 
+        } elseif ($user->background_type === 'image' && $user->background_value) {
+            // បើ User ជ្រើសរើស 'image'
+            $imageUrl = asset($user->background_value);
+            $bgStyle = "background-image: url('" . e($imageUrl) . "'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;";
+            // ដក Background លំនាំដើមចេញពី body
+            $bodyClass = 'font-sans antialiased';
+        }
+        // បើ 'default', វានឹងប្រើ $bodyClass លំនាំដើម
+    }
+@endphp
 
+{{-- <body class="font-sans antialiased bg-slate-100 dark:bg-slate-900 transition-colors duration-300" style="{!! $bgStyle !!}"> --}}
+    {{-- ✅ នេះគឺជា BODY TAG ដែលបានកែប្រែ --}}
+<body class="{{ $bodyClass }}" style="{!! $bgStyle !!}">
+
+    
     {{-- Topbar (Header) --}}
     @include('admin.body.header')
 

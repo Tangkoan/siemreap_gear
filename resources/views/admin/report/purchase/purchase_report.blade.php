@@ -3,7 +3,8 @@
     {{-- jQuery is required for the logic --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="page-content bg-slate-50 dark:bg-slate-900 min-h-screen">
+    <div class="container mx-auto p-4 min-h-screen">
+        
         <div class="container mx-auto py-8 px-4 md:px-6 lg:px-8">
 
             {{-- Page Header --}}
