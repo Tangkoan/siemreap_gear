@@ -2,8 +2,8 @@
 @section('admin')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6 dark:bg-gray-900">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 dark:bg-gray-900">
+    <div class="container mx-auto p-6 ">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-full p-0">
                 <div class="flex justify-between">
                     <h2 class="text-xl text-default mb-6 flex items-center">

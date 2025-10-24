@@ -2,7 +2,7 @@
 @section('admin')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<div class="page-content py-8 px-4 dark:bg-gray-900 min-h-screen w-full text-gray-900 dark:text-gray-100">
+<div class="page-content py-8 px-4 min-h-screen w-full text-gray-900 dark:text-gray-100">
     <div class="container mx-auto">
 
         {{-- Page Title --}}
