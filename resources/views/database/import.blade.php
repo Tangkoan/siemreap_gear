@@ -7,7 +7,7 @@
 <div class="py-12">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
         {{-- This is our card with support for both Light and Dark Mode --}}
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-xl sm:rounded-lg">
             
             <div class="p-6 lg:p-8">
                 

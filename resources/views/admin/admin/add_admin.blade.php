@@ -34,7 +34,7 @@
                                     {{ __(key: 'messages.name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="name" name="name"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
                             {{-- Role --}}
@@ -43,7 +43,7 @@
                                     {{ __(key: 'messages.roles') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="roles" id="roles"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <option selected disabled>{{ __(key: 'messages.select_roles') }}</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -57,7 +57,7 @@
                                     {{ __(key: 'messages.phone') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="phone" name="phone"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
                         </div>
@@ -72,7 +72,7 @@
                                     {{ __(key: 'messages.password') }}
                                 </label>
                                 <input type="password" id="current_password" name="password"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('password') is-invalid @enderror">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('password') is-invalid @enderror">
 
                                 {{-- Eye Icon --}}
                                 <span class="absolute right-3 top-9 cursor-pointer toggle-password"
@@ -97,7 +97,7 @@
                                     {{ __(key: 'messages.email') }}
                                 </label>
                                 <input type="email" id="email" name="email"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('email') border-red-500 @enderror">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('email') border-red-500 @enderror">
                                 
                                 {{-- ✅ THIS IS THE FIX ✅ --}}
                                 @error('email')

@@ -30,7 +30,7 @@
                                 <div class="flex items-center space-x-2">
                                     <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                                     <select id="perPage" name="perPage"
-                                        class="dark:bg-gray-800 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                        class="dark:bg-gray-900 dark:text-white h-10 border border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                         
                                         <option value="10" selected>10</option> <!-- ✅ Default -->
                                         <option value="25">25</option>
@@ -44,13 +44,13 @@
                                 <div class="w-full max-w-sm min-w-[200px] relative">
                                     <div class="relative">
                                         <input
-                                            class="dark:bg-gray-800 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                                            class="dark:bg-gray-900 dark:text-white bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                                             placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
 
 
 
                                         <button
-                                            class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center dark:bg-gray-800 bg-white rounded "
+                                            class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center dark:bg-gray-900 bg-white rounded "
                                             type="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
@@ -68,7 +68,7 @@
                                 <thead>
                                     <tr>
 
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {!! __('messages.table_no') !!}
                                             </p>
@@ -76,34 +76,34 @@
 
 
 
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.customer_name') }}
                                             </p>
                                         </th>
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.order_date') }}
                                             </p>
                                         </th>
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.payment_method') }}
                                             </p>
                                         </th>
                                         
-                                        <th class="px-2 sticky  top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="px-2 sticky  top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="px-4 text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.total') }}
                                             </p>
                                         </th>
 
-                                        <th class="px-2 sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="px-2 sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="px-4 text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.pay') }}
                                             </p>
                                         </th>
-                                        <th class="px-4 sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="px-4 sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="px-4 text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.due') }}
                                             </p>
@@ -112,7 +112,7 @@
 
 
 
-                                        <th class="sticky top-0 dark:bg-gray-800 p-4 border-b border-slate-200 bg-slate-50">
+                                        <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50">
                                             <p class="text-sm font-normal leading-none text-slate-500">
                                                 {{ __('messages.table_action') }}
                                             </p>

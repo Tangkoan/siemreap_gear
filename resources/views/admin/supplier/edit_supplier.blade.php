@@ -3,7 +3,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6  dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <div class="container mx-auto p-6  dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
 
             <div
@@ -33,7 +33,7 @@
                                          <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" id="name" name="name" value="{{ $supplier->name }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     @error('name')
                                         <span class="text-red-500"> {{ $message }} </span>
                                     @enderror
@@ -48,7 +48,7 @@
                                         {{ __('messages.email') }}
                                     </label>
                                     <input type="email" id="email" name="email" value="{{ $supplier->email }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
                                         {{ __('messages.notes') }}
                                     </label>
                                     <input type="text" id="notes" name="notes" value="{{ $supplier->notes }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
 
                                 {{-- Supplier Phone --}}
@@ -71,7 +71,7 @@
                                         {{ __('messages.phone') }}
                                     </label>
                                     <input type="tel" id="phone" name="phone"  value="{{ $supplier->phone }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
                             </div>
                         </div>

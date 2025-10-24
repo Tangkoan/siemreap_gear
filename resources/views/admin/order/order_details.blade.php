@@ -71,7 +71,7 @@
 
                             <div class="overflow-x-auto mb-4">
                                 <table class="w-full border-collapse border border-gray-300 text-xs shadow-sm">
-                                    <thead class="bg-gray-200 dark:bg-gray-800">
+                                    <thead class="bg-gray-200 dark:bg-gray-900">
                                         <tr>
                                             <th class="border border-gray-300 px-2 py-1">{{ __('messages.no') }}</th>
                                             <th class="border border-gray-300 px-2 py-1">{{ __('messages.image') }}</th>

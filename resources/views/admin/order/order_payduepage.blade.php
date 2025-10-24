@@ -35,7 +35,7 @@
 
                                     <input type="number" min="0" step="0.01" value="{{ $paydue->due }}" id="due" name="due"
                                         required class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md 
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 
+                                        bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 
                                         focus:outline-none focus:ring-2 focus:ring-indigo-500 
                                         @error('due') border-red-500 @enderror">
 
@@ -58,7 +58,7 @@
                     <div class="mt-6">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Product Image:</label>
                         <div
-                            class="flex items-center justify-center border border-gray-300 dark:border-gray-700 p-4 rounded-lg bg-gray-100 dark:bg-gray-800">
+                            class="flex items-center justify-center border border-gray-300 dark:border-gray-700 p-4 rounded-lg bg-gray-100 dark:bg-gray-900">
                             @if (!empty($paydue->product->product_image))
                                 <img src="{{ url('upload/' . $paydue->product->product_image) }}" alt="Product Image"
                                     class="w-20 h-16 object-cover rounded">

@@ -34,7 +34,7 @@
                                     {{ __('messages.permission_name') }}
                                 </label>
                                 <input value="{{ $permission->name }}" type="text" id="name" name="name" 
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('name') is-invalid @enderror">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('name') is-invalid @enderror">
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                                     {{ __(key: 'messages.group_name') }}
                                 </label>
                                 <select name="group_name" id="example-select" 
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option value="" disabled>{{ __(key: 'messages.select_group_name') }}</option>
                                     @foreach([
                                             'pos',

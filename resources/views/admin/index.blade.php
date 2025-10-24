@@ -14,7 +14,7 @@
                 {{-- <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">An overview of your business performance.</p> --}}
             </div>
             <div class="mt-4 sm:mt-0">
-                <div class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg shadow-sm">
+                <div class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -26,7 +26,7 @@
         {{-- ប្លុកបង្ហាញកាត KPI (Key Performance Indicator) --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {{-- កាត៖ ចំណូលថ្ងៃនេះ --}}
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.today_is_revenue') }}</p>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             {{-- កាត៖ ចំណូលខែនេះ --}}
-                {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                {{-- <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Month's Revenue</p>
@@ -65,7 +65,7 @@
                     <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('F') }}</p>
                 </div> --}}
             {{-- កាត៖ ចំណូលឆ្នាំនេះ --}}
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.this_year_is_revenue') }}</p>
@@ -78,7 +78,7 @@
                     <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.total_for') }} {{ date('Y') }}</p>
                 </div>
             {{-- កាត៖ Total Paid --}}
-             {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+             {{-- <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Paid</p>
@@ -91,7 +91,7 @@
                 <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time paid amount</p>
             </div> --}}
             {{-- កាត៖ Total Due --}}
-                {{-- <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                {{-- <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Due</p>
@@ -104,7 +104,7 @@
                     <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time outstanding</p>
                 </div> --}}
             {{-- កាត៖ Complete Orders --}}
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.complete_orders') }}</p>
@@ -125,19 +125,19 @@
             <div class="lg:col-span-2 space-y-8">
                 
                 {{-- តារាងក្រាហ្វិក៖ Sales Trend (30 Days) --}}
-                <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
                     <div id="sales-line-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Monthly Sales Trend (This Year) --}}
-                <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
                     <div id="this-year-monthly-sales-chart"></div>
                 </div>
 
                 {{-- តារាងទិន្នន័យ៖ Recent Orders --}}
-                    {{-- <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    {{-- <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                             <h3 class="text-lg  text-gray-800 dark:text-white">Recent Orders</h3>
                         </div>
@@ -185,19 +185,19 @@
             <div class="lg:col-span-1 space-y-8">
                 
                 {{-- តារាងក្រាហ្វិក៖ Top 5 Best-Selling Products --}}
-                <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
                     <div id="best-selling-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Order Distribution --}}
-                <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-900 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.order_distribution') }}</h3>
                     <div id="order-status-doughnut-chart" class="flex justify-center"></div>
                 </div>
 
                 {{-- ប្លុកថ្មីសម្រាប់បង្ហាញតារាងស្តុកទាប --}}
-                    {{-- <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    {{-- <div class="bg-white dark:bg-gray-900 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                         <h3 class="text-lg  text-gray-800 dark:text-white mb-4">Products almost out of stock (Top 5)</h3>
                         {{-- កន្លែងនេះនឹងត្រូវបង្ហាញ Chart ដែលបានបង្កើតដោយ JavaScript --}}
                         {{-- <div id="low-stock-chart"></div> 

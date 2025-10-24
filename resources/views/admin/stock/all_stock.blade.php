@@ -64,7 +64,7 @@
                     <div class="flex items-center space-x-2">
                         <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
                         <select id="perPage" name="perPage"
-                            class="h-10 border dark:bg-gray-800 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                            class="h-10 border dark:bg-gray-900 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                             <option value="10" selected>10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="w-full max-w-sm">
                         <input
-                            class="dark:text-white dark:bg-gray-800 bg-white w-full h-10 px-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded"
+                            class="dark:text-white dark:bg-gray-900 bg-white w-full h-10 px-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded"
                             placeholder="{{ __('messages.search') }}" id="search" type="text" />
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left table-auto min-w-max">
                         <thead>
-                            <tr class="bg-slate-50 dark:bg-gray-800">
+                            <tr class="bg-slate-50 dark:bg-gray-900">
                                 <th class="p-4 border-b border-slate-200">
                                     <p class="text-sm font-normal text-slate-500">{!! __('messages.table_no') !!}</p>
                                 </th>
@@ -121,11 +121,11 @@
         </div>
     </div>
 
-    <div id="stockAdjustmentModal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
+    <div id="stockAdjustmentModal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm "
         aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="inline-block bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6">
-                <form id="stockAdjustmentForm" method="POST" action="{{ route('stock.adjust') }}">
+            <div class="inline-block bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full max-w-lg p-6">
+                <form clas id="stockAdjustmentForm" method="POST" action="{{ route('stock.adjust') }}">
                     @csrf
                     <input type="hidden" name="product_id" id="modal_product_id">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100" id="modal-title">

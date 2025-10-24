@@ -27,37 +27,37 @@
                 {{-- Name (KH) --}}
                 <div>
                     <label for="name_kh" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.shop_name_kh') }}</label>
-                    <input type="text" id="name_kh" name="name_kh" value="{{ $info->name_kh }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <input type="text" id="name_kh" name="name_kh" value="{{ $info->name_kh }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Name (EN) --}}
                 <div>
                     <label for="name_en" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.shop_name_en') }}</label>
-                    <input type="text" id="name_en" name="name_en" value="{{ $info->name_en }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <input type="text" id="name_en" name="name_en" value="{{ $info->name_en }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Address --}}
                 <div>
                     <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.address') }}</label>
-                    <input type="text" id="address" name="address" value="{{ $info->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <input type="text" id="address" name="address" value="{{ $info->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Phone --}}
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.phone') }}</label>
-                    <input type="text" id="phone" name="phone" value="{{ $info->phone }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <input type="text" id="phone" name="phone" value="{{ $info->phone }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Note --}}
                 <div>
                     <label for="note" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.notes') }}</label>
-                    <textarea id="note" name="note" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->note }}</textarea>
+                    <textarea id="note" name="note" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->note }}</textarea>
                 </div>
 
                 {{-- Terms and Condition --}}
                 <div>
                         <label for="terms_and_condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.terms_and_condition') }}</label>
-                        <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
+                        <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
                     </div>
 
                 {{-- Shop Logo Upload --}}

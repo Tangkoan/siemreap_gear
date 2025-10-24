@@ -2,7 +2,7 @@
 @section('admin')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6 dark:bg-gray-800 min-h-screen text-gray-900 dark:text-gray-100">
+    <div class="container mx-auto p-6 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
             <div
                 class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
@@ -75,7 +75,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($purchaseItem as $key => $item)
-                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
                                             {{ $loop->iteration }}</td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">

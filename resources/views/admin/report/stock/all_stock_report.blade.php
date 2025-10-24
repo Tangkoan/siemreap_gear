@@ -44,17 +44,17 @@
         {{-- Tab Content Containers --}}
         <div id="reportTabContent">
             {{-- #1. By Day Tab Content --}}
-            <div class="tab-pane p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800" id="day-tab-content" role="tabpanel">
+            <div class="tab-pane p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900" id="day-tab-content" role="tabpanel">
                 @include('admin.report.stock.partials._report_by_day')
             </div>
 
             {{-- #2. By Month Tab Content --}}
-            <div class="tab-pane hidden p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800" id="month-tab-content" role="tabpanel">
+            <div class="tab-pane hidden p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900" id="month-tab-content" role="tabpanel">
                 @include('admin.report.stock.partials._report_by_month')
             </div>
 
             {{-- #3. By Year Tab Content --}}
-            <div class="tab-pane hidden p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800" id="year-tab-content" role="tabpanel">
+            <div class="tab-pane hidden p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900" id="year-tab-content" role="tabpanel">
                 @include('admin.report.stock.partials._report_by_year')
             </div>
         </div>
@@ -63,7 +63,7 @@
 
 {{-- Modal (Popup) - Shared for all tabs --}}
 <div id="detailsModal" class="fixed inset-0 bg-gray-900 bg-opacity-70 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50 transition-opacity duration-300 opacity-0">
-    <div class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1 border border-gray-700 rounded-lg w-full max-w-3xl shadow-2xl bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 scale-95 transition-transform duration-300">
+    <div class="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1 border border-gray-700 rounded-lg w-full max-w-3xl shadow-2xl bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 scale-95 transition-transform duration-300">
         <div class="mt-3">
             <div class="flex justify-between items-center mb-4 px-5 py-3 border-b border-gray-200 dark:border-gray-700">
                 <h3 class="text-2xl " id="modal-title">Transaction Details</h3>

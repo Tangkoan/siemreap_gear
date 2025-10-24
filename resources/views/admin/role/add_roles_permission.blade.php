@@ -23,7 +23,7 @@
                             <label for="role_id" class="block dark:text-white text-gray-700 text-sm font-medium mb-2">
                                 {{ __('messages.roles') }} <span class="text-red-500">*</span>
                             </label>
-                            <select name="role_id" id="role_id" class="dark:text-white dark:bg-gray-800 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <select name="role_id" id="role_id" class="dark:text-white dark:bg-gray-900 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 <option value="" disabled selected>{{ __('messages.select_roles') }}</option>
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}">{{ $role->name }}</option>

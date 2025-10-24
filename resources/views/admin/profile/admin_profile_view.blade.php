@@ -40,7 +40,7 @@
                     <label for="name" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.name') }}
                     </label>
-                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->name }}">
+                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->name }}">
                 </div>
 
                 {{-- Email --}}
@@ -48,7 +48,7 @@
                     <label for="email" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.email') }}
                     </label>
-                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->email }}">
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->email }}">
                 </div>
 
                 {{-- Phone --}}
@@ -56,7 +56,7 @@
                     <label for="phone" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.phone') }}
                     </label>
-                    <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->phone }}">
+                    <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->phone }}">
                 </div>
 
                 {{-- Image Upload --}}

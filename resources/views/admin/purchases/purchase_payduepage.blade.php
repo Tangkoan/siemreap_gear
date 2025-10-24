@@ -6,7 +6,7 @@
 
             {{-- The main card container --}}
             {{-- I've replaced 'card-bg' with standard Tailwind classes for background colors in both light and dark modes. --}}
-            <div class="lg:col-span-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 transition-all duration-300">
+            <div class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300">
                 
                 {{-- Header section --}}
                 {{-- Replaced 'text-default' with classes that adjust text color for light/dark modes. --}}

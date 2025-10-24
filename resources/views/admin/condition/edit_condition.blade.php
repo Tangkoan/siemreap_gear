@@ -30,7 +30,7 @@
                                     
                                     {{-- ✅ Input name and value updated for condition --}}
                                     <input type="text" id="condition_name" name="condition_name" value="{{ $condition->condition_name }}" class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
                                             focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
                                             @error('condition_name') border-red-500 ring-red-500 @enderror" />
 

@@ -37,7 +37,7 @@
     <script defer src="{{ asset('backend/assets/js/cdn.min.js') }}"></script>
 </head>
 
-<body class="flex flex-col h-screen  bg-gray-100 dark:bg-gray-800 overflow-hidden ">
+<body class="flex flex-col h-screen  bg-gray-100 dark:bg-gray-900 overflow-hidden ">
 
     {{-- Topbar (Header) --}}
     @include('admin.body.header')
