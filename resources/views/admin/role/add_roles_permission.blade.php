@@ -6,7 +6,7 @@
 
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1 ">
-            <div class="dark:bg-gray-900 bg-white rounded-lg shadow-md p-6 transition-all duration-300">
+            <div class="bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 transition-all duration-300">
                 <h2 class="dark:text-white text-2xl  text-gray-800 mb-6 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"

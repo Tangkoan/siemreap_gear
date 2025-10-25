@@ -7,7 +7,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {{-- Left Side: Profile Summary Card --}}
-        <div class="lg:col-span-1 bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 flex flex-col items-center justify-center space-y-4 transition-colors duration-300">
+        <div class="lg:col-span-1 bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 flex flex-col items-center justify-center space-y-4 transition-colors duration-300">
             <img class="h-24 w-24 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
                  src="{{ (!empty($adminData->photo)) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg')}}"
                  onerror="this.onerror=null;this.src='https://placehold.co/96x96/4f46e5/ffffff?text=User';"
@@ -25,7 +25,7 @@
         </div>
 
         {{-- Right Side: Edit Profile Form --}}
-        <div class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 transition-colors duration-300">
+        <div class="lg:col-span-2 bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 transition-colors duration-300">
             <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -40,7 +40,7 @@
                     <label for="name" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.name') }}
                     </label>
-                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->name }}">
+                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->name }}">
                 </div>
 
                 {{-- Email --}}
@@ -48,7 +48,7 @@
                     <label for="email" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.email') }}
                     </label>
-                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->email }}">
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->email }}">
                 </div>
 
                 {{-- Phone --}}
@@ -56,7 +56,7 @@
                     <label for="phone" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.phone') }}
                     </label>
-                    <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->phone }}">
+                    <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->phone }}">
                 </div>
 
                 {{-- Image Upload --}}
@@ -99,7 +99,7 @@
 
 
     {{-- បន្ថែមផ្នែកនេះទៅក្នុងទំព័រ Profile របស់អ្នក --}}
-<div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md mt-6">
+<div class="p-6 bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md mt-6">
     <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Customize Background</h3>
 
     <form id="appearanceForm" enctype="multipart/form-data">

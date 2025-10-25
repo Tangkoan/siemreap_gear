@@ -10,7 +10,7 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
 
-            <div class="lg:col-span-full card-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+            <div class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <div class="flex justify-between">
                     <h2 class="text-xl  text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

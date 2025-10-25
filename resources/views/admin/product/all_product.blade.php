@@ -1,5 +1,18 @@
 @extends('admin/admin_dashboard')
 @section('admin')
+
+
+<style>
+    .tbody tr:hover {
+        background-color: #cacaca61;
+    }
+
+    /* សម្រាប់ Dark Mode (បើអ្នកមាន) */
+    .dark .tbody tr:hover {
+        background-color: #6d6d6d61; /* នេះជាពណ៌ gray-800 របស់ Tailwind */
+    }
+</style>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <div class="container mx-auto p-6">
@@ -54,7 +67,7 @@
                         <div>
                             <div class="flex items-center space-x-2">
                                 <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
-                                <select id="perPage" name="perPage" class="h-10 border dark:bg-gray-900 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                <select id="perPage" name="perPage" class="h-10 border bg-white/80 dark:bg-gray-900/80 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="10" selected>10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -67,8 +80,8 @@
                         <div class="ml-3">
                             <div class="w-72 relative">
                                 <div class="relative">
-                                    <input class="dark:text-white dark:bg-gray-900 bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
-                                    <button class="dark:bg-gray-900 absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded" type="button">
+                                    <input class="dark:text-white bg-white/80 dark:bg-gray-900/80 w-full pr-11 h-10 pl-3 py-2  placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
+                                    <button class=" absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center  rounded" type="button">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                         </svg>
@@ -78,25 +91,25 @@
                         </div>
                     </div>
 
-                    <div class="table-wrapper overflow-x-auto overflow-y-auto max-h-[500px] lg:max-h-none">
-                        <table class="w-full text-left table-auto min-w-max">
+                    <div class="table-wrapper overflow-x-auto overflow-y-auto max-h-[500px] lg:max-h-none rounded-md bg-white/80 dark:bg-gray-900/80">
+                        <table class="w-full text-left table-auto min-w-max ">
                             <thead>
                                 <tr>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{!! __('messages.table_no') !!}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.image') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.product_code') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.product_name') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.category') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.condition_name') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.price') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.supplier') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __(key: 'messages.inventory') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __(key: 'messages.status') }}</p></th>
-                                    <th class="sticky top-0 dark:bg-gray-900 p-4 border-b border-slate-200 bg-slate-50"><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.table_action') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{!! __('messages.table_no') !!}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.image') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.product_code') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.product_name') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.category') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.condition_name') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.price') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.supplier') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __(key: 'messages.inventory') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __(key: 'messages.status') }}</p></th>
+                                    <th class="sticky top-0  p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-slate-500">{{ __('messages.table_action') }}</p></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                </tbody>
+                            <tbody class="tbody">
+                            </tbody>
                         </table>
                     </div>
 

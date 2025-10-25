@@ -6,7 +6,7 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
             <div
-                class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -33,7 +33,7 @@
                                     {{ __(key: 'messages.name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="name" name="name" value="{{ $adminuser->name }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
                             {{-- Role --}}
@@ -42,7 +42,7 @@
                                     {{ __(key: 'messages.roles') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="roles" id="roles"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <option disabled>{{ __(key: 'messages.select_roles') }}</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}" {{ $adminuser->hasRole($role->name) ? 'selected' : '' }}>
@@ -61,7 +61,7 @@
                                     {{ __(key: 'messages.email') }}
                                 </label>
                                 <input type="email" id="email" name="email" value="{{ $adminuser->email }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
                             {{-- Phone --}}
@@ -70,7 +70,7 @@
                                     {{ __(key: 'messages.phone') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="phone" name="phone" value="{{ $adminuser->phone }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,7 @@
 <div class="py-12">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
         {{-- This is our card with support for both Light and Dark Mode --}}
-        <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="bg-white/80 dark:bg-gray-900/80 overflow-hidden shadow-xl sm:rounded-lg">
             
             <div class="p-6 lg:p-8">
                 
@@ -66,7 +66,7 @@
                         </div>
 
                         {{-- Warning Message --}}
-                        <div class="mt-6 bg-yellow-100 dark:bg-gray-900 dark:bg-yellow-900/50 border-l-4 border-yellow-500 dark:border-yellow-600 text-yellow-800 dark:text-yellow-300 p-4 rounded-md" role="alert">
+                        <div class="mt-6 bg-white/80 dark:bg-gray-900/80 border-l-4 border-yellow-500/80 dark:border-yellow-600 text-yellow-800 dark:text-yellow-300 p-4 rounded-md" role="alert">
                             <div class="flex">
                                 <div class="py-1">
                                     <svg class="w-6 h-6 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

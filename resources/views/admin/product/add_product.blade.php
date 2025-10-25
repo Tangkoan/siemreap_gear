@@ -7,7 +7,7 @@
 
             <div
                 class="lg:col-span-full rounded-lg shadow-xl p-6 transition-all duration-300 transform
-                       bg-white dark:bg-gray-900">
+                       bg-white/80 dark:bg-gray-900/80 ">
                 <h2 class="text-xl  mb-6 flex items-center text-gray-900 dark:text-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -38,7 +38,7 @@
                                 </label>
                                 <input type="text" id="product_name" name="product_name"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                             </div>
 
@@ -51,7 +51,7 @@
                                 </label>
                                 <select name="category_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option selected disabled>{{ __('messages.select_category') }} </option>
                                     @foreach ($category as $cat)
@@ -68,7 +68,7 @@
                                 </label>
                                 <select name="supplier_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option selected disabled>{{ __('messages.select_supplier') }}</option>
                                     @foreach ($supplier as $cat)
@@ -85,7 +85,7 @@
                                 </label>
                                 <select name="condition_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option selected disabled>{{ __('messages.select_condition') }}</option>
                                     @foreach ($condition as $con)
@@ -121,7 +121,7 @@
                                 </label>
                                 <input type="number" min="0" step="0.01" id="selling_price" name="selling_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
 
@@ -133,7 +133,7 @@
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
                             
@@ -146,7 +146,7 @@
                                     {{ __('messages.inventory') }} 
                                 </label>
                                 <input type="number" value="0" name="product_store" readonly class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 cursor-not-allowed">
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-500 dark:text-gray-300 cursor-not-allowed">
                             </div>
 
                             {{-- Stock Alert --}}
@@ -156,7 +156,7 @@
                                 </label>
                                 <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                                                       bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                                                       bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                                                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
                             
@@ -168,7 +168,7 @@
                                 </label>
                                 <input type="tel" id="product_detail" name="product_detail"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
 

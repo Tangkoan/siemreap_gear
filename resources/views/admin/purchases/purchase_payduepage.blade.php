@@ -6,7 +6,7 @@
 
             {{-- The main card container --}}
             {{-- I've replaced 'card-bg' with standard Tailwind classes for background colors in both light and dark modes. --}}
-            <div class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300">
+            <div class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300">
                 
                 {{-- Header section --}}
                 {{-- Replaced 'text-default' with classes that adjust text color for light/dark modes. --}}
@@ -43,7 +43,7 @@
                                     <input type="number" min="0" step="0.01" value="{{ $purchasepaydue->due }}" id="due" name="due"
                                         required 
                                         class="w-full py-2.5 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                                               border  bg-white text-gray-900 
+                                               bg-white/80 dark:bg-gray-900/80
                                                 dark:text-gray-200
                                                @error('due') border-red-500 dark:border-red-500 @enderror">
 

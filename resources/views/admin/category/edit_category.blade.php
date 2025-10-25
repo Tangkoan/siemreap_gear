@@ -5,7 +5,7 @@
         <div class="grid grid-cols-1"> 
 
             <div
-                class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-colors duration-300 transform">
+                class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-colors duration-300 transform">
                 <h2 class="text-xl  text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                         class="w-6 h-6">

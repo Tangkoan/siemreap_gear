@@ -2,10 +2,10 @@
 @section('admin')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
+    <div class="container mx-auto p-6  min-h-screen text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
             <div
-                class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                class="lg:col-span-full bg-white bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <h2 class="text-xl  mb-6 flex items-center text-gray-800 dark:text-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
@@ -23,7 +23,7 @@
                     @csrf
                     <input type="hidden" name="id" value="{{ $purchase->id }}">
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6 ">
 
                         {{-- Column 1 --}}
                         <div class="space-y-4">
@@ -42,7 +42,7 @@
                         </div>
 
                         {{-- Column 2 --}}
-                        <div class="space-y-4">
+                        <div class="space-y-4 ">
                             <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
                                 {{ __('messages.invoice') }} : <span class="">{{ $purchase->invoice_no }}</span>
                             </label>
@@ -59,10 +59,10 @@
                     </div>
 
                     {{-- Table --}}
-                    <div class="overflow-x-auto mb-4">
+                    <div class="overflow-x-auto mb-4 ">
                         <table class="w-full text-sm border-collapse border border-gray-300 dark:border-gray-600 shadow-sm">
                             <thead>
-                                <tr class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+                                <tr class="bg-white/80 dark:bg-gray-900/80 text-gray-800 dark:text-gray-100">
                                     <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.no') }}</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.image') }}</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.product') }}
@@ -75,7 +75,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($purchaseItem as $key => $item)
-                                    <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <tr class="bg-white/80 dark:bg-gray-900/80 hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
                                             {{ $loop->iteration }}</td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">

@@ -18,7 +18,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 
             <a href="{{ route('admin.setting_infromationshop') }}"
-                class="block bg-white dark:bg-slate-800 rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-slate-200 dark:border-slate-700">
+                class="block bg-white/80 dark:bg-gray-900/80 rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-slate-200 dark:border-slate-700">
                 
                 {{-- Icon --}}
                 <div class="mb-3">
@@ -37,7 +37,7 @@
 
             {{-- អ្នកអាចបន្ថែម Card ផ្សេងទៀតនៅទីនេះ បើចាំបាច់ --}}
             <a href="{{ route('db.import.form') }}"
-                class="block bg-white dark:bg-slate-800 rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-slate-200 dark:border-slate-700">
+                class="block bg-white/80 dark:bg-gray-900/80 rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-slate-200 dark:border-slate-700">
                 
                 {{-- Icon --}}
                 <div class="mb-3">

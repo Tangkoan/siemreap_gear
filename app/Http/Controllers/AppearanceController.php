@@ -19,7 +19,7 @@ class AppearanceController extends Controller
         $validated = $request->validate([
             'background_type' => 'required|in:default,color,image',
             'background_color' => 'nullable|required_if:background_type,color|regex:/^#[0-9a-fA-F]{6}$/',
-            'background_image' => 'nullable|required_if:background_type,image|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'background_image' => 'nullable|required_if:background_type,image|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Max 2MB
         ], [
             'background_color.regex' => 'Invalid color format.',
             'background_image.image' => 'The file must be an image.',

@@ -36,7 +36,7 @@
                 </h1>
             </div>
 
-            <div class="p-4 sm:p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md mb-8">
+            <div class="p-4 sm:p-6 bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md mb-8">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="bg-gray-100 dark:bg-slate-700 p-1 rounded-lg flex items-center">
                         <button class="report-tab w-full px-4 py-2 text-sm rounded-md transition-colors duration-300" data-type="daily">{{ __('messages.day') }}</button>
@@ -100,7 +100,7 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {{-- Total Revenue --}}
-                        <div class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
                             <div class="flex-shrink-0 p-6 rounded-full">
                                 <img src="{{ asset('images/icons/business-icon.png') }}" class="h-8 w-8" alt="Revenue Icon">
                             </div>
@@ -111,7 +111,7 @@
                         </div>
 
                         {{-- Total Expense --}}
-                        <div class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
                             <div class="flex-shrink-0 p-6 rounded-full">
                                 <img src="{{ asset('images/icons/expense.png') }}" class="h-8 w-8" alt="Expense Icon">
                             </div>
@@ -124,7 +124,7 @@
                         {{-- ✅✅✅ START:  ✅✅✅ --}}
                         {{-- Profit / Loss --}}
                         <div id="profit-loss-card" {{-- << Id --}}
-                            class="flex items-center space-x-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
+                            class="flex items-center space-x-4 bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
                             <div class="flex-shrink-0 p-6 rounded-full">
                                 <img src="{{ asset('images/icons/money.png') }}" class="h-8 w-8" alt="Profit/Loss Icon">
                             </div>
@@ -139,7 +139,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {{-- Income Details Table --}}
-                    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-4 overflow-hidden">
+                    <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md p-4 overflow-hidden">
                         <h3 class="text-xl font-bold mb-4 text-green-500 px-2">{{ __('messages.income_details') }}</h3>
                         <div class="overflow-y-auto max-h-[60vh]">
                             <table class="w-full text-sm text-left">
@@ -152,12 +152,12 @@
                                         <th class="p-3 text-right">{{ __('messages.total') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody id="income-details-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody>
+                                <tbody id="income-details-body" class="t divide-y divide-gray-200 dark:divide-slate-700"></tbody>
                             </table>
                         </div>
                     </div>
                     {{-- Expense Details Table --}}
-                    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-4 overflow-hidden">
+                    <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md p-4 overflow-hidden">
                         <h3 class="text-xl font-bold mb-4 text-red-500 px-2">{{ __('messages.expense_details') }}</h3>
                         <div class="overflow-y-auto max-h-[60vh]">
                             <table class="w-full text-sm text-left">
@@ -170,7 +170,7 @@
                                         <th class="p-3 text-right">{{ __('messages.total') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody id="expense-details-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody>
+                                <tbody id="expense-details-body" class=" tbody divide-y divide-gray-200 dark:divide-slate-700"></tbody>
                             </table>
                         </div>
                     </div>

@@ -1,12 +1,26 @@
 @php $date = date('Y-m-d'); @endphp
+
+
+    <style>
+        .tbody tr:hover {
+            background-color: #cacaca61;
+        }
+
+        /* សម្រាប់ Dark Mode (បើអ្នកមាន) */
+        .dark .tbody tr:hover {
+            background-color: #6d6d6d61; /* នេះជាពណ៌ gray-800 របស់ Tailwind */
+        }
+    </style>
+
+
 <div class="space-y-6">
     {{-- KPI Cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_revenue') }}</h3><p id="kpi-revenue-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_orders') }}</h3><p id="kpi-orders-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.items_sold') }}</h3><p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.avg_order_value') }}</h3><p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 ">
+        <div class=" p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_revenue') }}</h3><p id="kpi-revenue-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class=" p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_orders') }}</h3><p id="kpi-orders-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class=" p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.items_sold') }}</h3><p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p></div>
+        <div class=" p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.avg_order_value') }}</h3><p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p></div>
+        <div class=" p-6 rounded-2xl bg-white/80 dark:bg-gray-900/80 shadow-sm">
             <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ __('messages.total_pre_orders') }}</h3>
             
             <p id="kpi-pre_orders-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p>
@@ -14,7 +28,7 @@
     </div>
 
     {{-- Control Bar --}}
-    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm">
+    <div class=" p-4 rounded-2xl shadow-sm">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4 w-full md:w-auto">
                 <input type="date" id="date-day" class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-red-500 focus:border-red-500" value="{{ $date }}">
@@ -44,7 +58,7 @@
     </div>
 
     {{-- Table Container --}}
-    <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden">
+    <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
                 <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
@@ -58,7 +72,7 @@
                         <th scope="col" class="px-6 py-4 text-center">{{ __('messages.table_action') }}</th>
                     </tr>
                 </thead>
-                <tbody id="report-table-body-day"></tbody>
+                <tbody id="report-table-body-day" class="tbody"></tbody>
                 <tfoot id="report-table-footer-day" class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700"></tfoot>
             </table>
         </div>

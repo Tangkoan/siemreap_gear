@@ -6,7 +6,7 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
             <div
-                class="lg:col-span-full bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -32,7 +32,7 @@
                                 <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
                                     {{ __(key: 'messages.permission_name') }}
                                 </label>
-                                <input type="text" id="name" name="name" required class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                                <input type="text" id="name" name="name" required class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
                                     @error('name') is-invalid @enderror">
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
                             </div>
@@ -46,7 +46,7 @@
                                     {{ __(key: 'messages.group_name') }}
                                 </label>
                                 <select name="group_name" id="example-select" required
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option value="" selected disabled>{{ __(key: 'messages.select_group_name') }}</option>
                                     <option value="pos">Pos</option>
                                     <option value="customer">Customer</option>

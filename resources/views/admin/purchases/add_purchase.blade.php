@@ -42,7 +42,7 @@
 
 <div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full  container mx-auto p-4">
     {{-- Left Side - Product Selection --}}
-    <div class="lg:w-3/5 xl:w-2/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
+    <div class="lg:w-3/5 xl:w-2/3 dark:bg-gray-900/80 bg-white/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
         {{-- Header & Search --}}
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200 dark:border-slate-700 mb-4">
             <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-0">{{ __('messages.purchase') }}</h2>
@@ -50,7 +50,7 @@
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                 </span>
-                <input type="text" placeholder="{{ __('messages.search') }}" id="searchBox" class="w-full p-2 pl-10 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white dark:bg-slate-900 dark:text-white" />
+                <input type="text" placeholder="{{ __('messages.search') }}" id="searchBox" class="w-full p-2 pl-10 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-900/80 bg-white/80 dark:text-white" />
             </div>
 
             
@@ -91,7 +91,7 @@
     </div>
 
     {{-- Right Side - Cart & Checkout --}}
-    <div class="lg:w-2/5 xl:w-1/3 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
+    <div class="lg:w-2/5 xl:w-1/3 dark:bg-gray-900/80 bg-white/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col h-[calc(100vh-90px)]">
         <div class="flex justify-between">
             <h2 class="text-xl font-bold text-slate-800 dark:text-white pb-4 border-b border-slate-200 dark:border-slate-700">{{ __('messages.purchase_cart') }}</h2>
 
@@ -108,9 +108,9 @@
 
 
         <div class="flex-1 mt-4 overflow-auto -mx-4 px-4">
-            <table class="w-full text-sm">
-                <thead class="bg-slate-50 dark:bg-slate-900/50 sticky top-0 z-10">
-                    <tr class="text-left text-slate-600 dark:text-slate-300">
+            <table class="w-full text-sm ">
+                <thead class="dark:bg-gray-900/80 bg-white/80 sticky top-0 z-10">
+                    <tr class="text-left text-slate-600 dark:text-slate-300 ">
                         <th class="p-2 ">{{ __('messages.product') }}</th>
                         <th class="p-2  text-center">{{ __('messages.qty') }}</th>
                         <th class="p-2  text-right">{{ __('messages.subtotal') }}</th>

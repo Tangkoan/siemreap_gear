@@ -3,11 +3,11 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6  dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div class="container mx-auto p-6  text-gray-900 dark:text-gray-100">
         <div class="grid grid-cols-1">
 
             <div
-                class="lg:col-span-full rounded-lg shadow-xl p-6 bg-gray-100 dark:bg-gray-900 transition-all duration-300 transform">
+                class="lg:col-span-full rounded-lg shadow-xl p-6 dark:bg-gray-900/80 bg-white/80 transition-all duration-300 transform">
                 <h2 class="text-xl  text-gray-800 dark:text-gray-100 mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
@@ -36,7 +36,7 @@
                                     <input type="text" id="name" name="name"
                                         value="{{ $customer->name }}"
                                         class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                                           dark:bg-gray-900/80 bg-white/80 text-gray-900 dark:text-gray-100
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
                                            @error('name') border-red-500 ring-red-500 @enderror" />
 
@@ -50,7 +50,7 @@
                                         {{ __('messages.customer_address') }}
                                     </label>
                                     <input type="text" id="address" name="address" value="{{ $customer->address }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-900/80 bg-white/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
                             </div>
 
@@ -63,7 +63,7 @@
                                         {{ __('messages.notes') }}
                                     </label>
                                     <input type="text" id="notes" name="notes" value="{{ $customer->notes }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-900/80 bg-white/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
 
                                 {{-- Customer Phone --}}
@@ -73,7 +73,7 @@
                                         {{ __('messages.customer_phone') }}
                                     </label>
                                     <input type="number" id="phone" name="phone" value="{{ $customer->phone }}"
-                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                        class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-900/80 bg-white/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 </div>
                             </div>
                         </div>

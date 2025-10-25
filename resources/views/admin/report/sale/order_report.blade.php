@@ -20,7 +20,7 @@
 
         {{-- Pill-style Tabs --}}
         <div class="mb-6">
-            <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
+            <div class="inline-block bg-white/80 dark:bg-gray-900/80 p-1.5 rounded-xl shadow-sm">
                 <ul class="flex items-center space-x-2" id="reportTab" role="tablist">
                     <li role="presentation">
                         <button class="tab-button text-sm  px-6 py-2.5 rounded-lg" type="button" role="tab" data-tab-target="#day-tab-content">{{ __('messages.by_day') }}</button>

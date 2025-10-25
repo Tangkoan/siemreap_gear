@@ -1,5 +1,16 @@
 {{-- ✨ NEW 2025 UI/UX for Stock Report --}}
 
+    <style>
+        .tbody tr:hover {
+            background-color: #cacaca61;
+        }
+
+        /* សម្រាប់ Dark Mode (បើអ្នកមាន) */
+        .dark .tbody tr:hover {
+            background-color: #6d6d6d61; /* នេះជាពណ៌ gray-800 របស់ Tailwind */
+        }
+    </style>
+
 {{-- Report Title --}}
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-slate-800 dark:text-white">
@@ -14,7 +25,7 @@
 
     {{-- KPI Card: Total Stock In --}}
     <div class="
-        bg-white dark:bg-slate-800 
+        bg-white/80 dark:bg-gray-900/80 
         p-6 rounded-2xl shadow-md 
         border-l-4 border-emerald-500 
         flex items-center gap-6 
@@ -37,7 +48,7 @@
 
     {{-- KPI Card: Total Stock Out --}}
     <div class="
-        bg-white dark:bg-slate-800 
+        bg-white/80 dark:bg-gray-900/80 
         p-6 rounded-2xl shadow-md 
         border-l-4 border-rose-500 
         flex items-center gap-6 
@@ -61,7 +72,7 @@
 </div>
 
 {{-- Control Bar: Filters & Export --}}
-<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-md mb-6">
+<div class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-md mb-6">
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-4 w-full md:w-auto">
 
@@ -101,7 +112,7 @@
 </div>
 
 {{-- Redesigned Table --}}
-<div class="bg-white dark:bg-slate-800 shadow-md rounded-2xl overflow-hidden">
+<div class="bg-white/80 dark:bg-gray-900/80 shadow-md rounded-2xl overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
             <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
@@ -113,7 +124,7 @@
                     <th scope="col" class="px-6 py-4 text-center">{{ __('messages.closing_stock') }}</th>
                 </tr>
             </thead>
-            <tbody id="report-table-body-day" class="divide-y divide-slate-200 dark:divide-slate-700">
+            <tbody id="report-table-body-day" class="tbody divide-y divide-slate-200 dark:divide-slate-700">
                 {{-- Data loaded by AJAX --}}
             </tbody>
         </table>

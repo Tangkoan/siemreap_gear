@@ -1,5 +1,18 @@
 @extends('admin.admin_dashboard') {{-- Your main admin layout --}}
 @section('admin')
+
+<style>
+        .tbody tr:hover {
+            background-color: #cacaca61;
+        }
+
+        /* សម្រាប់ Dark Mode (បើអ្នកមាន) */
+        .dark .tbody tr:hover {
+            background-color: #6d6d6d61; /* នេះជាពណ៌ gray-800 របស់ Tailwind */
+        }
+    </style>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <div class="page-content py-8 px-4 min-h-screen w-full text-gray-900 dark:text-gray-100">
@@ -17,7 +30,7 @@
 
         {{-- Tab Buttons --}}
         <div class="mb-6">
-            <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="inline-block bg-white/80 dark:bg-gray-900/80 p-1.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                 <ul class="flex items-center space-x-1" id="reportTab" role="tablist">
                     <li role="presentation">
                         <button class="tab-button text-sm  px-6 py-2.5 rounded-lg transition-colors duration-300" 
@@ -44,17 +57,17 @@
         {{-- Tab Content Containers --}}
         <div id="reportTabContent">
             {{-- #1. By Day Tab Content --}}
-            <div class="tab-pane p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900" id="day-tab-content" role="tabpanel">
+            <div class="tab-pane p-6 rounded-lg shadow-lg " id="day-tab-content" role="tabpanel">
                 @include('admin.report.stock.partials._report_by_day')
             </div>
 
             {{-- #2. By Month Tab Content --}}
-            <div class="tab-pane hidden p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900" id="month-tab-content" role="tabpanel">
+            <div class="tab-pane hidden p-6 rounded-lg shadow-lg " id="month-tab-content" role="tabpanel">
                 @include('admin.report.stock.partials._report_by_month')
             </div>
 
             {{-- #3. By Year Tab Content --}}
-            <div class="tab-pane hidden p-6 rounded-lg shadow-lg bg-white dark:bg-gray-900" id="year-tab-content" role="tabpanel">
+            <div class="tab-pane hidden p-6 rounded-lg shadow-lg " id="year-tab-content" role="tabpanel">
                 @include('admin.report.stock.partials._report_by_year')
             </div>
         </div>

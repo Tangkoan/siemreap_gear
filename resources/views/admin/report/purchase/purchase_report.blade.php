@@ -1,5 +1,20 @@
 @extends('admin.admin_dashboard')
 @section('admin')
+
+
+
+    <style>
+        .tbody tr:hover {
+            background-color: #cacaca61;
+        }
+
+        /* សម្រាប់ Dark Mode (បើអ្នកមាន) */
+        .dark .tbody tr:hover {
+            background-color: #6d6d6d61; /* នេះជាពណ៌ gray-800 របស់ Tailwind */
+        }
+    </style>
+
+
     {{-- jQuery is required for the logic --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -21,7 +36,7 @@
 
             {{-- Pill-style Tabs --}}
             <div class="mb-6">
-                <div class="inline-block bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-sm">
+                <div class="inline-block bg-white/80 dark:bg-gray-900/80 p-1.5 rounded-xl shadow-sm">
                     <ul class="flex items-center space-x-2" id="reportTab" role="tablist">
                         <li role="presentation"><button class="tab-button text-sm  px-6 py-2.5 rounded-lg"
                                 type="button" role="tab" data-tab-target="#day-tab-content">
@@ -43,31 +58,31 @@
                     @php $date = date('Y-m-d'); @endphp
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.total_spending') }}</h3>
                                 <p id="kpi-spending-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
                                     $0.00</p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.total_purchases') }}</h3>
                                 <p id="kpi-purchases-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0
                                 </p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.items_purchased') }}</h3>
                                 <p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.avg_purchase_value') }}</h3>
                                 <p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p>
                             </div>
                         </div>
                         <div
-                            class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                            class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
 
                             <div class="flex items-center gap-4 w-full md:w-auto">
                                 <input type="date" id="date-day"
@@ -104,7 +119,7 @@
                                 <span>{{ __('messages.export') }}</span>
                             </a>
                         </div>
-                        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden">
+                        <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead
@@ -119,7 +134,7 @@
                                             <th class="px-6 py-4 text-center">{{ __('messages.table_action') }}</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="report-table-body-day">
+                                    <tbody id="report-table-body-day" class="tbody">
                                     </tbody>
                                     <tfoot id="report-table-footer-day"
                                         class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
@@ -137,25 +152,25 @@
                     @php $month = date('Y-m'); @endphp
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.total_spending') }}</h3>
                                 <p id="kpi-spending-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
                                     $0.00</p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.total_purchases') }}</h3>
                                 <p id="kpi-purchases-month"
                                     class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.items_purchased') }}</h3>
                                 <p id="kpi-items-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0
                                 </p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.avg_purchase_value') }}</h3>
                                 <p id="kpi-avg-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00
@@ -163,7 +178,7 @@
                             </div>
                         </div>
                         <div
-                            class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                            class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
 
                             <div class="flex items-center gap-4 w-full md:w-auto">
                                 <input type="month" id="month-month"
@@ -198,7 +213,7 @@
                                 <span>{{ __('messages.export') }}</span>
                             </a>
                         </div>
-                        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden">
+                        <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead
@@ -213,7 +228,7 @@
                                             <th class="px-6 py-4 text-center">{{ __('messages.table_action') }}</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="report-table-body-month"></tbody>
+                                    <tbody id="report-table-body-month" class="tbody"></tbody>
                                     <tfoot id="report-table-footer-month"
                                         class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
                                     </tfoot>
@@ -229,25 +244,25 @@
                     @php $year = date('Y'); @endphp
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.total_spending') }}</h3>
                                 <p id="kpi-spending-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
                                     $0.00</p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.total_purchases') }}</h3>
                                 <p id="kpi-purchases-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
                                     0</p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.items_purchased') }}</h3>
                                 <p id="kpi-items-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0
                                 </p>
                             </div>
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm">
+                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
                                 <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     {{ __('messages.avg_purchase_value') }}</h3>
                                 <p id="kpi-avg-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00
@@ -255,7 +270,7 @@
                             </div>
                         </div>
                         <div
-                            class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                            class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
 
                             <div class="flex items-center gap-4 w-full md:w-auto">
                                 <input type="number" id="year-year"
@@ -290,7 +305,7 @@
                                 <span>{{ __('messages.export') }}</span>
                             </a>
                         </div>
-                        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden">
+                        <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead
@@ -305,7 +320,7 @@
                                             <th class="px-6 py-4 text-center">{{ __('messages.table_action') }}</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="report-table-body-year"></tbody>
+                                    <tbody id="report-table-body-year" class="tbody"></tbody>
                                     <tfoot id="report-table-footer-year"
                                         class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
                                     </tfoot>
@@ -324,7 +339,7 @@
         class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="relative w-full max-w-4xl mx-auto">
             <div id="voucher-print-area"
-                class="shadow-2xl rounded-2xl bg-white dark:bg-slate-800 transform transition-all">
+                class="shadow-2xl rounded-2xl bg-white/80 dark:bg-gray-900/80 transform transition-all">
                 <div class="px-8 pt-8 pb-4 flex justify-between items-start">
                     <div>
                         <h1 class="text-3xl font-bold text-red-600 dark:text-red-500">PURCHASE VOUCHER</h1>

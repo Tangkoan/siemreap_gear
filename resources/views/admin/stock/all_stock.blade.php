@@ -44,6 +44,16 @@
         .dark .select2-selection__arrow b {
             border-color: #9ca3af transparent transparent transparent !important; /* gray-400 */
         }
+
+        .tbody tr:hover {
+            background-color: #cacaca61;
+        }
+
+        /* សម្រាប់ Dark Mode (បើអ្នកមាន) */
+        .dark .tbody tr:hover {
+            background-color: #6d6d6d61; /* នេះជាពណ៌ gray-800 របស់ Tailwind */
+        }
+
     </style>
 
     <div class="container mx-auto p-6">
@@ -60,27 +70,37 @@
                     </h2>
                 </div>
 
-                <div class="w-full flex justify-between items-center mb-4">
-                    <div class="flex items-center space-x-2">
-                        <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
-                        <select id="perPage" name="perPage"
-                            class="h-10 border dark:bg-gray-900 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
-                            <option value="10" selected>10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                        </select>
+                <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
+                                <select id="perPage" name="perPage" class="dark:bg-gray-900/80 bg-white/70 dark:text-white h-10 border border-slate-300 dark:border-black-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="all">{{ __('messages.all') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <div class="w-full max-w-sm min-w-[200px] relative">
+                                <div class="relative">
+                                    <input class="dark:bg-gray-900/80 bg-white/80 dark:text-white   w-full pr-11 h-10 pl-3 py-2  placeholder:text-slate-400 text-slate-700 text-sm border-slate-300  rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
+                                    <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center   rounded" type="button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="w-full max-w-sm">
-                        <input
-                            class="dark:text-white dark:bg-gray-900 bg-white w-full h-10 px-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded"
-                            placeholder="{{ __('messages.search') }}" id="search" type="text" />
-                    </div>
-                </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left table-auto min-w-max">
-                        <thead>
-                            <tr class="bg-slate-50 dark:bg-gray-900">
+                <div class="overflow-x-auto rounded-md dark:bg-gray-900/80 bg-white/80">
+                    <table class="w-full text-left table-auto min-w-max ">
+                        <thead >
+                            <tr>
                                 <th class="p-4 border-b border-slate-200">
                                     <p class="text-sm font-normal text-slate-500">{!! __('messages.table_no') !!}</p>
                                 </th>
@@ -113,7 +133,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody class="tbody"></tbody>
                     </table>
                 </div>
                 <div class="pagination-wrapper mt-4"></div>
