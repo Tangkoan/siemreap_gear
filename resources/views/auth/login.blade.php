@@ -27,8 +27,8 @@
         }
     </style> --}}
 </head>
-<body class="bg-gradient-to-r min-h-screen flex items-center justify-center p-4">
-    <div class=" shadow-lg border border-gray-200 bg-white rounded-xl p-8 max-w-md w-full relative transform hover:scale-105 transition-transform duration-300 ease-in-out">
+<body class="bg-gradient-to-r from-gray-500 via-black-500 to-yello-500  min-h-screen flex items-center justify-center p-4">
+    <div class=" shadow-lg border border-gray-200 bg-white/80 rounded-xl p-8 max-w-md w-full relative transform hover:scale-105 transition-transform duration-300 ease-in-out">
         
 
         {{-- ✅ START: PHP Block to fetch Shop Info --}}
