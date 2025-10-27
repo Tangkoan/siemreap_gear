@@ -12,22 +12,42 @@ class AppearanceController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        $settings = $user->appearance_settings ?? []; // យកការកំណត់ចាស់ (បើមាន)
+        $settings = $user->appearance_settings ?? [];
 
-        // Validation Rules ថ្មី
+        // ✅ START: បន្ថែម Validation Rules សម្រាប់ Input
         $validator = Validator::make($request->all(), [
+            // --- Settings ចាស់ (Background & Colors) ---
             'light_primary_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'light_text_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'light_bg_type' => 'nullable|in:default,color,image',
             'light_bg_color' => 'nullable|required_if:light_bg_type,color|regex:/^#[0-9a-fA-F]{6}$/',
-            'light_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // ដក required_if ចេញ
-
+            'light_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'dark_primary_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'dark_text_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'dark_bg_type' => 'nullable|in:default,color,image',
             'dark_bg_color' => 'nullable|required_if:dark_bg_type,color|regex:/^#[0-9a-fA-F]{6}$/',
-            'dark_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // ដក required_if ចេញ
+            'dark_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+
+            // --- Settings សម្រាប់ Card ---
+            'light_card_type' => 'nullable|in:default,solid,gradient',
+            'light_card_color1' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_card_opacity' => 'nullable|numeric|min:0|max:100',
+            'light_card_color2' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_card_gradient_dir' => 'nullable|string',
+            'dark_card_type' => 'nullable|in:default,solid,gradient',
+            'dark_card_color1' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_card_opacity' => 'nullable|numeric|min:0|max:100',
+            'dark_card_color2' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_card_gradient_dir' => 'nullable|string',
+
+            // --- ✅ START: Settings ថ្មី (Input Background) ---
+            'light_input_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_input_opacity' => 'nullable|numeric|min:0|max:100',
+            'dark_input_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_input_opacity' => 'nullable|numeric|min:0|max:100',
+            // --- ✅ END: Settings ថ្មី ---
         ]);
+        // ✅ END: បន្ថែម Validation Rules
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
@@ -37,43 +57,32 @@ class AppearanceController extends Controller
         
         try {
             
-            // --- START FIX (កែសម្រួល Logic ផ្ទុក​រូបភាព) ---
-
-            // 1. ដំណើរការ Upload រូបភាព (Light Mode)
+            // --- Logic ផ្ទុករូបភាព (មិនផ្លាស់ប្តូរ) ---
             if ($request->hasFile('light_bg_image')) {
-                // លុបរូបចាស់ (បើមាន)
                 if (!empty($settings['light_bg_image']) && File::exists(public_path($settings['light_bg_image']))) {
                     File::delete(public_path($settings['light_bg_image']));
                 }
                 $validatedData['light_bg_image'] = $this->uploadImage($request->file('light_bg_image'), $user->id, 'light');
-                // បង្ខំឲ្យ Type ក្លាយជា 'image' ពេល Upload ជោគជ័យ
                 $validatedData['light_bg_type'] = 'image';
             } elseif ($request->input('light_bg_type') !== 'image') {
-                // បើ User ប្តូរទៅ 'default' ឬ 'color', ត្រូវលុបរូបចាស់ និង clear path
                 if (!empty($settings['light_bg_image']) && File::exists(public_path($settings['light_bg_image']))) {
                     File::delete(public_path($settings['light_bg_image']));
                 }
-                $validatedData['light_bg_image'] = null; // Clear path ក្នុង Database
+                $validatedData['light_bg_image'] = null;
             }
-
-            // 2. ដំណើរការ Upload រូបភាព (Dark Mode)
             if ($request->hasFile('dark_bg_image')) {
-                // លុបរូបចាស់ (បើមាន)
                 if (!empty($settings['dark_bg_image']) && File::exists(public_path($settings['dark_bg_image']))) {
                     File::delete(public_path($settings['dark_bg_image']));
                 }
                 $validatedData['dark_bg_image'] = $this->uploadImage($request->file('dark_bg_image'), $user->id, 'dark');
-                // បង្ខំឲ្យ Type ក្លាយជា 'image' ពេល Upload ជោគជ័យ
                 $validatedData['dark_bg_type'] = 'image';
             } elseif ($request->input('dark_bg_type') !== 'image') {
-                // បើ User ប្តូរទៅ 'default' ឬ 'color', ត្រូវលុបរូបចាស់ និង clear path
                 if (!empty($settings['dark_bg_image']) && File::exists(public_path($settings['dark_bg_image']))) {
                     File::delete(public_path($settings['dark_bg_image']));
                 }
-                $validatedData['dark_bg_image'] = null; // Clear path ក្នុង Database
+                $validatedData['dark_bg_image'] = null;
             }
-            
-            // --- END FIX ---
+            // --- បញ្ចប់ Logic ផ្ទុករូបភាព ---
 
             // បញ្ចូលទិន្នន័យថ្មីទៅក្នុងទិន្នន័យចាស់
             $user->appearance_settings = array_merge($settings, $validatedData);
@@ -85,7 +94,7 @@ class AppearanceController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Appearance updated successfully!',
-                'settings' => $finalSettings, // បញ្ជូនការកំណត់ទាំងអស់กลับទៅវិញ
+                'settings' => $finalSettings,
             ]);
 
         } catch (\Exception $e) {
@@ -96,7 +105,7 @@ class AppearanceController extends Controller
         }
     }
 
-    // Helper function សម្រាប់ Upload រូបភាព
+    // Helper function សម្រាប់ Upload រូបភាព (មិនផ្លាស់ប្តូរ)
     private function uploadImage($file, $userId, $prefix)
     {
         $filename = 'user_bg_' . $prefix . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
@@ -112,28 +121,32 @@ class AppearanceController extends Controller
     private function getAppearanceWithDefaults($user)
     {
         $settings = $user->appearance_settings ?? [];
+        
+        // ✅ START: បន្ថែម Default Values ថ្មី
         $defaults = [
-            'light_primary_color' => '#4F46E5', // indigo-600
-            'light_text_color' => '#1F2937',    // gray-800
-            'light_bg_type' => 'default',
-            'light_bg_color' => '#F3F4F6',    // gray-100
-            'light_bg_image' => null,
-            'dark_primary_color' => '#6366F1', // indigo-500
-            'dark_text_color' => '#F9FAFB',    // gray-50
-            'dark_bg_type' => 'default',
-            'dark_bg_color' => '#111827',    // gray-900
-            'dark_bg_image' => null,
+            // Settings ចាស់
+            'light_primary_color' => '#4F46E5', 'light_text_color' => '#1F2937',
+            'light_bg_type' => 'default', 'light_bg_color' => '#F3F4F6', 'light_bg_image' => null,
+            'dark_primary_color' => '#6366F1', 'dark_text_color' => '#F9FAFB',
+            'dark_bg_type' => 'default', 'dark_bg_color' => '#111827', 'dark_bg_image' => null,
+
+            // Settings សម្រាប់ Card
+            'light_card_type' => 'default', 'light_card_color1' => '#FFFFFF', 'light_card_opacity' => 80, 'light_card_color2' => '#F9FAFB', 'light_card_gradient_dir' => 'to right',
+            'dark_card_type' => 'default', 'dark_card_color1' => '#1F2937', 'dark_card_opacity' => 80, 'dark_card_color2' => '#111827', 'dark_card_gradient_dir' => 'to right',
+
+            // ✅ Settings ថ្មី (Input)
+            'light_input_color' => '#FFFFFF',       // Default ពណ៌ស
+            'light_input_opacity' => 80,             // Default 80%
+            'dark_input_color' => '#1F2937',        // Default ពណ៌ slate-800
+            'dark_input_opacity' => 80,              // Default 80%
         ];
+        // ✅ END: បន្ថែម Default Values ថ្មី
 
         $merged = array_merge($defaults, $settings);
 
-        // --- START FIX (ធានាថា URL ត្រឡប់ទៅត្រឹមត្រូវ) ---
-        
-        // 1. កំណត់តម្លៃ Default សម្រាប់ URL ឲ្យជា null
+        // Logic សម្រាប់ URL រូបភាព (មិនផ្លាស់ប្តូរ)
         $merged['light_bg_image_url'] = null;
         $merged['dark_bg_image_url'] = null;
-
-        // 2. បំប្លែង Path រូបភាពទៅជា URL ពេញលេញ (បើមាន)
         if ($merged['light_bg_type'] == 'image' && !empty($merged['light_bg_image'])) {
             $merged['light_bg_image_url'] = asset($merged['light_bg_image']);
         }
@@ -141,8 +154,7 @@ class AppearanceController extends Controller
             $merged['dark_bg_image_url'] = asset($merged['dark_bg_image']);
         }
         
-        // --- END FIX ---
-        
         return $merged;
     }
 }
+

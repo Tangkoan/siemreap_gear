@@ -22,10 +22,10 @@
                          src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}" 
                          alt="Shop Logo">
                 </span>
-                <span class="text-2xl font-bold text-slate-800 dark:text-slate-100">
+                <span class="text-2xl font-bold text-defalut">
                     {{-- ✅ កែប្រែទីនេះ: Dynamic Shop Name --}}
                     {{-- បើ $shopInfo មាន name_en, បើ Default --}}
-                    {{ $shopInfo->name_en ?? 'Siem Reap Gear' }}
+                    {{ $shopInfo->name_en ?? 'Kuy Tangkoan : 066764217' }}
                 </span>
             </a>
             <button id="toggleSidebar" class="hidden md:flex items-center p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
@@ -49,7 +49,7 @@
             </button>
             
             @can('pos.menu')
-                <a href="{{ route('pos') }}" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                <a href="{{ route('pos') }}" class="hidden sm:block bg-primary text-defalut font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     {{ __('messages.pos') }}
                 </a>
             @else
@@ -67,7 +67,7 @@
 
             {{-- Language Switcher --}}
             <div class="relative" x-data="{ open: false }" @click.outside="open = false">
-                <button @click="open = !open" class="flex items-center justify-center p-2 rounded-full text-slate-600 dark:text-slate-300 transition-colors focus:outline-none">
+                <button @click="open = !open" class="flex items-center justify-center p-2 rounded-full text-defalut transition-colors focus:outline-none">
                     @if (app()->getLocale() == 'km')
                         <img src="https://flagcdn.com/w20/kh.png" srcset="https://flagcdn.com/w40/kh.png 2x" width="30" alt="Khmer" class="dark:ring-1 dark:ring-white rounded-sm">
                     @else
@@ -75,14 +75,14 @@
                     @endif
                     <span class="ml-2 text-xs  ">{{ strtoupper(app()->getLocale()) }}</span>
                 </button>
-                <div x-show="open" x-transition class="absolute right-0 mt-2 w-40 rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
-                    <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+                <div x-show="open" x-transition class="absolute right-0 mt-2 w-40 rounded-xl card-dynamic-bg  backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
+                    <a href="{{ route('language.switch', 'en') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-default hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
                         <img src="https://flagcdn.com/w20/us.png" srcset="https://flagcdn.com/w40/us.png 2x" width="20" alt="English" class="dark:ring-1 dark:ring-white rounded-sm">
-                        <span>English</span>
+                        <span class="text-default">English</span>
                     </a>
-                    <a href="{{ route('language.switch', 'km') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+                    <a href="{{ route('language.switch', 'km') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-default hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
                         <img src="https://flagcdn.com/w20/kh.png" srcset="https://flagcdn.com/w40/kh.png 2x" width="20" alt="Khmer" class="dark:ring-1 dark:ring-white rounded-sm">
-                        <span>ភាសាខ្មែរ</span>
+                        <span class="text-default">ភាសាខ្មែរ</span>
                     </a>
                 </div>
             </div>
@@ -111,24 +111,24 @@
                 <button @click="open = !open" class="group flex items-center space-x-2 focus:outline-none">
                     <img class="h-10 w-10 rounded-full object-cover border-2 border-transparent group-hover:border-blue-500 transition-colors" src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}" alt="User Profile">
                     <div class="font-medium text-left hidden lg:block">
-                        <div class="text-sm text-slate-800 dark:text-slate-200 transition-colors">{{ $adminData->name }}</div>
+                        <div class="text-sm text-default transition-colors">{{ $adminData->name }}</div>
                         {{-- កែត្រង់នេះ --}}
-                        <div class="text-xs text-slate-500 dark:text-slate-400 transition-colors">{{ $adminData->roles->first()?->name }}</div>
+                        <div class="text-xs text-default transition-colors">{{ $adminData->roles->first()?->name }}</div>
                     </div>
                 </button>
-                <div x-show="open" x-transition class="absolute right-0 mt-2 w-56 rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
+                <div x-show="open" x-transition class="absolute right-0 mt-2 w-56 rounded-xl card-dynamic-bg backdrop-blur-md shadow-2xl py-2 z-50 origin-top-right ring-1 ring-black ring-opacity-5">
                     {{-- Dropdown content --}}
                     <div class="px-4 py-2">
-                        <p class="text-sm text-slate-700 dark:text-slate-200">{{ __('messages.signed_in_as') }}</p>
-                        <p class="text-sm   text-slate-900 dark:text-white truncate">{{ $adminData->name }}</p>
+                        <p class="text-sm text-default">{{ __('messages.signed_in_as') }}</p>
+                        <p class="text-sm text-default truncate">{{ $adminData->name }}</p>
                     </div>
                     <hr class="border-slate-200 dark:border-slate-700">
                     <div class="py-1">
-                        <a href="{{ route('admin.admin_profile_view') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+                        <a href="{{ route('admin.admin_profile_view') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-default hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
                             <span>{{ __('messages.my_account') }}</span>
                         </a>
-                        <a href="{{ route('change.password') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+                        <a href="{{ route('change.password') }}" class="flex items-center gap-3 px-4 py-2 text-sm text-default hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" /></svg>
                             <span>{{ __('messages.change_password') }}</span>
                         </a>
