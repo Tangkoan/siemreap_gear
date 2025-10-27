@@ -7,8 +7,8 @@
 
             <div
                 class="lg:col-span-full rounded-lg shadow-xl p-6 transition-all duration-300 transform
-                       bg-white/80 dark:bg-gray-900/80 ">
-                <h2 class="text-xl  mb-6 flex items-center text-gray-900 dark:text-gray-100">
+                       card-dynamic-bg ">
+                <h2 class="text-xl  mb-6 flex items-center text-defalut">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -17,7 +17,7 @@
 
                     <div class="px-2">
                         <a href="{{ route('all.product') }}"
-                            class="text-black hover:text-indigo-500 dark:text-white dark:hover:text-indigo-300 ">
+                            class="text-defalut  dark:hover:text-indigo-300 ">
                             {{ __('messages.add_product') }}
                         </a>
                     </div>
@@ -33,25 +33,25 @@
                             {{-- Product Name --}}
                             <div class="form-group">
                                 <label for="product_name"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.product_name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="product_name" name="product_name"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                             </div>
 
                             {{-- Category --}}
                             <div class="form-group">
                                 <label for="Category"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.category') }} 
                                     <span class="text-red-500">*</span>
                                 </label>
                                 <select name="category_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  text-defalut
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option selected disabled>{{ __('messages.select_category') }} </option>
                                     @foreach ($category as $cat)
@@ -63,12 +63,12 @@
                             {{-- Supplier --}}
                             <div class="form-group">
                                 <label for="Supplier"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                      {{ __('messages.supplier') }}  <span class="text-red-500">*</span>
                                 </label>
                                 <select name="supplier_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  text-defalut
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option selected disabled>{{ __('messages.select_supplier') }}</option>
                                     @foreach ($supplier as $cat)
@@ -80,12 +80,12 @@
                             {{-- Condition Name --}}
                             <div class="form-group">
                                 <label for="condition_id"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                      {{ __('messages.condition_name') }}  <span class="text-red-500">*</span>
                                 </label>
                                 <select name="condition_id" id="example-select"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  text-defalut
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option selected disabled>{{ __('messages.select_condition') }}</option>
                                     @foreach ($condition as $con)
@@ -97,15 +97,22 @@
                             {{-- Image --}}
                             <div class="mb-2">
                                 <label for="image"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                    class=" block text-defalut text-sm font-medium mb-2">
                                     {{ __('messages.image') }} <span class="text-red-500">*</span>
                                 </label>
-                                <input type="file" id="image" name="product_image"
-                                    class="block w-full text-sm text-gray-600 dark:text-gray-300
-                                           file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
-                                           file:text-sm file: file:bg-gray-300 dark:file:bg-gray-700
-                                           file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-400 dark:hover:file:bg-gray-600
-                                           cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                
+                                {{-- លាក់ Input ពិត --}}
+                                <input type="file" id="image" name="product_image" class="hidden" />
+                                {{-- ប្រើ Label ធ្វើជាប៊ូតុង --}}
+                                <label for="image" 
+                                    class="inline-block px-4 py-2 bg-primary text-white rounded-md cursor-pointer hover:bg-primary-focus">
+                                    <i class="fa-solid fa-upload mr-2"></i> {{-- ឧទាហរណ៍ ដាក់ Icon --}}
+                                    Choose File
+                                </label>
+                                {{-- (ជាជម្រើស) បង្ហាញឈ្មោះ File ពេលជ្រើសរើសរួច --}}
+                                <span id="file-name" class="ml-3 text-sm text-defalut">No file chosen</span>
+
+
                                 <img id="image_preview" src="#" alt="Image Preview"
                                     class="mt-2 rounded-md max-h-40 hidden" />
                             </div>
@@ -116,24 +123,24 @@
                             {{-- Price --}}
                             <div class="form-group">
                                 <label for="selling_price"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.price') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="selling_price" name="selling_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  text-defalut
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
 
                             {{-- Buy Price --}}
                             <div class="form-group">
                                 <label for="buying_price"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.cost') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  text-defalut
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
                             
@@ -142,33 +149,33 @@
                             {{-- Inventory --}}
                             <div class="form-group">
                                 <label for="product_store"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.inventory') }} 
                                 </label>
                                 <input type="number" value="0" name="product_store" readonly class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-500 dark:text-gray-300 cursor-not-allowed">
+                                    card-dynamic-bg  cursor-not-allowed">
                             </div>
 
                             {{-- Stock Alert --}}
                             <div class="form-group">
-                                <label for="stock_alert" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="stock_alert" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.stock_alert') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                                                       bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                                                       card-dynamic-bg  text-defalut
                                                                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
                             
                             {{-- Details --}}
                             <div>
                                 <label for="product_detail"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.details') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="tel" id="product_detail" name="product_detail"
                                     class="w-full py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600
-                                           bg-white/80 dark:bg-gray-900/80  text-gray-900 dark:text-gray-100
+                                           card-dynamic-bg  text-defalut
                                            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                             </div>
 
@@ -177,7 +184,7 @@
 
                             {{-- ✅ បន្ថែម Status Toggle Button --}}
                             <div class="form-group">
-                                <label for="status" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                <label for="status" class="block text-defalut text-sm font-medium mb-2">
                                     {{ __('messages.status') }}
                                 </label>
                                 <label for="status" class="relative inline-flex items-center cursor-pointer">
@@ -189,7 +196,7 @@
                                         @if(!isset($product)) checked @endif
                                     >
                                     <div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-                                    <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Active</span>
+                                    <span class="ml-3 text-sm font-medium text-defalut">Active</span>
                                 </label>
                             </div>
 
@@ -198,7 +205,7 @@
 
                     <div class="flex justify-end mt-6">
                         <button type="submit"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md shadow-lg transition-colors duration-200">
+                            class="bg-primary text-defalut font-bold py-3 px-6 rounded-md shadow-lg transition-colors duration-200">
                             {{ __('messages.save') }}
                         </button>
                     </div>

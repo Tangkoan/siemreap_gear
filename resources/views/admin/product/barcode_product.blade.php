@@ -3,7 +3,7 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
 
-            <div class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+            <div class="lg:col-span-full card-dynamic-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
                 <h2 class="text-xl  text-default mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
@@ -21,10 +21,10 @@
                 <div class="overflow-x-auto">
                     <div class="text-xl  text-default mb-6 flex items-center">
 
-                        <label for="firstname" class="form-label dark:text-white text-black">
+                        <label for="firstname" class="form-label text-defalut">
                             {{ __('messages.product_code') }} </label>
                         <div class="px-2">
-                            <h3 class="font-medium">{{ $product->product_code }}</h3>
+                            <h3 class="font-medium text-defalut">{{ $product->product_code }}</h3>
                         </div>
 
                     </div>
@@ -35,13 +35,10 @@
                 @endphp
 
                 <div class="overflow-x-auto">
-                    <div class="text-xl  text-default mb-6 flex items-center">
-
-
-                        <div class="px-2">
+                    <div class="text-xl mb-6 flex items-center">
+                        <div class="px-2 ">
                             <h3> {!! $generator->getBarcode($product->product_code, $generator::TYPE_CODE_128) !!} </h3>
                         </div>
-
                     </div>
                 </div>
 

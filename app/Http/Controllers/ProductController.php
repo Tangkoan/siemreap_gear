@@ -331,7 +331,7 @@ class ProductController extends Controller
                     // ✅ Edit Button
                     if (Auth::user()->can('product.edit')) {
                         $editBtn = '
-                        <button class="icon-edit  transition-colors duration-200 dark:hover:text-blue-900  hover:text-blue-900 focus:outline-none">
+                        <button class="transition-colors duration-200 text-primary focus:outline-none">
                             <a href="' . route('edit.product', $item->id) . '">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">

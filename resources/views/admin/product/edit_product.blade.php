@@ -2,10 +2,10 @@
 @section('admin')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6 text-gray-900 dark:text-gray-100">
-        <div class="grid grid-cols-1 ">
-            <div class="rounded-lg shadow-xl p-6 bg-white/80 dark:bg-gray-900/80 transition-all duration-300 transform">
-                <h2 class="text-xl  mb-6 flex items-center text-gray-800 dark:text-gray-100">
+    <div class="container mx-auto p-6 text-defallut">
+        <div class="grid grid-cols-1">
+            <div class="rounded-lg shadow-xl p-6 card-dynamic-bg transition-all duration-300 transform">
+                <h2 class="text-xl  mb-6 flex items-center ">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -29,7 +29,7 @@
                             {{-- Product Name --}}
                             <div class="form-group">
                                 <label for="product_name"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.product_name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="product_name" name="product_name" 
@@ -43,7 +43,7 @@
                             {{-- Category --}}
                             <div class="form-group">
                                 <label for="Category"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.category') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="category_id"
@@ -61,7 +61,7 @@
                             {{-- Supplier --}}
                             <div class="form-group">
                                 <label for="supplier"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.supplier') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="supplier_id"
@@ -79,7 +79,7 @@
                             {{-- Condition Name --}}
                             <div class="form-group">
                                 <label for="condition_id"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                      {{ __('messages.condition_name') }}  <span class="text-red-500">*</span>
                                 </label>
                                 <select name="condition_id" id="example-select"
@@ -103,11 +103,21 @@
                             {{-- Image --}}
                             <div class="form-group">
                                 <label for="image"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                    class="block text-defalut text-sm font-medium mb-2">
                                     {{ __('messages.image') }} 
                                 </label>
-                                <input type="file" id="image" name="product_image"
-                                    class="block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file: file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+                                
+                                {{-- លាក់ Input ពិត --}}
+                                <input type="file" id="image" name="product_image" class="hidden" />
+                                {{-- ប្រើ Label ធ្វើជាប៊ូតុង --}}
+                                <label for="image" 
+                                    class="inline-block px-4 py-2 bg-primary text-white rounded-md cursor-pointer hover:bg-primary-focus">
+                                    <i class="fa-solid fa-upload mr-2"></i> {{-- ឧទាហរណ៍ ដាក់ Icon --}}
+                                    Choose File
+                                </label>
+                                {{-- (ជាជម្រើស) បង្ហាញឈ្មោះ File ពេលជ្រើសរើសរួច --}}
+                                <span id="file-name" class="ml-3 text-sm text-defalut">No file chosen</span>
+
                                 <img id="image_preview" src="{{ asset($product->product_image) }}" alt="Image Preview"
                                     class="mt-2 rounded-md max-h-40 border border-gray-300 dark:border-gray-600" />
                                 @error('image')
@@ -123,7 +133,7 @@
                             {{-- Price --}}
                             <div class="form-group">
                                 <label for="selling_price"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.price') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="selling_price" name="selling_price"
@@ -134,7 +144,7 @@
                             {{-- Buy Price --}}
                             <div class="form-group">
                                 <label for="buying_price"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.cost') }}<span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="buying_price" name="buying_price"
@@ -146,7 +156,7 @@
                             {{-- Inventory --}}
                             <div class="form-group">
                                 <label for="product_store"
-                                    class="block text-gray-700  dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.inventory') }} 
                                 </label>
                                 <input type="text" id="product_store" name="product_store" 
@@ -156,7 +166,7 @@
                             </div>
                             {{-- Stock Alert --}}
                             <div class="form-group">
-                                <label for="stock_alert" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="stock_alert" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.stock_alert') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" min="0" step="0.01" id="stock_alert" name="stock_alert" value="{{ $product->stock_alert }}"
@@ -166,7 +176,7 @@
                             {{-- Details --}}
                             <div class="form-group">
                                 <label for="product_detail"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.details') }}
                                 </label>
                                 <input type="text" id="product_detail" name="product_detail"
@@ -177,7 +187,7 @@
 
                             {{-- ✅ START: កូដថ្មីសម្រាប់ Status Toggle (សម្រាប់​ទំព័រ Edit តែ​ប៉ុណ្ណោះ) --}}
                             <div class="form-group">
-                                <label for="status" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                <label for="status" class="block text-defalut text-sm font-medium mb-2">
                                     {{ __('messages.status') }}
                                 </label>
                                 <label for="status" class="relative inline-flex items-center cursor-pointer">
@@ -191,7 +201,7 @@
                                     >
                                     
                                     <div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-                                    <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Active</span>
+                                    <span class="ml-3 text-sm font-medium text-defalut">Active</span>
                                 </label>
                             </div>
                             {{-- ✅ END --}}
@@ -201,7 +211,7 @@
 
                     <div class="flex justify-end mt-6">
                         <button type="submit"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
+                            class="bg-primary text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
                              {{ __('messages.save') }} 
                         </button>
                     </div>
