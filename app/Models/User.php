@@ -32,9 +32,9 @@ class User extends Authenticatable
         'password',
         'phone',
         'photo',
-
-        'background_type', // ✅ បន្ថែមទីនេះ
-        'background_value', // ✅ បន្ថែមទីនេះ
+        'appearance_settings', // ✅ បន្ថែម Column ថ្មីនេះ
+        // 'background_type',  // ❌ លុប Column ចាស់នេះចោល
+        // 'background_value', // ❌ លុប Column ចាស់នេះចោល
     ];
 
     /**
@@ -57,6 +57,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+
+            'appearance_settings' => 'array', // <-- បន្ថែមបន្ទាត់នេះ
         ];
     }
 

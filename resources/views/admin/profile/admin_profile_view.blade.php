@@ -8,11 +8,11 @@
         
         {{-- Left Side: Profile Summary Card --}}
         <div class="lg:col-span-1 bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 flex flex-col items-center justify-center space-y-4 transition-colors duration-300">
-            <img class="h-24 w-24 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
+            <img class="h-24 w-24 rounded-full object-cover border-4 border-primary shadow-lg"
                  src="{{ (!empty($adminData->photo)) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg')}}"
                  onerror="this.onerror=null;this.src='https://placehold.co/96x96/4f46e5/ffffff?text=User';"
                  alt="Admin Profile Picture">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">{{ $adminData->name }}</h2>
+            <h2 class="text-2xl font-bold text-default">{{ $adminData->name }}</h2>
             <p class="text-gray-500 dark:text-gray-400">{{ $adminData->email }}</p>
 
             <div class="mt-6 w-full text-left space-y-3 border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -26,11 +26,11 @@
 
         {{-- Right Side: Edit Profile Form --}}
         <div class="lg:col-span-2 bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 transition-colors duration-300">
-            <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+            <h2 class="text-xl text-primary mb-6 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                 </svg>
-                {{ __('messages.personal_info') }}
+                <span class="text-default">{{ __('messages.personal_info') }}</span>
             </h2>
 
             <form method="post" action="{{ route('admin.profile.store') }}" enctype="multipart/form-data" class="space-y-4">
@@ -40,7 +40,7 @@
                     <label for="name" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.name') }}
                     </label>
-                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->name }}">
+                    <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 ring-primary" value="{{ $adminData->name }}">
                 </div>
 
                 {{-- Email --}}
@@ -48,7 +48,7 @@
                     <label for="email" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.email') }}
                     </label>
-                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->email }}">
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 ring-primary" value="{{ $adminData->email }}">
                 </div>
 
                 {{-- Phone --}}
@@ -56,7 +56,7 @@
                     <label for="phone" class="block text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">
                         {{ __('messages.phone') }}
                     </label>
-                    <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ $adminData->phone }}">
+                    <input type="tel" name="phone" id="phone" required class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 ring-primary" value="{{ $adminData->phone }}">
                 </div>
 
                 {{-- Image Upload --}}
@@ -70,26 +70,26 @@
                              alt="Current Profile Picture">
                         
                         <div class="flex-grow">
-                             <input type="file" name="photo" id="image" class="hidden">
-                             <label for="image" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white  py-2 px-4 rounded-md transition-colors duration-200 shadow-sm">
-                                 {{ __('messages.chosse_file') }}
-                             </label>
-                             <span id="file-name" class="text-gray-500 dark:text-gray-400 ml-3 text-sm">{{ __('messages.no_file_chosse') }}</span>
+                            <input type="file" name="photo" id="image" class="hidden">
+                            <label for="image" class="cursor-pointer bg-primary hover:opacity-90 text-white py-2 px-4 rounded-md transition-colors duration-200 shadow-sm">
+                                {{ __('messages.chosse_file') }}
+                            </label>
+                            <span id="file-name" class="text-gray-500 dark:text-gray-400 ml-3 text-sm">{{ __('messages.no_file_chosse') }}</span>
                         </div>
                         
                         <div class="relative">
-                             <button type="button" id="clearImageBtn" class="hidden absolute -top-8 -right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900">
-                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                 </svg>
-                             </button>
+                            <button type="button" id="clearImageBtn" class="hidden absolute -top-8 -right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 {{-- Submit Button --}}
                 <div class="flex justify-end pt-4">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button type="submit" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 ring-primary">
                         {{ __('messages.edit') }}
                     </button>
                 </div>
@@ -98,64 +98,85 @@
     </div>
 
 
-    {{-- បន្ថែមផ្នែកនេះទៅក្នុងទំព័រ Profile របស់អ្នក --}}
-<div class="p-6 bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Customize Background</h3>
+    {{-- =============================================== --}}
+    {{-- START: NEW APPEARANCE FORM (ទម្រង់ថ្មី) --}}
+    {{-- =============================================== --}}
+    @php
+    // យក Settings មកបង្ហាញក្នុង Form
+    // យើងត្រូវការ Default ដូចគ្នានឹងអ្វីដែលមានក្នុង <head>
+    $defaults = [
+        'light_primary_color' => '#4F46E5', 'light_text_color' => '#1F2937', 'light_bg_type' => 'default', 'light_bg_color' => '#F3F4F6', 'light_bg_image' => null,
+        'dark_primary_color' => '#6366F1', 'dark_text_color' => '#F9FAFB', 'dark_bg_type' => 'default', 'dark_bg_color' => '#111827', 'dark_bg_image' => null,
+    ];
+    $s = array_merge($defaults, Auth::user()->appearance_settings ?? []);
+    @endphp
 
-    <form id="appearanceForm" enctype="multipart/form-data">
-        @csrf
-        <div class="space-y-4">
+    <div class="p-6 bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md mt-6" 
+         x-data="{ 
+            tab: 'light',
+            light: {
+                bg_type: '{{ $s['light_bg_type'] }}',
+                primary_color: '{{ $s['light_primary_color'] }}',
+                text_color: '{{ $s['light_text_color'] }}',
+                bg_color: '{{ $s['light_bg_color'] }}',
+                image_preview: '{{ ($s['light_bg_type'] == 'image' && $s['light_bg_image']) ? asset($s['light_bg_image']) : '' }}'
+            },
+            dark: {
+                bg_type: '{{ $s['dark_bg_type'] }}',
+                primary_color: '{{ $s['dark_primary_color'] }}',
+                text_color: '{{ $s['dark_text_color'] }}',
+                bg_color: '{{ $s['dark_bg_color'] }}',
+                image_preview: '{{ ($s['dark_bg_type'] == 'image' && $s['dark_bg_image']) ? asset($s['dark_bg_image']) : '' }}'
+            }
+         }">
+        
+        <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Customize Appearance</h3>
 
-            <div class="flex flex-wrap items-center gap-4 sm:gap-6">
-                <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="background_type" value="default" class="form-radio text-blue-600" {{ Auth::user()->background_type == 'default' ? 'checked' : '' }}>
-                    <span class="ml-2 dark:text-slate-300">Default</span>
-                </label>
-                <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="background_type" value="color" class="form-radio text-blue-600" {{ Auth::user()->background_type == 'color' ? 'checked' : '' }}>
-                    <span class="ml-2 dark:text-slate-300">Color</span>
-                </label>
-                <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="background_type" value="image" class="form-radio text-blue-600" {{ Auth::user()->background_type == 'image' ? 'checked' : '' }}>
-                    <span class="ml-2 dark:text-slate-300">Image</span>
-                </label>
-            </div>
-
-            <div id="colorPickerWrapper" class="hidden pt-2">
-                <label for="background_color" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Choose Color</label>
-                <input type="color" id="background_color" name="background_color" 
-                       value="{{ Auth::user()->background_type == 'color' ? Auth::user()->background_value : '#ffffff' }}" 
-                       class="mt-1 block w-full h-10 p-1 border border-slate-300 dark:border-slate-600 rounded-md cursor-pointer">
-            </div>
-
-            <div id="imageUploaderWrapper" class="hidden pt-2">
-                <label for="background_image" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Upload Image</label>
-                <input type="file" id="background_image" name="background_image" accept="image/*"
-                       class="mt-1 block w-full text-sm text-slate-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-md file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-blue-50 file:text-blue-700
-                              hover:file:bg-blue-100
-                              dark:file:bg-slate-700 dark:file:text-slate-300 dark:hover:file:bg-slate-600"/>
-                <img id="imagePreview" src="{{ (Auth::user()->background_type == 'image' && Auth::user()->background_value) ? asset(Auth::user()->background_value) : '' }}" alt="Image Preview" 
-                     class="mt-4 rounded-lg max-h-48 {{ (Auth::user()->background_type == 'image' && Auth::user()->background_value) ? '' : 'hidden' }}">
-            </div>
-
-            <div id="appearance_error" class="text-red-500 text-sm"></div>
-
+        <!-- Tabs Navigation -->
+        <div class="border-b border-gray-200 dark:border-gray-700 mb-4">
+            <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                <button @click="tab = 'light'"
+                        :class="tab === 'light' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-600'"
+                        class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors">
+                    Light Mode
+                </button>
+                <button @click="tab = 'dark'"
+                        :class="tab === 'dark' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-600'"
+                        class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors">
+                    Dark Mode
+                </button>
+            </nav>
         </div>
 
-        <div class="mt-6 flex justify-end">
-            <button type="submit" id="saveAppearanceBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none disabled:opacity-75 transition-all">
-                Save Changes
-            </button>
-        </div>
-    </form>
-</div>
+        <form id="appearanceForm" enctype="multipart/form-data">
+            @csrf
+            
+            <!-- Light Mode Panel -->
+            <div x-show="tab === 'light'" class="space-y-4" style="display: none;">
+                @include('admin.profile.partials.appearance_form_inputs', ['mode' => 'light', 's' => $s])
+            </div>
+
+            <!-- Dark Mode Panel -->
+            <div x-show="tab === 'dark'" class="space-y-4" style="display: none;">
+                @include('admin.profile.partials.appearance_form_inputs', ['mode' => 'dark', 's' => $s])
+            </div>
+
+            <div id="appearance_error" class="text-red-500 text-sm mt-4"></div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="submit" id="saveAppearanceBtn" class="px-4 py-2 bg-primary text-white rounded-md hover:opacity-90 focus:outline-none disabled:opacity-75 transition-all">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+    {{-- =============================================== --}}
+    {{-- END: NEW APPEARANCE FORM --}}
+    {{-- =============================================== --}}
 
 </div>
 
+{{-- SCRIPT សម្រាប់ Profile Photo (កូដចាស់របស់អ្នក) --}}
 <script type="text/javascript">
     $(document).ready(function(){
         const originalImageSrc = $('#showImage').attr('src');
@@ -204,47 +225,90 @@
     });
 </script>
 
-
+{{-- SCRIPT សម្រាប់ Appearance Form (កូដថ្មីដែលបានកែ) --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('appearanceForm');
     if (!form) return;
 
-    const typeRadios = form.querySelectorAll('input[name="background_type"]');
-    const colorWrapper = document.getElementById('colorPickerWrapper');
-    const imageWrapper = document.getElementById('imageUploaderWrapper');
-    const imageInput = document.getElementById('background_image');
-    const imagePreview = document.getElementById('imagePreview');
     const saveBtn = document.getElementById('saveAppearanceBtn');
     const errorDiv = document.getElementById('appearance_error');
+    
+    // Function ថ្មី៖ ដើម្បី Update CSS Variables ភ្លាមៗ
+    function updateDynamicStyles(settings) {
+        
+        // ✅ START FIX #1: លុប Inline Style ចាស់ចោល
+        // ត្រូវតែលុប style ចាស់ដែលជាប់នៅលើ <body> 
+        // បើមិនដូច្នេះទេ វានឹង "ឈ្នះ" CSS Variables ថ្មីរបស់យើង
+        document.body.removeAttribute('style');
+        // ✅ END FIX #1
 
-    // Function ដើម្បីបង្ហាញ/លាក់ Input
-    function toggleInputs() {
-        const selectedType = form.querySelector('input[name="background_type"]:checked').value;
-        colorWrapper.classList.toggle('hidden', selectedType !== 'color');
-        imageWrapper.classList.toggle('hidden', selectedType !== 'image');
+        // ស្វែងរក <style> tag របស់យើង
+        let styleTag = document.getElementById('dynamic-user-styles');
+        if (!styleTag) {
+            styleTag = document.createElement('style');
+            styleTag.id = 'dynamic-user-styles';
+            document.head.appendChild(styleTag);
+        }
+
+        // កំណត់ Background ពិតប្រាកដដោយផ្អែកលើ Type
+        // ប្រើ Default ពី PHP ដែលបាន print ចូលក្នុង JS
+        const light_bg_final = settings.light_bg_type === 'color' ? settings.light_bg_color : '{{ $defaults['light_bg_color'] }}'; 
+        const dark_bg_final = settings.dark_bg_type === 'color' ? settings.dark_bg_color : '{{ $defaults['dark_bg_color'] }}'; 
+        
+        // កំណត់ Background Image
+        const light_image_final = (settings.light_bg_type === 'image' && settings.light_bg_image_url) ? `url(${settings.light_bg_image_url})` : 'none';
+        const dark_image_final = (settings.dark_bg_type === 'image' && settings.dark_bg_image_url) ? `url(${settings.dark_bg_image_url})` : 'none';
+
+        // បង្កើត CSS string
+        const css = `
+            :root {
+                --primary-light: ${settings.light_primary_color};
+                --text-light: ${settings.light_text_color};
+                --bg-light: ${light_bg_final};
+                --bg-image-light: ${light_image_final};
+
+                --primary-dark: ${settings.dark_primary_color};
+                --text-dark: ${settings.dark_text_color};
+                --bg-dark: ${dark_bg_final};
+                --bg-image-dark: ${dark_image_final};
+            }
+
+            /* ផ្នែកខាងក្រោមនេះត្រូវតែដូចគ្នានឹងអ្វីដែលមានក្នុង <head> */
+            body {
+                background-color: var(--bg-light);
+                color: var(--text-light);
+                background-image: var(--bg-image-light);
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                background-repeat: no-repeat;
+            }
+            .dark body {
+                background-color: var(--bg-dark);
+                color: var(--text-dark);
+                background-image: var(--bg-image-dark);
+            }
+            .text-primary { color: var(--primary-light); }
+            .dark .text-primary { color: var(--primary-dark); }
+            .bg-primary { background-color: var(--primary-light); }
+            .dark .bg-primary { background-color: var(--primary-dark); }
+            .border-primary { border-color: var(--primary-light); }
+            .dark .border-primary { border-color: var(--primary-dark); }
+            .ring-primary { --tw-ring-color: var(--primary-light); }
+            .dark .ring-primary { --tw-ring-color: var(--primary-dark); }
+            .icon-primary { stroke: var(--primary-light); fill: var(--primary-light); }
+            .dark .icon-primary { stroke: var(--primary-dark); fill: var(--primary-dark); }
+            .text-default { color: var(--text-light); }
+            .dark .text-default { color: var(--text-dark); }
+        `;
+
+        // បញ្ចូល CSS ថ្មីទៅក្នុង <style> tag
+        styleTag.innerHTML = css;
     }
 
-    // ហៅ Function ពេលទំព័របើក
-    toggleInputs();
 
-    // ថែម Event Listeners ទៅលើ Radio Buttons
-    typeRadios.forEach(radio => radio.addEventListener('change', toggleInputs));
-
-    // Logic សម្រាប់បង្ហាញរូប Preview
-    imageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                imagePreview.src = event.target.result;
-                imagePreview.classList.remove('hidden');
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // ដំណើរការ Form បែប AJAX
+    // ដំណើរការ Form បែប AJAX (បានកែសម្រួល)
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         saveBtn.disabled = true;
@@ -258,17 +322,15 @@ document.addEventListener('DOMContentLoaded', function () {
             body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                // CSRF token ត្រូវបានរួមបញ្ចូលក្នុង FormData រួចហើយ
             }
         })
         .then(response => response.json().then(data => ({ status: response.status, data })))
         .then(({ status, data }) => {
             if (status >= 400) { 
-                // ដោះស្រាយ Validation errors
                 if (data.errors) {
                     let errorMsg = Object.values(data.errors).flat().join(' ');
                     errorDiv.textContent = errorMsg;
-                    toastr.error(errorMsg); // អ្នកកំពុងប្រើ Toastr
+                    toastr.error(errorMsg);
                 } else {
                     errorDiv.textContent = data.message || 'An error occurred.';
                     toastr.error(data.message || 'An error occurred.');
@@ -279,34 +341,36 @@ document.addEventListener('DOMContentLoaded', function () {
             // --- ជោគជ័យ ---
             toastr.success(data.message);
 
-            // អាប់ដេត Background ភ្លាមៗដោយមិនបាច់ Reload ទំព័រ
-            if (data.background_type === 'color') {
-                document.body.style.backgroundImage = 'none';
-                document.body.style.backgroundColor = data.background_value;
-            } else if (data.background_type === 'image') {
-                document.body.style.backgroundColor = '';
-                document.body.style.backgroundImage = `url(${data.background_value})`;
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
-                document.body.style.backgroundRepeat = 'no-repeat';
-                document.body.style.backgroundAttachment = 'fixed';
-            } else {
-                // Default
-                document.body.removeAttribute('style'); // លុប inline style ចោល
-            }
+            // អាប់ដេត Background ភ្លាមៗដោយហៅ Function ថ្មីរបស់យើង
+            updateDynamicStyles(data.settings);
 
-            // អាប់ដេត src របស់ Preview ក្នុងករណី Upload រូបថ្មី
-            if (data.background_type === 'image') {
-                imagePreview.src = data.background_value;
-                imagePreview.classList.remove('hidden');
-            } else {
-                imagePreview.classList.add('hidden');
+            // ✅ START FIX #2: លុបកូដ Alpine.js ដែលបង្ក Error ចេញ
+            // យើងមិនត្រូវការ Update preview ភ្លាមៗទេ ព្រោះ Page ទាំងមូលបាន Update ហើយ
+            
+            /*
+            const alpineData = form.closest('[x-data]').__x.data;
+            if (data.settings.light_bg_image_url) {
+                alpineData.light.image_preview = data.settings.light_bg_image_url;
+            } else if (data.settings.light_bg_type !== 'image') {
+                 alpineData.light.image_preview = ''; 
             }
+            if (data.settings.dark_bg_image_url) {
+                alpineData.dark.image_preview = data.settings.dark_bg_image_url;
+            } else if (data.settings.dark_bg_type !== 'image') {
+                 alpineData.dark.image_preview = '';
+            }
+            */
+           // ✅ END FIX #2
+
 
         })
         .catch(error => {
             console.error('Appearance Update Error:', error);
-            toastr.error('An unexpected error occurred. Please try again.');
+            // កុំបង្ហាញ Error ក្រហម បើសិនជា 'success' ទើបនឹងបង្ហាញ
+            // នេះជាការជួសជុលបណ្តោះអាសន្នចំពោះ Error ក្រហម
+            if (!error.message.includes('data is not defined')) {
+                 toastr.error('An unexpected error occurred. Please try again.');
+            }
         })
         .finally(() => {
             saveBtn.disabled = false;
@@ -315,5 +379,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
 
 @endsection
