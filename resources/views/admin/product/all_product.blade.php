@@ -66,8 +66,8 @@
                     <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
-                                <select id="perPage" name="perPage" class="h-10 border card-dynamic-bg dark:bg-gray-900/80 dark:text-white border-slate-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                <label for="perPage" class="text-sm text-defalut">{{ __('messages.show') }}</label>
+                                <select id="perPage" name="perPage" class="h-10 border card-dynamic-bg border-slate-300 rounded text-sm text-defalut focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="10" selected>10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -80,7 +80,7 @@
                         <div class="ml-3">
                             <div class="w-72 relative">
                                 <div class="relative">
-                                    <input class="dark:text-white card-dynamic-bg dark:bg-gray-900/80 w-full pr-11 h-10 pl-3 py-2  placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
+                                    <input class="text-defalut card-dynamic-bg  w-full pr-11 h-10 pl-3 py-2 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                     <button class=" absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center  rounded" type="button">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />

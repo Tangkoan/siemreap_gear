@@ -73,8 +73,8 @@
                 <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
                         <div>
                             <div class="flex items-center space-x-2">
-                                <label for="perPage" class="text-sm text-slate-600">{{ __('messages.show') }}</label>
-                                <select id="perPage" name="perPage" class="dark:bg-gray-900/80 bg-white/70 dark:text-white h-10 border border-slate-300 dark:border-black-300 rounded text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                                <label for="perPage" class="text-sm text-defalut">{{ __('messages.show') }}</label>
+                                <select id="perPage" name="perPage" class="text-defalut card-dynamic-bg h-10 border border-slate-300 dark:border-black-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-slate-400">
                                     <option value="10" selected>10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -86,7 +86,7 @@
                         <div class="ml-3">
                             <div class="w-full max-w-sm min-w-[200px] relative">
                                 <div class="relative">
-                                    <input class="dark:bg-gray-900/80 bg-white/80 dark:text-white   w-full pr-11 h-10 pl-3 py-2  placeholder:text-slate-400 text-slate-700 text-sm border-slate-300  rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
+                                    <input class="card-dynamic-bg text-defalut w-full pr-11 h-10 pl-3 py-2  text-sm border-slate-300  rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                     <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center   rounded" type="button">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -97,39 +97,39 @@
                         </div>
                     </div>
 
-                <div class="overflow-x-auto rounded-md dark:bg-gray-900/80 bg-white/80">
+                <div class="overflow-x-auto rounded-md card-dynamic-bg">
                     <table class="w-full text-left table-auto min-w-max ">
                         <thead >
                             <tr>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{!! __('messages.table_no') !!}</p>
+                                    <p class="text-sm font-medium text-primary">{!! __('messages.table_no') !!}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.image') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.image') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.product_code') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.product_code') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.product_name') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.product_name') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.category') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.category') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.condition_name') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.condition_name') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.price') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.price') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200 text-center">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.inventory') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.inventory') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.status') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.status') }}</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200">
-                                    <p class="text-sm font-normal text-slate-500">{{ __('messages.table_action') }}</p>
+                                    <p class="text-sm font-medium text-primary">{{ __('messages.table_action') }}</p>
                                 </th>
                             </tr>
                         </thead>
@@ -141,61 +141,61 @@
         </div>
     </div>
 
-    <div id="stockAdjustmentModal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm "
+    <div id="stockAdjustmentModal" class="hidden fixed inset-0 z-[100] backdrop-blur-sm "
         aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="inline-block bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full max-w-lg p-6">
+            <div class="inline-block card-dynamic-bg rounded-lg shadow-xl w-full max-w-lg p-6">
                 <form clas id="stockAdjustmentForm" method="POST" action="{{ route('stock.adjust') }}">
                     @csrf
                     <input type="hidden" name="product_id" id="modal_product_id">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100" id="modal-title">
+                    <h3 class="text-lg font-medium text-defalut" id="modal-title">
                         {{ __('messages.adjust_stock_for') }} <span id="modal_product_name" class="font-bold"></span></h3>
                     <div class="mt-4 space-y-4">
                         <div>
                             <label for="type"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.a_t') }}</label>
+                                class="block text-sm font-medium text-defalut">{{ __('messages.a_t') }}</label>
                             <select id="type" name="type" required
-                                class="block w-full mt-1 dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm"></select>
+                                class="block w-full mt-1 card-dynamic-bg text-defalut dark:border-gray-600 rounded-md shadow-sm"></select>
                         </div>
                         <div id="returnPerPageContainer" class="hidden">
                             <label for="returnPerPage"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.show') }}</label>
+                                class="block text-sm font-medium text-defalut">{{ __('messages.show') }}</label>
                             <select id="returnPerPage"
-                                class="block w-full mt-1 dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm">
+                                class="block w-full mt-1 card-dynamic-bg text-defalut dark:border-gray-600 rounded-md shadow-sm">
                                 <option value="10" selected>10</option>
                                 <option value="25">25</option>
                             </select>
                         </div>
                         <div id="saleReturnListContainer" class="hidden">
                             <label for="sale_detail_id"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.select_sale_transaction') }}</label>
-                            <select id="sale_detail_id" class="block w-full mt-1 dark:bg-gray-700"></select>
-                            <input type="hidden" name="sale_detail_id" id="hidden_sale_detail_id">
+                                class="block text-sm font-medium text-defalut">{{ __('messages.select_sale_transaction') }}</label>
+                            <select id="sale_detail_id" class="block w-full mt-1 text-defalut card-dynamic-bg"></select>
+                            <input type="hidden" name="sale_detail_id" class="card-dynamic-bg text-defalut" id="hidden_sale_detail_id">
                         </div>
                         <div id="purchaseReturnListContainer" class="hidden">
                             <label for="purchase_detail_id"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.select_purchase_transaction') }}</label>
-                            <select id="purchase_detail_id" class="block w-full mt-1"></select>
+                                class="block text-sm font-medium text-defalut">{{ __('messages.select_purchase_transaction') }}</label>
+                            <select id="purchase_detail_id" class="block w-full mt-1 card-dynamic-bg text-defalut"></select>
                             <input type="hidden" name="purchase_detail_id" id="hidden_purchase_detail_id">
                         </div>
                         <div>
                             <label for="quantity"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.quantity') }}</label>
+                                class="block text-sm font-medium text-defalut ">{{ __('messages.quantity') }}</label>
                             <input type="number" name="quantity" id="quantity" required min="1" disabled
-                                class="block w-full mt-1 dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm">
+                                class="block w-full mt-1 card-dynamic-bg dark:border-gray-600 rounded-md shadow-sm">
                         </div>
                         <div>
                             <label for="notes"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.notes_reason') }}</label>
+                                class="block text-sm font-medium text-defalut">{{ __('messages.notes_reason') }}</label>
                             <textarea id="notes" name="notes" rows="3" required
-                                class="block w-full mt-1 dark:bg-gray-700 dark:border-gray-600 rounded-md shadow-sm"></textarea>
+                                class="block w-full mt-1 card-dynamic-bg dark:border-gray-600 rounded-md shadow-sm"></textarea>
                         </div>
                     </div>
                     <div class="flex mt-6 justify-end space-x-4">
                         <button type="button" id="closeModalBtn"
-                            class="py-2 px-4 text-gray-700 bg-gray-500 text-white dark:bg-gray-700 dark:text-gray-200  rounded-md">{{ __('messages.cancel') }}</button>
+                            class="py-2 px-4  bg-gray-500 text-white dark:bg-gray-700 dark:text-gray-200  rounded-md">{{ __('messages.cancel') }}</button>
                         <button type="submit"
-                            class="py-2 px-4 text-white bg-red-600 rounded-md">{{ __('messages.save') }}</button>
+                            class="py-2 px-4 bg-primary text-defalut rounded-md">{{ __('messages.save') }}</button>
                     </div>
                 </form>
             </div>

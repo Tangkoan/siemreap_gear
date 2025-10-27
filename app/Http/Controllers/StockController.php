@@ -50,7 +50,7 @@ class StockController extends Controller
             if (Auth::user()->can('stock.manage')) {
                 $adjustStockBtn = '
                 <button type="button"
-                    class="open-modal-btn icon-edit transition-colors duration-200 dark:hover:text-blue-900 hover:text-blue-900 focus:outline-none"
+                    class="open-modal-btn text-primary transition-colors duration-200 dark:hover:text-blue-900 hover:text-blue-900 focus:outline-none"
                     data-product-id="'.$item->id.'"
                     data-product-name="'.htmlspecialchars($item->product_name, ENT_QUOTES).'"
                     title="Adjust Stock">
