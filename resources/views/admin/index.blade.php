@@ -4,18 +4,18 @@
 {{-- ហៅប្រើ Library ApexCharts ក្រាហ្វិក --}}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-{{-- <div class="page-content bg-gray-100 dark:bg-gray-900/80"> --}}
-<div class="container mx-auto p-4 sm:p-6">
+{{-- <div class="page-content bg-gray-100 "> --}}
+<div class="container mx-auto p-4 sm:p-6 ">
     <div class="container mx-auto p-4 md:p-6 lg:p-8 space-y-8">
 
         {{-- បឋមកថា (Header) របស់ទំព័រ --}}
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div>
-                <h1 class="text-3xl font-bold text-white dark:text-white">{{ __('messages.dashboard') }}</h1>
-                {{-- <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">An overview of your business performance.</p> --}}
+                <h1 class="text-3xl font-bold text-defalut">{{ __('messages.dashboard') }}</h1>
+                {{-- <p class="mt-1 text-sm text-defalut">An overview of your business performance.</p> --}}
             </div>
             <div class="mt-4 sm:mt-0">
-                <div class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg shadow-sm">
+                <div class="flex items-center gap-2 text-sm font-medium text-defalut card-dynamic-bg  border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -27,11 +27,11 @@
         {{-- ប្លុកបង្ហាញកាត KPI (Key Performance Indicator) --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {{-- កាត៖ ចំណូលថ្ងៃនេះ --}}
-            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.today_is_revenue') }}</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($todays_revenue, 2) }}</p>
+                        <p class="text-sm font-medium text-defalut  uppercase">{{ __('messages.today_is_revenue') }}</p>
+                        <p class="text-3xl font-bold text-defalut mt-2">${{ number_format($todays_revenue, 2) }}</p>
                     </div>
                     <div class="bg-indigo-100 dark:bg-indigo-900/50 p-3 rounded-full">
                         <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
@@ -49,73 +49,73 @@
                             {{ number_format(abs($revenue_change), 1) }}%
                         </span>
                     @endif
-                    <span class="text-gray-500 dark:text-gray-400">{{ __('messages.today_is_revenue') }}{{ __('messages.vs_yesterday') }}</span>
+                    <span class="text-defalut">{{ __('messages.today_is_revenue') }}{{ __('messages.vs_yesterday') }}</span>
                 </div>
             </div>
             {{-- កាត៖ ចំណូលខែនេះ --}}
-                {{-- <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">This Month's Revenue</p>
-                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_month_revenue, 2) }}</p>
+                            <p class="text-sm font-medium text-defalut uppercase">This Month's Revenue</p>
+                            <p class="text-3xl font-bold text-defalut mt-2">${{ number_format($this_month_revenue, 2) }}</p>
                         </div>
                         <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
                             <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" /></svg>
                         </div>
                     </div>
-                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">Total for {{ date('F') }}</p>
+                    <p class="mt-4 text-sm text-defalut">Total for {{ date('F') }}</p>
                 </div> --}}
             {{-- កាត៖ ចំណូលឆ្នាំនេះ --}}
-                <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.this_year_is_revenue') }}</p>
-                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($this_year_revenue, 2) }}</p>
+                            <p class="text-sm font-medium text-defalut uppercase">{{ __('messages.this_year_is_revenue') }}</p>
+                            <p class="text-3xl font-bold text-defalut mt-2">${{ number_format($this_year_revenue, 2) }}</p>
                         </div>
                         <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
                             <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
                         </div>
                     </div>
-                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.total_for') }} {{ date('Y') }}</p>
+                    <p class="mt-4 text-sm text-defalut">{{ __('messages.total_for') }} {{ date('Y') }}</p>
                 </div>
             {{-- កាត៖ Total Paid --}}
-             {{-- <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+             {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Paid</p>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($total_paid, 2) }}</p>
+                        <p class="text-sm font-medium text-defalut uppercase">Total Paid</p>
+                        <p class="text-3xl font-bold text-defalut mt-2">${{ number_format($total_paid, 2) }}</p>
                     </div>
                     <div class="bg-green-100 dark:bg-green-900/50 p-3 rounded-full">
                         <svg class="w-6 h-6 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V6.375c0-.621.504-1.125 1.125-1.125h.375m18 3.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75m0 0h.375c.621 0 1.125.504 1.125 1.125v.75c0 .621-.504 1.125-1.125 1.125h-.375m-1.5-3H15a.75.75 0 0 0-.75.75v.75m0 0a.75.75 0 0 0 .75.75h.75a.75.75 0 0 0 .75-.75v-.75M3.75 12h1.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.75c0 .621-.504 1.125-1.125 1.125h-.375m-1.5-3h1.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.75c0 .621-.504 1.125-1.125 1.125h-.375" /></svg>
                     </div>
                 </div>
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time paid amount</p>
+                <p class="mt-4 text-sm text-defalut">All-time paid amount</p>
             </div> --}}
             {{-- កាត៖ Total Due --}}
-                {{-- <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Due</p>
-                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${{ number_format($total_due, 2) }}</p>
+                            <p class="text-sm font-medium text-defalut uppercase">Total Due</p>
+                            <p class="text-3xl font-bold text-defalut mt-2">${{ number_format($total_due, 2) }}</p>
                         </div>
                         <div class="bg-amber-100 dark:bg-amber-900/50 p-3 rounded-full">
                             <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
                         </div>
                     </div>
-                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">All-time outstanding</p>
+                    <p class="mt-4 text-sm text-defalut">All-time outstanding</p>
                 </div> --}}
             {{-- កាត៖ Complete Orders --}}
-                <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('messages.complete_orders') }}</p>
-                            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">{{ number_format($complete_orders_count) }}</p>
+                            <p class="text-sm font-medium text-defalut uppercase">{{ __('messages.complete_orders') }}</p>
+                            <p class="text-3xl font-bold text-defalut mt-2">{{ number_format($complete_orders_count) }}</p>
                         </div>
                         <div class="bg-teal-100 dark:bg-teal-900/50 p-3 rounded-full">
                             <svg class="w-6 h-6 text-teal-600 dark:text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
                         </div>
                     </div>
-                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.all_time_completed') }}</p>
+                    <p class="mt-4 text-sm text-defalut">{{ __('messages.all_time_completed') }}</p>
                 </div>
         </div>
 
@@ -126,24 +126,24 @@
             <div class="lg:col-span-2 space-y-8">
                 
                 {{-- តារាងក្រាហ្វិក៖ Sales Trend (30 Days) --}}
-                <div class="bg-white/80 dark:bg-gray-900/80 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg  text-defalut mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
                     <div id="sales-line-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Monthly Sales Trend (This Year) --}}
-                <div class="bg-white/80 dark:bg-gray-900/80 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg  text-defalut mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
                     <div id="this-year-monthly-sales-chart"></div>
                 </div>
 
                 {{-- តារាងទិន្នន័យ៖ Recent Orders --}}
-                    {{-- <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    {{-- <div class="card-dynamic-bg  rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                            <h3 class="text-lg  text-gray-800 dark:text-white">Recent Orders</h3>
+                            <h3 class="text-lg  text-defalut">Recent Orders</h3>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <table class="w-full text-sm text-left text-defalut">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-300">
                                     <tr>
                                         <th scope="col" class="px-6 py-3">Customer</th>
@@ -169,7 +169,7 @@
                                                 <span class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-right  text-gray-800 dark:text-white">${{ number_format($order->total, 2) }}</td>
+                                        <td class="px-6 py-4 text-right  text-defalut">${{ number_format($order->total, 2) }}</td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -186,20 +186,20 @@
             <div class="lg:col-span-1 space-y-8">
                 
                 {{-- តារាងក្រាហ្វិក៖ Top 5 Best-Selling Products --}}
-                <div class="bg-white/80 dark:bg-gray-900/80 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg text-defalut mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
                     <div id="best-selling-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Order Distribution --}}
-                <div class="bg-white/80 dark:bg-gray-900/80 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg  text-gray-800 dark:text-white mb-4">{{ __('messages.order_distribution') }}</h3>
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg  text-defalut mb-4">{{ __('messages.order_distribution') }}</h3>
                     <div id="order-status-doughnut-chart" class="flex justify-center"></div>
                 </div>
 
                 {{-- ប្លុកថ្មីសម្រាប់បង្ហាញតារាងស្តុកទាប --}}
-                    {{-- <div class="bg-white/80 dark:bg-gray-900/80 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                        <h3 class="text-lg  text-gray-800 dark:text-white mb-4">Products almost out of stock (Top 5)</h3>
+                    {{-- <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg  text-defalut mb-4">Products almost out of stock (Top 5)</h3>
                         {{-- កន្លែងនេះនឹងត្រូវបង្ហាញ Chart ដែលបានបង្កើតដោយ JavaScript --}}
                         {{-- <div id="low-stock-chart"></div> 
                     </div> --}} 
