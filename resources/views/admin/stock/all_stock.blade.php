@@ -141,7 +141,7 @@
         </div>
     </div>
 
-    <div id="stockAdjustmentModal" class="hidden fixed inset-0 z-[100] backdrop-blur-sm "
+    <div id="stockAdjustmentModal" class="hidden fixed inset-0 z-[100] backdrop-blur-sm"
         aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="inline-block card-dynamic-bg rounded-lg shadow-xl w-full max-w-lg p-6">
@@ -168,9 +168,9 @@
                         </div>
                         <div id="saleReturnListContainer" class="hidden">
                             <label for="sale_detail_id"
-                                class="block text-sm font-medium text-defalut">{{ __('messages.select_sale_transaction') }}</label>
+                                class="block text-sm font-sm text-defalut">{{ __('messages.select_sale_transaction') }}</label>
                             <select id="sale_detail_id" class="block w-full mt-1 text-defalut card-dynamic-bg"></select>
-                            <input type="hidden" name="sale_detail_id" class="card-dynamic-bg text-defalut" id="hidden_sale_detail_id">
+                            <input class="card-dynamic-bg text-defalut" type="hidden" name="sale_detail_id"  id="hidden_sale_detail_id">
                         </div>
                         <div id="purchaseReturnListContainer" class="hidden">
                             <label for="purchase_detail_id"

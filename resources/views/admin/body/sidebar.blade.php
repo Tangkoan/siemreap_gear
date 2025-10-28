@@ -1,5 +1,5 @@
 <nav id="sidebar"
-    class="static h-full nset-0 bg-white/30 backdrop-blur-lg dark:bg-gray-900/80  w-56 p-4 md:block hidden border-none border-slate-200/70 dark:border-slate-800 z-40 overflow-y-auto overflow-x-hidden">
+    class="static h-full nset-0  backdrop-blur-lg card-dynamic-bg  w-56 p-4 md:block hidden border-none border-slate-200/70 dark:border-slate-800 z-40 overflow-y-auto overflow-x-hidden">
 
     <div id="sidebar-nav" class="space-y-1">
         <div id="nav-links" class="space-y-1">

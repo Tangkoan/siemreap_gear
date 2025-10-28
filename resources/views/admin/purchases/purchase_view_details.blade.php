@@ -2,11 +2,11 @@
 @section('admin')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div class="container mx-auto p-6  min-h-screen text-gray-900 dark:text-gray-100">
+    <div class="container mx-auto p-6  min-h-screen text-defalut">
         <div class="grid grid-cols-1">
             <div
-                class="lg:col-span-full bg-white bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl  mb-6 flex items-center text-gray-800 dark:text-gray-100">
+                class="lg:col-span-full card-dynamic-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                <h2 class="text-xl  mb-6 flex items-center text-defalut">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -27,32 +27,32 @@
 
                         {{-- Column 1 --}}
                         <div class="space-y-4">
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.supplier_name') }} : <span class="">{{ $purchase->supplier->name }}</span>
                             </label>
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.email') }} : <span class="">{{ $purchase->supplier->email ?? 'null' }}</span>
                             </label>
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.phone') }} : <span class="">{{ $purchase->supplier->phone }}</span>
                             </label>
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.purchase_date') }} : <span class="">{{ $purchase->purchase_date }}</span>
                             </label>
                         </div>
 
                         {{-- Column 2 --}}
                         <div class="space-y-4 ">
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.invoice') }} : <span class="">{{ $purchase->invoice_no }}</span>
                             </label>
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.payment_status') }} ​: <span class="">{{ $purchase->payment_status }}</span>
                             </label>
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.paid_amount') }} ​: <span class="">{{ $purchase->pay }}</span>
                             </label>
-                            <label class="block text-gray-500 dark:text-gray-300 text-sm font-medium">
+                            <label class="block text-defalut text-sm font-medium">
                                 {{ __('messages.due_amount') }} ​: <span class="">{{ $purchase->due }}</span>
                             </label>
                         </div>
@@ -62,7 +62,7 @@
                     <div class="overflow-x-auto mb-4 ">
                         <table class="w-full text-sm border-collapse border border-gray-300 dark:border-gray-600 shadow-sm">
                             <thead>
-                                <tr class="bg-white/80 dark:bg-gray-900/80 text-gray-800 dark:text-gray-100">
+                                <tr class="card-dynamic-bg text-defalut">
                                     <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.no') }}</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.image') }}</th>
                                     <th class="border border-gray-300 dark:border-gray-600 px-2 py-1">{{ __('messages.product') }}
@@ -75,7 +75,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($purchaseItem as $key => $item)
-                                    <tr class="bg-white/80 dark:bg-gray-900/80 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <tr class="card-dynamic-bg">
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">
                                             {{ $loop->iteration }}</td>
                                         <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center">

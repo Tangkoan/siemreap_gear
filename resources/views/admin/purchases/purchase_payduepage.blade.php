@@ -6,11 +6,11 @@
 
             {{-- The main card container --}}
             {{-- I've replaced 'card-bg' with standard Tailwind classes for background colors in both light and dark modes. --}}
-            <div class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300">
+            <div class="lg:col-span-full card-dynamic-bg rounded-lg shadow-xl p-6 transition-all duration-300">
                 
                 {{-- Header section --}}
                 {{-- Replaced 'text-default' with classes that adjust text color for light/dark modes. --}}
-                <h2 class="text-xl  text-gray-800 dark:text-gray-200 mb-6 flex items-center">
+                <h2 class="text-xl  text-defalut mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                         class="size-6 mr-2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -35,7 +35,7 @@
                                 {{-- Pay Now Field --}}
                                 <div>
                                     {{-- Label text color adjusted for better visibility in both modes. --}}
-                                    <label for="due" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
+                                    <label for="due" class="block text-sm font-medium text-defalut mb-1">
                                         {{ __('messages.pay_now') }}
                                     </label>
 
@@ -43,8 +43,8 @@
                                     <input type="number" min="0" step="0.01" value="{{ $purchasepaydue->due }}" id="due" name="due"
                                         required 
                                         class="w-full py-2.5 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                                               bg-white/80 dark:bg-gray-900/80
-                                                dark:text-gray-200
+                                               card-dynamic-bg
+                                                text-defalut
                                                @error('due') border-red-500 dark:border-red-500 @enderror">
 
                                     <x-input-error :messages="$errors->get('due')" class="mt-2" />
@@ -56,7 +56,7 @@
                         <div class="flex justify-end mt-6">
                             {{-- Replaced 'button-blue' with standard Tailwind classes for a consistent look. --}}
                             <button type="submit"
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800">
+                                class="bg-primary text-defalut font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800">
                                 {{ __('messages.save') }}
                             </button>
                         </div>
