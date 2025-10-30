@@ -15,12 +15,12 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<div class="page-content py-8 px-4 min-h-screen w-full text-gray-900 dark:text-gray-100">
+<div class="page-content py-8 px-4 min-h-screen w-full text-defalut">
     <div class="container mx-auto">
 
         {{-- Page Title --}}
         <div class="flex flex-col md:flex-row items-center justify-between mb-8">
-            <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white flex items-center gap-3">
+            <h1 class="text-4xl font-extrabold text-defalut flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-9">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                 </svg>
@@ -30,7 +30,7 @@
 
         {{-- Tab Buttons --}}
         <div class="mb-6">
-            <div class="inline-block bg-white/80 dark:bg-gray-900/80 p-1.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="inline-block card-dynamic-bg p-1.5 rounded-xl shadow-sm border border-primary">
                 <ul class="flex items-center space-x-1" id="reportTab" role="tablist">
                     <li role="presentation">
                         <button class="tab-button text-sm  px-6 py-2.5 rounded-lg transition-colors duration-300" 
@@ -113,19 +113,19 @@
 $(document).ready(function() {
     const tabs = $('.tab-button');
     const panes = $('.tab-pane');
-    const activeTabClasses = 'bg-red-600 text-white shadow-md';
-    const inactiveTabClasses = 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700';
+    const activeTabClasses = 'bg-primary text-white shadow-md';
+    const inactiveTabClasses = 'text-defalut hover:bg-slate-100 dark:hover:bg-slate-700';
     let activeTab = 'day'; // Default active tab
     let searchTimeout;
 
     // Helper function to show loading state in table
     function showLoading(tableBodyId) {
-        $(`#${tableBodyId}`).html('<tr><td colspan="5" class="text-center p-6 text-gray-500 dark:text-gray-400"><div class="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-red-500 rounded-full" role="status" aria-label="loading"></div> <span class="ml-2">Loading data...</span></td></tr>');
+        $(`#${tableBodyId}`).html('<tr><td colspan="5" class="text-center p-6 text-defalut"><div class="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-red-500 rounded-full" role="status" aria-label="loading"></div> <span class="ml-2">Loading data...</span></td></tr>');
     }
 
     // Helper function to show error state in table
     function showError(tableBodyId) {
-        $(`#${tableBodyId}`).html('<tr><td colspan="5" class="text-center text-red-500 p-6">Failed to load data. Please try again.</td></tr>');
+        $(`#${tableBodyId}`).html('<tr><td colspan="5" class="text-center text-defalut p-6">Failed to load data. Please try again.</td></tr>');
     }
 
     // --- Data Fetching Functions ---

@@ -24,7 +24,7 @@
 
             {{-- Page Header --}}
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
-                <h1 class="text-3xl lg:text-4xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
+                <h1 class="text-3xl lg:text-4xl font-bold text-defalut flex items-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 " fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -36,7 +36,7 @@
 
             {{-- Pill-style Tabs --}}
             <div class="mb-6">
-                <div class="inline-block bg-white/80 dark:bg-gray-900/80 p-1.5 rounded-xl shadow-sm">
+                <div class="inline-block card-dynamic-bg  p-1.5 rounded-xl shadow-sm">
                     <ul class="flex items-center space-x-2" id="reportTab" role="tablist">
                         <li role="presentation"><button class="tab-button text-sm  px-6 py-2.5 rounded-lg"
                                 type="button" role="tab" data-tab-target="#day-tab-content">
@@ -58,35 +58,35 @@
                     @php $date = date('Y-m-d'); @endphp
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.total_spending') }}</h3>
-                                <p id="kpi-spending-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
+                                <p id="kpi-spending-day" class="text-3xl font-bold text-defalut mt-2">
                                     $0.00</p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.total_purchases') }}</h3>
-                                <p id="kpi-purchases-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0
+                                <p id="kpi-purchases-day" class="text-3xl font-bold text-defalut mt-2">0
                                 </p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.items_purchased') }}</h3>
-                                <p id="kpi-items-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p>
+                                <p id="kpi-items-day" class="text-3xl font-bold text-defalut mt-2">0</p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.avg_purchase_value') }}</h3>
-                                <p id="kpi-avg-day" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00</p>
+                                <p id="kpi-avg-day" class="text-3xl font-bold text-defalut mt-2">$0.00</p>
                             </div>
                         </div>
                         <div
-                            class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                            class="card-dynamic-bg p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
 
                             <div class="flex items-center gap-4 w-full md:w-auto">
                                 <input type="date" id="date-day"
-                                    class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                    class="form-input w-full md:w-auto card-dynamic-bg border-primary rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     value="{{ $date }}">
                                 <div class="relative w-full md:w-64">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg
@@ -96,7 +96,7 @@
                                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg></div>
                                     <input
-                                        class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                        class="form-input w-full pl-10 card-dynamic-bg border-primary rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="Search..." id="search-purchase-day" type="text" />
                                 </div>
                             </div>
@@ -106,8 +106,8 @@
 
                             <a id="exportBtn-day" href="{{ route('report.purchases.export.date', ['date' => $date]) }}"
                                 class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
-                                    bg-gradient-to-r bg-green-600 to-green-700 text-white font-medium 
-                                    shadow-md hover:shadow-lg hover:bg-green-700 hover:to-green-800 
+                                    bg-gradient-to-r bg-primary text-defalut font-medium 
+                                    shadow-md hover:shadow-lg 
                                     transition duration-300 ease-in-out w-full md:w-auto">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -119,11 +119,11 @@
                                 <span>{{ __('messages.export') }}</span>
                             </a>
                         </div>
-                        <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
+                        <div class="card-dynamic-bg shadow-sm rounded-2xl overflow-hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead
-                                        class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
+                                        class="text-xs  uppercase card-dynamic-bg text-defalut">
                                         <tr>
                                             <th class="px-6 py-4">{{ __('messages.no') }}</th>
                                             <th class="px-6 py-4">{{ __('messages.date') }}</th>
@@ -137,11 +137,11 @@
                                     <tbody id="report-table-body-day" class="tbody">
                                     </tbody>
                                     <tfoot id="report-table-footer-day"
-                                        class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
+                                        class="text-sm text-defalut card-dynamic-bg">
                                     </tfoot>
                                 </table>
                             </div>
-                            <div id="pagination-links-day" class="p-4 border-t border-slate-200 dark:border-slate-700">
+                            <div id="pagination-links-day" class="p-4">
                             </div>
                         </div>
                     </div>
@@ -152,47 +152,47 @@
                     @php $month = date('Y-m'); @endphp
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.total_spending') }}</h3>
-                                <p id="kpi-spending-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
+                                <p id="kpi-spending-month" class="text-3xl font-bold text-defalut mt-2">
                                     $0.00</p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.total_purchases') }}</h3>
                                 <p id="kpi-purchases-month"
-                                    class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0</p>
+                                    class="text-3xl font-bold text-defalut mt-2">0</p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.items_purchased') }}</h3>
-                                <p id="kpi-items-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0
+                                <p id="kpi-items-month" class="text-3xl font-bold text-defalut mt-2">0
                                 </p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.avg_purchase_value') }}</h3>
-                                <p id="kpi-avg-month" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00
+                                <p id="kpi-avg-month" class="text-3xl font-bold text-defalut mt-2">$0.00
                                 </p>
                             </div>
                         </div>
                         <div
-                            class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                            class="card-dynamic-bg p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
 
                             <div class="flex items-center gap-4 w-full md:w-auto">
                                 <input type="month" id="month-month"
-                                    class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                    class="form-input w-full md:w-auto card-dynamic-bg rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     value="{{ $month }}">
                                 <div class="relative w-full md:w-64">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg
-                                            class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
+                                            class="w-5 h-5 text-primary" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg></div>
                                     <input
-                                        class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                        class="form-input w-full pl-10 card-dynamic-bg  rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="Search..." id="search-purchase-month" type="text" />
                                 </div>
                             </div>
@@ -213,11 +213,11 @@
                                 <span>{{ __('messages.export') }}</span>
                             </a>
                         </div>
-                        <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
+                        <div class="card-dynamic-bg shadow-sm rounded-2xl overflow-hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead
-                                        class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
+                                        class="text-xs text-defalut uppercase card-dynamic-bg">
                                         <tr>
                                             <th class="px-6 py-4">{{ __('messages.no') }}</th>
                                             <th class="px-6 py-4">{{ __('messages.date') }}</th>
@@ -230,7 +230,7 @@
                                     </thead>
                                     <tbody id="report-table-body-month" class="tbody"></tbody>
                                     <tfoot id="report-table-footer-month"
-                                        class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
+                                        class="text-sm  text-defalut card-dynamic-bg">
                                     </tfoot>
                                 </table>
                             </div>
@@ -244,37 +244,37 @@
                     @php $year = date('Y'); @endphp
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.total_spending') }}</h3>
-                                <p id="kpi-spending-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
+                                <p id="kpi-spending-year" class="text-3xl font-bold text-defalut mt-2">
                                     $0.00</p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.total_purchases') }}</h3>
-                                <p id="kpi-purchases-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">
+                                <p id="kpi-purchases-year" class="text-3xl font-bold text-defalut mt-2">
                                     0</p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.items_purchased') }}</h3>
-                                <p id="kpi-items-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">0
+                                <p id="kpi-items-year" class="text-3xl font-bold text-defalut mt-2">0
                                 </p>
                             </div>
-                            <div class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow-sm">
-                                <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div class="card-dynamic-bg p-6 rounded-2xl shadow-sm">
+                                <h3 class="text-sm font-medium text-defalut">
                                     {{ __('messages.avg_purchase_value') }}</h3>
-                                <p id="kpi-avg-year" class="text-3xl font-bold text-slate-800 dark:text-white mt-2">$0.00
+                                <p id="kpi-avg-year" class="text-3xl font-bold text-defalut mt-2">$0.00
                                 </p>
                             </div>
                         </div>
                         <div
-                            class="bg-white/80 dark:bg-gray-900/80 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                            class="card-dynamic-bg p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
 
                             <div class="flex items-center gap-4 w-full md:w-auto">
                                 <input type="number" id="year-year"
-                                    class="form-input w-full md:w-auto bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                    class="form-input w-full md:w-auto card-dynamic-bg  rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     value="{{ $year }}">
                                 <div class="relative w-full md:w-64">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg
@@ -284,7 +284,7 @@
                                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg></div>
                                     <input
-                                        class="form-input w-full pl-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                        class="form-input w-full pl-10 card-dynamic-bg  rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="Search..." id="search-purchase-year" type="text" />
                                 </div>
                             </div>
@@ -305,11 +305,11 @@
                                 <span>{{ __('messages.export') }}</span>
                             </a>
                         </div>
-                        <div class="bg-white/80 dark:bg-gray-900/80 shadow-sm rounded-2xl overflow-hidden">
+                        <div class="card-dynamic-bg shadow-sm rounded-2xl overflow-hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead
-                                        class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
+                                        class="text-xs text-defalut card-dynamic-bg">
                                         <tr>
                                             <th class="px-6 py-4">{{ __('messages.no') }}</th>
                                             <th class="px-6 py-4">{{ __('messages.date') }}</th>
@@ -322,7 +322,7 @@
                                     </thead>
                                     <tbody id="report-table-body-year" class="tbody"></tbody>
                                     <tfoot id="report-table-footer-year"
-                                        class="text-sm  text-slate-800 dark:text-white bg-slate-100 dark:bg-slate-700">
+                                        class="text-sm  text-defalut card-dynamic-bg">
                                     </tfoot>
                                 </table>
                             </div>
@@ -339,23 +339,23 @@
         class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="relative w-full max-w-4xl mx-auto">
             <div id="voucher-print-area"
-                class="shadow-2xl rounded-2xl bg-white/80 dark:bg-gray-900/80 transform transition-all">
+                class="shadow-2xl rounded-2xl card-dynamic-bg transform transition-all">
                 <div class="px-8 pt-8 pb-4 flex justify-between items-start">
                     <div>
-                        <h1 class="text-3xl font-bold text-red-600 dark:text-red-500">PURCHASE VOUCHER</h1>
-                        <p class="text-sm text-slate-500 mt-1">Invoice: <span id="purchase-invoice-no"
-                                class=" text-slate-700 dark:text-slate-300"></span></p>
+                        <h1 class="text-3xl font-bold text-primary">PURCHASE VOUCHER</h1>
+                        <p class="text-sm text-defalut mt-1">Invoice: <span id="purchase-invoice-no"
+                                class=" text-defalut"></span></p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="printPurchaseBtn" title="Print"
-                            class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full"><svg
+                            class="p-2 text-defalut rounded-full"><svg
                                 class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0" />
                             </svg></button>
                         <button id="closePurchaseModalBtn" title="Close"
-                            class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full"><svg
+                            class="p-2 text-defalut rounded-full"><svg
                                 class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12" />
@@ -365,21 +365,21 @@
                 <div class="p-8">
                     <div class="grid md:grid-cols-2 gap-8 mb-8">
                         <div>
-                            <p class="text-sm  text-slate-500">SUPPLIER</p>
-                            <p id="supplier-name" class="text-lg font-bold text-slate-900 dark:text-white mt-1"></p>
-                            <p id="supplier-phone" class="text-sm text-slate-500"></p>
+                            <p class="text-sm  text-defalut">SUPPLIER</p>
+                            <p id="supplier-name" class="text-lg font-bold text-defalut mt-1"></p>
+                            <p id="supplier-phone" class="text-sm text-defalut"></p>
                         </div>
                         <div class="text-left md:text-right">
-                            <p class="text-sm  text-slate-500">DATE</p>
+                            <p class="text-sm  text-defalut">DATE</p>
                             <p id="purchase-date" class="font-medium mt-1"></p>
-                            <p class="text-sm  text-slate-500 mt-4">Payment Method</p><span
+                            <p class="text-sm  text-defalut mt-4">Payment Method</p><span
                                 id="purchase-status-badge"
                                 class="px-3 py-1 text-xs font-bold rounded-full mt-1 inline-block"></span>
                         </div>
                     </div>
                     <div class="overflow-x-auto rounded-lg border dark:border-slate-700">
                         <table class="min-w-full">
-                            <thead class="bg-slate-50 dark:bg-slate-700">
+                            <thead class="card-dynamic-bg">
                                 <tr>
                                     <th class="p-4 text-left">PRODUCT</th>
                                     <th class="p-4 text-center">QTY</th>
@@ -397,8 +397,8 @@
                                     id="summary-subtotal">$0.00</span></div>
                             <div class="flex justify-between"><span>Discount:</span><span id="summary-discount"
                                     class="text-red-500">-$0.00</span></div>
-                            <div class="flex justify-between"><span>Shipping:</span><span
-                                    id="summary-shipping">$0.00</span></div>
+                            {{-- <div class="flex justify-between"><span>Shipping:</span><span
+                                    id="summary-shipping">$0.00</span></div> --}}
                             <div class="border-t border-dashed my-2"></div>
                             <div class="flex justify-between font-bold text-xl"><span>Grand Total:</span><span
                                     id="summary-grandtotal">$0.00</span></div>
@@ -412,7 +412,7 @@
     {{-- Inline Styles and All JavaScript --}}
     <style>
         .form-input {
-            @apply h-10 border bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white border-slate-300 dark:border-slate-600 rounded-lg text-sm w-full focus:ring-2 focus:ring-red-500/50 focus:border-red-500;
+            @apply h-10 border card-dynamic-bg text-defalut border-slate-300 dark:border-slate-600 rounded-lg text-sm w-full focus:ring-2 focus:ring-red-500/50 focus:border-red-500;
         }
 
         .badge-success {
@@ -427,13 +427,13 @@
     <script>
         $(document).ready(function() {
             let searchTimeout;
-            const activeTabClasses = 'bg-red-600 text-white';
+            const activeTabClasses = 'bg-primary text-white';
             const inactiveTabClasses =
-                'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700';
+                'text-defalut hover:bg-primary';
 
             function showLoading(tableBody) {
                 tableBody.html(
-                    `<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-2 text-slate-500"><svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span></div></td></tr>`
+                    `<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-2 text-defalut"><svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span></div></td></tr>`
                     );
             }
 
@@ -565,7 +565,7 @@
                             `$${parseFloat(purchase.total).toFixed(2)}`);
 
                         let detailsHtml = purchaseDetails?.length ? '' :
-                            '<tr><td colspan="4" class="text-center p-6 text-slate-500">No items found for this purchase.</td></tr>';
+                            '<tr><td colspan="4" class="text-center p-6 text-defalut">No items found for this purchase.</td></tr>';
                         purchaseDetails?.forEach(item => {
                             // ✅ បង្កើត URL រូបភាពដោយប្រើ assetBaseUrl
                             const imageUrl = `${assetBaseUrl}${item.product.product_image}`;
@@ -575,12 +575,12 @@
                                         <td class="p-4">
                                             <div class="flex items-center gap-3">
                                                 <img src="${imageUrl}" class="w-12 h-12 object-cover rounded-lg">
-                                                <div class=" text-slate-800 dark:text-white">${item.product.product_name}</div>
+                                                <div class=" text-defalut">${item.product.product_name}</div>
                                             </div>
                                         </td>
                                         <td class="p-4 text-center">${item.quantity}</td>
                                         <td class="p-4 text-right">$${parseFloat(item.purchase_price).toFixed(2)}</td>
-                                        <td class="p-4 text-right font-medium text-slate-800 dark:text-white">$${parseFloat(item.total).toFixed(2)}</td>
+                                        <td class="p-4 text-right font-medium text-defalut">$${parseFloat(item.total).toFixed(2)}</td>
                                     </tr>`;
                             });
 

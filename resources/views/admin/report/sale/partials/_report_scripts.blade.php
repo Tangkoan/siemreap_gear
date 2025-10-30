@@ -3,8 +3,8 @@ $(document).ready(function() {
     
     // --- SHARED VARIABLES ---
     let searchTimeout;
-    const activeTabClasses = 'bg-red-600 text-white';
-    const inactiveTabClasses = 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700';
+    const activeTabClasses = 'bg-primary text-defalut';
+    const inactiveTabClasses = 'text-primary hover:bg-primary';
 
     // --- HELPER FUNCTIONS ---
     function showLoading(tableBody) {

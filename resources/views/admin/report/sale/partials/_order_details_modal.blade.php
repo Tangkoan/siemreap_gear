@@ -1,17 +1,17 @@
 <div id="orderDetailsModal" class="fixed inset-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 p-4 backdrop-blur-sm hidden">
     <div class="relative w-full max-w-4xl mx-auto">
-        <div id="invoice-content" class="transform rounded-2xl bg-white shadow-2xl transition-all dark:bg-slate-800">
+        <div id="invoice-content" class="transform rounded-2xl  shadow-2xl transition-all card-dynamic-bg">
             
             <div class="flex items-start justify-between px-8 pt-8 pb-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-blue-600 dark:text-blue-500">INVOICE</h1>
-                    <p class="mt-1 text-sm text-slate-500">Invoice No: <span id="invoice-no" class=" text-slate-700 dark:text-slate-300"></span></p>
+                    <h1 class="text-3xl font-bold text-primary">INVOICE</h1>
+                    <p class="mt-1 text-sm text-defalut">Invoice No: <span id="invoice-no" class=" text-defalut"></span></p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="printInvoiceBtn" class="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-blue-600 dark:hover:bg-slate-700" title="Print Invoice">
+                    <button id="printInvoiceBtn" class="rounded-full p-2 text-defalut transition-colors hover:bg-primary" title="Print Invoice">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0" /></svg>
                     </button>
-                    <button id="closeModalBtn" class="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-red-600 dark:hover:bg-slate-700" title="Close">
+                    <button id="closeModalBtn" class="rounded-full p-2 text-defalut transition-colors hover:bg-slate-100 hover:text-red-600 " title="Close">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
@@ -21,41 +21,41 @@
                 <div class="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2">
                     <div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm  text-slate-500 dark:text-slate-400">Customer Name:</p>
-                            <p id="customer-name" class="text-sm font-bold text-slate-900 dark:text-white"></p>
+                            <p class="text-sm  text-defalut da">Customer Name:</p>
+                            <p id="customer-name" class="text-sm font-bold text-defalut"></p>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm  text-slate-500 dark:text-slate-400">Customer Phone:</p>
-                            <p id="customer-phone" class="text-sm font-bold text-slate-900 dark:text-white"></p>
+                            <p class="text-sm  text-defalut da">Customer Phone:</p>
+                            <p id="customer-phone" class="text-sm font-bold text-defalut"></p>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm  text-slate-500 dark:text-slate-400">Payment Method:</p>
-                            <p id="summary-payment-method" class="text-sm font-bold text-slate-900 dark:text-white"></p>
+                            <p class="text-sm  text-defalut da">Payment Method:</p>
+                            <p id="summary-payment-method" class="text-sm font-bold text-defalut"></p>
                         </div>
                     </div>
 
                     <div class="text-left md:text-right">
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm  text-slate-500 dark:text-slate-400">DATE OF ISSUE:</p>
-                            <p id="order-date" class="text-sm font-bold text-slate-900 dark:text-white"></p>
+                            <p class="text-sm  text-defalut da">DATE OF ISSUE:</p>
+                            <p id="order-date" class="text-sm font-bold text-defalut"></p>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <p class="text-sm  text-slate-500 dark:text-slate-400">STATUS:</p>
+                            <p class="text-sm  text-defalut da">STATUS:</p>
                             <p id="order-status-badge" class="rounded-full px-3 py-1 text-xs font-bold"></p>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="overflow-x-auto rounded-lg border dark:border-slate-700">
+                <div class="overflow-x-auto rounded-lg border-primary border">
                     <table class="min-w-full">
-                        <thead class="bg-slate-50 dark:bg-slate-700">
+                        <thead class="card-dynamic-bg">
                             <tr>
-                                <th class="w-2/5 p-4 text-left text-sm  text-slate-600 dark:text-slate-300">PRODUCT</th>
-                                <th class="p-4 text-center text-sm  text-slate-600 dark:text-slate-300">STATUS</th>
-                                <th class="p-4 text-center text-sm  text-slate-600 dark:text-slate-300">QTY</th>
-                                <th class="p-4 text-right text-sm  text-slate-600 dark:text-slate-300">UNIT PRICE</th>
-                                <th class="p-4 text-right text-sm  text-slate-600 dark:text-slate-300">TOTAL</th>
+                                <th class="w-2/5 p-4 text-left text-sm  text-defalut">PRODUCT</th>
+                                <th class="p-4 text-center text-sm  text-defalut">STATUS</th>
+                                <th class="p-4 text-center text-sm  text-defalut">QTY</th>
+                                <th class="p-4 text-right text-sm  text-defalut">UNIT PRICE</th>
+                                <th class="p-4 text-right text-sm  text-defalut">TOTAL</th>
                             </tr>
                         </thead>
                         <tbody id="modal-table-body" class="text-sm divide-y divide-slate-200 dark:divide-slate-600"></tbody>
@@ -64,10 +64,10 @@
 
                 <div class="mt-8 flex justify-end">
                     <div class="w-full max-w-xs space-y-3">
-                        <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Subtotal:</span><span id="summary-subtotal">$0.00</span></div>
-                        <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Discount:</span><span id="summary-discount" class="text-red-500">-$0.00</span></div>
-                        <div class="my-2 border-t border-dashed border-slate-300 dark:border-slate-600"></div>
-                        <div class="flex justify-between text-xl font-bold text-slate-900 dark:text-white"><span>Grand Total:</span><span id="summary-grandtotal">$0.00</span></div>
+                        <div class="flex justify-between text-defalut"><span>Subtotal:</span><span id="summary-subtotal">$0.00</span></div>
+                        <div class="flex justify-between text-defalut"><span>Discount:</span><span id="summary-discount" class="text-primary">-$0.00</span></div>
+                        <div class="my-2 border-t border-dashed border-primary"></div>
+                        <div class="flex justify-between text-xl font-bold text-defalut"><span>Grand Total:</span><span id="summary-grandtotal">$0.00</span></div>
                         
                     </div>
                 </div>
@@ -82,11 +82,11 @@ $(document).ready(function() {
     // --- SHARED VARIABLES ---
     let searchTimeout;
     const activeTabClasses = 'bg-red-600 text-white';
-    const inactiveTabClasses = 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700';
+    const inactiveTabClasses = 'text-defalut hover:bg-slate-100 dark:hover:bg-slate-700';
 
     // --- HELPER FUNCTIONS ---
     function showLoading(tableBody) {
-        tableBody.html(`<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-2 text-slate-500"><svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span></div></td></tr>`);
+        tableBody.html(`<tr><td colspan="7" class="text-center p-8"><div class="flex justify-center items-center gap-2 text-defalut"><svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Loading...</span></div></td></tr>`);
     }
 
     function updateKPIs(period, kpis) {
@@ -244,7 +244,7 @@ $(document).ready(function() {
                         </tr>`;
                     });
                 } else {
-                    detailsHtml = '<tr><td colspan="5" class="p-6 text-center text-slate-500">No items found.</td></tr>';
+                    detailsHtml = '<tr><td colspan="5" class="p-6 text-center text-defalut">No items found.</td></tr>';
                 }
                 $('#modal-table-body').html(detailsHtml);
 

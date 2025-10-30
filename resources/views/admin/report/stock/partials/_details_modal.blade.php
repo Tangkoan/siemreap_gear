@@ -14,12 +14,12 @@
                                 <th class="p-3">{{ __('messages.date') }}</th>
                                 <th class="p-3">{{ __('messages.type_stock') }}</th>
                                 <th class="p-3 text-right">Quantity</th> {{-- Added text-right for consistency --}}
-                                <th class="p-3">Reference</th>
-                            </tr>
+                                {{-- <th class="p-3">Reference</th> --}}
+                            {{-- </tr>
                         </thead>
                         <tbody id="modal-table-body" class="divide-y divide-gray-200 dark:divide-gray-700 text-sm">
                             {{-- Details will be loaded here by AJAX --}}
-                        </tbody>
+                        {{-- </tbody>
                     </table>
                 </div>
             </div>
@@ -27,5 +27,5 @@
                 <button id="closeModalBtn" class="px-6 py-2 bg-red-600 dark:bg-red-700 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 dark:hover:bg-red-800 transition duration-150 ease-in-out">Close</button>
             </div>
         </div>
-    </div>
-{{-- </div> --}} --}}
+    </div> --}}
+{{-- </div> --}} --}} --}}

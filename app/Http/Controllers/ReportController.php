@@ -235,15 +235,15 @@ class ReportController extends Controller
                 $stockOut = (int)$product->stock_out;
                 $closingStock = $openingStock + $stockIn - $stockOut;
 
-                $tableHtml .= '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer stock-row transition-colors duration-150"
+                $tableHtml .= '<tr class="cursor-pointer stock-row transition-colors duration-150"
                                      data-product-id="' . $product->id . '"
                                      data-product-name="' . htmlspecialchars($product->product_name) . '"
                                      data-active-tab="' . $activeTab . '">';
-                $tableHtml .= '<td class="p-2 text-gray-900 dark:text-white">' . htmlspecialchars($product->product_name) . ' <span class="text-xs text-gray-500">(' . htmlspecialchars($product->product_code) . ')</span></td>';
-                $tableHtml .= '<td class="p-2 px-8 text-gray-700 dark:text-gray-300 text-center">' . $openingStock . '</td>';
+                $tableHtml .= '<td class="p-2 text-defalut">' . htmlspecialchars($product->product_name) . ' <span class="text-xs text-gray-500">(' . htmlspecialchars($product->product_code) . ')</span></td>';
+                $tableHtml .= '<td class="p-2 px-8 text-defalut text-center">' . $openingStock . '</td>';
                 $tableHtml .= '<td class="p-2 px-8 text-green-600  text-center">+' . $stockIn . '</td>';
                 $tableHtml .= '<td class="p-2 px-8 text-red-600  text-center">-' . $stockOut . '</td>';
-                $tableHtml .= '<td class="p-2 px-8 font-bold text-blue-600 dark:text-blue-400 text-center">' . $closingStock . '</td>';
+                $tableHtml .= '<td class="p-2 px-8 font-bold text-primary text-center">' . $closingStock . '</td>';
                 $tableHtml .= '</tr>';
             }
         }
