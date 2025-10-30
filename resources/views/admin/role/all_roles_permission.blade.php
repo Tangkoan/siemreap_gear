@@ -27,7 +27,7 @@
                         <div class="px-2">{{ __('messages.all_roles_permission') }}</div>
                     </h2>
                     <div>
-                        <button type="button" class="bg-primary text-defalut py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none">
+                        <button type="button" class="bg-primary text-white py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none">
                             <a href="{{ route('add.roles.permission') }}">{{ __('messages.add_role_in_permission') }}</a>
                         </button>
                     </div>

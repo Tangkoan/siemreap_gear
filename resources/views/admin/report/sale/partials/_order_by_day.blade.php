@@ -40,7 +40,7 @@
             <a id="exportBtn-day" 
                 href="{{ route('report.orders.export.date', ['date' => $date]) }}" 
                 class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
-                        bg-gradient-to-r bg-primary text-defalut font-medium 
+                        bg-gradient-to-r bg-primary text-white font-medium 
                         shadow-md hover:shadow-lg  
                         transition duration-300 ease-in-out w-full md:w-auto">
                     

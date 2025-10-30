@@ -41,7 +41,7 @@
 
                     <div class="flex justify-end mt-6">
                         <button type="submit"
-                            class="bg-primary text-defalut font-bold py-3 px-6 rounded-md shadow-lg transition-colors duration-200">
+                            class="bg-primary text-white font-bold py-3 px-6 rounded-md shadow-lg transition-colors duration-200">
                             {{ __('messages.save') }}
                         </button>
                     </div>

@@ -318,7 +318,7 @@
 
                 if (Object.keys(cartContent).length === 0) {
                     cartTableBody.innerHTML =
-                        `<tr><td colspan="5" class="py-10 text-slate-400 text-center text-sm">{{ __('messages.no_items_in_cart') }}</td></tr>`;
+                        `<tr><td colspan="5" class="py-10 text-defalut text-center text-sm">{{ __('messages.no_items_in_cart') }}</td></tr>`;
                 } else {
                     for (const rowId in cartContent) {
                         const item = cartContent[rowId];

@@ -15,7 +15,7 @@
                 {{-- <p class="mt-1 text-sm text-defalut">An overview of your business performance.</p> --}}
             </div>
             <div class="mt-4 sm:mt-0">
-                <div class="flex items-center gap-2 text-sm font-medium text-defalut card-dynamic-bg  border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg shadow-sm">
+                <div class="flex items-center gap-2 text-sm font-medium text-defalut card-dynamic-bg  border border-primary px-4 py-2 rounded-lg shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -27,7 +27,7 @@
         {{-- ប្លុកបង្ហាញកាត KPI (Key Performance Indicator) --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {{-- កាត៖ ចំណូលថ្ងៃនេះ --}}
-            <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-primary">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-defalut  uppercase">{{ __('messages.today_is_revenue') }}</p>
@@ -53,7 +53,7 @@
                 </div>
             </div>
             {{-- កាត៖ ចំណូលខែនេះ --}}
-                {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-primary">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-defalut uppercase">This Month's Revenue</p>
@@ -66,7 +66,7 @@
                     <p class="mt-4 text-sm text-defalut">Total for {{ date('F') }}</p>
                 </div> --}}
             {{-- កាត៖ ចំណូលឆ្នាំនេះ --}}
-                <div class="card-dynamic-bg p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg p-6 rounded-xl shadow-sm border border-primary">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-defalut uppercase">{{ __('messages.this_year_is_revenue') }}</p>
@@ -79,7 +79,7 @@
                     <p class="mt-4 text-sm text-defalut">{{ __('messages.total_for') }} {{ date('Y') }}</p>
                 </div>
             {{-- កាត៖ Total Paid --}}
-             {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+             {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-primary">
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-defalut uppercase">Total Paid</p>
@@ -92,7 +92,7 @@
                 <p class="mt-4 text-sm text-defalut">All-time paid amount</p>
             </div> --}}
             {{-- កាត៖ Total Due --}}
-                {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                {{-- <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-primary">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-defalut uppercase">Total Due</p>
@@ -105,7 +105,7 @@
                     <p class="mt-4 text-sm text-defalut">All-time outstanding</p>
                 </div> --}}
             {{-- កាត៖ Complete Orders --}}
-                <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg  p-6 rounded-xl shadow-sm border border-primary">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm font-medium text-defalut uppercase">{{ __('messages.complete_orders') }}</p>
@@ -126,20 +126,20 @@
             <div class="lg:col-span-2 space-y-8">
                 
                 {{-- តារាងក្រាហ្វិក៖ Sales Trend (30 Days) --}}
-                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-primary">
                     <h3 class="text-lg  text-defalut mb-4">{{ __('messages.sales_trend_last_30_days') }}</h3>
                     <div id="sales-line-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Monthly Sales Trend (This Year) --}}
-                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-primary">
                     <h3 class="text-lg  text-defalut mb-4">{{ __('messages.monthly_sales_trend') }} {{ $this_year_monthly_chart_data['year'] }}</h3>
                     <div id="this-year-monthly-sales-chart"></div>
                 </div>
 
                 {{-- តារាងទិន្នន័យ៖ Recent Orders --}}
-                    {{-- <div class="card-dynamic-bg  rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                    {{-- <div class="card-dynamic-bg  rounded-xl shadow-sm border border-primary overflow-hidden">
+                        <div class="p-6 border-b border-primary flex justify-between items-center">
                             <h3 class="text-lg  text-defalut">Recent Orders</h3>
                         </div>
                         <div class="overflow-x-auto">
@@ -154,7 +154,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($recent_orders as $order)
-                                    <tr class="border-b border-gray-200 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <tr class="border-b border-primary last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                         <td class="px-6 py-4">
                                             <div class="flex items-center gap-3">
                                                 <img class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($order->customer->name ?? 'N A') }}&background=random&color=fff" alt="avatar">
@@ -186,19 +186,19 @@
             <div class="lg:col-span-1 space-y-8">
                 
                 {{-- តារាងក្រាហ្វិក៖ Top 5 Best-Selling Products --}}
-                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-primary">
                     <h3 class="text-lg text-defalut mb-4">{{ __('messages.top5_best_selling_products') }}</h3>
                     <div id="best-selling-chart"></div>
                 </div>
 
                 {{-- តារាងក្រាហ្វិក៖ Order Distribution --}}
-                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-primary">
                     <h3 class="text-lg  text-defalut mb-4">{{ __('messages.order_distribution') }}</h3>
                     <div id="order-status-doughnut-chart" class="flex justify-center"></div>
                 </div>
 
                 {{-- ប្លុកថ្មីសម្រាប់បង្ហាញតារាងស្តុកទាប --}}
-                    {{-- <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    {{-- <div class="card-dynamic-bg  p-4 md:p-6 rounded-xl shadow-sm border border-primary">
                         <h3 class="text-lg  text-defalut mb-4">Products almost out of stock (Top 5)</h3>
                         {{-- កន្លែងនេះនឹងត្រូវបង្ហាញ Chart ដែលបានបង្កើតដោយ JavaScript --}}
                         {{-- <div id="low-stock-chart"></div> 

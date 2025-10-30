@@ -106,7 +106,7 @@
 
                             <a id="exportBtn-day" href="{{ route('report.purchases.export.date', ['date' => $date]) }}"
                                 class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
-                                    bg-gradient-to-r bg-primary text-defalut font-medium 
+                                    bg-gradient-to-r bg-primary text-white font-medium 
                                     shadow-md hover:shadow-lg 
                                     transition duration-300 ease-in-out w-full md:w-auto">
 
@@ -200,8 +200,8 @@
                             <a id="exportBtn-month"
                                 href="{{ route('report.purchases.export.month', ['month' => $month]) }}"
                                 class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
-                                    bg-gradient-to-r bg-green-600 to-green-700 text-white font-medium 
-                                    shadow-md hover:shadow-lg hover:bg-green-700 hover:to-green-800 
+                                    bg-gradient-to-r bg-primary text-white font-medium 
+                                    shadow-md hover:shadow-lg 
                                     transition duration-300 ease-in-out w-full md:w-auto">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -292,8 +292,8 @@
 
                             <a id="exportBtn-year" href="{{ route('report.purchases.export.year', ['year' => $year]) }}"
                                 class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl 
-                                    bg-gradient-to-r bg-green-600 to-green-700 text-white font-medium 
-                                    shadow-md hover:shadow-lg hover:bg-green-700 hover:to-green-800 
+                                    bg-gradient-to-r bg-primary text-white font-medium 
+                                    shadow-md hover:shadow-lg 
                                     transition duration-300 ease-in-out w-full md:w-auto">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
