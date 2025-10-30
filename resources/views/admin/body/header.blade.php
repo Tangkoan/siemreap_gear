@@ -22,13 +22,13 @@
                          src="{{ ($shopInfo && $shopInfo->logo) ? asset('upload/shop_info/' . $shopInfo->logo) : asset('upload/no_image.jpg') }}" 
                          alt="Shop Logo">
                 </span>
-                <span class="text-2xl font-bold text-defalut">
+                <span class="text-2xl font-bold text-primary">
                     {{-- ✅ កែប្រែទីនេះ: Dynamic Shop Name --}}
                     {{-- បើ $shopInfo មាន name_en, បើ Default --}}
                     {{ $shopInfo->name_en ?? 'Kuy Tangkoan : 066764217' }}
                 </span>
             </a>
-            <button id="toggleSidebar" class="hidden md:flex items-center p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors">
+            <button id="toggleSidebar" class="hidden md:flex items-center p-2 rounded-lg text-primary transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
                 </svg>
@@ -49,7 +49,7 @@
             </button>
             
             @can('pos.menu')
-                <a href="{{ route('pos') }}" class="hidden sm:block bg-primary text-defalut font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                <a href="{{ route('pos') }}" class="hidden sm:block bg-primary text-white font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                     {{ __('messages.pos') }}
                 </a>
             @else

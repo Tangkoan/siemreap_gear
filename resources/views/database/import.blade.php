@@ -7,16 +7,16 @@
 <div class="py-12">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
         {{-- This is our card with support for both Light and Dark Mode --}}
-        <div class="bg-white/80 dark:bg-gray-900/80 overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="card-dynamic-bg overflow-hidden shadow-xl sm:rounded-lg">
             
             <div class="p-6 lg:p-8">
                 
                 {{-- Card Header --}}
-                <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
-                    <h2 class="text-2xl  text-gray-800 dark:text-gray-200">
+                <div class="border-b border-primary pb-4">
+                    <h2 class="text-2xl  text-defalut">
                         {{ __('messages.title') }}
                     </h2>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    <p class="mt-1 text-sm text-defalut">
                         {{ __('messages.subtitle') }}
                     </p>
                 </div>
@@ -43,9 +43,9 @@
 
                         {{-- Redesigned File Upload Input --}}
                         <div>
-                            <label for="database_file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('messages.form_label') }}</label>
+                            <label for="database_file" class="block mb-2 text-sm font-medium text-defalut">{{ __('messages.form_label') }}</label>
                             
-                            <label for="database_file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition">
+                            <label for="database_file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-primary border-dashed rounded-lg cursor-pointer card-dynamic-bg transition">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                     <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
@@ -66,7 +66,7 @@
                         </div>
 
                         {{-- Warning Message --}}
-                        <div class="mt-6 bg-white/80 dark:bg-gray-900/80 border-l-4 border-yellow-500/80 dark:border-yellow-600 text-yellow-800 dark:text-yellow-300 p-4 rounded-md" role="alert">
+                        <div class="mt-6 card-dynamic-bg border-l-4 border-yellow-500/80 dark:border-yellow-600 text-yellow-800 dark:text-yellow-300 p-4 rounded-md" role="alert">
                             <div class="flex">
                                 <div class="py-1">
                                     <svg class="w-6 h-6 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,7 +82,7 @@
 
                         {{-- Submit Button --}}
                         <div class="mt-8 flex justify-end">
-                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-primary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                                 </svg>

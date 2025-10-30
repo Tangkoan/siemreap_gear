@@ -7,7 +7,7 @@
 <div class="page-content">
     <div class="container mx-auto p-4 sm:p-6">
         
-        <div class="bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6">
+        <div class="card-dynamic-bg rounded-lg shadow-md p-6">
             
             <div class="flex justify-between">
                                 <h2 class="text-xl  text-default mb-0 flex items-center">
@@ -26,51 +26,51 @@
 
                 {{-- Name (KH) --}}
                 <div>
-                    <label for="name_kh" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.shop_name_kh') }}</label>
-                    <input type="text" id="name_kh" name="name_kh" value="{{ $info->name_kh }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <label for="name_kh" class="block text-sm font-medium text-defalut">{{ __('messages.shop_name_kh') }}</label>
+                    <input type="text" id="name_kh" name="name_kh" value="{{ $info->name_kh }}" required class="mt-1 block w-full rounded-md border-primary shadow-sm card-dynamic-bg  focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Name (EN) --}}
                 <div>
-                    <label for="name_en" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.shop_name_en') }}</label>
-                    <input type="text" id="name_en" name="name_en" value="{{ $info->name_en }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <label for="name_en" class="block text-sm font-medium text-defalut">{{ __('messages.shop_name_en') }}</label>
+                    <input type="text" id="name_en" name="name_en" value="{{ $info->name_en }}" required class="mt-1 block w-full rounded-md border-primary shadow-sm card-dynamic-bg  focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Address --}}
                 <div>
-                    <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.address') }}</label>
-                    <input type="text" id="address" name="address" value="{{ $info->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <label for="address" class="block text-sm font-medium text-defalut">{{ __('messages.address') }}</label>
+                    <input type="text" id="address" name="address" value="{{ $info->address }}" class="mt-1 block w-full rounded-md border-primary shadow-sm card-dynamic-bg  focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Phone --}}
                 <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.phone') }}</label>
-                    <input type="text" id="phone" name="phone" value="{{ $info->phone }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <label for="phone" class="block text-sm font-medium text-defalut">{{ __('messages.phone') }}</label>
+                    <input type="text" id="phone" name="phone" value="{{ $info->phone }}" class="mt-1 block w-full rounded-md border-primary shadow-sm card-dynamic-bg  focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
 
                 {{-- Note --}}
                 <div>
-                    <label for="note" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.notes') }}</label>
-                    <textarea id="note" name="note" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->note }}</textarea>
+                    <label for="note" class="block text-sm font-medium text-defalut">{{ __('messages.notes') }}</label>
+                    <textarea id="note" name="note" rows="3" class="mt-1 block w-full rounded-md border-primary shadow-sm card-dynamic-bg  focus:border-indigo-500 focus:ring-indigo-500">{{ $info->note }}</textarea>
                 </div>
 
                 {{-- Terms and Condition --}}
                 <div>
-                        <label for="terms_and_condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.terms_and_condition') }}</label>
-                        <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-white/80 dark:bg-gray-900/80 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
+                        <label for="terms_and_condition" class="block text-sm font-medium text-defalut">{{ __('messages.terms_and_condition') }}</label>
+                        <textarea id="terms_and_condition" name="terms_and_condition" rows="5" class="mt-1 block w-full rounded-md border-primary shadow-sm card-dynamic-bg  focus:border-indigo-500 focus:ring-indigo-500">{{ $info->terms_and_condition }}</textarea>
                     </div>
 
                 {{-- Shop Logo Upload --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('messages.logo') }}</label>
+                    <label class="block text-sm font-medium text-defalut">{{ __('messages.logo') }}</label>
                     <div class="mt-2 flex items-center space-x-4">
-                        <img class="h-24 w-24 rounded-lg object-cover border-2 border-gray-300" id="showLogo"
+                        <img class="h-24 w-24 rounded-lg object-cover border-2 border-primary" id="showLogo"
                              src="{{ (!empty($info->logo)) ? url('upload/shop_info/' . $info->logo) : url('upload/no_image.jpg') }}"
                              alt="Current Shop Logo">
                         
                         <div class="flex-grow">
                             <input type="file" name="logo" id="logo_input" class="hidden">
-                            <label for="logo_input" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white  py-2 px-4 rounded-md shadow-sm">
+                            <label for="logo_input" class="cursor-pointer bg-primary text-white  py-2 px-4 rounded-md shadow-sm">
                                 {{ __('messages.choose') }}
                             </label>
                         </div>
@@ -79,7 +79,7 @@
 
                 {{-- Submit Button --}}
                 <div class="flex justify-end pt-4">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md shadow-lg">
+                    <button type="submit" class="bg-primary text-white font-bold py-2 px-6 rounded-md shadow-lg">
                         {{ __('messages.save') }}
                     </button>
                 </div>

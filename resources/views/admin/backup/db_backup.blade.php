@@ -6,7 +6,7 @@
 <style>
     /* Main card with glassmorphism effect for dark mode */
     .card-ui-2025 {
-        @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-black/20;
+        @apply card-dynamic-bg backdrop-blur-xl border border-primary shadow-2xl shadow-slate-200/40 dark:shadow-black/20;
     }
 
     /* Pill-style tab buttons */
@@ -16,11 +16,11 @@
     
     /* Active state for pill tabs */
     .tab-button-pill.active-tab {
-        @apply bg-blue-600 text-white shadow-md;
+        @apply bg-primary text-defalut shadow-md;
     }
     
     .tab-button-pill:not(.active-tab) {
-        @apply text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60;
+        @apply text-defalut ;
     }
 
     /* Animation for tab content panels */
@@ -48,7 +48,7 @@
 <div class="container mx-auto p-4 md:p-6">
     <div class="w-full card-ui-2025 rounded-2xl">
 
-        <div class="px-6 py-5 border-b border-slate-200  flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="px-6 py-5 border-b border-primary  flex flex-col md:flex-row justify-between items-center gap-4">
             
 
             <h2 class="text-xl  text-default mb-6 flex items-center">
@@ -59,7 +59,7 @@
                        
                     </h2>
     
-    <div id="tab-container" class="inline-flex bg-white/80 dark:bg-gray-900/80 p-1.5 rounded-xl shadow-sm">
+    <div id="tab-container" class="inline-flex card-dynamic-bg p-1.5 rounded-xl shadow-sm">
         <button
             data-target="#db-panel"
             data-active-classes="bg-red-600 text-white shadow-lg"
@@ -86,19 +86,19 @@
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                     <div class="relative w-full md:w-auto">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+                            <svg class="w-5 h-5 text-defalut" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
                         </div>
-                        <input type="text" id="db_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-white/80 dark:bg-gray-900/80 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="{{ __(key: 'messages.search') }}">
+                        <input type="text" id="db_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-defalut border border-primary rounded-lg card-dynamic-bg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="{{ __(key: 'messages.search') }}">
                     </div>
-                    <a href="{{ route('admin.backup.now') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 transition shadow-md hover:shadow-lg">
+                    <a href="{{ route('admin.backup.now') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 transition shadow-md hover:shadow-lg">
                         {{ __(key: 'messages.backup_database_now') }}
                     </a>
                 </div>
 
-                <div class="border-none bg-white/80 dark:bg-gray-900/80 rounded-xl overflow-hidden">
+                <div class="border-none card-dynamic-bg rounded-xl overflow-hidden">
                     <div class="overflow-y-auto max-h-[450px]">
-                        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-                            <thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-100 dark:bg-slate-800 sticky top-0">
+                        <table class="w-full text-sm text-left text-defalut">
+                            <thead class="text-xs card-dynamic-bg text-defalut uppercase  sticky top-0">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.no') }}</th>
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.file_name') }}</th>
@@ -107,7 +107,7 @@
                                     <th scope="col" class="px-6 py-3 text-center">{{ __(key: 'messages.action') }}</th>
                                 </tr>
                             </thead>
-                            <tbody id="db_backup_tbody" class="tbody divide-y divide-slate-200 dark:divide-slate-800">
+                            <tbody id="db_backup_tbody" class="tbody divide-y divide-primary">
                                 </tbody>
                         </table>
                     </div>
@@ -118,19 +118,19 @@
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                     <div class="relative w-full md:w-auto">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+                            <svg class="w-5 h-5 text-defalut" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
                         </div>
-                        <input type="text" id="project_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-lg bg-white/80 dark:bg-gray-900/80 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="{{ __(key: 'messages.search') }}">
+                        <input type="text" id="project_search" class="block w-full md:w-80 p-2.5 pl-10 text-sm text-defalut border border-primary rounded-lg card-dynamic-bg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" placeholder="{{ __(key: 'messages.search') }}">
                     </div>
-                    <a href="{{ route('admin.backup.project') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 transition shadow-md hover:shadow-lg">
+                    <a href="{{ route('admin.backup.project') }}" class="w-full md:w-auto text-center py-2.5 px-5 text-sm font-medium text-white rounded-md bg-primary focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 transition shadow-md hover:shadow-lg">
                         {{ __(key: 'messages.backup_project_file_now') }}
                     </a>
                 </div>
 
-                <div class="border-none border-slate-200 bg-white/80 dark:bg-gray-900/80 rounded-xl overflow-hidden">
+                <div class="border-none border-primary card-dynamic-bg rounded-xl overflow-hidden">
                     <div class="overflow-y-auto max-h-[450px]">
-                        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
-                             <thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-100 dark:bg-slate-800 sticky top-0">
+                        <table class="w-full text-sm text-left text-defalut">
+                             <thead class="text-xs text-defalut uppercase card-dynamic-bg sticky top-0">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.no') }}</th>
                                     <th scope="col" class="px-6 py-3">{{ __(key: 'messages.file_name') }}</th>
@@ -139,7 +139,7 @@
                                     <th scope="col" class="px-6 py-3 text-center">{{ __(key: 'messages.table_action') }}</th>
                                 </tr>
                             </thead>
-                            <tbody id="project_backup_tbody" class="tbody divide-y divide-slate-200 dark:divide-slate-800">
+                            <tbody id="project_backup_tbody" class="tbody divide-y divide-primary">
                                 </tbody>
                         </table>
                     </div>

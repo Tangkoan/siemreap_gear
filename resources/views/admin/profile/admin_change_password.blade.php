@@ -7,7 +7,7 @@
     <div class="grid grid-cols-1">
 
         {{-- Main Card Container --}}
-        <div class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 transition-colors duration-300">
+        <div class="lg:col-span-full card-dynamic-bg rounded-lg shadow-md p-6 transition-colors duration-300">
             <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
@@ -20,11 +20,11 @@
 
                 {{-- Old Password --}}
                 <div class="mb-4 relative">
-                    <label for="current_password" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                    <label for="current_password" class="block text-defalut text-sm font-medium mb-2">
                         {{ __('messages.old_password') }}
                     </label>
                     <input type="password" id="current_password" name="old_password"
-                           class="w-full pr-10 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('old_password') border-red-500 @enderror">
+                           class="w-full pr-10 py-3 card-dynamic-bg text-defalut border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('old_password') border-red-500 @enderror">
                     {{-- Eye icon for show/hide --}}
                     <span class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center cursor-pointer toggle-password" data-target="current_password">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -40,11 +40,11 @@
 
                 {{-- New Password --}}
                 <div class="mb-4 relative">
-                    <label for="new_password" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                    <label for="new_password" class="block text-defalut text-sm font-medium mb-2">
                         {{ __('messages.new_password') }}
                     </label>
                     <input type="password" id="new_password" name="new_password"
-                           class="w-full pr-10 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('new_password') border-red-500 @enderror">
+                           class="w-full pr-10 py-3 card-dynamic-bg text-defalut border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('new_password') border-red-500 @enderror">
                     {{-- Eye icon for show/hide --}}
                     <span class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center cursor-pointer toggle-password" data-target="new_password">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -60,11 +60,11 @@
 
                 {{-- Confirm Password --}}
                 <div class="mb-6 relative">
-                    <label for="new_password_confirmation" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                    <label for="new_password_confirmation" class="block text-defalut text-sm font-medium mb-2">
                         {{ __('messages.confirm_password') }}
                     </label>
                     <input type="password" name="new_password_confirmation" id="new_password_confirmation"
-                           class="w-full pr-10 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                           class="w-full pr-10 py-3 card-dynamic-bg text-defalut border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     {{-- Eye icon for show/hide --}}
                     <span class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center cursor-pointer toggle-password" data-target="new_password_confirmation">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

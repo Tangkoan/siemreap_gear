@@ -6,8 +6,8 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
             <div
-                class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center">
+                class="lg:col-span-full card-dynamic-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                <h2 class="text-xl  text-defalut mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -29,20 +29,20 @@
                         <div class="space-y-4">
                             {{-- Name --}}
                             <div class="form-group">
-                                <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="name" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __(key: 'messages.name') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="name" name="name" value="{{ $adminuser->name }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-primary rounded-md card-dynamic-bg text-defalut focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
                             {{-- Role --}}
                             <div class="form-group">
-                                <label for="roles" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="roles" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __(key: 'messages.roles') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="roles" id="roles"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-primary rounded-md card-dynamic-bg text-defalut focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <option disabled>{{ __(key: 'messages.select_roles') }}</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}" {{ $adminuser->hasRole($role->name) ? 'selected' : '' }}>
@@ -57,27 +57,27 @@
                         <div class="space-y-4">
                             {{-- Email --}}
                             <div class="form-group">
-                                <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="email" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __(key: 'messages.email') }}
                                 </label>
                                 <input type="email" id="email" name="email" value="{{ $adminuser->email }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-primary rounded-md card-dynamic-bg text-defalut focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
 
                             {{-- Phone --}}
                             <div class="form-group">
-                                <label for="phone" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="phone" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __(key: 'messages.phone') }} <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="phone" name="phone" value="{{ $adminuser->phone }}"
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    class="w-full py-2.5 px-4 border border-primary rounded-md card-dynamic-bg text-defalut focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
                         </div>
                     </div>
 
                     <div class="flex justify-end mt-6">
                         <button type="submit"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
+                            class="bg-primary text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
                             {{ __(key: 'messages.save') }}
                         </button>
                     </div>

@@ -18,7 +18,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 
             <a href="{{ route('admin.setting_infromationshop') }}"
-                class="block bg-white/80 dark:bg-gray-900/80 rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-slate-200 dark:border-slate-700">
+                class="block card-dynamic-bg rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-primary">
                 
                 {{-- Icon --}}
                 <div class="mb-3">
@@ -29,7 +29,7 @@
                 
                 {{-- Title --}}
                 <div class="mt-auto">
-                    <p class="text-sm font-medium text-black dark:text-white">{{ __('messages.information_shop') }}</p>
+                    <p class="text-sm font-medium text-defalut">{{ __('messages.information_shop') }}</p>
                 </div>
             </a>
 
@@ -37,7 +37,7 @@
 
             {{-- អ្នកអាចបន្ថែម Card ផ្សេងទៀតនៅទីនេះ បើចាំបាច់ --}}
             <a href="{{ route('db.import.form') }}"
-                class="block bg-white/80 dark:bg-gray-900/80 rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-slate-200 dark:border-slate-700">
+                class="block card-dynamic-bg rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col items-center text-center border border-primary">
                 
                 {{-- Icon --}}
                 <div class="mb-3">
@@ -48,7 +48,7 @@
                 
                 {{-- Title --}}
                 <div class="mt-auto">
-                    <p class="text-sm font-medium text-black dark:text-white">{{ __('messages.import_db') }}</p>
+                    <p class="text-sm font-medium text-defalut">{{ __('messages.import_db') }}</p>
                 </div>
             </a>
 

@@ -24,7 +24,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
             <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-3">
+                <h1 class="text-3xl font-bold tracking-tight text-defalut flex items-center gap-3">
                     <span>
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
@@ -36,9 +36,9 @@
                 </h1>
             </div>
 
-            <div class="p-4 sm:p-6 bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md mb-8">
+            <div class="p-4 sm:p-6 card-dynamic-bg rounded-xl shadow-md mb-8">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="bg-gray-100 dark:bg-slate-700 p-1 rounded-lg flex items-center">
+                    <div class="card-dynamic-bg p-1 rounded-lg flex items-center">
                         <button class="report-tab w-full px-4 py-2 text-sm rounded-md transition-colors duration-300" data-type="daily">{{ __('messages.day') }}</button>
                         <button class="report-tab w-full px-4 py-2 text-sm rounded-md transition-colors duration-300" data-type="monthly">{{ __('messages.month') }}</button>
                         <button class="report-tab w-full px-4 py-2 text-sm rounded-md transition-colors duration-300" data-type="yearly">{{ __('messages.year') }}</button>
@@ -47,32 +47,32 @@
                     <div id="filter-container" class="flex items-center gap-4">
                         <div id="daily-filter-group" class="filter-group flex items-center gap-2 hidden">
                             <div class="flex flex-col">
-                                <label for="daily_start_date" class="text-xs mb-1">{{ __('messages.start_date') }}</label>
-                                <input type="date" id="daily_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
+                                <label for="daily_start_date" class="text-xs mb-1 text-primary">{{ __('messages.start_date') }}</label>
+                                <input type="date" id="daily_start_date" class="filter-input-start h-10 border-primary card-dynamic-bg text-primary rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
                             </div>
                             <div class="flex flex-col">
-                                <label for="daily_end_date" class="text-xs mb-1">{{ __('messages.end_date') }}</label>
-                                <input type="date" id="daily_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
+                                <label for="daily_end_date" class="text-xs mb-1 text-primary">{{ __('messages.end_date') }}</label>
+                                <input type="date" id="daily_end_date" class="filter-input-end h-10 border-primary card-dynamic-bg text-primary rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
                             </div>
                         </div>
                         <div id="monthly-filter-group" class="filter-group flex items-center gap-2 hidden">
                             <div class="flex flex-col">
-                                <label for="monthly_start_date" class="text-xs mb-1">{{ __('messages.start_month') }}</label>
-                                <input type="month" id="monthly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
+                                <label for="monthly_start_date" class="text-xs mb-1 text-primary">{{ __('messages.start_month') }}</label>
+                                <input type="month" id="monthly_start_date" class="filter-input-start h-10 border-primary card-dynamic-bg text-primary rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
                             </div>
                             <div class="flex flex-col">
-                                <label for="monthly_end_date" class="text-xs mb-1">{{ __('messages.end_month') }}</label>
-                                <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
+                                <label for="monthly_end_date" class="text-xs mb-1 text-primary">{{ __('messages.end_month') }}</label>
+                                <input type="month" id="monthly_end_date" class="filter-input-end h-10 border-primary card-dynamic-bg text-primary rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500">
                             </div>
                         </div>
                         <div id="yearly-filter-group" class="filter-group flex items-center gap-2 hidden">
                             <div class="flex flex-col">
-                                <label for="yearly_start_date" class="text-xs mb-1">{{ __('messages.start_year') }}</label>
-                                <input type="number" id="yearly_start_date" class="filter-input-start h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="YYYY" min="2000">
+                                <label for="yearly_start_date" class="text-xs mb-1 text-primary">{{ __('messages.start_year') }}</label>
+                                <input type="number" id="yearly_start_date" class="filter-input-start h-10 border-primary card-dynamic-bg text-primary rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="YYYY" min="2000">
                             </div>
                             <div class="flex flex-col">
-                                <label for="yearly_end_date" class="text-xs mb-1">{{ __('messages.end_year') }}</label>
-                                <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="YYYY" min="2000">
+                                <label for="yearly_end_date" class="text-xs mb-1 text-primary">{{ __('messages.end_year') }}</label>
+                                <input type="number" id="yearly_end_date" class="filter-input-end h-10 border-primary card-dynamic-bg text-primary rounded-lg text-sm shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="YYYY" min="2000">
                             </div>
                         </div>
                     </div>
@@ -90,33 +90,33 @@
 
             <div id="loading-spinner" class="text-center p-10">
                 <svg class="animate-spin h-8 w-8 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"> <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle> <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"> </path> </svg>
-                <p class="mt-2 text-gray-500 dark:text-gray-400">Loading Report...</p>
+                <p class="mt-2 text-defalut">Loading Report...</p>
             </div>
 
             <div id="report-content" style="display: none;">
                 <div id="report-summary" class="text-center mb-8">
                     <h2 class="text-2xl mb-4 text-gray-700 dark:text-gray-300">
-                        {{ __('messages.report_for') }}: <span id="report-title-date" class="text-red-500 font-bold"></span>
+                        {{ __('messages.report_for') }}: <span id="report-title-date" class="text-primary font-bold"></span>
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {{-- Total Revenue --}}
-                        <div class="flex items-center space-x-4 bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 card-dynamic-bg p-6 rounded-xl shadow-md border-l-4 border-green-500 transform hover:scale-105 transition-transform duration-300">
                             <div class="flex-shrink-0 p-6 rounded-full">
                                 <img src="{{ asset('images/icons/business-icon.png') }}" class="h-8 w-8" alt="Revenue Icon">
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">{{ __('messages.total_revenue') }}</h3>
+                                <h3 class="text-lg font-medium text-defalut">{{ __('messages.total_revenue') }}</h3>
                                 <p id="total-revenue" class="text-3xl font-bold mt-1 text-green-600">$0.00</p>
                             </div>
                         </div>
 
                         {{-- Total Expense --}}
-                        <div class="flex items-center space-x-4 bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center space-x-4 card-dynamic-bg p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
                             <div class="flex-shrink-0 p-6 rounded-full">
                                 <img src="{{ asset('images/icons/expense.png') }}" class="h-8 w-8" alt="Expense Icon">
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">{{ __('messages.total_expense') }}</h3>
+                                <h3 class="text-lg font-medium text-defalut">{{ __('messages.total_expense') }}</h3>
                                 <p id="total-expenses" class="text-3xl font-bold mt-1 text-red-600">$0.00</p>
                             </div>
                         </div>
@@ -124,12 +124,12 @@
                         {{-- ✅✅✅ START:  ✅✅✅ --}}
                         {{-- Profit / Loss --}}
                         <div id="profit-loss-card" {{-- << Id --}}
-                            class="flex items-center space-x-4 bg-white/80 dark:bg-gray-900/80 p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
+                            class="flex items-center space-x-4 card-dynamic-bg p-6 rounded-xl shadow-md border-l-4 border-red-500 transform hover:scale-105 transition-transform duration-300">
                             <div class="flex-shrink-0 p-6 rounded-full">
                                 <img src="{{ asset('images/icons/money.png') }}" class="h-8 w-8" alt="Profit/Loss Icon">
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">{{ __('messages.profit_loss') }}</h3>
+                                <h3 class="text-lg font-medium text-defalut">{{ __('messages.profit_loss') }}</h3>
                                 <p id="profit-loss" class="text-3xl font-bold mt-2">$0.00</p>
                             </div>
                         </div>
@@ -139,11 +139,11 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {{-- Income Details Table --}}
-                    <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md p-4 overflow-hidden">
+                    <div class="card-dynamic-bg rounded-xl shadow-md p-4 overflow-hidden">
                         <h3 class="text-xl font-bold mb-4 text-green-500 px-2">{{ __('messages.income_details') }}</h3>
                         <div class="overflow-y-auto max-h-[60vh]">
                             <table class="w-full text-sm text-left">
-                                <thead class="sticky top-0 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 uppercase text-xs">
+                                <thead class="sticky top-0 card-dynamic-bg text-green-500 uppercase text-xs">
                                     <tr>
                                         <th class="p-3">{{ __('messages.date') }}</th>
                                         <th class="p-3">{{ __('messages.details') }}</th>
@@ -157,11 +157,11 @@
                         </div>
                     </div>
                     {{-- Expense Details Table --}}
-                    <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow-md p-4 overflow-hidden">
+                    <div class="card-dynamic-bg rounded-xl shadow-md p-4 overflow-hidden">
                         <h3 class="text-xl font-bold mb-4 text-red-500 px-2">{{ __('messages.expense_details') }}</h3>
                         <div class="overflow-y-auto max-h-[60vh]">
                             <table class="w-full text-sm text-left">
-                                <thead class="sticky top-0 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 uppercase text-xs">
+                                <thead class="sticky top-0 card-dynamic-bg text-red-500 px-2 uppercase text-xs">
                                     <tr>
                                         <th class="p-3">{{ __('messages.date') }}</th>
                                         <th class="p-3">{{ __('messages.details') }}</th>

@@ -47,7 +47,7 @@
                             {{ __('messages.name') }}
                         </label>
                         <input type="text" id="name" name="name" required
-                            class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                            class="w-full px-4 py-3 card-dynamic-bg text-defalut border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                             value="{{ $adminData->name }}">
                     </div>
 
@@ -57,7 +57,7 @@
                             {{ __('messages.email') }}
                         </label>
                         <input type="email" id="email" name="email" required
-                            class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                            class="w-full px-4 py-3 card-dynamic-bg text-defalut border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                             value="{{ $adminData->email }}">
                     </div>
 
@@ -67,7 +67,7 @@
                             {{ __('messages.phone') }}
                         </label>
                         <input type="tel" name="phone" id="phone" required
-                            class="w-full px-4 py-3 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                            class="w-full px-4 py-3 card-dynamic-bg text-defalut border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                             value="{{ $adminData->phone }}">
                     </div>
 
@@ -77,7 +77,7 @@
                             {{ __('messages.user_profile_image') }}
                         </label>
                         <div class="flex items-center space-x-4">
-                            <img class="h-20 w-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
+                            <img class="h-20 w-20 rounded-full object-cover border-2 border-primary"
                                 id="showImage"
                                 src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}"
                                 alt="Current Profile Picture">
@@ -176,20 +176,20 @@
         }">
             {{-- ✅ END: Update x-data --}}
 
-            <h3 class="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Customize Appearance</h3>
+            <h3 class="text-lg font-medium text-defalut mb-4">Customize Appearance</h3>
 
             <!-- Tabs Navigation -->
-            <div class="border-b border-gray-200 dark:border-gray-700 mb-4">
+            <div class="border-b border-primary mb-4">
                 <nav class="-mb-px flex space-x-4" aria-label="Tabs">
                     <button @click="tab = 'light'"
                         :class="tab === 'light' ? 'border-primary text-primary' :
-                            'border-transparent text-default hover:text-gray-700 hover:border-gray-300  dark:hover:text-gray-300 dark:hover:border-gray-600'"
+                            'border-transparent text-default  dark:hover:border-primary'"
                         class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors">
                         Light Mode
                     </button>
                     <button @click="tab = 'dark'"
                         :class="tab === 'dark' ? 'border-primary text-primary' :
-                            'border-transparent text-default hover:text-gray-700 hover:border-gray-300  dark:hover:text-gray-300 dark:hover:border-gray-600'"
+                            'border-transparent text-default '"
                         class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors">
                         Dark Mode
                     </button>
