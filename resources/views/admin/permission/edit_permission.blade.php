@@ -6,8 +6,8 @@
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1">
             <div
-                class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform">
-                <h2 class="text-xl  text-gray-800 dark:text-white mb-6 flex items-center">
+                class="lg:col-span-full card-dynamic-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform">
+                <h2 class="text-xl  text-defalut mb-6 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -30,11 +30,11 @@
                         {{-- Column 1 --}}
                         <div class="space-y-4">
                             <div class="form-group">
-                                <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                <label for="name" class="block text-defalut text-sm font-medium mb-1">
                                     {{ __('messages.permission_name') }}
                                 </label>
                                 <input value="{{ $permission->name }}" type="text" id="name" name="name" 
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('name') is-invalid @enderror">
+                                    class="card-dynamic-bg text-defalut w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('name') is-invalid @enderror">
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
                             </div>
                         </div>
@@ -43,11 +43,11 @@
                         <div class="space-y-4">
                             <div class="form-group">
                                 <label for="group_name"
-                                    class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">
+                                    class="block text-defalut text-sm font-medium mb-1">
                                     {{ __(key: 'messages.group_name') }}
                                 </label>
                                 <select name="group_name" id="example-select" 
-                                    class="w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    class="card-dynamic-bg text-defalut w-full py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-md  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <option value="" disabled>{{ __(key: 'messages.select_group_name') }}</option>
                                     @foreach([
                                             'pos',
@@ -76,7 +76,7 @@
 
                     <div class="flex justify-end mt-6">
                         <button type="submit"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
+                            class="bg-primary text-defalut font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
                             {{ __('messages.save') }}
                         </button>
                     </div>

@@ -6,8 +6,8 @@
 
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1 ">
-            <div class="bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-md p-6 transition-all duration-300">
-                <h2 class="dark:text-white text-2xl  text-gray-800 mb-6 flex items-center gap-2">
+            <div class="card-dynamic-bg rounded-lg shadow-md p-6 transition-all duration-300">
+                <h2 class="text-defalut mb-6 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
@@ -20,10 +20,10 @@
 
                     <div class="mb-6">
                         <div class="form-group">
-                            <label for="role_id" class="block dark:text-white text-gray-700 text-sm font-medium mb-2">
+                            <label for="role_id" class="block text-defalut text-sm font-medium mb-2">
                                 {{ __('messages.roles') }} <span class="text-red-500">*</span>
                             </label>
-                            <select name="role_id" id="role_id" class="dark:text-white dark:bg-gray-900 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <select name="role_id" id="role_id" class="text-defalut w-full px-4 py-2 border border-primary rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 <option value="" disabled selected>{{ __('messages.select_roles') }}</option>
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}">{{ $role->name }}</option>
@@ -35,11 +35,11 @@
                     <div class="mb-6 flex items-center gap-3">
                         {{-- កែតម្រូវ: id និង for ត្រូវតែដូចគ្នា --}}
                         <input type="checkbox" id="checkAll" 
-                            class="h-5 w-5 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-offset-gray-800 dark:text-blue-500">
-                        <label for="checkAll" class="text-gray-700 text-sm dark:text-white">{{ __('messages.all_permission') }}</label>
+                            class="h-5 w-5 rounded  border-primary text-defalut focus:ring-primary dark:focus:ring-offset-primary ">
+                        <label for="checkAll" class="text-defalut text-sm ">{{ __('messages.all_permission') }}</label>
                     </div>
 
-                    <hr class="border-gray-300 mb-6">
+                    <hr class="border-primary mb-6">
 
                     {{-- 
                         !!! ការព្រមានសំខាន់ !!!
@@ -50,8 +50,8 @@
                         @php
                             $permissions = App\Models\User::getpermissionByGroupName($group->group_name);
                         @endphp
-                        <fieldset class="mb-6 border border-gray-200 p-4 rounded-md">
-                            <legend class="text-sm text-black  mb-4 dark:text-white">
+                        <fieldset class="mb-6 border border-primary p-4 rounded-md">
+                            <legend class="text-sm text-defalut mb-4">
                                 {{-- កែតម្រូវ: ត្រូវបញ្ជាក់ឈ្មោះไฟล์ 'messages.' --}}
                                 {{ __('messages.' . $group->group_name) }}
                             </legend>
@@ -59,9 +59,9 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 @foreach ($permissions as $permission)
                                     {{-- កែតម្រូវ: ដកដកឃ្លាចេញពី for --}}
-                                    <label for="perm_{{ $permission->id }}" class="dark:text-white flex items-center gap-3 text-gray-700 text-sm">
+                                    <label for="perm_{{ $permission->id }}" class="text-defalut flex items-center gap-3 text-sm">
                                         <input type="checkbox" name="permission[]" value="{{ $permission->id }}" id="perm_{{ $permission->id }}"
-    class="h-5 w-5 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-offset-gray-800 dark:text-blue-500">
+    class="h-5 w-5 rounded  border-primary dark:border-primary text-defalut focus:ring-primary dark:focus:ring-offset-primary ">
                                         {{-- កែតម្រូវ: ត្រូវបញ្ជាក់ឈ្មោះไฟล์ 'messages.' --}}
                                         {{ __('messages.' . $permission->name) }}
                                     </label>
@@ -71,7 +71,7 @@
                     @endforeach
 
                     <div class="text-right">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow transition-all duration-200">
+                        <button type="submit" class="bg-primary text-defalut font-bold py-2 px-6 rounded shadow transition-all duration-200">
                             {{ __('messages.save') }}
                         </button>
                     </div>

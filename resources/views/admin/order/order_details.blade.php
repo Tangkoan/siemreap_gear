@@ -8,7 +8,7 @@
         <div class="container mx-auto p-6 ">
             <div class="grid grid-cols-1 ">
 
-                <div class="lg:col-span-full bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
+                <div class="lg:col-span-full card-dynamic-bg rounded-lg shadow-xl p-6 transition-all duration-300 transform ">
                     <h2 class="text-xl  text-default mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -17,7 +17,7 @@
                         </svg>
 
 
-                        <div class="px-2">
+                        <div class="px-2 text-defalut">
                             <a href="{{ route('pending.order') }}">
                                  {{ __('messages.order_details') }}
                             </a>
@@ -37,32 +37,32 @@
 
                                 {{-- Column 1 --}}
                                 <div class="space-y-4">
-                                    <label class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.customer_name') }} : <span>{{ $order->customer->name }}</span>
                                     </label>
-                                    <label class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.email') }} : <span>{{ $order->customer->email ?? 'null' }}</span>
                                     </label>
-                                    <label class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.phone') }} : <span>{{ $order->customer->phone }}</span>
                                     </label>
-                                    <label class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.order_date') }} : <span>{{ $order->order_date }}</span>
                                     </label>
                                 </div>
 
                                 {{-- Column 2 --}}
                                 <div class="space-y-4">
-                                    <label class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.order_invoice') }} : <span>{{ $order->invoice_no }}</span>
                                     </label>
-                                    <label for="product_name" class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label for="product_name" class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.payment_method') }} : <span>{{ $order->payment_status }}</span>
                                     </label>
-                                    <label for="product_name" class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label for="product_name" class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.paid_amount') }} : <span>{{ $order->pay }}</span>
                                     </label>
-                                    <label for="product_name" class="block text-gray-400 text-sm font-medium mb-1">
+                                    <label for="product_name" class="block text-defalut text-sm font-medium mb-1">
                                         {{ __('messages.due_amount') }} : <span>{{ $order->due }}</span>
                                     </label>
                                 </div>
@@ -71,7 +71,7 @@
 
                             <div class="overflow-x-auto mb-4">
                                 <table class="w-full border-collapse border border-gray-300 text-xs shadow-sm">
-                                    <thead class="bg-gray-200 dark:bg-gray-900">
+                                    <thead class="card-dynamic-bg text-defalut">
                                         <tr>
                                             <th class="border border-gray-300 px-2 py-1">{{ __('messages.no') }}</th>
                                             <th class="border border-gray-300 px-2 py-1">{{ __('messages.image') }}</th>
@@ -104,7 +104,7 @@
                             <div class="flex justify-end mt-6">
                                 {{-- ✅ CHANGE HERE: Added id and data-due attribute --}}
                                 <button type="submit" id="complete-order-btn" data-due="{{ $order->due }}"
-                                    class="button-add button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
+                                    class="bg-primary text-defalut button-blue font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg">
                                     {{ __('messages.complete_order') }}
                                 </button>
                             </div>
