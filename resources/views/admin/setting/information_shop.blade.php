@@ -80,11 +80,11 @@
 
                 {{-- (NEW) Favicon Upload --}}
                 <div>
-                    <label class="block text-sm font-medium text-defalut">{{ __('messages.favicon') }}</label>
+                    <label class="block text-sm font-medium text-defalut">{{ __('Favicon') }}</label>
                     <div class="mt-2 flex items-center space-x-4">
                         {{-- Preview Image --}}
                         <img class="h-12 w-12 rounded-lg object-cover border-2 border-primary" id="showFavicon"
-                            src="{{ (!empty($info->favicon)) ? url('upload/shop_info/' . $info->favicon) : url('upload/no_image.jpg') }}"
+                            src="{{ (!empty($info->favicon)) ? url('upload/shop_info/' . $info->favicon) : url(asset('upload/no_image.jpg')) }}"
                             alt="Current Favicon">
                         
                         <div class="flex-grow">
