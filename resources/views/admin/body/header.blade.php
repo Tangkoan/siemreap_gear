@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-40 w-full nset-0 backdrop-blur-lg card-dynamic-bg\40  transition-colors duration-300">
+<header class="sticky top-0 z-40 w-full backdrop-blur-lg card-dynamic-bg  transition-colors duration-300">
     
     <div class=" flex flex-wrap justify-between items-center gap-y-2 p-3">
 
