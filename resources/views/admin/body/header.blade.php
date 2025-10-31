@@ -1,6 +1,6 @@
 <header class="sticky top-0 z-40 w-full nset-0 backdrop-blur-lg card-dynamic-bg\40  transition-colors duration-300">
     
-    <div class="container mx-auto flex flex-wrap justify-between items-center gap-y-2 p-3">
+    <div class=" flex flex-wrap justify-between items-center gap-y-2 p-3">
 
         {{-- ✅ START: PHP Block to fetch Shop Info --}}
         {{-- ✅ ចាប់ផ្តើម៖ ប្លុក PHP សម្រាប់ទាញយក --}}
