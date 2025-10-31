@@ -13,6 +13,7 @@ class informationshop extends Model
         'address',
         'phone',
         'logo', // <--- សូមប្រាកដថា 'logo' មាននៅក្នុងនេះ
+        'favicon',
         'note',
         'terms_and_condition',
     ];

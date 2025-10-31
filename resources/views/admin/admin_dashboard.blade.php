@@ -20,6 +20,14 @@
     <link href="{{ asset('backend/assets/css/profile.css') }}" rel="stylesheet" />
 
     <title>Dashboard</title>
+
+    @if(isset($shopInfo) && $shopInfo->favicon)
+        {{-- បើមាន Favicon ក្នុង Database, វានឹងបង្ហាញនៅទីនេះ ជាមួយ Cache Busting --}}
+        <link rel="icon" href="{{ url('upload/shop_info/' . $shopInfo->favicon) }}?v={{ $shopInfo->updated_at->timestamp }}">
+    @else
+        {{-- បើមិនមាន, វានឹងប្រើ Favicon ដើមរបស់អ្នក (Fallback) --}}
+        <link rel="icon" href="{{ asset('image/favicon.ico') }}" type="image/x-icon">
+    @endif
     
     {{-- ✅ START: DYNAMIC STYLES (កូដថ្មីដែលមាន Card Logic) --}}
     @auth

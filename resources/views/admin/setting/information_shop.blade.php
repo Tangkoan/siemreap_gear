@@ -77,6 +77,28 @@
                     </div>
                 </div>
 
+
+                {{-- (NEW) Favicon Upload --}}
+                <div>
+                    <label class="block text-sm font-medium text-defalut">{{ __('messages.favicon') }}</label>
+                    <div class="mt-2 flex items-center space-x-4">
+                        {{-- Preview Image --}}
+                        <img class="h-12 w-12 rounded-lg object-cover border-2 border-primary" id="showFavicon"
+                            src="{{ (!empty($info->favicon)) ? url('upload/shop_info/' . $info->favicon) : url('upload/no_image.jpg') }}"
+                            alt="Current Favicon">
+                        
+                        <div class="flex-grow">
+                            {{-- File Input --}}
+                            <input type="file" name="favicon" id="favicon_input" class="hidden">
+                            {{-- Label for Input --}}
+                            <label for="favicon_input" class="cursor-pointer bg-primary text-white py-2 px-4 rounded-md shadow-sm">
+                                {{ __('messages.choose') }}
+                            </label>
+                            <p class="text-xs text-gray-500 mt-1">បានណែនាំ: .ico, .png, .svg (e.g., 32x32px)</p>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Submit Button --}}
                 <div class="flex justify-end pt-4">
                     <button type="submit" class="bg-primary text-white font-bold py-2 px-6 rounded-md shadow-lg">
@@ -96,6 +118,17 @@
                 var reader = new FileReader();
                 reader.onload = function(e_reader){
                     $('#showLogo').attr('src', e_reader.target.result);
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // 2. (NEW) Handler សម្រាប់ Favicon
+        $('#favicon_input').change(function(e){
+            if (e.target.files && e.target.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e_reader){
+                    $('#showFavicon').attr('src', e_reader.target.result);
                 }
                 reader.readAsDataURL(e.target.files[0]);
             }

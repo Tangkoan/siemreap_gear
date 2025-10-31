@@ -7,7 +7,7 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <link rel="icon" href="{{ asset('image/favicon.ico') }}" type="image/x-icon">
+        {{-- <link rel="icon" href="{{ asset('image/favicon.ico') }}" type="image/x-icon"> --}}
 
 
         <!-- Scripts -->
