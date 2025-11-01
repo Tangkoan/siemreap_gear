@@ -48,15 +48,51 @@
                 1$ = <span id="current-rate-display">{{ $activeRate->rate_khr ?? '?' }}</span>៛
             </button>
             
+            {{-- ====================================================== --}}
+            {{-- ✅ START: កូដកែប្រែសម្រាប់ប៊ូតុង POS --}}
+            {{-- ====================================================== --}}
             @can('pos.menu')
-                <a href="{{ route('pos') }}" class="hidden sm:block bg-primary text-white font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
-                    {{ __('messages.pos') }}
-                </a>
+                @if(session()->has('active_shift_id'))
+                    {{-- 1. បើកវេនហើយ៖ បង្ហាញប៊ូតុង POS (Enabled) --}}
+                    <a href="{{ route('pos') }}" class="hidden sm:block bg-primary text-white font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                        {{ __('messages.pos') }}
+                    </a>
+                @else
+                    {{-- 2. មិនទាន់បើកវេន៖ បង្ហាញប៊ូតុង POS (Disabled) --}}
+                    <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400  py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="Please open shift first">
+                        {{ __('messages.pos') }}
+                    </button>
+                @endif
             @else
-                <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400   py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="You don't have permission to access POS">
+                {{-- 3. គ្មានសិទ្ធិ៖ បង្ហាញប៊ូតុង POS (Disabled) --}}
+                <button class="hidden sm:block bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400  py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled title="You don't have permission to access POS">
                     {{ __('messages.pos') }}
                 </button>
             @endcan
+            {{-- ==================================================== --}}
+            {{-- ✅ END: បញ្ចប់កូដប៊ូតុង POS --}}
+            {{-- ==================================================== --}}
+
+
+            {{-- ====================================================== --}}
+            {{-- ✅ START: កូដថ្មីសម្រាប់ប៊ូតុង Shift (Open/Close) --}}
+            {{-- ====================================================== --}}
+            @can('pos.menu') 
+                @if(session()->has('active_shift_id'))
+                    {{-- 1. បើកវេនហើយ៖ បង្ហាញប៊ូតុង "Close Shift" (ពណ៌ក្រហម) --}}
+                    <a href="{{ route('shift.close.form') }}" class="hidden sm:block bg-red-800 text-white font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                        {{ __('messages.close_shift') }} {{-- <--- ✅ បានកែត្រង់នេះ --}}
+                    </a>
+                @else
+                    {{-- 2. មិនទាន់បើកវេន៖ បង្ហាញប៊ូតុង "Open Shift" (ពណ៌បៃតង) --}}
+                    <a href="{{ route('shift.open.form') }}" class="hidden sm:block bg-primary text-white font-bold  py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                        {{ __('messages.open_shift') }} {{-- <--- ✅ បានកែត្រង់នេះ --}}
+                    </a>
+                @endif
+            @endcan
+            {{-- ==================================================== --}}
+            {{-- ✅ END: បញ្ចប់កូដប៊ូតុង Shift --}}
+            {{-- ==================================================== --}}
 
             {{-- Theme Toggle --}}
             <button id="theme-toggle" class="w-16 h-8 rounded-full bg-slate-200 dark:bg-slate-700 relative flex items-center transition-colors duration-500">

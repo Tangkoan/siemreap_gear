@@ -22,6 +22,9 @@ use Symfony\Component\DomCrawler\Crawler;
 // ✅ ជំហានទី១.១៖ ត្រូវប្រាកដថាបាន Import HTTP Client
 use Illuminate\Support\Facades\Http;
 
+// សម្រាប់ចាប់ថា Auth (user ណាលក់ទំនិញជូនភ្លៀវ)
+use Illuminate\Support\Facades\Auth; // <-- ត្រូវប្រាកដថាមាន
+
 
 class PosController extends Controller
 {
@@ -845,8 +848,23 @@ public function FinalInvoice(Request $request)
     DB::beginTransaction();
 
     try {
+
+        // ⬇️ ⬇️ ⬇️ កែប្រែនៅត្រង់នេះ ⬇️ ⬇️ ⬇️
+
+        // 1. យក ID របស់អ្នកប្រើប្រាស់ដែលកំពុង Login
+        $cashier_id = Auth::id(); 
+
+        // 2. យក ID នៃវេនដែលកំពុង Active (ពី Session ដែលយើងបានកំណត់ពេល Open Register)
+        $active_shift_id = $request->session()->get('active_shift_id');
+
         $data = [
             'customer_id' => $request->customer_id,
+
+            // ===== បន្ថែម ២ បន្ទាត់នេះ =====
+            'user_id' => $cashier_id,
+            'shift_id' => $active_shift_id,
+            // ===============================
+
             'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
             'order_status' => $orderStatus,
             'order_type' => $orderType,

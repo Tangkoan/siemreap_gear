@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AppearanceController;
 
+use App\Http\Controllers\ShiftController; // ត្រូវប្រាកដថាបាន Import
+
 use App\Http\Controllers\DatabaseImportController;
 
 
@@ -69,6 +71,33 @@ Route::middleware(['auth'])->group(callback: function () {
     //
     Route::post('/appearance/update', [AppearanceController::class, 'update'])->name('appearance.update');
 
+
+    // === ក្រុម Route សម្រាប់ POS ===
+        // User ត្រូវតែ: 1. Login (auth)
+        //                2. មានសិទ្ធិ (permission:pos.menu)
+        //                3. បានបើកវេន (check.shift)
+        Route::middleware(['auth', 'permission:pos.menu', 'check.shift'])->group(function () {     
+            // នេះគឺជា Route របស់អ្នកដែលបានការពារ
+            Route::get('/page/pos', [PosController::class, 'PosPage'])->name('pos');
+            Route::post('/create-invoice', [PosController::class, 'CreateInvoice'])->name('create.invoice');
+        });
+
+
+    // ========================= Open Shift =====================================================
+    // =================================================================
+    
+
+        // ដាក់ Route សម្រាប់ "បើក" និង "បិទ" វេន នៅទីនេះ
+        // ព្រោះ User ត្រូវតែអាចចូលទំព័រទាំងនេះបាន ទោះបីមិនទាន់បើកវេន
+        Route::get('/shift/open', [ShiftController::class, 'showOpenForm'])->name('shift.open.form');
+        Route::post('/shift/open', [ShiftController::class, 'openShift'])->name('shift.open');
+        Route::get('/shift/close', [ShiftController::class, 'showCloseForm'])->name('shift.close.form');
+        Route::post('/shift/close', [ShiftController::class, 'closeShift'])->name('shift.close');
+
+        // (Route ផ្សេងទៀតដែលមិនត្រូវការ Active Shift ដូចជា Dashboard, Report...)
+        // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+   
+    // ========================= Close Shift ====================================================
 
     // Import Database
         Route::get('/database/import', [DatabaseImportController::class, 'showForm'])->name('db.import.form');
@@ -487,6 +516,10 @@ Route::middleware(['auth'])->group(callback: function () {
             Route::post('/exchange-rate/store', [App\Http\Controllers\PosController::class, 'storeExchangeRate'])->name('exchange-rate.store');
             Route::post('/exchange-rate/auto-fetch', [App\Http\Controllers\PosController::class, 'fetchAndStoreAutoRate'])->name('exchange-rate.auto-fetch');
         // End POS
+
+
+
+        
         ///POS All Route 
             Route::controller(PosController::class)->group(function () {
 
@@ -497,13 +530,14 @@ Route::middleware(['auth'])->group(callback: function () {
 
 
 
-                Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
+                // Route::get('/page/pos', 'PosPage')->name('pos')->middleware('permission:pos.menu');
+                // Route::post('/create-invoice', 'CreateInvoice');
                 // Route::post('/add-cart', 'AddCart');
                 // Route::get('/allitem', 'AllItem');
                 // Route::post('/cart-update/{rowId}', 'CartUpdate');
                 // Route::get('/cart-remove/{rowId}', 'CartRemove');
 
-                Route::post('/create-invoice', 'CreateInvoice');
+                
 
 
                 Route::post('/create-invoice-pos', 'CreateInvoiceVI');

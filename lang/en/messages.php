@@ -588,4 +588,32 @@ return [
 
 
         'import_db' => 'Import Database',
+
+
+
+// =============================  Open Shift   =============================
+        'open_shift' => 'Open Shift',
+        'close_shift' => 'Close Shift',
+        'open_new_shift' => 'Open New Shift',
+        'start_daily_sales_session' => 'Start your daily sales session.',
+        'start_your_shift' => 'Start Your Shift',
+        'enter_starting_cash_prompt' => 'Please enter the starting cash amount in your cash drawer.',
+        'starting_cash_usd' => 'Starting Cash (USD)',
+        'start_shift_and_go_to_pos' => 'Start Shift & Go to POS',
+        'end_of_shift_reconciliation' => 'End of Shift Reconciliation',
+    
+        'verify_cash_prompt' => 'Verify your cash sales against the counted amount before closing the shift.',
+        'system_calculation' => 'System Calculation',
+        'starting_cash_label' => '1. Starting Cash',
+        'total_cash_sales_label' => '2. Total Cash Sales',
+        'expected_cash_label' => 'Expected Cash in Drawer (1+2)',
+        'non_cash_totals_label' => 'Non-Cash Totals (For Reference)',
+        'total_card_sales_label' => 'Total Card Sales:',
+        'total_qr_sales_label' => 'Total QR Sales:',
+        'cashier_declaration_label' => 'Cashier Declaration',
+        'actual_cash_label' => 'Actual Cash Counted',
+        'actual_cash_placeholder' => 'Enter the total cash amount you counted',
+        'warning' => 'Warning',
+        'close_shift_warning' => 'Please double-check your cash count. Once a shift is closed, it cannot be reopened.',
+        'confirm_close_shift_btn' => 'Confirm & Close Shift',
 ];
