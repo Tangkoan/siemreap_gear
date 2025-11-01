@@ -5,7 +5,8 @@
 <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
 <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
 
-<div class="container-fluid px-8">
+{{-- ខ្ញុំប្រើ p-4 pt-6 តាមកូដមុន (អ្នកអាចប្តូរ p-8 តាមใจ) --}}
+<div class="container-fluid p-4 pt-6 md:p-6">
 
     {{-- START: Page Title & Breadcrumb --}}
     <div class="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center">
@@ -122,7 +123,9 @@
                                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-default">{{ __('messages.shift_duration') }}</th>
                                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right uppercase text-default">{{ __('messages.expected_cash') }}</th>
                                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right uppercase text-default">{{ __('messages.actual_cash') }}</th>
+                                {{-- ✅ START: កូដកែប្រែ (បានបន្ថែមជួរឈរនេះត្រឡប់មកវិញ) --}}
                                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right uppercase text-default">{{ __('messages.difference') }}</th>
+                                {{-- ✅ END: កូដកែប្រែ --}}
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -146,15 +149,17 @@
                                         $ {{ number_format($shift->ending_cash, 2) }}
                                     </td>
                                     
+                                    {{-- ✅ START: កូដកែប្រែ (បានបន្ថែមជួរឈរនេះត្រឡប់មកវិញ) --}}
                                     <td class="px-6 py-4 text-sm font-bold text-right whitespace-nowrap">
                                         @if($shift->difference < 0)
                                             <span class="text-red-500">-$ {{ number_format(abs($shift->difference), 2) }}</span>
                                         @elseif($shift->difference > 0)
-                                            <span class="text-yellow-500">+$ {{ number_format(($shift->difference), 2) }}</span>
+                                            <span class="text-yellow-500">+$ {{ number_format($shift->difference, 2) }}</span>
                                         @else
                                             <span class="text-green-500">$ {{ number_format($shift->difference, 2) }}</span>
                                         @endif
                                     </td>
+                                    {{-- ✅ END: កូដកែប្រែ --}}
                                 </tr>
                             @empty
                             <tr>
@@ -202,7 +207,7 @@
         {{-- Modal Body --}}
         <div class="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
             
-            {{-- Loading Spinner (បង្ហាញពេលកំពុងទាញទិន្នន័យ) --}}
+            {{-- Loading Spinner --}}
             <div id="modalLoading" class="text-center p-10">
                 <svg class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-primary" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67228 50 9.67228C27.4013 9.67228 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -213,34 +218,41 @@
 
             {{-- Modal Content (បង្ហាញពេលទិន្នន័យមកដល់) --}}
             <div id="modalData" class="hidden">
-                {{-- ផ្នែកសរុប (Summary) --}}
                 
-                {{-- ✅ START: កូដកែប្រែ --}}
-                {{-- ខ្ញុំបានកែ 'class_exists=' ទៅជា 'class=' --}}
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {{-- ✅ END: កូដកែប្រែ --}}
-
+                <h5 class="mb-4 text-lg font-semibold text-default">{{ __('messages.cash_reconciliation') }}</h5>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-700/50">
-                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.starting_cash_label') }}</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">1. {{ __('messages.starting_cash_label') }}</div>
                         <div class="mt-1 text-2xl font-semibold text-default" id="modalStartingCash"></div>
                     </div>
                     <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-700/50">
-                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.total_cash_sales_label') }}</div>
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">2. {{ __('messages.total_cash_sales_label') }}</div>
                         <div class="mt-1 text-2xl font-semibold text-green-500" id="modalTotalCashSales"></div>
                     </div>
-                    <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-700/50">
-                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.expected_cash_label') }}</div>
+                    <div class="p-4 rounded-lg bg-primary/10 dark:bg-primary/20 border border-primary">
+                        <div class="text-sm font-medium text-primary">{{ __('messages.expected_cash_label') }} (1+2)</div>
                         <div class="mt-1 text-2xl font-semibold text-primary" id="modalExpectedCash"></div>
                     </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-700/50">
                         <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.actual_cash_label') }}</div>
                         <div class="mt-1 text-2xl font-semibold text-default" id="modalActualCash"></div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-700/50">
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.total_qr_sales_label') }} (Non-Cash)</div>
+                        <div class="mt-1 text-2xl font-semibold text-default" id="modalTotalQRSales"></div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-700/50">
+                        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.total_card_sales_label') }} (Non-Cash)</div>
+                        <div class="mt-1 text-2xl font-semibold text-default" id="modalTotalCardSales"></div>
                     </div>
                 </div>
 
                 {{-- ភាពខុសគ្នា (Difference) --}}
                 <div id="modalDifferenceWrapper" class="p-4 mb-6 text-center rounded-lg">
-                    <div class="text-sm font-medium uppercase text-default">{{ __('messages.difference') }}</div>
+                    <div class="text-sm font-medium uppercase text-default">{{ __('messages.cash_difference_label') }}</div>
                     <div class="mt-1 text-3xl font-bold" id="modalDifference"></div>
                 </div>
 
@@ -279,24 +291,16 @@
 
 
 {{-- START: JavaScript សម្រាប់ Date Picker និង Modal --}}
-{{-- ខ្ញុំបានដក @push('scripts') ចេញ ហើយដាក់ <script> ផ្ទាល់ --}}
 <script>
-    // សម្រាប់បើក Date Picker
     document.addEventListener('DOMContentLoaded', function() {
-        flatpickr("#start_date", {
-            dateFormat: "Y-m-d",
-        });
-        flatpickr("#end_date", {
-            dateFormat: "Y-m-d",
-        });
+        flatpickr("#start_date", { dateFormat: "Y-m-d" });
+        flatpickr("#end_date", { dateFormat: "Y-m-d" });
     });
 
-    // សម្រាប់ Format លុយ
     function formatCurrency(number) {
         return '$ ' + parseFloat(number).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
-    // សម្រាប់ Format ពេលវេលា
     function formatTime(dateTimeString) {
         const date = new Date(dateTimeString);
         return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -307,16 +311,13 @@
     const modalLoading = document.getElementById('modalLoading');
     const modalData = document.getElementById('modalData');
 
-    // Function បើក Modal
     async function openShiftDetailsModal(shiftId) {
-        // បង្ហាញ Modal និង Loading Spinner
         modal.classList.remove('hidden');
         modalData.classList.add('hidden');
         modalLoading.classList.remove('hidden');
         setTimeout(() => modalContent.classList.remove('scale-95'), 10); 
 
         try {
-            // 1. ទាញទិន្នន័យពី Controller
             const response = await fetch(`/report/shift-details/${shiftId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -331,23 +332,28 @@
             document.getElementById('modalTotalCashSales').innerText = formatCurrency(data.calculations.total_cash_sales);
             document.getElementById('modalExpectedCash').innerText = formatCurrency(data.calculations.expected_cash);
             document.getElementById('modalActualCash').innerText = formatCurrency(data.shift.ending_cash);
+            document.getElementById('modalTotalQRSales').innerText = formatCurrency(data.calculations.total_qr_sales);
+            document.getElementById('modalTotalCardSales').innerText = formatCurrency(data.calculations.total_card_sales);
 
-            // បំពេញ Difference Box
+            // គណនា Difference ឡើងវិញ
             const diffWrapper = document.getElementById('modalDifferenceWrapper');
             const diffText = document.getElementById('modalDifference');
             diffWrapper.classList.remove('bg-green-100', 'dark:bg-green-900/30', 'bg-red-100', 'dark:bg-red-900/30', 'bg-yellow-100', 'dark:bg-yellow-900/30');
             diffText.classList.remove('text-green-600', 'text-red-600', 'text-yellow-600');
 
-            if (data.shift.difference < 0) {
-                diffText.innerText = `-${formatCurrency(Math.abs(data.shift.difference))} ({{ __('messages.short') }})`;
+            // គណនា Difference ឱ្យបានត្រឹមត្រូវ ដោយផ្អែកលើទិន្នន័យ "Real-time"
+            const correctDifference = parseFloat(data.shift.ending_cash) - parseFloat(data.calculations.expected_cash);
+
+            if (correctDifference < 0) {
+                diffText.innerText = `-${formatCurrency(Math.abs(correctDifference))} ({{ __('messages.short') }})`;
                 diffText.classList.add('text-red-600', 'dark:text-red-400');
                 diffWrapper.classList.add('bg-red-100', 'dark:bg-red-900/30');
-            } else if (data.shift.difference > 0) {
-                diffText.innerText = `+${formatCurrency(data.shift.difference)} ({{ __('messages.over') }})`;
+            } else if (correctDifference > 0) {
+                diffText.innerText = `+${formatCurrency(correctDifference)} ({{ __('messages.over') }})`;
                 diffText.classList.add('text-yellow-600', 'dark:text-yellow-400');
                 diffWrapper.classList.add('bg-yellow-100', 'dark:bg-yellow-900/30');
             } else {
-                diffText.innerText = `${formatCurrency(data.shift.difference)} ({{ __('messages.perfect') }})`;
+                diffText.innerText = `${formatCurrency(correctDifference)} ({{ __('messages.perfect') }})`;
                 diffText.classList.add('text-green-600', 'dark:text-green-400');
                 diffWrapper.classList.add('bg-green-100', 'dark:bg-green-900/30');
             }
