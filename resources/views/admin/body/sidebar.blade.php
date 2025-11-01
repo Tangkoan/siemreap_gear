@@ -48,14 +48,14 @@
                         </svg>
                         <span class="px-2">{{ __('messages.category') }}</span>
                     </a>
-                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48  bg-white/90 dark:bg-slate-800/90 backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border border-slate-200 dark:border-slate-700 hidden">
+                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48  card-dynamic-bg backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border  hidden">
                         @if ($categoryMenu)
-                            <a href="{{ route('all.category') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+                            <a href="{{ route('all.category') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
                                 {{ __('messages.category') }}
                             </a>
                         @endif
                         @if ($categoryCondition)
-                            <a href="{{ route('all.condition') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+                            <a href="{{ route('all.condition') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
                                 {{ __('messages.condition') }}
                             </a>
                         @endif
@@ -157,12 +157,12 @@
                         </svg>
                         <span class="px-2">{{ __('messages.purchase') }}</span>
                     </a>
-                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48 bg-white/90 dark:bg-slate-800/90 backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border border-slate-200 dark:border-slate-700 hidden">
+                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48 card-dynamic-bg backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border  hidden">
                         @if ($purchaseComplete)
-                            <a href="{{ route('complete.purchase') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.complete') }}</a>
+                            <a href="{{ route('complete.purchase') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.complete') }}</a>
                         @endif
                         @if ($purchasePendingDue)
-                            <a href="{{ route('purchase.pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending_due') }}</a>
+                            <a href="{{ route('purchase.pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.pending_due') }}</a>
                         @endif
                     </div>
                 </div>
@@ -190,15 +190,15 @@
                         </svg>
                         <span class="px-2">{{ __('messages.order') }}</span>
                     </a>
-                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48 bg-white/90 dark:bg-slate-800/90 backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border border-slate-200 dark:border-slate-700 hidden">
+                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48 card-dynamic-bg backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border  hidden">
                         @if ($orderPending)
-                            <a href="{{ route('pending.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending') }}</a>
+                            <a href="{{ route('pending.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.pending') }}</a>
                         @endif
                         @if ($orderComplete)
-                            <a href="{{ route('complete.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.complete') }}</a>
+                            <a href="{{ route('complete.order') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.complete') }}</a>
                         @endif
                         {{-- @if ($orderPendingDue)
-                            <a href="{{ route('pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.pending_due_sale') }}</a>
+                            <a href="{{ route('pending.due') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.pending_due_sale') }}</a>
                         @endif --}}
                     </div>
                 </div>
@@ -222,10 +222,10 @@
                         </svg>
                         <span class="px-2">{{ __('messages.permission') }}</span>
                     </a>
-                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-52 bg-white/90 dark:bg-slate-800/90 backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border border-slate-200 dark:border-slate-700 hidden">
-                        <a href="{{ route('all.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.all_permission') }}</a>
-                        <a href="{{ route('all.roles') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.all_roles') }}</a>
-                        <a href="{{ route('all.roles.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.all_roles_in_permission') }}</a>
+                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-52 card-dynamic-bg backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border  hidden">
+                        <a href="{{ route('all.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.all_permission') }}</a>
+                        <a href="{{ route('all.roles') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.all_roles') }}</a>
+                        <a href="{{ route('all.roles.permission') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.all_roles_in_permission') }}</a>
                     </div>
                 </div>
             @endif
@@ -253,18 +253,18 @@
                         </svg>
                         <span class="px-2">{{ __('messages.report') }}</span>
                     </a>
-                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48 bg-white/90 dark:bg-slate-800/90 backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border border-slate-200 dark:border-slate-700 hidden">
+                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48 card-dynamic-bg backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border  hidden">
                         @if ($reportSale)
-                            <a href="{{ route('all.reports') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.sale_report') }}</a>
+                            <a href="{{ route('all.reports') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.sale_report') }}</a>
                         @endif
                         @if ($reportPurchase)
-                            <a href="{{ route('report.purchases.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.purchases_report') }}</a>
+                            <a href="{{ route('report.purchases.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.purchases_report') }}</a>
                         @endif
                         @if ($reportStock)
-                            <a href="{{ route('all.report.stock') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.stock_report') }}</a>
+                            <a href="{{ route('all.report.stock') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.stock_report') }}</a>
                         @endif
                         @if ($reportExpense)
-                            <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">{{ __('messages.incom_outcome_report') }}</a>
+                            <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.incom_outcome_report') }}</a>
                         @endif
                     </div>
                 </div>
