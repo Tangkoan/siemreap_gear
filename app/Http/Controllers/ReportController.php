@@ -16,6 +16,7 @@ use App\Models\Shift;
 use App\Models\User;
 
 
+
 use Illuminate\Support\Facades\DB; // <== បន្ថែមនេះ
 
 
@@ -48,6 +49,10 @@ use App\Exports\IncomeExpenseReportExport;
 
 use App\Exports\IncomeExpenseExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ShiftReportExport;
+
+
 
 
 // Export Sale(Order)
@@ -55,7 +60,7 @@ use App\Exports\OrdersByDateExport;
 use App\Exports\OrdersByMonthExport;
 use App\Exports\OrdersByYearExport; 
 
-use Maatwebsite\Excel\Facades\Excel;
+
 
 class ReportController extends Controller
 {
@@ -1280,53 +1285,118 @@ class ReportController extends Controller
 
 
     /// Open Shift
+    // public function showShiftReport(Request $request)
+    // {
+    //     // === 1. Logic សម្រាប់ Filter ===
+    //     $query = Shift::where('status', 'closed')
+    //                     ->with('user') // ភ្ជាប់ទៅតារាង User ដើម្បីយកឈ្មោះ
+    //                     ->latest(); // រៀបចំពីថ្មីទៅចាស់
+
+    //     // Filter តាមកាលបរិច្ឆេទ (Date Range)
+    //     if ($request->filled('start_date') && $request->filled('end_date')) {
+    //         $query->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
+    //     }
+
+    //     // Filter តាមអ្នកគិតលុយ (Cashier/User)
+    //     if ($request->filled('user_id')) {
+    //         $query->where('user_id', $request->user_id);
+    //     }
+
+    //     // យកទិន្នន័យវេន (Shifts) មកបង្ហាញ (១៥ ក្នុងមួយទំព័រ)
+    //     $shifts = $query->paginate(15);
+
+
+    //     // === 2. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់" (Honesty Summary) ===
+    //     // គណនាសរុប "ភាពខុសគ្នា" (Difference) សម្រាប់អ្នកគិតលុយម្នាក់ៗ
+    //     $summaryQuery = Shift::where('status', 'closed')
+    //                         ->groupBy('user_id')
+    //                         ->select('user_id', DB::raw('SUM(difference) as total_difference'))
+    //                         ->with('user');
+
+    //     // ប្រសិនបើ Super Admin បាន Filter តាមកាលបរិច្ឆេទ នោះ Summary ក៏ត្រូវ Filter ដែរ
+    //     if ($request->filled('start_date') && $request->filled('end_date')) {
+    //         $summaryQuery->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
+    //     }
+
+    //     $honestySummary = $summaryQuery->get();
+
+    //     // យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
+    //     $users = User::all();
+
+    //     // បញ្ជូនទិន្នន័យទាំងអស់ទៅកាន់ View
+    //     return view('admin.report.shift_report', [
+    //         'shifts' => $shifts,
+    //         'honestySummary' => $honestySummary,
+    //         'users' => $users,
+    //         'request' => $request // សម្រាប់រក្សាតម្លៃចាស់នៅក្នុង Filter
+    //     ]);
+    // }
+
     public function showShiftReport(Request $request)
-    {
-        // === 1. Logic សម្រាប់ Filter ===
-        $query = Shift::where('status', 'closed')
-                        ->with('user') // ភ្ជាប់ទៅតារាង User ដើម្បីយកឈ្មោះ
-                        ->latest(); // រៀបចំពីថ្មីទៅចាស់
+{
+    // 1. ប្រើ Helper function ថ្មី
+    $query = $this->buildShiftReportQuery($request);
 
-        // Filter តាមកាលបរិច្ឆេទ (Date Range)
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
-        }
+    // 2. យកទិន្នន័យវេន (Shifts) មកបង្ហាញ
+    $shifts = $query->paginate(15);
 
-        // Filter តាមអ្នកគិតលុយ (Cashier/User)
-        if ($request->filled('user_id')) {
-            $query->where('user_id', $request->user_id);
-        }
+    // 3. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់"
+    $summaryQuery = Shift::where('status', 'closed')
+                        ->groupBy('user_id')
+                        ->select('user_id', DB::raw('SUM(difference) as total_difference'))
+                        ->with('user');
 
-        // យកទិន្នន័យវេន (Shifts) មកបង្ហាញ (១៥ ក្នុងមួយទំព័រ)
-        $shifts = $query->paginate(15);
-
-
-        // === 2. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់" (Honesty Summary) ===
-        // គណនាសរុប "ភាពខុសគ្នា" (Difference) សម្រាប់អ្នកគិតលុយម្នាក់ៗ
-        $summaryQuery = Shift::where('status', 'closed')
-                            ->groupBy('user_id')
-                            ->select('user_id', DB::raw('SUM(difference) as total_difference'))
-                            ->with('user');
-
-        // ប្រសិនបើ Super Admin បាន Filter តាមកាលបរិច្ឆេទ នោះ Summary ក៏ត្រូវ Filter ដែរ
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $summaryQuery->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
-        }
-
-        $honestySummary = $summaryQuery->get();
-
-        // យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
-        $users = User::all();
-
-        // បញ្ជូនទិន្នន័យទាំងអស់ទៅកាន់ View
-        return view('admin.report.shift_report', [
-            'shifts' => $shifts,
-            'honestySummary' => $honestySummary,
-            'users' => $users,
-            'request' => $request // សម្រាប់រក្សាតម្លៃចាស់នៅក្នុង Filter
-        ]);
+    // បន្ថែម Filter ទៅ Summary ផងដែរ
+    if ($request->filled('start_date') && $request->filled('end_date')) {
+        $summaryQuery->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
     }
+    if ($request->filled('user_id')) {
+        $summaryQuery->where('user_id', $request->user_id);
+    }
+
+    $honestySummary = $summaryQuery->get();
+
+    // 4. យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
+    $users = User::all();
+
+    return view('admin.report.shift_report', [
+        'shifts' => $shifts,
+        'honestySummary' => $honestySummary,
+        'users' => $users,
+        'request' => $request 
+    ]);
+}
     
+public function exportShiftsExcel(Request $request)
+{
+    $userId = $request->user_id;
+    $startDate = $request->start_date;
+    $endDate = $request->end_date;
+
+    $fileName = 'shift-report-' . now()->format('Y-m-d') . '.xlsx';
+    return Excel::download(new ShiftReportExport($userId, $startDate, $endDate), $fileName);
+}
+
+public function exportShiftsPdf(Request $request)
+{
+    // 1. ប្រើ Helper function ដើម្បីទាញយក Query
+    $query = $this->buildShiftReportQuery($request);
+
+    // 2. យកទិន្នន័យ "ទាំងអស់" (មិនមែន Paginate)
+    $shifts = $query->get();
+
+    $fileName = 'shift-report-' . now()->format('Y-m-d') . '.pdf';
+
+    // 3. បញ្ជូនទិន្នន័យទៅកាន់ View សម្រាប់ Export
+    $pdf = Pdf::loadView('admin.report.exports.shift_report_excel', [
+        'shifts' => $shifts
+    ]);
+
+    // 4. កំណត់ទំហំក្រដាស (แนวนอน)
+    $pdf->setPaper('a4', 'landscape'); 
+
+    return $pdf->download($fileName);
+}
     
     public function getShiftDetails(Shift $shift)
     {
@@ -1361,5 +1431,31 @@ class ReportController extends Controller
                 // ព្រោះវាជាអ្វីដែល Cashier បានបិទ
             ]
         ]);
+    }
+
+    // Private function សម្រាប់ទាញយកទិន្នន័យ (ប្រើរួមគ្នា)
+    private function buildShiftReportQuery(Request $request)
+    {
+        $query = Shift::where('status', 'closed')
+                        ->with([
+                            'user', 
+                            'orders' => function($orderQuery) {
+                                // យកតែ Order ដែលបានលក់ (មិនមែន pre-order)
+                                $orderQuery->where('order_status', 'complete'); 
+                            },
+                            'orders.orderDetails', 
+                            'orders.orderDetails.product'
+                        ]) // <-- ✅ កូដកែប្រែ
+                        ->latest();
+        
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
+        }
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+        
+        return $query;
     }
 }

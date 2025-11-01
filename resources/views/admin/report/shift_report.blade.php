@@ -31,7 +31,10 @@
     {{-- START: Filter Card --}}
     <div class="mb-6 card-dynamic-bg rounded-xl shadow-lg">
         <div class="p-6">
-            <form action="{{ route('report.shifts') }}" method="GET">
+            {{-- ✅ 1. បន្ថែម ID ទៅឱ្យ Form --}}
+            <form action="{{ route('report.shifts') }}" method="GET" id="shiftReportForm">
+
+                {{-- 2. ផ្នែក Filter Inputs --}}
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                     {{-- Filter by User --}}
                     <div>
@@ -45,7 +48,7 @@
                             @endforeach
                         </select>
                     </div>
-                    
+
                     {{-- Filter by Start Date --}}
                     <div>
                         <label for="start_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.start_date') }}</label>
@@ -58,9 +61,11 @@
                         <input type="text" name="end_date" id="end_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" value="{{ $request->end_date }}" placeholder="Select End Date">
                     </div>
 
-                    {{-- Filter Buttons --}}
+                    {{-- Filter/Reset Buttons --}}
                     <div class="flex items-end space-x-2">
-                        <button type="submit" class="w-full px-4 py-2 font-medium text-white transition duration-150 ease-in-out border border-transparent rounded-lg shadow-sm bg-primary hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <button type="submit" class="w-full px-4 py-2 font-medium text-white transition duration-150 ease-in-out border border-transparent rounded-lg shadow-sm bg-primary hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                {{-- ✅ 3. បន្ថែម JavaScript onClick --}}
+                                onclick="setFormAction('{{ route('report.shifts') }}')">
                             {{ __('messages.filter') }}
                         </button>
                         <a href="{{ route('report.shifts') }}" class="w-full px-4 py-2 font-medium text-center transition duration-150 ease-in-out border rounded-lg text-default border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none">
@@ -68,10 +73,39 @@
                         </a>
                     </div>
                 </div>
+
+                {{-- ✅ 4. បន្ថែមផ្នែក Export --}}
+                <div class="flex justify-end pt-4 mt-4 border-t border-slate-200 dark:border-slate-700 space-x-3">
+                    <span class="flex items-center pr-2 text-sm font-medium text-default">{{ __('messages.export_as') }}:</span>
+
+                    {{-- ប៊ូតុង Excel --}}
+                    <button type="submit" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-lg shadow-sm hover:bg-green-700 focus:outline-none"
+                        onclick="setFormAction('{{ route('report.shifts.export.excel') }}')">
+                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.63 8.23l1.88-1.88-1.88-1.88a.5.5 0 01.7-.71l1.88 1.88 1.88-1.88a.5.5 0 11.7.71L8.23 6.63l1.88 1.88a.5.5 0 01-.7.71L7.33 7.33l-1.88 1.88a.5.5 0 01-.7-.71l1.88-1.88zM12 11.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM10.5 13a.5.5 0 00-1 0v1a.5.5 0 001 0v-1zM14 13.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"/></svg> {{-- (Icon Excel សាមញ្ញ) --}}
+                        Excel
+                    </button>
+
+                    {{-- ប៊ូតុង PDF --}}
+                    <button type="submit" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none"
+                        onclick="setFormAction('{{ route('report.shifts.export.pdf') }}')">
+                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a2 2 0 012-2h10a2 2 0 110 4H5a2 2 0 01-2-2zm6-4a1 1 0 00-1-1H4a1 1 0 100 2h4a1 1 0 001-1zM9 5a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1zM3 5a1 1 0 000 2h.01a1 1 0 100-2H3z" clip-rule="evenodd" /></svg> {{-- (Icon PDF សាមញ្ញ) --}}
+                        PDF
+                    </button>
+                </div>
             </form>
         </div>
     </div>
     {{-- END: Filter Card --}}
+
+    {{-- ... (កូដ Layout ខាងក្រោម, Modal, និង JavaScript ទុកដដែល) ... --}}
+
+    {{-- ✅ 5. បន្ថែម JavaScript សម្រាប់ Form Action --}}
+    <script>
+        // (ដាក់វានៅក្នុង <script> ខាងក្រោមគេ ជាមួយ JavaScript ផ្សេងទៀត)
+        function setFormAction(actionUrl) {
+            document.getElementById('shiftReportForm').action = actionUrl;
+        }
+    </script>
 
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">

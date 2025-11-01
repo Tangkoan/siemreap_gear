@@ -154,6 +154,12 @@ Route::middleware(['auth'])->group(callback: function () {
             // យើងប្រើ Route-Model Binding (Shift $shift) ដើម្បីឱ្យវាងាយស្រួល
             Route::get('/report/shift-details/{shift}','getShiftDetails')->name('report.shift.details');
 
+
+            // ✅ បន្ថែម Route ថ្មីទាំងពីរនេះ
+            Route::get('/report/shifts/export/excel', [ReportController::class, 'exportShiftsExcel'])->name('report.shifts.export.excel');
+            Route::get('/report/shifts/export/pdf', [ReportController::class, 'exportShiftsPdf'])->name('report.shifts.export.pdf');
+
+
             Route::get('/all/reports', 'AllReports')->name('all.reports');
             Route::get('/report/orders/details', 'getOrderDetails')->name('report.orders.details');
             Route::match(['get', 'post'], '/report/orders/by-date', 'orderReportByDate')->name('report.orders.by_date');
