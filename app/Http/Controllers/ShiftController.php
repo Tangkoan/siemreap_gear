@@ -60,7 +60,8 @@ class ShiftController extends Controller
         $sales = Order::where('shift_id', $shiftId);
 
         // ⚠️ សំខាន់៖ សូមប្រាកដថាអ្នកប្រើ 'payment_status' ឱ្យត្រូវនឹង Column ក្នុងតារាង 'orders'
-        $totalCash = $sales->clone()->where('payment_status', 'cash')->sum('total');
+        // $totalCash = $sales->clone()->where('payment_status', 'cash')->sum('total');
+        $totalCash = $sales->clone()->whereIn('payment_status', ['Cash', 'HandCash','QrScan'])->sum('total');
         $totalCard = $sales->clone()->where('payment_status', 'card')->sum('total');
         $totalQR = $sales->clone()->where('payment_status', 'qr')->sum('total');
 
@@ -86,7 +87,8 @@ class ShiftController extends Controller
 
         // គណនាយอดលក់ម្តងទៀត
         $sales = Order::where('shift_id', $shiftId);
-        $totalCash = $sales->clone()->where('payment_status', 'cash')->sum('total');
+        // $totalCash = $sales->clone()->where('payment_status', 'cash')->sum('total');
+        $totalCash = $sales->clone()->whereIn('payment_status', ['Cash', 'HandCash','QrScan'])->sum('total');
         $totalCard = $sales->clone()->where('payment_status', 'card')->sum('total');
         $totalQR = $sales->clone()->where('payment_status', 'qr')->sum('total');
 

@@ -12,6 +12,8 @@ use App\Models\Orderdetails;
 use App\Models\purchase;
 use App\Models\purchase_details;
 use App\Models\Expense;
+use App\Models\Shift;
+use App\Models\User;
 
 
 use Illuminate\Support\Facades\DB; // <== បន្ថែមនេះ
@@ -1225,5 +1227,139 @@ class ReportController extends Controller
 
         // 4. បញ្ជាឲ្យ Browser ទាញយក PDF
         return $pdf->download($fileName);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /// Open Shift
+    public function showShiftReport(Request $request)
+    {
+        // === 1. Logic សម្រាប់ Filter ===
+        $query = Shift::where('status', 'closed')
+                        ->with('user') // ភ្ជាប់ទៅតារាង User ដើម្បីយកឈ្មោះ
+                        ->latest(); // រៀបចំពីថ្មីទៅចាស់
+
+        // Filter តាមកាលបរិច្ឆេទ (Date Range)
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
+        }
+
+        // Filter តាមអ្នកគិតលុយ (Cashier/User)
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // យកទិន្នន័យវេន (Shifts) មកបង្ហាញ (១៥ ក្នុងមួយទំព័រ)
+        $shifts = $query->paginate(15);
+
+
+        // === 2. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់" (Honesty Summary) ===
+        // គណនាសរុប "ភាពខុសគ្នា" (Difference) សម្រាប់អ្នកគិតលុយម្នាក់ៗ
+        $summaryQuery = Shift::where('status', 'closed')
+                            ->groupBy('user_id')
+                            ->select('user_id', DB::raw('SUM(difference) as total_difference'))
+                            ->with('user');
+
+        // ប្រសិនបើ Super Admin បាន Filter តាមកាលបរិច្ឆេទ នោះ Summary ក៏ត្រូវ Filter ដែរ
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $summaryQuery->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
+        }
+
+        $honestySummary = $summaryQuery->get();
+
+        // យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
+        $users = User::all();
+
+        // បញ្ជូនទិន្នន័យទាំងអស់ទៅកាន់ View
+        return view('admin.report.shift_report', [
+            'shifts' => $shifts,
+            'honestySummary' => $honestySummary,
+            'users' => $users,
+            'request' => $request // សម្រាប់រក្សាតម្លៃចាស់នៅក្នុង Filter
+        ]);
+    }
+    
+    
+    public function getShiftDetails(Shift $shift)
+    {
+        // $shift ត្រូវបានទាញយកដោយស្វ័យប្រវត្តិតាមរយៈ Route-Model Binding
+
+        // 1. ផ្ទុក (Load) ឈ្មោះអ្នកប្រើប្រាស់ដែលភ្ជាប់ជាមួយវេននេះ
+        $shift->load('user');
+        
+        // 2. ទាញយក Order ទាំងអស់ដែល "បោះត្រា" ជាមួយ shift_id នេះ
+        $orders = Order::where('shift_id', $shift->id)
+                        ->orderBy('created_at', 'asc')
+                        ->get();
+
+        // 3. គណនាសរុប (ប្រើ Logic ដូចគ្នានឹង ShiftController ដែលបានកែ)
+        $cashSales = $orders->whereIn('payment_status', ['Cash', 'HandCash'])->sum('total');
+        $qrSales = $orders->where('payment_status', 'QrScan')->sum('total');
+        $cardSales = $orders->where('payment_status', 'Card')->sum('total'); // (ក្នុងករណីអ្នកមាន 'Card')
+        
+        // 4. គណនាលុយរំពឹងទុក (Expected Cash)
+        $expectedCash = $shift->starting_cash + $cashSales;
+
+        // 5. បញ្ជូនទិន្នន័យទាំងអស់ជា JSON
+        return response()->json([
+            'shift' => $shift,
+            'orders' => $orders,
+            'calculations' => [
+                'total_cash_sales' => $cashSales,
+                'total_qr_sales' => $qrSales,
+                'total_card_sales' => $cardSales,
+                'expected_cash' => $expectedCash,
+                // យើងប្រើ $shift->ending_cash និង $shift->difference ពី Database
+                // ព្រោះវាជាអ្វីដែល Cashier បានបិទ
+            ]
+        ]);
     }
 }

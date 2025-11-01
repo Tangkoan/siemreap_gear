@@ -148,6 +148,12 @@ Route::middleware(['auth'])->group(callback: function () {
 
     // ============================= Report Route ==================================================
         Route::controller(ReportController::class)->group(function () {
+            // ===== របាយការណ៍វេន (Shift Report) =====
+            Route::get('/report/shifts', [ReportController::class, 'showShiftReport'])->name('report.shifts');
+            // ✅ បន្ថែម Route ថ្មីនេះ
+            // យើងប្រើ Route-Model Binding (Shift $shift) ដើម្បីឱ្យវាងាយស្រួល
+            Route::get('/report/shift-details/{shift}','getShiftDetails')->name('report.shift.details');
+
             Route::get('/all/reports', 'AllReports')->name('all.reports');
             Route::get('/report/orders/details', 'getOrderDetails')->name('report.orders.details');
             Route::match(['get', 'post'], '/report/orders/by-date', 'orderReportByDate')->name('report.orders.by_date');

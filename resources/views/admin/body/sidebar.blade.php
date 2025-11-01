@@ -238,9 +238,10 @@
                 $reportPurchase = Auth::user()->can('report.purchase');
                 $reportStock = Auth::user()->can('report.stock');
                 $reportExpense = Auth::user()->can('report.expense');
-                $isReportActive = isRouteActive(['all.reports', 'report.purchases.view', 'all.report.stock', 'report.income_expense.view']);
+                $reportShift  = Auth::user()->can('report.shifts');
+                $isReportActive = isRouteActive(['all.reports', 'report.purchases.view', 'all.report.stock', 'report.income_expense.view', 'report.shifts']);
             @endphp
-            @if ($reportMenu || $reportSale || $reportPurchase || $reportStock || $reportExpense)
+            @if ($reportMenu || $reportSale || $reportPurchase || $reportStock || $reportExpense  || $reportShift)
                 <div class="relative" data-dropdown-trigger>
                     <a href="{{ route('all.reports') }}"
                         class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
@@ -266,6 +267,13 @@
                         @if ($reportExpense)
                             <a href="{{ route('report.income_expense.view') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">{{ __('messages.incom_outcome_report') }}</a>
                         @endif
+
+                        @if ($reportShift)
+                            <a href="{{ route('report.shifts') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md ...">
+                                {{ __('messages.shift_report') }}
+                            </a>
+                        @endif
+                        
                     </div>
                 </div>
             @endif
