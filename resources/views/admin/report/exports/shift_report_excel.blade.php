@@ -41,6 +41,20 @@
 <h2>Shift Report (Detailed)</h2>
 <p>Date Generated: {{ \Carbon\Carbon::now()->format('d-M-Y H:i A') }}</p>
 
+{{-- បង្ហាញ Report Period --}}
+@if(isset($startDate) && $startDate && isset($endDate) && $endDate)
+    <p style="font-weight: bold; font-size: 13px;">
+        Report Period: {{ \Carbon\Carbon::parse($startDate)->format('d-M-Y') }} 
+        to 
+        {{ \Carbon\Carbon::parse($endDate)->format('d-M-Y') }}
+    </p>
+@elseif(isset($startDate) && $startDate)
+     <p style="font-weight: bold; font-size: 13px;">
+        Report Date (From): {{ \Carbon\Carbon::parse($startDate)->format('d-M-Y') }}
+    </p>
+@endif
+
+
 {{-- រង្វិលជុំ (Loop) សម្រាប់វេននីមួយៗ --}}
 @forelse($shifts as $shift)
     
@@ -69,14 +83,18 @@
                         to {{ \Carbon\Carbon::parse($shift->end_time)->format('H:i') }}
                     @endif
                 </td>
-                <td class="text-right">$ {{ number_format($shift->starting_cash + $shift->total_sales_cash, 2) }}</td>
-                <td class="text-right">$ {{ number_format($shift->ending_cash, 2) }}</td>
+                
+                {{-- ✅ START: កូដកែប្រែ (ដកសញ្ញា $ ចេញ) --}}
+                <td class="text-right">{{ number_format($shift->starting_cash + $shift->total_sales_cash, 2, '.', '') }}</td>
+                <td class="text-right">{{ number_format($shift->ending_cash, 2, '.', '') }}</td>
                 <td class="text-right 
                     @if($shift->difference < 0) text-danger @elseif($shift->difference > 0) @else text-success @endif">
-                    $ {{ number_format($shift->difference, 2) }}
+                    {{ number_format($shift->difference, 2, '.', '') }}
                 </td>
-                <td class="text-right">$ {{ number_format($shift->total_sales_qr, 2) }}</td>
-                <td class="text-right">$ {{ number_format($shift->total_sales_card, 2) }}</td>
+                <td class="text-right">{{ number_format($shift->total_sales_qr, 2, '.', '') }}</td>
+                <td class="text-right">{{ number_format($shift->total_sales_card, 2, '.', '') }}</td>
+                {{-- ✅ END: កូដកែប្រែ --}}
+                
             </tr>
         </tbody>
     </table>
@@ -105,15 +123,21 @@
                         <td>{{ $order->payment_status }}</td>
                         <td>{{ $detail->product->product_name ?? 'N/A' }}</td>
                         <td class="text-right">{{ $detail->quantity }}</td>
-                        <td class="text-right">$ {{ number_format($detail->unitcost, 2) }}</td>
-                        <td class="text-right">$ {{ number_format($detail->total, 2) }}</td>
+                        
+                        {{-- ✅ START: កូដកែប្រែ (ដកសញ្ញា $ ចេញ) --}}
+                        <td class="text-right">{{ number_format($detail->unitcost, 2, '.', '') }}</td>
+                        <td class="text-right">{{ number_format($detail->total, 2, '.', '') }}</td>
+                        {{-- ✅ END: កូដកែប្រែ --}}
                     </tr>
                     @endforeach
                 @endforeach
                 {{-- បន្ទាត់សរុប (Total Row) --}}
                 <tr class="total-row">
                     <td colspan="5" class="text-right">Total Sales (All Methods):</td>
-                    <td class="text-right">$ {{ number_format($shift->orders->sum('total'), 2) }}</td>
+                    
+                    {{-- ✅ START: កូដកែប្រែ (ដកសញ្ញា $ ចេញ) --}}
+                    <td class="text-right">{{ number_format($shift->orders->sum('total'), 2, '.', '') }}</td>
+                    {{-- ✅ END: កូដកែប្រែ --}}
                 </tr>
             </tbody>
         </table>

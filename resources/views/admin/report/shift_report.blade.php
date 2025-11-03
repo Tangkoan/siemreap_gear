@@ -1,22 +1,35 @@
 @extends('admin/admin_dashboard')
 @section('admin')
 
-{{-- 1. ដាក់ Script និង Style សម្រាប់ Date Picker នៅខាងលើ --}}
+{{-- 1. Script និង Style សម្រាប់ Date Picker --}}
 <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
 <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
 
-{{-- ខ្ញុំប្រើ p-4 pt-6 តាមកូដមុន (អ្នកអាចប្តូរ p-8 តាមใจ) --}}
+{{-- 2. Style សម្រាប់ Loading Overlay --}}
+<style>
+    #report-data-container.loading {
+        opacity: 0.5;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+</style>
+
 <div class="container-fluid p-4 pt-6 md:p-6">
 
     {{-- START: Page Title & Breadcrumb --}}
     <div class="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center">
-        <div>
-            <h4 class="text-2xl font-semibold text-default">{{ __('messages.shift_report') }}</h4>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <div class="flex">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+            </div>
+            <h4 class="text-2xl font-bold text-default py-2 px-2">{{ __('messages.shift_report') }}</h4>
+            {{-- <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {{ __('messages.review_cash_handling_accuracy') }}
-            </p>
+            </p> --}}
         </div>
-        <div class="mt-2 text-sm sm:mt-0">
+        {{-- <div class="mt-2 text-sm sm:mt-0">
             <ol class="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
                 <li><a href="{{ route('dashboard') }}" class="hover:text-primary">{{ __('messages.dashboard') }}</a></li>
                 <li><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
@@ -24,18 +37,18 @@
                 <li><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
                 <li class="font-medium text-default">{{ __('messages.shift_report') }}</li>
             </ol>
-        </div>
+        </div> --}}
     </div>
     {{-- END: Page Title & Breadcrumb --}}
 
+    
     {{-- START: Filter Card --}}
     <div class="mb-6 card-dynamic-bg rounded-xl shadow-lg">
         <div class="p-6">
-            {{-- ✅ 1. បន្ថែម ID ទៅឱ្យ Form --}}
             <form action="{{ route('report.shifts') }}" method="GET" id="shiftReportForm">
-
-                {{-- 2. ផ្នែក Filter Inputs --}}
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                
+                {{-- 3. កែសម្រួល Grid ទៅ md:grid-cols-3 --}}
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                     {{-- Filter by User --}}
                     <div>
                         <label for="user_id" class="block mb-1 text-sm font-medium text-default">{{ __('messages.filter_by_cashier') }}</label>
@@ -52,43 +65,41 @@
                     {{-- Filter by Start Date --}}
                     <div>
                         <label for="start_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.start_date') }}</label>
-                        <input type="text" name="start_date" id="start_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" value="{{ $request->start_date }}" placeholder="Select Start Date">
+                        
+                        {{-- ✅ កូដកែប្រែ៖ បានបន្ថែម default value (ថ្ងៃនេះ) --}}
+                        <input type="text" name="start_date" id="start_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+                            value="{{ $request->start_date ?? now()->format('Y-m-d') }}" 
+                            placeholder="Select Start Date">
                     </div>
 
                     {{-- Filter by End Date --}}
                     <div>
                         <label for="end_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.end_date') }}</label>
-                        <input type="text" name="end_date" id="end_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" value="{{ $request->end_date }}" placeholder="Select End Date">
+                        
+                        {{-- ✅ កូដកែប្រែ៖ បានបន្ថែម default value (ថ្ងៃនេះ) --}}
+                        <input type="text" name="end_date" id="end_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+                            value="{{ $request->end_date ?? now()->format('Y-m-d') }}" 
+                            placeholder="Select End Date">
                     </div>
 
-                    {{-- Filter/Reset Buttons --}}
-                    <div class="flex items-end space-x-2">
-                        <button type="submit" class="w-full px-4 py-2 font-medium text-white transition duration-150 ease-in-out border border-transparent rounded-lg shadow-sm bg-primary hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                {{-- ✅ 3. បន្ថែម JavaScript onClick --}}
-                                onclick="setFormAction('{{ route('report.shifts') }}')">
-                            {{ __('messages.filter') }}
-                        </button>
-                        <a href="{{ route('report.shifts') }}" class="w-full px-4 py-2 font-medium text-center transition duration-150 ease-in-out border rounded-lg text-default border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none">
-                            {{ __('messages.reset') }}
-                        </a>
-                    </div>
+                    {{-- 4. ដកប៊ូតុង Filter និង Reset ចេញ --}}
                 </div>
 
-                {{-- ✅ 4. បន្ថែមផ្នែក Export --}}
+                {{-- ផ្នែក Export ទុកដដែល --}}
                 <div class="flex justify-end pt-4 mt-4 border-t border-slate-200 dark:border-slate-700 space-x-3">
                     <span class="flex items-center pr-2 text-sm font-medium text-default">{{ __('messages.export_as') }}:</span>
 
                     {{-- ប៊ូតុង Excel --}}
                     <button type="submit" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-lg shadow-sm hover:bg-green-700 focus:outline-none"
                         onclick="setFormAction('{{ route('report.shifts.export.excel') }}')">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.63 8.23l1.88-1.88-1.88-1.88a.5.5 0 01.7-.71l1.88 1.88 1.88-1.88a.5.5 0 11.7.71L8.23 6.63l1.88 1.88a.5.5 0 01-.7.71L7.33 7.33l-1.88 1.88a.5.5 0 01-.7-.71l1.88-1.88zM12 11.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM10.5 13a.5.5 0 00-1 0v1a.5.5 0 001 0v-1zM14 13.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"/></svg> {{-- (Icon Excel សាមញ្ញ) --}}
+                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.63 8.23l1.88-1.88-1.88-1.88a.5.5 0 01.7-.71l1.88 1.88 1.88-1.88a.5.5 0 11.7.71L8.23 6.63l1.88 1.88a.5.5 0 01-.7.71L7.33 7.33l-1.88 1.88a.5.5 0 01-.7-.71l1.88-1.88zM12 11.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM10.5 13a.5.5 0 00-1 0v1a.5.5 0 001 0v-1zM14 13.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"/></svg>
                         Excel
                     </button>
 
                     {{-- ប៊ូតុង PDF --}}
                     <button type="submit" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none"
                         onclick="setFormAction('{{ route('report.shifts.export.pdf') }}')">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a2 2 0 012-2h10a2 2 0 110 4H5a2 2 0 01-2-2zm6-4a1 1 0 00-1-1H4a1 1 0 100 2h4a1 1 0 001-1zM9 5a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1zM3 5a1 1 0 000 2h.01a1 1 0 100-2H3z" clip-rule="evenodd" /></svg> {{-- (Icon PDF សាមញ្ញ) --}}
+                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a2 2 0 012-2h10a2 2 0 110 4H5a2 2 0 01-2-2zm6-4a1 1 0 00-1-1H4a1 1 0 100 2h4a1 1 0 001-1zM9 5a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1zM3 5a1 1 0 000 2h.01a1 1 0 100-2H3z" clip-rule="evenodd" /></svg>
                         PDF
                     </button>
                 </div>
@@ -97,124 +108,11 @@
     </div>
     {{-- END: Filter Card --}}
 
-    {{-- ... (កូដ Layout ខាងក្រោម, Modal, និង JavaScript ទុកដដែល) ... --}}
-
-    {{-- ✅ 5. បន្ថែម JavaScript សម្រាប់ Form Action --}}
-    <script>
-        // (ដាក់វានៅក្នុង <script> ខាងក្រោមគេ ជាមួយ JavaScript ផ្សេងទៀត)
-        function setFormAction(actionUrl) {
-            document.getElementById('shiftReportForm').action = actionUrl;
-        }
-    </script>
-
-
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        
-        {{-- START: Honesty Summary Card --}}
-        <div class="lg:col-span-1">
-            <div class="card-dynamic-bg rounded-xl shadow-lg h-full">
-                <div class="p-6">
-                    <h5 class="text-xl font-semibold text-default mb-4">{{ __('messages.cashier_honesty_summary') }}</h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">
-                        {{ __('messages.summary_desc') }}
-                    </p>
-                    <div class="space-y-4">
-                        @forelse($honestySummary as $summary)
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium text-default">{{ $summary->user->name ?? 'Unknown' }}</span>
-                            
-                            @if($summary->total_difference < 0)
-                                <span class="font-bold text-red-500">
-                                    -$ {{ number_format(abs($summary->total_difference), 2) }} ({{ __('messages.short') }})
-                                </span>
-                            @elseif($summary->total_difference > 0)
-                                <span class="font-bold text-yellow-500">
-                                    +$ {{ number_format($summary->total_difference, 2) }} ({{ __('messages.over') }})
-                                </span>
-                            @else
-                                <span class="font-bold text-green-500">
-                                    $ {{ number_format($summary->total_difference, 2) }} ({{ __('messages.perfect') }})
-                                </span>
-                            @endif
-                        </div>
-                        @empty
-                        <p class="text-gray-500 dark:text-gray-400">{{ __('messages.no_data_for_summary') }}</p>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- END: Honesty Summary Card --}}
-
-        {{-- START: Main Report Table Card --}}
-        <div class="lg:col-span-2">
-            <div class="overflow-x-auto card-dynamic-bg rounded-xl shadow-lg">
-                <div class="min-w-full overflow-hidden">
-                    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-                        <thead class="bg-slate-50 dark:bg-slate-800">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-default">{{ __('messages.cashier') }}</th>
-                                <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-default">{{ __('messages.shift_duration') }}</th>
-                                <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right uppercase text-default">{{ __('messages.expected_cash') }}</th>
-                                <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right uppercase text-default">{{ __('messages.actual_cash') }}</th>
-                                {{-- ✅ START: កូដកែប្រែ (បានបន្ថែមជួរឈរនេះត្រឡប់មកវិញ) --}}
-                                <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right uppercase text-default">{{ __('messages.difference') }}</th>
-                                {{-- ✅ END: កូដកែប្រែ --}}
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                            @forelse($shifts as $shift)
-                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer" 
-                                    data-shift-id="{{ $shift->id }}"
-                                    onclick="openShiftDetailsModal({{ $shift->id }})">
-                                
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-default">{{ $shift->user->name ?? 'Unknown' }}</div>
-                                        <div class="text-xs text-gray-500 dark:text-gray-400">Shift ID: {{ $shift->id }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-default">{{ \Carbon\Carbon::parse($shift->start_time)->format('d-M-Y H:i') }}</div>
-                                        <div class="text-xs text-gray-500 dark:text-gray-400">to {{ \Carbon\Carbon::parse($shift->end_time)->format('H:i') }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-right whitespace-nowrap text-default">
-                                        $ {{ number_format($shift->starting_cash + $shift->total_sales_cash, 2) }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-right whitespace-nowrap text-default">
-                                        $ {{ number_format($shift->ending_cash, 2) }}
-                                    </td>
-                                    
-                                    {{-- ✅ START: កូដកែប្រែ (បានបន្ថែមជួរឈរនេះត្រឡប់មកវិញ) --}}
-                                    <td class="px-6 py-4 text-sm font-bold text-right whitespace-nowrap">
-                                        @if($shift->difference < 0)
-                                            <span class="text-red-500">-$ {{ number_format(abs($shift->difference), 2) }}</span>
-                                        @elseif($shift->difference > 0)
-                                            <span class="text-yellow-500">+$ {{ number_format($shift->difference, 2) }}</span>
-                                        @else
-                                            <span class="text-green-500">$ {{ number_format($shift->difference, 2) }}</span>
-                                        @endif
-                                    </td>
-                                    {{-- ✅ END: កូដកែប្រែ --}}
-                                </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                    {{ __('messages.no_shifts_found_criteria') }}
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    
-                    @if($shifts->hasPages())
-                    <div class="p-4 border-t border-slate-200 dark:border-slate-700">
-                        {{ $shifts->appends(request()->query())->links() }}
-                    </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-        {{-- END: Main Report Table Card --}}
-
+    
+    {{-- 5. បន្ថែម ID ទៅ Wrapper ហើយប្រើ @include --}}
+    <div id="report-data-container" class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {{-- ទិន្នន័យដំបូងនឹងត្រូវបាន Load មកទីនេះ --}}
+        @include('admin.report._report_content') 
     </div>
     
 </div>
@@ -324,13 +222,19 @@
 {{-- ====================================================== --}}
 
 
-{{-- START: JavaScript សម្រាប់ Date Picker និង Modal --}}
+{{-- ====================================================== --}}
+{{-- START: SCRIPT (កូដកែប្រែថ្មី) --}}
+{{-- បានរួមបញ្ចូល JavaScript ទាំងអស់ (Modal, AJAX, Bug Fix) មកកន្លែងតែមួយ --}}
+{{-- ====================================================== --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        flatpickr("#start_date", { dateFormat: "Y-m-d" });
-        flatpickr("#end_date", { dateFormat: "Y-m-d" });
-    });
+    // == 1. Global Helper Functions (សម្រាប់ Modal និង Export) ==
+    
+    // Function សម្រាប់ Form Export (Excel/PDF)
+    function setFormAction(actionUrl) {
+        document.getElementById('shiftReportForm').action = actionUrl;
+    }
 
+    // Functions សម្រាប់ Format លេខ និង ពេលវេលា ក្នុង Modal
     function formatCurrency(number) {
         return '$ ' + parseFloat(number).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
@@ -340,6 +244,7 @@
         return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
     }
 
+    // Functions សម្រាប់បើក/បិទ Modal (ត្រូវតែនៅ Global ព្រោះ HTML 'onclick' ហៅវា)
     const modal = document.getElementById('shiftDetailsModal');
     const modalContent = document.getElementById('shiftDetailsModalContent');
     const modalLoading = document.getElementById('modalLoading');
@@ -358,7 +263,6 @@
             }
             const data = await response.json();
 
-            // 2. បំពេញទិន្នន័យ (Populate Data)
             document.getElementById('modalTitle').innerText = `{{ __('messages.shift_details') }} #${data.shift.id} (${data.shift.user.name})`;
             
             // បំពេញ Summary Box
@@ -369,30 +273,30 @@
             document.getElementById('modalTotalQRSales').innerText = formatCurrency(data.calculations.total_qr_sales);
             document.getElementById('modalTotalCardSales').innerText = formatCurrency(data.calculations.total_card_sales);
 
-            // គណនា Difference ឡើងវិញ
+            // គណនា Difference 
             const diffWrapper = document.getElementById('modalDifferenceWrapper');
             const diffText = document.getElementById('modalDifference');
             diffWrapper.classList.remove('bg-green-100', 'dark:bg-green-900/30', 'bg-red-100', 'dark:bg-red-900/30', 'bg-yellow-100', 'dark:bg-yellow-900/30');
             diffText.classList.remove('text-green-600', 'text-red-600', 'text-yellow-600');
 
-            // គណនា Difference ឱ្យបានត្រឹមត្រូវ ដោយផ្អែកលើទិន្នន័យ "Real-time"
+            // ប្រើ correctDifference ពីព្រោះ data.shift.difference ជា data ចាស់
             const correctDifference = parseFloat(data.shift.ending_cash) - parseFloat(data.calculations.expected_cash);
 
             if (correctDifference < 0) {
                 diffText.innerText = `-${formatCurrency(Math.abs(correctDifference))} ({{ __('messages.short') }})`;
                 diffText.classList.add('text-red-600', 'dark:text-red-400');
-                diffWrapper.classList.add('bg-red-100', 'dark:bg-red-900/30');
+                diffWrapper.classList.add('bg-red-100', 'dark:bg-red-900/3D');
             } else if (correctDifference > 0) {
                 diffText.innerText = `+${formatCurrency(correctDifference)} ({{ __('messages.over') }})`;
                 diffText.classList.add('text-yellow-600', 'dark:text-yellow-400');
-                diffWrapper.classList.add('bg-yellow-100', 'dark:bg-yellow-900/30');
+                diffWrapper.classList.add('bg-yellow-100', 'dark:bg-yellow-900/3D');
             } else {
                 diffText.innerText = `${formatCurrency(correctDifference)} ({{ __('messages.perfect') }})`;
                 diffText.classList.add('text-green-600', 'dark:text-green-400');
-                diffWrapper.classList.add('bg-green-100', 'dark:bg-green-900/30');
+                diffWrapper.classList.add('bg-green-100', 'dark:bg-green-900/3D');
             }
 
-            // 3. បំពេញតារាង Orders
+            // បំពេញតារាង Orders
             const orderListBody = document.getElementById('modalOrderList');
             orderListBody.innerHTML = ''; 
 
@@ -409,17 +313,15 @@
                     orderListBody.innerHTML += row;
                 });
             } else {
-                const row = `
+                orderListBody.innerHTML = `
                     <tr>
                         <td colspan="4" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                             {{ __('messages.no_orders_in_shift') }}
                         </td>
                     </tr>
                 `;
-                orderListBody.innerHTML = row;
             }
 
-            // 4. បង្ហាញទិន្នន័យ និងលាក់ Loading
             modalLoading.classList.add('hidden');
             modalData.classList.remove('hidden');
 
@@ -435,13 +337,143 @@
         setTimeout(() => modal.classList.add('hidden'), 200);
     }
 
-    // ចុចខាងក្រៅ Modal ដើម្បីបិទ
-    modal.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeShiftDetailsModal();
+
+    // == 2. Event Listeners (AJAX, Modal Click, etc.) ==
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        // ភ្ជាប់ Modal click event (ពេល DOM ready)
+        if (modal) {
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeShiftDetailsModal();
+                }
+            });
+        }
+
+        // --- ផ្នែក AJAX Filter ---
+        const reportContainer = document.getElementById('report-data-container');
+        const form = document.getElementById('shiftReportForm');
+        const userSelect = document.getElementById('user_id');
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+
+        // Debounce function
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        // Function សម្រាប់ទាញទិន្នន័យ (Fetch Data)
+        async function fetchReportData(url = null) {
+            
+            // បើមិនមាន URL, បង្កើតវាពី Form
+            if (!url) {
+                // ✅ START: កូដកែប្រែ (វិធីសាស្ត្រថ្មី)
+                // យើងនឹងបង្កើត URLSearchParams ដោយខ្លួនឯង ព្រោះ FormData ពេលខ្លះមានបញ្ហា
+                const params = new URLSearchParams();
+                
+                // 1. យក User ID
+                const userSelect = document.getElementById('user_id');
+                if (userSelect && userSelect.value) {
+                    params.append('user_id', userSelect.value);
+                }
+
+                // 2. យក Start Date
+                const startDateInput = document.getElementById('start_date');
+                if (startDateInput && startDateInput.value) {
+                    params.append('start_date', startDateInput.value);
+                }
+
+                // 3. យក End Date
+                const endDateInput = document.getElementById('end_date');
+                if (endDateInput && endDateInput.value) {
+                    params.append('end_date', endDateInput.value);
+                }
+                // ✅ END: កូដកែប្រែ
+
+                url = `${window.location.pathname}?${params.toString()}`;
+            }
+
+            reportContainer.classList.add('loading');
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    }
+                });
+
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const data = await response.json();
+                reportContainer.innerHTML = data.html;
+
+                // (URL នឹងមិនផ្លាស់ប្តូរ ដូចដែលអ្នកចង់បាន)
+                // window.history.pushState({}, '', url); 
+
+            } catch (error) {
+                console.error('Failed to fetch report data:', error);
+            } finally {
+                reportContainer.classList.remove('loading');
+            }
+        }
+
+        // បង្កើត Debounced version
+        const debouncedFetch = debounce(fetchReportData, 400);
+
+        // --- ភ្ជាប់ Listeners (ជួសជុលកំហុស) ---
+        
+        // 1. User Dropdown
+        if (userSelect) {
+            userSelect.addEventListener('change', () => debouncedFetch());
+        }
+
+        // 2. Start Date (Initialize តែម្តង)
+        if (startDateInput) {
+            flatpickr(startDateInput, { 
+                dateFormat: "Y-m-d",
+                // ✅ START: កូដកែប្រែ
+                onChange: function(selectedDates, dateStr, instance) {
+                // ✅ END: កូដកែប្រែ
+                    debouncedFetch();
+                }
+            });
+        }
+
+        // 3. End Date (Initialize តែម្តង)
+        if (endDateInput) {
+            flatpickr(endDateInput, { 
+                dateFormat: "Y-m-d",
+                // ✅ START: កូដកែប្រែ
+                onChange: function(selectedDates, dateStr, instance) {
+                // ✅ END: កូដកែប្រែ
+                    debouncedFetch();
+                }
+            });
+        }
+        
+        // 4. Pagination
+        if (reportContainer) {
+            reportContainer.addEventListener('click', function(e) {
+                // ពិនិត្យមើលថាតើអ្វីដែលបានចុចគឺជា Link នៅក្នុង Pagination
+                if (e.target.tagName === 'A' && e.target.closest('.pagination')) {
+                    e.preventDefault(); // បញ្ឈប់ការ Reload Page
+                    const url = e.target.href; // យក URL ពី Link នោះ
+                    
+                    if(url) {
+                        fetchReportData(url); // ហៅ Function ជាមួយ URL ថ្មី
+                    }
+                }
+            });
         }
     });
-
 </script>
-{{-- END: JavaScript --}}
+{{-- ====================================================== --}}
+{{-- END: SCRIPT --}}
+{{-- ====================================================== --}}
 @endsection

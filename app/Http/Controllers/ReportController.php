@@ -1239,218 +1239,170 @@ class ReportController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /// Open Shift
-    // public function showShiftReport(Request $request)
-    // {
-    //     // === 1. Logic សម្រាប់ Filter ===
-    //     $query = Shift::where('status', 'closed')
-    //                     ->with('user') // ភ្ជាប់ទៅតារាង User ដើម្បីយកឈ្មោះ
-    //                     ->latest(); // រៀបចំពីថ្មីទៅចាស់
-
-    //     // Filter តាមកាលបរិច្ឆេទ (Date Range)
-    //     if ($request->filled('start_date') && $request->filled('end_date')) {
-    //         $query->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
-    //     }
-
-    //     // Filter តាមអ្នកគិតលុយ (Cashier/User)
-    //     if ($request->filled('user_id')) {
-    //         $query->where('user_id', $request->user_id);
-    //     }
-
-    //     // យកទិន្នន័យវេន (Shifts) មកបង្ហាញ (១៥ ក្នុងមួយទំព័រ)
-    //     $shifts = $query->paginate(15);
-
-
-    //     // === 2. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់" (Honesty Summary) ===
-    //     // គណនាសរុប "ភាពខុសគ្នា" (Difference) សម្រាប់អ្នកគិតលុយម្នាក់ៗ
-    //     $summaryQuery = Shift::where('status', 'closed')
-    //                         ->groupBy('user_id')
-    //                         ->select('user_id', DB::raw('SUM(difference) as total_difference'))
-    //                         ->with('user');
-
-    //     // ប្រសិនបើ Super Admin បាន Filter តាមកាលបរិច្ឆេទ នោះ Summary ក៏ត្រូវ Filter ដែរ
-    //     if ($request->filled('start_date') && $request->filled('end_date')) {
-    //         $summaryQuery->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
-    //     }
-
-    //     $honestySummary = $summaryQuery->get();
-
-    //     // យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
-    //     $users = User::all();
-
-    //     // បញ្ជូនទិន្នន័យទាំងអស់ទៅកាន់ View
-    //     return view('admin.report.shift_report', [
-    //         'shifts' => $shifts,
-    //         'honestySummary' => $honestySummary,
-    //         'users' => $users,
-    //         'request' => $request // សម្រាប់រក្សាតម្លៃចាស់នៅក្នុង Filter
-    //     ]);
-    // }
+// ===============================================
+    // START: SHIFT REPORT FUNCTIONS (កូដកែប្រែថ្មី)
+    // ===============================================
 
     public function showShiftReport(Request $request)
-{
-    // 1. ប្រើ Helper function ថ្មី
-    $query = $this->buildShiftReportQuery($request);
-
-    // 2. យកទិន្នន័យវេន (Shifts) មកបង្ហាញ
-    $shifts = $query->paginate(15);
-
-    // 3. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់"
-    $summaryQuery = Shift::where('status', 'closed')
-                        ->groupBy('user_id')
-                        ->select('user_id', DB::raw('SUM(difference) as total_difference'))
-                        ->with('user');
-
-    // បន្ថែម Filter ទៅ Summary ផងដែរ
-    if ($request->filled('start_date') && $request->filled('end_date')) {
-        $summaryQuery->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
-    }
-    if ($request->filled('user_id')) {
-        $summaryQuery->where('user_id', $request->user_id);
-    }
-
-    $honestySummary = $summaryQuery->get();
-
-    // 4. យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
-    $users = User::all();
-
-    return view('admin.report.shift_report', [
-        'shifts' => $shifts,
-        'honestySummary' => $honestySummary,
-        'users' => $users,
-        'request' => $request 
-    ]);
-}
-    
-public function exportShiftsExcel(Request $request)
-{
-    $userId = $request->user_id;
-    $startDate = $request->start_date;
-    $endDate = $request->end_date;
-
-    $fileName = 'shift-report-' . now()->format('Y-m-d') . '.xlsx';
-    return Excel::download(new ShiftReportExport($userId, $startDate, $endDate), $fileName);
-}
-
-public function exportShiftsPdf(Request $request)
-{
-    // 1. ប្រើ Helper function ដើម្បីទាញយក Query
-    $query = $this->buildShiftReportQuery($request);
-
-    // 2. យកទិន្នន័យ "ទាំងអស់" (មិនមែន Paginate)
-    $shifts = $query->get();
-
-    $fileName = 'shift-report-' . now()->format('Y-m-d') . '.pdf';
-
-    // 3. បញ្ជូនទិន្នន័យទៅកាន់ View សម្រាប់ Export
-    $pdf = Pdf::loadView('admin.report.exports.shift_report_excel', [
-        'shifts' => $shifts
-    ]);
-
-    // 4. កំណត់ទំហំក្រដាស (แนวนอน)
-    $pdf->setPaper('a4', 'landscape'); 
-
-    return $pdf->download($fileName);
-}
-    
-    public function getShiftDetails(Shift $shift)
     {
-        // $shift ត្រូវបានទាញយកដោយស្វ័យប្រវត្តិតាមរយៈ Route-Model Binding
+        // ✅ START: កូដកែប្រែ (បន្ថែម Default សម្រាប់ថ្ងៃនេះ)
+        // ប្រសិនបើនេះជាការ Load ទំព័រដំបូង (មិនមែន AJAX) 
+        // ហើយមិនមានថ្ងៃខែត្រូវបានកំណត់ (user មិនទាន់ Filter)
+        // នោះយើងនឹងកំណត់ Default ទៅជា "ថ្ងៃនេះ"
+        if (!$request->ajax() && !$request->has('start_date') && !$request->has('end_date')) {
+            $today = now()->format('Y-m-d');
+            $request->merge([
+                'start_date' => $today,
+                'end_date' => $today,
+            ]);
+        }
+        // ✅ END: កូដកែប្រែ
 
-        // 1. ផ្ទុក (Load) ឈ្មោះអ្នកប្រើប្រាស់ដែលភ្ជាប់ជាមួយវេននេះ
-        $shift->load('user');
+        // 1. ប្រើ Helper function ថ្មី (ឥឡូវនេះវានឹងប្រើ "ថ្ងៃនេះ" ជា Default)
+        $query = $this->buildShiftReportQuery($request);
+
+        // 2. យកទិន្នន័យវេន (Shifts) មកបង្ហាញ
+        $shifts = $query->paginate(15)->withQueryString(); 
+
+        // 3. Logic សម្រាប់ "ផ្ទៀងផ្ទាត់ភាពស្មោះត្រង់"
+        $summaryQuery = Shift::where('status', 'closed')
+                            ->groupBy('user_id')
+                            ->select('user_id', DB::raw('SUM(difference) as total_difference'))
+                            ->with('user');
+
+        // (តក្កវិជ្ជា Filter ខាងក្រោមនេះ ត្រឹមត្រូវហើយ ព្រោះវានឹងប្រើ $request ដែលបានកែ)
+        if ($request->filled('start_date')) {
+            $startDate = \Carbon\Carbon::parse($request->start_date)->startOfDay(); 
+            $summaryQuery->where('start_time', '>=', $startDate);
+        }
+        if ($request->filled('end_date')) {
+            $endDate = \Carbon\Carbon::parse($request->end_date)->endOfDay();
+            $summaryQuery->where('start_time', '<=', $endDate);
+        }
+        if ($request->filled('user_id')) {
+            $summaryQuery->where('user_id', $request->user_id);
+        }
+
+        $honestySummary = $summaryQuery->get();
+
+        // 4. យក Users ទាំងអស់ (សម្រាប់ Filter Dropdown)
+        $users = User::all();
         
-        // 2. ទាញយក Order ទាំងអស់ដែល "បោះត្រា" ជាមួយ shift_id នេះ
-        $orders = Order::where('shift_id', $shift->id)
-                        ->orderBy('created_at', 'asc')
-                        ->get();
+        // ពិនិត្យមើលថាតើ Request នេះជា AJAX Request ឬអត់
+        if ($request->ajax()) {
+            $reportHtml = view('admin.report._report_content', [
+                'shifts' => $shifts,
+                'honestySummary' => $honestySummary,
+                'request' => $request
+            ])->render();
+            return response()->json(['html' => $reportHtml]);
+        }
 
-        // 3. គណនាសរុប (ប្រើ Logic ដូចគ្នានឹង ShiftController ដែលបានកែ)
-        $cashSales = $orders->whereIn('payment_status', ['Cash', 'HandCash'])->sum('total');
-        $qrSales = $orders->where('payment_status', 'QrScan')->sum('total');
-        $cardSales = $orders->where('payment_status', 'Card')->sum('total'); // (ក្នុងករណីអ្នកមាន 'Card')
-        
-        // 4. គណនាលុយរំពឹងទុក (Expected Cash)
-        $expectedCash = $shift->starting_cash + $cashSales;
-
-        // 5. បញ្ជូនទិន្នន័យទាំងអស់ជា JSON
-        return response()->json([
-            'shift' => $shift,
-            'orders' => $orders,
-            'calculations' => [
-                'total_cash_sales' => $cashSales,
-                'total_qr_sales' => $qrSales,
-                'total_card_sales' => $cardSales,
-                'expected_cash' => $expectedCash,
-                // យើងប្រើ $shift->ending_cash និង $shift->difference ពី Database
-                // ព្រោះវាជាអ្វីដែល Cashier បានបិទ
-            ]
+        // បើមិនមែន AJAX (Load Page លើកដំបូង) បង្ហាញ View ពេញ
+        return view('admin.report.shift_report', [
+            'shifts' => $shifts,
+            'honestySummary' => $honestySummary,
+            'users' => $users,
+            'request' => $request // $request នេះឥឡូវមានផ្ទុក Default "ថ្ងៃនេះ" ហើយ
         ]);
     }
+    
+    //... (Function exportShiftsExcel, exportShiftsPdf, getShiftDetails ទុកដដែល) ...
+    public function exportShiftsExcel(Request $request)
+    {
+        // 1. ប្រើ Helper function ដើម្បីទាញយក Query (ដូច PDF)
+        $query = $this->buildShiftReportQuery($request);
 
-    // Private function សម្រាប់ទាញយកទិន្នន័យ (ប្រើរួមគ្នា)
+        // 2. យកទិន្នន័យ "ទាំងអស់" (មិនមែន Paginate)
+        $shifts = $query->get();
+
+        // 3. យកថ្ងៃខែពី Request (ដូច PDF)
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $fileName = 'shift-report-' . now()->format('Y-m-d') . '.xlsx';
+        
+        // 4. បញ្ជូន "ទិន្នន័យ" (collection) ទៅកាន់ Export class 
+        return Excel::download(new ShiftReportExport($shifts, $startDate, $endDate), $fileName);
+    }
+
+    public function exportShiftsPdf(Request $request)
+    {
+        // 1. ប្រើ Helper function ដើម្បីទាញយក Query
+        $query = $this->buildShiftReportQuery($request);
+
+        // 2. យកទិន្នន័យ "ទាំងអស់" (មិនមែន Paginate)
+        $shifts = $query->get();
+
+        // 3. យកថ្ងៃខែពី Request (នេះជាកូដបន្ថែម)
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $fileName = 'shift-report-' . now()->format('Y-m-d') . '.pdf';
+
+        // 4. បញ្ជូនទិន្នន័យ "ទាំងអស់" (រួមទាំងថ្ងៃខែ) ទៅកាន់ View សម្រាប់ Export
+        $pdf = Pdf::loadView('admin.report.exports.shift_report_excel', [
+            'shifts' => $shifts,
+            'startDate' => $startDate, // <-- ✅ បន្ថែមនេះ
+            'endDate' => $endDate    // <-- ✅ បន្ថែមនេះ
+        ]);
+
+        // 5. កំណត់ទំហំក្រដាស (แนวนอน)
+        $pdf->setPaper('a4', 'landscape'); 
+
+        return $pdf->download($fileName);
+    }
+
+    public function getShiftDetails(Shift $shift)
+    {
+    $shift->load('user');
+    $orders = Order::where('shift_id', $shift->id)
+    ->orderBy('created_at', 'asc')
+    ->get();
+
+    $cashSales = $orders->whereIn('payment_status', ['Cash', 'HandCash'])->sum('total');
+    $qrSales = $orders->where('payment_status', 'QrScan')->sum('total');
+    $cardSales = $orders->where('payment_status', 'Card')->sum('total');
+    $expectedCash = $shift->starting_cash + $cashSales;
+
+    return response()->json([
+    'shift' => $shift,
+    'orders' => $orders,
+    'calculations' => [
+    'total_cash_sales' => $cashSales,
+    'total_qr_sales' => $qrSales,
+    'total_card_sales' => $cardSales,
+    'expected_cash' => $expectedCash,
+    ]
+    ]);
+    }
+
+   // Private function សម្រាប់ទាញយកទិន្នន័យ (ប្រើរួមគ្នា)
     private function buildShiftReportQuery(Request $request)
     {
         $query = Shift::where('status', 'closed')
                         ->with([
                             'user', 
                             'orders' => function($orderQuery) {
-                                // យកតែ Order ដែលបានលក់ (មិនមែន pre-order)
                                 $orderQuery->where('order_status', 'complete'); 
                             },
                             'orders.orderDetails', 
                             'orders.orderDetails.product'
-                        ]) // <-- ✅ កូដកែប្រែ
+                        ])
                         ->latest();
         
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween(DB::raw('DATE(start_time)'), [$request->start_date, $request->end_date]);
+        // ✅ START: កូដកែប្រែ (វិធីសាស្ត្រ Carbon ថ្មី)
+        if ($request->filled('start_date')) {
+            // យកពេលចាប់ផ្តើមនៃថ្ងៃ (ឧ. 2025-11-08 00:00:00)
+            $startDate = \Carbon\Carbon::parse($request->start_date)->startOfDay();
+            $query->where('start_time', '>=', $startDate);
         }
+        if ($request->filled('end_date')) {
+            // យកពេលចុងបញ្ចប់នៃថ្ងៃ (ឧ. 2025-11-08 23:59:59)
+            $endDate = \Carbon\Carbon::parse($request->end_date)->endOfDay();
+            $query->where('start_time', '<=', $endDate);
+        }
+        // ✅ END: កូដកែប្រែ
 
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
@@ -1458,4 +1410,8 @@ public function exportShiftsPdf(Request $request)
         
         return $query;
     }
+    
+    // ===============================================
+    // END: SHIFT REPORT FUNCTIONS
+    // ===============================================
 }

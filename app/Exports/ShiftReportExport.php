@@ -2,55 +2,33 @@
 
 namespace App\Exports;
 
-use App\Models\Shift;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Illuminate\Support\Facades\DB;
 
-class ShiftReportExport implements FromView, ShouldAutoSize
+class ShiftReportExport implements FromView
 {
-    protected $userId;
+    protected $shifts;
     protected $startDate;
     protected $endDate;
 
-    public function __construct($userId, $startDate, $endDate)
+    // constructor ថ្មី ទទួលយកទិន្នន័យ $shifts (ដែល Controller បានទាញ)
+    public function __construct($shifts, $startDate, $endDate)
     {
-        $this->userId = $userId;
+        $this->shifts = $shifts;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
     }
 
-
-
+    /**
+    * @return \Illuminate\Contracts\View\View
+    */
     public function view(): View
     {
-        // 1. ប្រើ Logic ដូចគ្នានឹង ReportController
-        $query = Shift::where('status', 'closed')
-                        ->with([
-                            'user',
-                            'orders' => function($orderQuery) {
-                                $orderQuery->where('order_status', 'complete');
-                            },
-                            'orders.orderDetails',
-                            'orders.orderDetails.product'
-                        ]) // <-- ✅ កូដកែប្រែ
-                        ->latest();
-
-        if ($this->startDate && $this->endDate) {
-            $query->whereBetween(DB::raw('DATE(start_time)'), [$this->startDate, $this->endDate]);
-        }
-
-        if ($this->userId) {
-            $query->where('user_id', $this->userId);
-        }
-
-        $shifts = $query->get();
-
-        // 3. បញ្ជូនទិន្នន័យទៅកាន់ View សម្រាប់ Export
+        // ប្រើ Blade View ដូចគ្នានឹង PDF 
         return view('admin.report.exports.shift_report_excel', [
-            'shifts' => $shifts
+            'shifts' => $this->shifts,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate
         ]);
     }
-    
 }
