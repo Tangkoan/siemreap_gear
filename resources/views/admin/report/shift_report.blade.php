@@ -46,64 +46,66 @@
     <div class="mb-6 card-dynamic-bg rounded-xl shadow-lg">
         <div class="p-6">
             <form action="{{ route('report.shifts') }}" method="GET" id="shiftReportForm">
-                
-                {{-- 3. កែសម្រួល Grid ទៅ md:grid-cols-3 --}}
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    {{-- Filter by User --}}
-                    <div>
-                        <label for="user_id" class="block mb-1 text-sm font-medium text-default">{{ __('messages.filter_by_cashier') }}</label>
-                        <select name="user_id" id="user_id" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
-                            <option value="">{{ __('messages.all_cashiers') }}</option>
-                            @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ $request->user_id == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
 
-                    {{-- Filter by Start Date --}}
-                    <div>
-                        <label for="start_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.start_date') }}</label>
-                        
-                        {{-- ✅ កូដកែប្រែ៖ បានបន្ថែម default value (ថ្ងៃនេះ) --}}
-                        <input type="text" name="start_date" id="start_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
-                            value="{{ $request->start_date ?? now()->format('Y-m-d') }}" 
-                            placeholder="Select Start Date">
-                    </div>
+    {{-- ✅ ប្រើ Flexbox Layout (sm:flex-row) ដើម្បីបំបែកជា ២ ក្រុម --}}
+    {{-- sm:items-end តម្រឹមបាតស្មើគ្នា, sm:justify-between ដាក់ក្រុមឆ្វេង និងស្តាំ --}}
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
 
-                    {{-- Filter by End Date --}}
-                    <div>
-                        <label for="end_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.end_date') }}</label>
-                        
-                        {{-- ✅ កូដកែប្រែ៖ បានបន្ថែម default value (ថ្ងៃនេះ) --}}
-                        <input type="text" name="end_date" id="end_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
-                            value="{{ $request->end_date ?? now()->format('Y-m-d') }}" 
-                            placeholder="Select End Date">
-                    </div>
+        {{-- ក្រុមទី១៖ ក្រុម Filter (តម្រៀបដោយ Grid សម្រាប់ភាពងាយស្រួល) --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            {{-- Filter by User --}}
+            <div>
+                <label for="user_id" class="block mb-1 text-sm font-medium text-default">{{ __('messages.filter_by_cashier') }}</label>
+                <select name="user_id" id="user_id" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <option value="">{{ __('messages.all_cashiers') }}</option>
+                    @foreach($users as $user)
+                    <option value="{{ $user->id }}" {{ $request->user_id == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
 
-                    {{-- 4. ដកប៊ូតុង Filter និង Reset ចេញ --}}
-                </div>
+            {{-- Filter by Start Date --}}
+            <div>
+                <label for="start_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.start_date') }}</label>
+                <input type="text" name="start_date" id="start_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+                       value="{{ $request->start_date ?? now()->format('Y-m-d') }}" 
+                       placeholder="Select Start Date">
+            </div>
 
-                {{-- ផ្នែក Export ទុកដដែល --}}
-                <div class="flex justify-end pt-4 mt-4 border-t border-slate-200 dark:border-slate-700 space-x-3">
-                    <span class="flex items-center pr-2 text-sm font-medium text-default">{{ __('messages.export_as') }}:</span>
+            {{-- Filter by End Date --}}
+            <div>
+                <label for="end_date" class="block mb-1 text-sm font-medium text-default">{{ __('messages.end_date') }}</label>
+                <input type="text" name="end_date" id="end_date" class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" 
+                       value="{{ $request->end_date ?? now()->format('Y-m-d') }}" 
+                       placeholder="Select End Date">
+            </div>
+        </div>
 
-                    {{-- ប៊ូតុង Excel --}}
-                    <button type="submit" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-lg shadow-sm hover:bg-green-700 focus:outline-none"
-                        onclick="setFormAction('{{ route('report.shifts.export.excel') }}')">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.63 8.23l1.88-1.88-1.88-1.88a.5.5 0 01.7-.71l1.88 1.88 1.88-1.88a.5.5 0 11.7.71L8.23 6.63l1.88 1.88a.5.5 0 01-.7.71L7.33 7.33l-1.88 1.88a.5.5 0 01-.7-.71l1.88-1.88zM12 11.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM10.5 13a.5.5 0 00-1 0v1a.5.5 0 001 0v-1zM14 13.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5z"/></svg>
-                        Excel
-                    </button>
-
-                    {{-- ប៊ូតុង PDF --}}
-                    <button type="submit" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none"
-                        onclick="setFormAction('{{ route('report.shifts.export.pdf') }}')">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a2 2 0 012-2h10a2 2 0 110 4H5a2 2 0 01-2-2zm6-4a1 1 0 00-1-1H4a1 1 0 100 2h4a1 1 0 001-1zM9 5a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1zM3 5a1 1 0 000 2h.01a1 1 0 100-2H3z" clip-rule="evenodd" /></svg>
-                        PDF
-                    </button>
-                </div>
-            </form>
+        {{-- ក្រុមទី២៖ ក្រុមប៊ូតុង Export (តម្រៀបដោយ Flex) --}}
+        <div class="flex items-center gap-2">
+            
+            {{-- ប៊ូតុង Excel --}}
+            <button type="submit" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors"
+                    onclick="setFormAction('{{ route('report.shifts.export.excel') }}')">
+                {{-- SVG Icon សម្រាប់ Excel (ដូចក្នុងរូប) --}}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path> <polyline points="14 2 14 8 20 8"></polyline> <line x1="16" y1="13" x2="8" y2="13"></line> <line x1="16" y1="17" x2="8" y2="17"></line> <polyline points="10 9 9 9 8 9"></polyline> </svg>
+                Excel
+            </button>
+            
+            {{-- ប៊ូតុង PDF --}}
+            <button type="submit" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition-colors"
+                    onclick="setFormAction('{{ route('report.shifts.export.pdf') }}')">
+                {{-- SVG Icon សម្រាប់ PDF (ដូចក្នុងរូប) --}}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path> <polyline points="14 2 14 8 20 8"></polyline> <path d="M10.29 13.71a2.43 2.43 0 0 1-2.43-2.43 2.43 2.43 0 0 1 2.43-2.43c1.34 0 2.43.95 2.43 2.1 0 .59-.22 1.16-.64 1.57"> </path> <path d="M14.71 13.71a2.43 2.43 0 0 1-2.43-2.43 2.43 2.43 0 0 1 2.43-2.43c1.34 0 2.43.95 2.43 2.1 0 .59-.22 1.16-.64 1.57"> </path> </svg>
+                PDF
+            </button>
+        </div>
+        
+    </div>
+</form>
         </div>
     </div>
     {{-- END: Filter Card --}}

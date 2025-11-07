@@ -21,12 +21,12 @@ class AppearanceController extends Controller
             'light_text_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'light_bg_type' => 'nullable|in:default,color,image',
             'light_bg_color' => 'nullable|required_if:light_bg_type,color|regex:/^#[0-9a-fA-F]{6}$/',
-            'light_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'light_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:10000',
             'dark_primary_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'dark_text_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'dark_bg_type' => 'nullable|in:default,color,image',
             'dark_bg_color' => 'nullable|required_if:dark_bg_type,color|regex:/^#[0-9a-fA-F]{6}$/',
-            'dark_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'dark_bg_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:10000',
 
             // --- Settings សម្រាប់ Card ---
             'light_card_type' => 'nullable|in:default,solid,gradient',
