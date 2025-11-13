@@ -5,9 +5,8 @@
     <div class="container mx-auto p-4 sm:p-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            {{-- ✅ Card នេះឥឡូវប្រើ Class ថ្មី --}}
-            <div
-                class="lg:col-span-1 card-dynamic-bg rounded-lg shadow-md p-6 flex flex-col items-center justify-center space-y-4 transition-colors duration-300">
+            {{-- ✅ Profile Card --}}
+            <div class="lg:col-span-1 card-dynamic-bg rounded-lg shadow-md p-6 flex flex-col items-center justify-center space-y-4 transition-colors duration-300">
                 <img class="h-24 w-24 rounded-full object-cover border-4 border-primary shadow-lg"
                     src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}"
                     onerror="this.onerror=null;this.src='https://placehold.co/96x96/4f46e5/ffffff?text=User';"
@@ -23,11 +22,9 @@
                     <p class="text-default font-medium">{{ __('messages.email') }}: <span
                             class="font-normal text-default ">{{ Auth::user()->email }}</span></p>
                 </div>
-
-
             </div>
 
-            {{-- ✅ Card នេះឥឡូវប្រើ Class ថ្មី --}}
+            {{-- ✅ Profile Edit Form --}}
             <div class="lg:col-span-2 card-dynamic-bg rounded-lg shadow-md p-6 transition-colors duration-300">
                 <h2 class="text-xl text-default mb-6 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -43,7 +40,7 @@
                     @csrf
                     {{-- Name --}}
                     <div>
-                        <label for="name" class="block text-default  text-sm font-medium mb-2">
+                        <label for="name" class="block text-default text-sm font-medium mb-2">
                             {{ __('messages.name') }}
                         </label>
                         <input type="text" id="name" name="name" required
@@ -53,7 +50,7 @@
 
                     {{-- Email --}}
                     <div>
-                        <label for="email" class="block text-default  text-sm font-medium mb-2">
+                        <label for="email" class="block text-default text-sm font-medium mb-2">
                             {{ __('messages.email') }}
                         </label>
                         <input type="email" id="email" name="email" required
@@ -63,7 +60,7 @@
 
                     {{-- Phone --}}
                     <div>
-                        <label for="phone" class="block text-default  text-sm font-medium mb-2">
+                        <label for="phone" class="block text-default text-sm font-medium mb-2">
                             {{ __('messages.phone') }}
                         </label>
                         <input type="tel" name="phone" id="phone" required
@@ -73,7 +70,7 @@
 
                     {{-- Image Upload --}}
                     <div>
-                        <label for="image" class="block text-default  text-sm font-medium mb-2">
+                        <label for="image" class="block text-default text-sm font-medium mb-2">
                             {{ __('messages.user_profile_image') }}
                         </label>
                         <div class="flex items-center space-x-4">
@@ -82,14 +79,14 @@
                                 src="{{ !empty($adminData->photo) ? url('upload/admin_image/' . $adminData->photo) : url('upload/no_image.jpg') }}"
                                 alt="Current Profile Picture">
 
-                            <div class="flex-grow ">
+                            <div class="flex-grow">
                                 <input type="file" name="photo" id="image" class="hidden">
                                 <label for="image"
                                     class="cursor-pointer bg-primary hover:opacity-90 text-white py-2 px-4 rounded-md transition-colors duration-200 shadow-sm">
                                     {{ __('messages.chosse_file') }}
                                 </label>
                                 <span id="file-name"
-                                    class="text-default  ml-3 text-sm">{{ __('messages.no_file_chosse') }}</span>
+                                    class="text-default ml-3 text-sm">{{ __('messages.no_file_chosse') }}</span>
                             </div>
 
                             <div class="relative">
@@ -116,80 +113,107 @@
             </div>
         </div>
 
-
+        {{-- ✅ PHP Block: កំណត់ Defaults ឱ្យគ្រប់គ្រាន់ ដើម្បីកុំឱ្យ Error --}}
         @php
-            // យក Settings មកបង្ហាញក្នុង Form
             $defaults = [
-                'light_primary_color' => '#4F46E5',
-                'light_text_color' => '#1F2937',
-                'light_bg_type' => 'default',
-                'light_bg_color' => '#F3F4F6',
-                'light_bg_image' => null,
-                'dark_primary_color' => '#6366F1',
-                'dark_text_color' => '#F9FAFB',
-                'dark_bg_type' => 'default',
-                'dark_bg_color' => '#111827',
-                'dark_bg_image' => null,
-                'light_card_type' => 'default',
-                'light_card_color1' => '#FFFFFF',
-                'light_card_opacity' => 80,
-                'light_card_color2' => '#F9FAFB',
-                'light_card_gradient_dir' => 'to right',
-                'dark_card_type' => 'default',
-                'dark_card_color1' => '#1F2937',
-                'dark_card_opacity' => 80,
-                'dark_card_color2' => '#111827',
-                'dark_card_gradient_dir' => 'to right',
+                // --- Global ---
+                'light_primary_color' => '#4F46E5', 'light_text_color' => '#1F2937',
+                'light_bg_type' => 'default', 'light_bg_color' => '#F3F4F6', 'light_bg_image' => null,
+                'dark_primary_color' => '#6366F1', 'dark_text_color' => '#F9FAFB',
+                'dark_bg_type' => 'default', 'dark_bg_color' => '#111827', 'dark_bg_image' => null,
+
+                // --- Card ---
+                'light_card_type' => 'default', 'light_card_color1' => '#FFFFFF', 'light_card_opacity' => 80, 'light_card_color2' => '#F9FAFB', 'light_card_gradient_dir' => 'to right',
+                'dark_card_type' => 'default', 'dark_card_color1' => '#1F2937', 'dark_card_opacity' => 80, 'dark_card_color2' => '#111827', 'dark_card_gradient_dir' => 'to right',
+
+                // --- Header ---
+                'light_header_type' => 'default', 'light_header_bg_color' => '#FFFFFF', 'light_header_opacity' => 100, 'light_header_blur' => 10, 'light_header_color2' => '#FFFFFF', 'light_header_gradient_dir' => 'to right', 'light_header_image' => null,
+                'dark_header_type' => 'default', 'dark_header_bg_color' => '#1F2937', 'dark_header_opacity' => 100, 'dark_header_blur' => 10, 'dark_header_color2' => '#111827', 'dark_header_gradient_dir' => 'to right', 'dark_header_image' => null,
+
+                // --- Sidebar ---
+                'light_sidebar_type' => 'default', 'light_sidebar_bg_color' => '#FFFFFF', 'light_sidebar_opacity' => 100, 'light_sidebar_blur' => 10, 'light_sidebar_color2' => '#FFFFFF', 'light_sidebar_gradient_dir' => 'to bottom', 'light_sidebar_image' => null,
+                'dark_sidebar_type' => 'default', 'dark_sidebar_bg_color' => '#111827', 'dark_sidebar_opacity' => 100, 'dark_sidebar_blur' => 10, 'dark_sidebar_color2' => '#000000', 'dark_sidebar_gradient_dir' => 'to bottom', 'dark_sidebar_image' => null,
             ];
+
             $s = array_merge($defaults, Auth::user()->appearance_settings ?? []);
+
+            // ✅ បង្កើត Array សម្រាប់ Alpine.js
+            $alpineData = [
+                'tab' => 'light',
+                'light' => [
+                    'bg_type' => $s['light_bg_type'],
+                    'primary_color' => $s['light_primary_color'],
+                    'text_color' => $s['light_text_color'],
+                    'bg_color' => $s['light_bg_color'],
+                    'image_preview' => ($s['light_bg_type'] == 'image' && !empty($s['light_bg_image'])) ? asset($s['light_bg_image']) : '',
+                    
+                    'card_type' => $s['light_card_type'],
+                    'card_color1' => $s['light_card_color1'],
+                    'card_opacity' => $s['light_card_opacity'],
+                    'card_color2' => $s['light_card_color2'],
+                    'card_gradient_dir' => $s['light_card_gradient_dir'],
+
+                    'header_type' => $s['light_header_type'],
+                    'header_bg_color' => $s['light_header_bg_color'],
+                    'header_opacity' => $s['light_header_opacity'],
+                    'header_blur' => $s['light_header_blur'],
+                    'header_color2' => $s['light_header_color2'],
+                    'header_gradient_dir' => $s['light_header_gradient_dir'],
+                    'header_image_preview' => (($s['light_header_type'] ?? '') == 'image' && !empty($s['light_header_image'])) ? asset($s['light_header_image']) : '',
+
+                    'sidebar_type' => $s['light_sidebar_type'],
+                    'sidebar_bg_color' => $s['light_sidebar_bg_color'],
+                    'sidebar_opacity' => $s['light_sidebar_opacity'],
+                    'sidebar_blur' => $s['light_sidebar_blur'],
+                    'sidebar_color2' => $s['light_sidebar_color2'],
+                    'sidebar_gradient_dir' => $s['light_sidebar_gradient_dir'],
+                    'sidebar_image_preview' => (($s['light_sidebar_type'] ?? '') == 'image' && !empty($s['light_sidebar_image'])) ? asset($s['light_sidebar_image']) : '',
+                ],
+                'dark' => [
+                    'bg_type' => $s['dark_bg_type'],
+                    'primary_color' => $s['dark_primary_color'],
+                    'text_color' => $s['dark_text_color'],
+                    'bg_color' => $s['dark_bg_color'],
+                    'image_preview' => ($s['dark_bg_type'] == 'image' && !empty($s['dark_bg_image'])) ? asset($s['dark_bg_image']) : '',
+
+                    'card_type' => $s['dark_card_type'],
+                    'card_color1' => $s['dark_card_color1'],
+                    'card_opacity' => $s['dark_card_opacity'],
+                    'card_color2' => $s['dark_card_color2'],
+                    'card_gradient_dir' => $s['dark_card_gradient_dir'],
+
+                    'header_type' => $s['dark_header_type'],
+                    'header_bg_color' => $s['dark_header_bg_color'],
+                    'header_opacity' => $s['dark_header_opacity'],
+                    'header_blur' => $s['dark_header_blur'],
+                    'header_color2' => $s['dark_header_color2'],
+                    'header_gradient_dir' => $s['dark_header_gradient_dir'],
+                    'header_image_preview' => (($s['dark_header_type'] ?? '') == 'image' && !empty($s['dark_header_image'])) ? asset($s['dark_header_image']) : '',
+
+                    'sidebar_type' => $s['dark_sidebar_type'],
+                    'sidebar_bg_color' => $s['dark_sidebar_bg_color'],
+                    'sidebar_opacity' => $s['dark_sidebar_opacity'],
+                    'sidebar_blur' => $s['dark_sidebar_blur'],
+                    'sidebar_color2' => $s['dark_sidebar_color2'],
+                    'sidebar_gradient_dir' => $s['dark_sidebar_gradient_dir'],
+                    'sidebar_image_preview' => (($s['dark_sidebar_type'] ?? '') == 'image' && !empty($s['dark_sidebar_image'])) ? asset($s['dark_sidebar_image']) : '',
+                ]
+            ];
         @endphp
 
-        {{-- ✅ Card នេះឥឡូវប្រើ Class ថ្មី --}}
-        <div class="p-6 card-dynamic-bg rounded-xl shadow-md mt-6" {{-- ✅ START: Update x-data ជាមួយ Card settings --}} x-data="{
-            tab: 'light',
-            light: {
-                bg_type: '{{ $s['light_bg_type'] }}',
-                primary_color: '{{ $s['light_primary_color'] }}',
-                text_color: '{{ $s['light_text_color'] }}',
-                bg_color: '{{ $s['light_bg_color'] }}',
-                image_preview: '{{ $s['light_bg_type'] == 'image' && $s['light_bg_image'] ? asset($s['light_bg_image']) : '' }}',
-        
-                card_type: '{{ $s['light_card_type'] }}',
-                card_color1: '{{ $s['light_card_color1'] }}',
-                card_opacity: '{{ $s['light_card_opacity'] }}',
-                card_color2: '{{ $s['light_card_color2'] }}',
-                card_gradient_dir: '{{ $s['light_card_gradient_dir'] }}'
-            },
-            dark: {
-                bg_type: '{{ $s['dark_bg_type'] }}',
-                primary_color: '{{ $s['dark_primary_color'] }}',
-                text_color: '{{ $s['dark_text_color'] }}',
-                bg_color: '{{ $s['dark_bg_color'] }}',
-                image_preview: '{{ $s['dark_bg_type'] == 'image' && $s['dark_bg_image'] ? asset($s['dark_bg_image']) : '' }}',
-        
-                card_type: '{{ $s['dark_card_type'] }}',
-                card_color1: '{{ $s['dark_card_color1'] }}',
-                card_opacity: '{{ $s['dark_card_opacity'] }}',
-                card_color2: '{{ $s['dark_card_color2'] }}',
-                card_gradient_dir: '{{ $s['dark_card_gradient_dir'] }}'
-            }
-        }">
-            {{-- ✅ END: Update x-data --}}
-
+        {{-- ✅ Appearance Form Container --}}
+        <div class="p-6 card-dynamic-bg rounded-xl shadow-md mt-6" x-data='@json($alpineData)'>
             <h3 class="text-lg font-medium text-defalut mb-4">Customize Appearance</h3>
 
-            <!-- Tabs Navigation -->
             <div class="border-b border-primary mb-4">
                 <nav class="-mb-px flex space-x-4" aria-label="Tabs">
                     <button @click="tab = 'light'"
-                        :class="tab === 'light' ? 'border-primary text-primary' :
-                            'border-transparent text-default  dark:hover:border-primary'"
+                        :class="tab === 'light' ? 'border-primary text-primary' : 'border-transparent text-default dark:hover:border-primary'"
                         class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors">
                         Light Mode
                     </button>
                     <button @click="tab = 'dark'"
-                        :class="tab === 'dark' ? 'border-primary text-primary' :
-                            'border-transparent text-default '"
+                        :class="tab === 'dark' ? 'border-primary text-primary' : 'border-transparent text-default'"
                         class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors">
                         Dark Mode
                     </button>
@@ -199,20 +223,12 @@
             <form id="appearanceForm" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Light Mode Panel -->
                 <div x-show="tab === 'light'" class="space-y-4">
-                    @include('admin.profile.partials.appearance_form_inputs', [
-                        'mode' => 'light',
-                        's' => $s,
-                    ])
+                    @include('admin.profile.partials.appearance_form_inputs', ['mode' => 'light', 's' => $s])
                 </div>
 
-                <!-- Dark Mode Panel -->
                 <div x-show="tab === 'dark'" class="space-y-4">
-                    @include('admin.profile.partials.appearance_form_inputs', [
-                        'mode' => 'dark',
-                        's' => $s,
-                    ])
+                    @include('admin.profile.partials.appearance_form_inputs', ['mode' => 'dark', 's' => $s])
                 </div>
 
                 <div id="appearance_error" class="text-red-500 text-sm mt-4"></div>
@@ -228,7 +244,7 @@
 
     </div>
 
-    {{-- Script សម្រាប់ Profile Image (មិនផ្លាស់ប្តូរ) --}}
+    {{-- ✅ Profile Image Script --}}
     <script type="text/javascript">
         $(document).ready(function() {
             const originalImageSrc = $('#showImage').attr('src');
@@ -273,213 +289,196 @@
         });
     </script>
 
-
-    {{-- ✅ SCRIPT សម្រាប់ Appearance Form (បាន Update) --}}
+    {{-- ✅ Dynamic Styles & Form Script --}}
     <script>
+        // Global Helper Functions
+        function hexToRgba(hex, alpha = 100) {
+            let c;
+            if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+                c = hex.substring(1).split('');
+                if (c.length == 3) {
+                    c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+                }
+                c = '0x' + c.join('');
+                return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + (alpha / 100) + ')';
+            }
+            return `rgba(255, 255, 255, ${alpha / 100})`;
+        }
+
+        function getBgStyle(type, color1, opacity, color2, dir, imgUrl) {
+            if (type === 'solid') return hexToRgba(color1, opacity);
+            if (type === 'blur') return hexToRgba(color1, opacity);
+            if (type === 'gradient') return `linear-gradient(${dir}, ${color1}, ${color2})`;
+            if (type === 'image' && imgUrl) return `url(${imgUrl}) center/cover no-repeat`;
+            return null;
+        }
+
+        function getBackdropFilter(type, amount) {
+            return type === 'blur' ? `blur(${amount}px)` : 'none';
+        }
+
+        function updateDynamicStyles(settings) {
+            document.body.removeAttribute('style');
+            let styleTag = document.getElementById('dynamic-user-styles');
+            if (!styleTag) { // Create if missing
+                styleTag = document.createElement('style');
+                styleTag.id = 'dynamic-user-styles';
+                document.head.appendChild(styleTag);
+            }
+
+            // Defaults for Fallback (Taken from PHP Logic)
+            const defaultLightBg = '{{ $defaults['light_bg_color'] }}';
+            const defaultDarkBg = '{{ $defaults['dark_bg_color'] }}';
+
+            // Main Background
+            const light_bg_final = settings.light_bg_type === 'color' ? settings.light_bg_color : defaultLightBg;
+            const dark_bg_final = settings.dark_bg_type === 'color' ? settings.dark_bg_color : defaultDarkBg;
+            const light_image_final = (settings.light_bg_type === 'image' && settings.light_bg_image_url) ? `url(${settings.light_bg_image_url})` : 'none';
+            const dark_image_final = (settings.dark_bg_type === 'image' && settings.dark_bg_image_url) ? `url(${settings.dark_bg_image_url})` : 'none';
+
+            // Card Logic
+            let light_card_bg_final = 'rgba(255, 255, 255, 0.8)';
+            if (settings.light_card_type === 'solid') light_card_bg_final = hexToRgba(settings.light_card_color1, settings.light_card_opacity);
+            else if (settings.light_card_type === 'gradient') light_card_bg_final = `linear-gradient(${settings.light_card_gradient_dir}, ${settings.light_card_color1}, ${settings.light_card_color2})`;
+
+            let dark_card_bg_final = 'rgba(30, 41, 59, 0.8)';
+            if (settings.dark_card_type === 'solid') dark_card_bg_final = hexToRgba(settings.dark_card_color1, settings.dark_card_opacity);
+            else if (settings.dark_card_type === 'gradient') dark_card_bg_final = `linear-gradient(${settings.dark_card_gradient_dir}, ${settings.dark_card_color1}, ${settings.dark_card_color2})`;
+
+            // Header Logic
+            const h_light = getBgStyle(settings.light_header_type, settings.light_header_bg_color, settings.light_header_opacity, settings.light_header_color2, settings.light_header_gradient_dir, settings.light_header_image_url);
+            const h_dark = getBgStyle(settings.dark_header_type, settings.dark_header_bg_color, settings.dark_header_opacity, settings.dark_header_color2, settings.dark_header_gradient_dir, settings.dark_header_image_url);
+
+            // Sidebar Logic
+            const s_light = getBgStyle(settings.light_sidebar_type, settings.light_sidebar_bg_color, settings.light_sidebar_opacity, settings.light_sidebar_color2, settings.light_sidebar_gradient_dir, settings.light_sidebar_image_url);
+            const s_dark = getBgStyle(settings.dark_sidebar_type, settings.dark_sidebar_bg_color, settings.dark_sidebar_opacity, settings.dark_sidebar_color2, settings.dark_sidebar_gradient_dir, settings.dark_sidebar_image_url);
+
+            const css = `
+                :root {
+                    --primary-light: ${settings.light_primary_color};
+                    --text-light: ${settings.light_text_color};
+                    --bg-light: ${light_bg_final};
+                    --bg-image-light: ${light_image_final};
+
+                    --primary-dark: ${settings.dark_primary_color};
+                    --text-dark: ${settings.dark_text_color};
+                    --bg-dark: ${dark_bg_final};
+                    --bg-image-dark: ${dark_image_final};
+
+                    --card-bg-light: ${light_card_bg_final};
+                    --card-bg-dark: ${dark_card_bg_final};
+
+                    --header-bg-light: ${h_light || '#ffffff'};
+                    --header-backdrop-light: ${getBackdropFilter(settings.light_header_type, settings.light_header_blur)};
+                    
+                    --header-bg-dark: ${h_dark || '#1f2937'};
+                    --header-backdrop-dark: ${getBackdropFilter(settings.dark_header_type, settings.dark_header_blur)};
+
+                    --sidebar-bg-light: ${s_light || '#ffffff'};
+                    --sidebar-backdrop-light: ${getBackdropFilter(settings.light_sidebar_type, settings.light_sidebar_blur)};
+
+                    --sidebar-bg-dark: ${s_dark || '#111827'};
+                    --sidebar-backdrop-dark: ${getBackdropFilter(settings.dark_sidebar_type, settings.dark_sidebar_blur)};
+                }
+
+                body {
+                    background-color: var(--bg-light);
+                    color: var(--text-light);
+                    background-image: var(--bg-image-light);
+                    background-size: cover;
+                    background-position: center;
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                }
+                .dark body {
+                    background-color: var(--bg-dark);
+                    color: var(--text-dark);
+                    background-image: var(--bg-image-dark);
+                }
+
+                .card-dynamic-bg {
+                    background: var(--card-bg-light);
+                }
+                .dark .card-dynamic-bg {
+                    background: var(--card-bg-dark);
+                }
+
+                .header-dynamic-bg {
+                    background: var(--header-bg-light) !important;
+                    backdrop-filter: var(--header-backdrop-light);
+                    -webkit-backdrop-filter: var(--header-backdrop-light);
+                }
+                .dark .header-dynamic-bg {
+                    background: var(--header-bg-dark) !important;
+                    backdrop-filter: var(--header-backdrop-dark);
+                    -webkit-backdrop-filter: var(--header-backdrop-dark);
+                }
+
+                .sidebar-dynamic-bg {
+                    background: var(--sidebar-bg-light) !important;
+                    backdrop-filter: var(--sidebar-backdrop-light);
+                    -webkit-backdrop-filter: var(--sidebar-backdrop-light);
+                }
+                .dark .sidebar-dynamic-bg {
+                    background: var(--sidebar-bg-dark) !important;
+                    backdrop-filter: var(--sidebar-backdrop-dark);
+                    -webkit-backdrop-filter: var(--sidebar-backdrop-dark);
+                }
+
+                /* Helpers */
+                .text-primary { color: var(--primary-light); }
+                .dark .text-primary { color: var(--primary-dark); }
+                .bg-primary { background-color: var(--primary-light); }
+                .dark .bg-primary { background-color: var(--primary-dark); }
+                .border-primary { border-color: var(--primary-light); }
+                .dark .border-primary { border-color: var(--primary-dark); }
+                .ring-primary { --tw-ring-color: var(--primary-light); }
+                .dark .ring-primary { --tw-ring-color: var(--primary-dark); }
+                .icon-primary { stroke: var(--primary-light); fill: var(--primary-light); }
+                .dark .icon-primary { stroke: var(--primary-dark); fill: var(--primary-dark); }
+                .text-default { color: var(--text-light); }
+                .dark .text-default { color: var(--text-dark); }
+            `;
+            styleTag.innerHTML = css;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('appearanceForm');
-            if (!form) return;
-
             const saveBtn = document.getElementById('saveAppearanceBtn');
             const errorDiv = document.getElementById('appearance_error');
 
-            // ✅ START: បន្ថែម JS Helper សម្រាប់បំប្លែង HEX ទៅ RGBA
-            function hexToRgba(hex, alpha = 100) {
-                // ពិនិត្យមើល Hex code ត្រឹមត្រូវ (e.g., #FFFFFF or #FFF)
-                let c;
-                if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-                    c = hex.substring(1).split('');
-                    if (c.length == 3) {
-                        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-                    }
-                    c = '0x' + c.join('');
-                    const r = (c >> 16) & 255;
-                    const g = (c >> 8) & 255;
-                    const b = c & 255;
-                    return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
-                }
-                // Fallback បើ Hex មិនត្រឹមត្រូវ
-                return `rgba(255, 255, 255, ${alpha / 100})`;
-            }
-            // ✅ END: បន្ថែម JS Helper
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveBtn.disabled = true;
+                    saveBtn.textContent = 'Saving...';
+                    errorDiv.textContent = '';
 
-            // ✅ START: Update Function នេះ
-            function updateDynamicStyles(settings) {
+                    const formData = new FormData(this);
 
-                // 1. លុប Inline Style ចាស់ (នៅដដែល)
-                document.body.removeAttribute('style');
-
-                let styleTag = document.getElementById('dynamic-user-styles');
-                if (!styleTag) {
-                    styleTag = document.createElement('style');
-                    styleTag.id = 'dynamic-user-styles';
-                    document.head.appendChild(styleTag);
-                }
-
-                // 2. កំណត់ Background គោល (នៅដដែល)
-                const light_bg_final = settings.light_bg_type === 'color' ? settings.light_bg_color :
-                    '{{ $defaults['light_bg_color'] }}';
-                const dark_bg_final = settings.dark_bg_type === 'color' ? settings.dark_bg_color :
-                    '{{ $defaults['dark_bg_color'] }}';
-                const light_image_final = (settings.light_bg_type === 'image' && settings.light_bg_image_url) ?
-                    `url(${settings.light_bg_image_url})` : 'none';
-                const dark_image_final = (settings.dark_bg_type === 'image' && settings.dark_bg_image_url) ?
-                    `url(${settings.dark_bg_image_url})` : 'none';
-
-                // 3. ✅ START: បង្កើត CSS សម្រាប់ Card
-                // Light Card
-                let light_card_bg_final = 'rgba(255, 255, 255, 0.8)'; // Default bg-white/80
-                if (settings.light_card_type === 'solid') {
-                    light_card_bg_final = hexToRgba(settings.light_card_color1, settings.light_card_opacity);
-                } else if (settings.light_card_type === 'gradient') {
-                    light_card_bg_final =
-                        `linear-gradient(${settings.light_card_gradient_dir}, ${settings.light_card_color1}, ${settings.light_card_color2})`;
-                }
-                // Dark Card
-                let dark_card_bg_final = 'rgba(30, 41, 59, 0.8)'; // Default bg-slate-800/80
-                if (settings.dark_card_type === 'solid') {
-                    dark_card_bg_final = hexToRgba(settings.dark_card_color1, settings.dark_card_opacity);
-                } else if (settings.dark_card_type === 'gradient') {
-                    dark_card_bg_final =
-                        `linear-gradient(${settings.dark_card_gradient_dir}, ${settings.dark_card_color1}, ${settings.dark_card_color2})`;
-                }
-                // ✅ END: បង្កើត CSS សម្រាប់ Card
-
-
-                // 4. ✅ START: បង្កើត CSS String ថ្មី
-                const css = `
-            :root {
-                /* Main Background & Colors */
-                --primary-light: ${settings.light_primary_color};
-                --text-light: ${settings.light_text_color};
-                --bg-light: ${light_bg_final};
-                --bg-image-light: ${light_image_final};
-
-                --primary-dark: ${settings.dark_primary_color};
-                --text-dark: ${settings.dark_text_color};
-                --bg-dark: ${dark_bg_final};
-                --bg-image-dark: ${dark_image_final};
-
-                /* Card Backgrounds */
-                --card-bg-light: ${light_card_bg_final};
-                --card-bg-dark: ${dark_card_bg_final};
-
-                /* ✅ បន្ថែមថ្មីចូល JS ដែរ */
-                --header-bg-light: ${settings.light_header_color};
-                --sidebar-bg-light: ${settings.light_sidebar_color};
-
-                --header-bg-dark: ${settings.dark_header_color};
-                --sidebar-bg-dark: ${settings.dark_sidebar_color};
-            }
-
-            /* Áp dụng Main Background */
-            body {
-                background-color: var(--bg-light);
-                color: var(--text-light);
-                background-image: var(--bg-image-light);
-                background-size: cover;
-                background-position: center;
-                background-attachment: fixed;
-                background-repeat: no-repeat;
-            }
-            .dark body {
-                background-color: var(--bg-dark);
-                color: var(--text-dark);
-                background-image: var(--bg-image-dark);
-            }
-
-            /* ✅ បន្ថែម CSS Class ថ្មីចូល JS ដែរ */
-            .header-dynamic-bg { background-color: var(--header-bg-light); }
-            .dark .header-dynamic-bg { background-color: var(--header-bg-dark); }
-
-            .sidebar-dynamic-bg { background-color: var(--sidebar-bg-light); }
-            .dark .sidebar-dynamic-bg { background-color: var(--sidebar-bg-dark); }
-
-            /* Áp dụng Card Background */
-            .card-dynamic-bg {
-                background-color: var(--card-bg-light); /* Fallback */
-                background: var(--card-bg-light); /* For Gradients */
-            }
-            .dark .card-dynamic-bg {
-                background-color: var(--card-bg-dark);
-                background: var(--card-bg-dark);
-            }
-
-            /* Helpers (Colors) */
-            .text-primary { color: var(--primary-light); }
-            .dark .text-primary { color: var(--primary-dark); }
-            .bg-primary { background-color: var(--primary-light); }
-            .dark .bg-primary { background-color: var(--primary-dark); }
-            .border-primary { border-color: var(--primary-light); }
-            .dark .border-primary { border-color: var(--primary-dark); }
-            .ring-primary { --tw-ring-color: var(--primary-light); }
-            .dark .ring-primary { --tw-ring-color: var(--primary-dark); }
-            .icon-primary { stroke: var(--primary-light); fill: var(--primary-light); }
-            .dark .icon-primary { stroke: var(--primary-dark); fill: var(--primary-dark); }
-            .text-default { color: var(--text-light); }
-            .dark .text-default { color: var(--text-dark); }
-        `;
-                // ✅ END: បង្កើត CSS String ថ្មី
-
-                // បញ្ចូល CSS ថ្មីទៅក្នុង <style> tag
-                styleTag.innerHTML = css;
-            }
-            // ✅ END: Update Function នេះ
-
-
-            // ដំណើរការ Form បែប AJAX (មិនផ្លាស់ប្តូរ)
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveBtn.disabled = true;
-                saveBtn.textContent = 'Saving...';
-                errorDiv.textContent = '';
-
-                const formData = new FormData(this);
-
-                fetch("{{ route('appearance.update') }}", {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                        }
-                    })
-                    .then(response => response.json().then(data => ({
-                        status: response.status,
-                        data
-                    })))
-                    .then(({
-                        status,
-                        data
-                    }) => {
-                        if (status >= 400) {
-                            if (data.errors) {
-                                let errorMsg = Object.values(data.errors).flat().join(' ');
+                    fetch("{{ route('appearance.update') }}", {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        })
+                        .then(response => response.json().then(data => ({ status: response.status, data })))
+                        .then(({ status, data }) => {
+                            if (status >= 400) {
+                                let errorMsg = data.errors ? Object.values(data.errors).flat().join(' ') : (data.message || 'Error');
                                 errorDiv.textContent = errorMsg;
                                 toastr.error(errorMsg);
-                            } else {
-                                errorDiv.textContent = data.message || 'An error occurred.';
-                                toastr.error(data.message || 'An error occurred.');
+                                throw new Error(data.message);
                             }
-                            throw new Error(data.message);
-                        }
-
-                        // --- ជោគជ័យ ---
-                        toastr.success(data.message);
-
-                        // អាប់ដេត Background ភ្លាមៗដោយហៅ Function ថ្មីរបស់យើង
-                        updateDynamicStyles(data.settings);
-                    })
-                    .catch(error => {
-                        console.error('Appearance Update Error:', error);
-                        if (!error.message.includes('data is not defined')) {
-                            toastr.error('An unexpected error occurred. Please try again.');
-                        }
-                    })
-                    .finally(() => {
-                        saveBtn.disabled = false;
-                        saveBtn.textContent = 'Save Changes';
-                    });
-            });
+                            toastr.success(data.message);
+                            updateDynamicStyles(data.settings);
+                        })
+                        .catch(error => console.error(error))
+                        .finally(() => {
+                            saveBtn.disabled = false;
+                            saveBtn.textContent = 'Save Changes';
+                        });
+                });
+            }
         });
     </script>
 @endsection

@@ -146,18 +146,141 @@
 </div>
 {{-- ✅ END: ផ្នែកថ្មីសម្រាប់ Card Background --}}
 
+{{-- ✅ START: HEADER CUSTOMIZATION --}}
 <hr class="my-6 border-slate-200 dark:border-slate-700">
-
 <div class="pt-2">
-    <label for="{{ $modePrefix }}_header_color" class="block text-sm font-medium text-defalut">Header Background</label>
-    <input type="color" id="{{ $modePrefix }}_header_color" name="{{ $modePrefix }}_header_color"
-        value="{{ $s[$modePrefix . '_header_color'] }}" x-model="{{ $mode }}.header_color"
-        class="mt-1 block w-full h-10 p-1 border border-primary rounded-md cursor-pointer">
-</div>
+    <h4 class="text-md font-medium text-defalut flex items-center gap-2">
+        <span>Header Background</span>
+    </h4>
+    
+    <div class="flex flex-wrap items-center gap-4 mt-2 mb-4">
+        @foreach(['default' => 'Default', 'solid' => 'Solid', 'gradient' => 'Gradient', 'image' => 'Image', 'blur' => 'Glass/Blur'] as $val => $label)
+        <label class="flex items-center cursor-pointer">
+            <input type="radio" name="{{ $modePrefix }}_header_type" value="{{ $val }}" class="form-radio text-primary"
+                x-model="{{ $mode }}.header_type">
+            <span class="ml-2 text-defalut text-sm">{{ $label }}</span>
+        </label>
+        @endforeach
+    </div>
 
-<div class="pt-2">
-    <label for="{{ $modePrefix }}_sidebar_color" class="block text-sm font-medium text-defalut">Sidebar Background</label>
-    <input type="color" id="{{ $modePrefix }}_sidebar_color" name="{{ $modePrefix }}_sidebar_color"
-        value="{{ $s[$modePrefix . '_sidebar_color'] }}" x-model="{{ $mode }}.sidebar_color"
-        class="mt-1 block w-full h-10 p-1 border border-primary rounded-md cursor-pointer">
+    <div class="p-3 border border-slate-200 dark:border-slate-700 rounded-lg card-dynamic-bg ">
+        
+        <div x-show="['solid', 'blur'].includes({{ $mode }}.header_type)" x-transition>
+            <label class="block text-sm font-medium text-defalut">Background Color</label>
+            <input type="color" name="{{ $modePrefix }}_header_bg_color" x-model="{{ $mode }}.header_bg_color"
+                class="mt-1 block w-full h-10 p-1 border card-dynamic-bg border-primary rounded-md cursor-pointer">
+        </div>
+
+        <div x-show="['solid', 'blur'].includes({{ $mode }}.header_type)" class="mt-3" x-transition>
+            <label class="block text-sm font-medium text-defalut">Opacity: <span x-text="{{ $mode }}.header_opacity"></span>%</label>
+            <input type="range" name="{{ $modePrefix }}_header_opacity" min="0" max="100" x-model="{{ $mode }}.header_opacity"
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <div x-show="{{ $mode }}.header_type === 'blur'" class="mt-3" x-transition>
+            <label class="block text-sm font-medium text-defalut">Blur Amount: <span x-text="{{ $mode }}.header_blur"></span>px</label>
+            <input type="range" name="{{ $modePrefix }}_header_blur" min="0" max="30" x-model="{{ $mode }}.header_blur"
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <div x-show="{{ $mode }}.header_type === 'gradient'" class="space-y-3" x-transition>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-defalut">Start Color</label>
+                    <input type="color" name="{{ $modePrefix }}_header_bg_color" x-model="{{ $mode }}.header_bg_color" class="w-full h-10 rounded-md cursor-pointer">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-defalut">End Color</label>
+                    <input type="color" name="{{ $modePrefix }}_header_color2" x-model="{{ $mode }}.header_color2" class="w-full h-10 rounded-md cursor-pointer">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-defalut">Direction</label>
+                <select name="{{ $modePrefix }}_header_gradient_dir" x-model="{{ $mode }}.header_gradient_dir" class="w-full p-2 border rounded-md dark:bg-slate-800 dark:border-slate-600">
+                    <option value="to right">Left to Right</option>
+                    <option value="to bottom">Top to Bottom</option>
+                    <option value="to bottom right">Diagonal</option>
+                </select>
+            </div>
+        </div>
+
+        <div x-show="{{ $mode }}.header_type === 'image'" class="mt-2" x-transition>
+            <label class="block text-sm font-medium text-defalut">Upload Header Image</label>
+            <input type="file" name="{{ $modePrefix }}_header_image" accept="image/*"
+                @change="{{ $mode }}.header_image_preview = URL.createObjectURL($event.target.files[0])"
+                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-opacity-90"/>
+            
+            <div class="mt-2" x-show="{{ $mode }}.header_image_preview">
+                <img :src="{{ $mode }}.header_image_preview" class="h-20 w-full object-cover rounded-md border border-slate-300">
+            </div>
+        </div>
+    </div>
 </div>
+{{-- ✅ END: HEADER CUSTOMIZATION --}}
+
+
+{{-- ✅ START: SIDEBAR CUSTOMIZATION (Copy ដូច Header ដែរគ្រាន់តែប្តូរឈ្មោះ) --}}
+<hr class="my-6 border-slate-200 dark:border-slate-700 ">
+<div class="pt-2">
+    <h4 class="text-md font-medium text-defalut flex items-center gap-2">
+        <span>Sidebar Background</span>
+    </h4>
+    
+    <div class="flex flex-wrap items-center gap-4 mt-2 mb-4">
+        @foreach(['default' => 'Default', 'solid' => 'Solid', 'gradient' => 'Gradient', 'image' => 'Image', 'blur' => 'Glass/Blur'] as $val => $label)
+        <label class="flex items-center cursor-pointer">
+            <input type="radio" name="{{ $modePrefix }}_sidebar_type" value="{{ $val }}" class="form-radio text-primary"
+                x-model="{{ $mode }}.sidebar_type">
+            <span class="ml-2 text-defalut text-sm">{{ $label }}</span>
+        </label>
+        @endforeach
+    </div>
+
+    <div class="p-3 border border-slate-200 dark:border-slate-700 rounded-lg card-dynamic-bg ">
+        <div x-show="['solid', 'blur'].includes({{ $mode }}.sidebar_type)" x-transition>
+            <label class="block text-sm font-medium text-defalut">Background Color</label>
+            <input type="color" name="{{ $modePrefix }}_sidebar_bg_color" x-model="{{ $mode }}.sidebar_bg_color"
+                class="mt-1 block w-full h-10 p-1 border border-primary rounded-md cursor-pointer">
+        </div>
+        <div x-show="['solid', 'blur'].includes({{ $mode }}.sidebar_type)" class="mt-3" x-transition>
+            <label class="block text-sm font-medium text-defalut">Opacity: <span x-text="{{ $mode }}.sidebar_opacity"></span>%</label>
+            <input type="range" name="{{ $modePrefix }}_sidebar_opacity" min="0" max="100" x-model="{{ $mode }}.sidebar_opacity"
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+        </div>
+        <div x-show="{{ $mode }}.sidebar_type === 'blur'" class="mt-3" x-transition>
+            <label class="block text-sm font-medium text-defalut">Blur Amount: <span x-text="{{ $mode }}.sidebar_blur"></span>px</label>
+            <input type="range" name="{{ $modePrefix }}_sidebar_blur" min="0" max="30" x-model="{{ $mode }}.sidebar_blur"
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+        </div>
+        <div x-show="{{ $mode }}.sidebar_type === 'gradient'" class="space-y-3" x-transition>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-defalut">Start Color</label>
+                    <input type="color" name="{{ $modePrefix }}_sidebar_bg_color" x-model="{{ $mode }}.sidebar_bg_color" class="w-full h-10 rounded-md cursor-pointer">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-defalut">End Color</label>
+                    <input type="color" name="{{ $modePrefix }}_sidebar_color2" x-model="{{ $mode }}.sidebar_color2" class="w-full h-10 rounded-md cursor-pointer">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-defalut">Direction</label>
+                <select name="{{ $modePrefix }}_sidebar_gradient_dir" x-model="{{ $mode }}.sidebar_gradient_dir" class="w-full p-2 border rounded-md dark:bg-slate-800 dark:border-slate-600">
+                    <option value="to right">Left to Right</option>
+                    <option value="to bottom">Top to Bottom</option>
+                    <option value="to bottom right">Diagonal</option>
+                </select>
+            </div>
+        </div>
+        <div x-show="{{ $mode }}.sidebar_type === 'image'" class="mt-2" x-transition>
+            <label class="block text-sm font-medium text-defalut">Upload Sidebar Image</label>
+            <input type="file" name="{{ $modePrefix }}_sidebar_image" accept="image/*"
+                @change="{{ $mode }}.sidebar_image_preview = URL.createObjectURL($event.target.files[0])"
+                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white"/>
+            <div class="mt-2" x-show="{{ $mode }}.sidebar_image_preview">
+                <img :src="{{ $mode }}.sidebar_image_preview" class="h-20 w-full object-cover rounded-md border border-slate-300">
+            </div>
+        </div>
+    </div>
+</div>
+{{-- ✅ END: SIDEBAR CUSTOMIZATION --}}

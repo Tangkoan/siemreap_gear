@@ -48,6 +48,30 @@
                 return "rgba($r, $g, $b, $alpha)";
             }
 
+            // Logic ថ្មីដើម្បី Generate CSS String ពី PHP
+            function getBgStylePHP($s, $prefix) {
+                $type = $s[$prefix.'_type'] ?? 'default';
+                $bg = $s[$prefix.'_bg_color'] ?? '#ffffff';
+                $op = $s[$prefix.'_opacity'] ?? 100;
+                $col2 = $s[$prefix.'_color2'] ?? '#ffffff';
+                $dir = $s[$prefix.'_gradient_dir'] ?? 'to right';
+                $img = $s[$prefix.'_image'] ?? null;
+
+                if ($type === 'solid') return hexToRgba($bg, $op);
+                if ($type === 'blur') return hexToRgba($bg, $op);
+                if ($type === 'gradient') return "linear-gradient($dir, $bg, $col2)";
+                if ($type === 'image' && $img) return "url(" . asset($img) . ") center/cover no-repeat";
+                
+                // Default Fallback
+                return ($prefix == 'light_header' || $prefix == 'light_sidebar') ? '#ffffff' : '#1f2937';
+            }
+
+            function getBackdropPHP($s, $prefix) {
+                $type = $s[$prefix.'_type'] ?? 'default';
+                $amount = $s[$prefix.'_blur'] ?? 10;
+                return $type === 'blur' ? "blur({$amount}px)" : 'none';
+            }
+
             // កំណត់តម្លៃ Default (រួមទាំង Card)
             $defaults = [
                 'light_primary_color' => '#4F46E5', 'light_text_color' => '#1F2937',
@@ -130,11 +154,17 @@
                 --card-bg-dark: {!! $dark_card_bg_final !!};
 
                 /* ✅ បន្ថែមថ្មី៖ បង្កើត Variable សម្រាប់ Header & Sidebar */
-                --header-bg-light: {{ $s['light_header_color'] }};
-                --sidebar-bg-light: {{ $s['light_sidebar_color'] }};
+                --header-bg-light: {!! getBgStylePHP($s, 'light_header') !!};
+                --header-backdrop-light: {{ getBackdropPHP($s, 'light_header') }};
 
-                --header-bg-dark: {{ $s['dark_header_color'] }};
-                --sidebar-bg-dark: {{ $s['dark_sidebar_color'] }};
+                --header-bg-dark: {!! getBgStylePHP($s, 'dark_header') !!};
+                --header-backdrop-dark: {{ getBackdropPHP($s, 'dark_header') }};
+
+                --sidebar-bg-light: {!! getBgStylePHP($s, 'light_sidebar') !!};
+                --sidebar-backdrop-light: {{ getBackdropPHP($s, 'light_sidebar') }};
+
+                --sidebar-bg-dark: {!! getBgStylePHP($s, 'dark_sidebar') !!};
+                --sidebar-backdrop-dark: {{ getBackdropPHP($s, 'dark_sidebar') }};
             }
 
             /* អនុវត្ត (Apply) Variables ទាំងនោះ */
@@ -186,19 +216,25 @@
 
             /* កូដសម្រាប់កំណត់ Varable Header Backgroun & Sidebar Background */
             .header-dynamic-bg {
-                background-color: var(--header-bg-light);
-                transition: background-color 0.3s;
+                background: var(--header-bg-light) !important;
+                backdrop-filter: var(--header-backdrop-light);
+                -webkit-backdrop-filter: var(--header-backdrop-light);
             }
             .dark .header-dynamic-bg {
-                background-color: var(--header-bg-dark);
+                background: var(--header-bg-dark) !important;
+                backdrop-filter: var(--header-backdrop-dark);
+                -webkit-backdrop-filter: var(--header-backdrop-dark);
             }
 
             .sidebar-dynamic-bg {
-                background-color: var(--sidebar-bg-light);
-                transition: background-color 0.3s;
+                background: var(--sidebar-bg-light) !important;
+                backdrop-filter: var(--sidebar-backdrop-light);
+                -webkit-backdrop-filter: var(--sidebar-backdrop-light);
             }
             .dark .sidebar-dynamic-bg {
-                background-color: var(--sidebar-bg-dark);
+                background: var(--sidebar-bg-dark) !important;
+                backdrop-filter: var(--sidebar-backdrop-dark);
+                -webkit-backdrop-filter: var(--sidebar-backdrop-dark);
             }
 
         </style>

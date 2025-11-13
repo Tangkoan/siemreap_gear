@@ -47,11 +47,39 @@ class AppearanceController extends Controller
             'dark_input_opacity' => 'nullable|numeric|min:0|max:100',
             // --- ✅ END: Settings ថ្មី ---
 
-            // ✅ បន្ថែមថ្មី៖ សម្រាប់ Header & Sidebar
-            'light_header_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
-            'light_sidebar_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
-            'dark_header_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
-            'dark_sidebar_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            // ✅ START: Settings ថ្មីសម្រាប់ Header (កែពី Color ធម្មតា ទៅជា Full Option)
+            'light_header_type' => 'nullable|in:default,solid,gradient,image,blur',
+            'light_header_bg_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_header_opacity' => 'nullable|numeric|min:0|max:100',
+            'light_header_color2' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/', // For Gradient
+            'light_header_gradient_dir' => 'nullable|string',
+            'light_header_image' => 'nullable|image|max:5000',
+            'light_header_blur' => 'nullable|numeric|min:0|max:50', // For Blur effect
+
+            'dark_header_type' => 'nullable|in:default,solid,gradient,image,blur',
+            'dark_header_bg_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_header_opacity' => 'nullable|numeric|min:0|max:100',
+            'dark_header_color2' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_header_gradient_dir' => 'nullable|string',
+            'dark_header_image' => 'nullable|image|max:5000',
+            'dark_header_blur' => 'nullable|numeric|min:0|max:50',
+
+            // ✅ START: Settings ថ្មីសម្រាប់ Sidebar
+            'light_sidebar_type' => 'nullable|in:default,solid,gradient,image,blur',
+            'light_sidebar_bg_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_sidebar_opacity' => 'nullable|numeric|min:0|max:100',
+            'light_sidebar_color2' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_sidebar_gradient_dir' => 'nullable|string',
+            'light_sidebar_image' => 'nullable|image|max:5000',
+            'light_sidebar_blur' => 'nullable|numeric|min:0|max:50',
+
+            'dark_sidebar_type' => 'nullable|in:default,solid,gradient,image,blur',
+            'dark_sidebar_bg_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_sidebar_opacity' => 'nullable|numeric|min:0|max:100',
+            'dark_sidebar_color2' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_sidebar_gradient_dir' => 'nullable|string',
+            'dark_sidebar_image' => 'nullable|image|max:5000',
+            'dark_sidebar_blur' => 'nullable|numeric|min:0|max:50',
         ]);
         // ✅ END: បន្ថែម Validation Rules
 
@@ -62,59 +90,52 @@ class AppearanceController extends Controller
         $validatedData = $validator->validated();
         
         try {
-            
-            // --- Logic ផ្ទុករូបភាព (មិនផ្លាស់ប្តូរ) ---
+            // 1. Handle Main Background Images (ទុកដដែល)
             if ($request->hasFile('light_bg_image')) {
-                if (!empty($settings['light_bg_image']) && File::exists(public_path($settings['light_bg_image']))) {
-                    File::delete(public_path($settings['light_bg_image']));
-                }
-                $validatedData['light_bg_image'] = $this->uploadImage($request->file('light_bg_image'), $user->id, 'light');
+                $validatedData['light_bg_image'] = $this->uploadImage($request->file('light_bg_image'), $user->id, 'light_bg');
                 $validatedData['light_bg_type'] = 'image';
-            } elseif ($request->input('light_bg_type') !== 'image') {
-                if (!empty($settings['light_bg_image']) && File::exists(public_path($settings['light_bg_image']))) {
-                    File::delete(public_path($settings['light_bg_image']));
-                }
-                $validatedData['light_bg_image'] = null;
             }
             if ($request->hasFile('dark_bg_image')) {
-                if (!empty($settings['dark_bg_image']) && File::exists(public_path($settings['dark_bg_image']))) {
-                    File::delete(public_path($settings['dark_bg_image']));
-                }
-                $validatedData['dark_bg_image'] = $this->uploadImage($request->file('dark_bg_image'), $user->id, 'dark');
+                $validatedData['dark_bg_image'] = $this->uploadImage($request->file('dark_bg_image'), $user->id, 'dark_bg');
                 $validatedData['dark_bg_type'] = 'image';
-            } elseif ($request->input('dark_bg_type') !== 'image') {
-                if (!empty($settings['dark_bg_image']) && File::exists(public_path($settings['dark_bg_image']))) {
-                    File::delete(public_path($settings['dark_bg_image']));
-                }
-                $validatedData['dark_bg_image'] = null;
             }
-            // --- បញ្ចប់ Logic ផ្ទុករូបភាព ---
 
-            // បញ្ចូលទិន្នន័យថ្មីទៅក្នុងទិន្នន័យចាស់
+            // 2. ✅ Handle Header Images
+            foreach (['light', 'dark'] as $mode) {
+                if ($request->hasFile("{$mode}_header_image")) {
+                    $validatedData["{$mode}_header_image"] = $this->uploadImage($request->file("{$mode}_header_image"), $user->id, "{$mode}_header");
+                    $validatedData["{$mode}_header_type"] = 'image';
+                } elseif ($request->input("{$mode}_header_type") !== 'image') {
+                     // Keep old image if logic permits, or clear it based on your preference
+                }
+            }
+
+            // 3. ✅ Handle Sidebar Images
+            foreach (['light', 'dark'] as $mode) {
+                if ($request->hasFile("{$mode}_sidebar_image")) {
+                    $validatedData["{$mode}_sidebar_image"] = $this->uploadImage($request->file("{$mode}_sidebar_image"), $user->id, "{$mode}_sidebar");
+                    $validatedData["{$mode}_sidebar_type"] = 'image';
+                }
+            }
+
             $user->appearance_settings = array_merge($settings, $validatedData);
             $user->save();
-
-            // ត្រឡប់ការកំណត់ដែលបាន Update ទាំងអស់
-            $finalSettings = $this->getAppearanceWithDefaults($user);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Appearance updated successfully!',
-                'settings' => $finalSettings,
+                'settings' => $this->getAppearanceWithDefaults($user),
             ]);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 
     // Helper function សម្រាប់ Upload រូបភាព (មិនផ្លាស់ប្តូរ)
     private function uploadImage($file, $userId, $prefix)
     {
-        $filename = 'user_bg_' . $prefix . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = $prefix . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
         $path = 'upload/backgrounds/';
         if (!File::exists(public_path($path))) {
             File::makeDirectory(public_path($path), 0755, true);
@@ -146,26 +167,38 @@ class AppearanceController extends Controller
             'dark_input_color' => '#1F2937',        // Default ពណ៌ slate-800
             'dark_input_opacity' => 80,              // Default 80%
 
-            // ✅ បន្ថែមថ្មី៖ Default Values សម្រាប់ Header & Sidebar
-            'light_header_color' => '#FFFFFF',  // ពណ៌ស
-            'light_sidebar_color' => '#FFFFFF', // ពណ៌ស
+            // HEADER Defaults
+            'light_header_type' => 'default', 'light_header_bg_color' => '#FFFFFF', 'light_header_opacity' => 100, 'light_header_blur' => 10,
+            'light_header_color2' => '#F3F4F6', 'light_header_gradient_dir' => 'to right', 'light_header_image' => null,
             
-            'dark_header_color' => '#1F2937',   // Dark Gray
-            'dark_sidebar_color' => '#111827',  // Darker Gray
+            'dark_header_type' => 'default', 'dark_header_bg_color' => '#1F2937', 'dark_header_opacity' => 100, 'dark_header_blur' => 10,
+            'dark_header_color2' => '#111827', 'dark_header_gradient_dir' => 'to right', 'dark_header_image' => null,
+
+            // SIDEBAR Defaults
+            'light_sidebar_type' => 'default', 'light_sidebar_bg_color' => '#FFFFFF', 'light_sidebar_opacity' => 100, 'light_sidebar_blur' => 10,
+            'light_sidebar_color2' => '#F3F4F6', 'light_sidebar_gradient_dir' => 'to bottom', 'light_sidebar_image' => null,
+
+            'dark_sidebar_type' => 'default', 'dark_sidebar_bg_color' => '#111827', 'dark_sidebar_opacity' => 100, 'dark_sidebar_blur' => 10,
+            'dark_sidebar_color2' => '#000000', 'dark_sidebar_gradient_dir' => 'to bottom', 'dark_sidebar_image' => null,
         ];
         // ✅ END: បន្ថែម Default Values ថ្មី
 
         $merged = array_merge($defaults, $settings);
 
-        // Logic សម្រាប់ URL រូបភាព (មិនផ្លាស់ប្តូរ)
-        $merged['light_bg_image_url'] = null;
-        $merged['dark_bg_image_url'] = null;
-        if ($merged['light_bg_type'] == 'image' && !empty($merged['light_bg_image'])) {
-            $merged['light_bg_image_url'] = asset($merged['light_bg_image']);
+        // Create URLs for JS
+        foreach(['light_bg_image', 'dark_bg_image', 'light_header_image', 'dark_header_image', 'light_sidebar_image', 'dark_sidebar_image'] as $key) {
+            $merged[$key . '_url'] = (!empty($merged[$key]) && File::exists(public_path($merged[$key]))) ? asset($merged[$key]) : null;
         }
-        if ($merged['dark_bg_type'] == 'image' && !empty($merged['dark_bg_image'])) {
-            $merged['dark_bg_image_url'] = asset($merged['dark_bg_image']);
-        }
+
+        // // Logic សម្រាប់ URL រូបភាព (មិនផ្លាស់ប្តូរ)
+        // $merged['light_bg_image_url'] = null;
+        // $merged['dark_bg_image_url'] = null;
+        // if ($merged['light_bg_type'] == 'image' && !empty($merged['light_bg_image'])) {
+        //     $merged['light_bg_image_url'] = asset($merged['light_bg_image']);
+        // }
+        // if ($merged['dark_bg_type'] == 'image' && !empty($merged['dark_bg_image'])) {
+        //     $merged['dark_bg_image_url'] = asset($merged['dark_bg_image']);
+        // }
         
         return $merged;
     }
