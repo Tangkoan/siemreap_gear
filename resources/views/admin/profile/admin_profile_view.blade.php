@@ -363,6 +363,13 @@
                 /* Card Backgrounds */
                 --card-bg-light: ${light_card_bg_final};
                 --card-bg-dark: ${dark_card_bg_final};
+
+                /* ✅ បន្ថែមថ្មីចូល JS ដែរ */
+                --header-bg-light: ${settings.light_header_color};
+                --sidebar-bg-light: ${settings.light_sidebar_color};
+
+                --header-bg-dark: ${settings.dark_header_color};
+                --sidebar-bg-dark: ${settings.dark_sidebar_color};
             }
 
             /* Áp dụng Main Background */
@@ -380,6 +387,13 @@
                 color: var(--text-dark);
                 background-image: var(--bg-image-dark);
             }
+
+            /* ✅ បន្ថែម CSS Class ថ្មីចូល JS ដែរ */
+            .header-dynamic-bg { background-color: var(--header-bg-light); }
+            .dark .header-dynamic-bg { background-color: var(--header-bg-dark); }
+
+            .sidebar-dynamic-bg { background-color: var(--sidebar-bg-light); }
+            .dark .sidebar-dynamic-bg { background-color: var(--sidebar-bg-dark); }
 
             /* Áp dụng Card Background */
             .card-dynamic-bg {

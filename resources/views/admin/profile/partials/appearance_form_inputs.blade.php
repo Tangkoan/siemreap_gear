@@ -145,3 +145,19 @@
     </div>
 </div>
 {{-- ✅ END: ផ្នែកថ្មីសម្រាប់ Card Background --}}
+
+<hr class="my-6 border-slate-200 dark:border-slate-700">
+
+<div class="pt-2">
+    <label for="{{ $modePrefix }}_header_color" class="block text-sm font-medium text-defalut">Header Background</label>
+    <input type="color" id="{{ $modePrefix }}_header_color" name="{{ $modePrefix }}_header_color"
+        value="{{ $s[$modePrefix . '_header_color'] }}" x-model="{{ $mode }}.header_color"
+        class="mt-1 block w-full h-10 p-1 border border-primary rounded-md cursor-pointer">
+</div>
+
+<div class="pt-2">
+    <label for="{{ $modePrefix }}_sidebar_color" class="block text-sm font-medium text-defalut">Sidebar Background</label>
+    <input type="color" id="{{ $modePrefix }}_sidebar_color" name="{{ $modePrefix }}_sidebar_color"
+        value="{{ $s[$modePrefix . '_sidebar_color'] }}" x-model="{{ $mode }}.sidebar_color"
+        class="mt-1 block w-full h-10 p-1 border border-primary rounded-md cursor-pointer">
+</div>

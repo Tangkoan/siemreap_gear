@@ -46,6 +46,12 @@ class AppearanceController extends Controller
             'dark_input_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
             'dark_input_opacity' => 'nullable|numeric|min:0|max:100',
             // --- ✅ END: Settings ថ្មី ---
+
+            // ✅ បន្ថែមថ្មី៖ សម្រាប់ Header & Sidebar
+            'light_header_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'light_sidebar_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_header_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
+            'dark_sidebar_color' => 'nullable|regex:/^#[0-9a-fA-F]{6}$/',
         ]);
         // ✅ END: បន្ថែម Validation Rules
 
@@ -139,6 +145,13 @@ class AppearanceController extends Controller
             'light_input_opacity' => 80,             // Default 80%
             'dark_input_color' => '#1F2937',        // Default ពណ៌ slate-800
             'dark_input_opacity' => 80,              // Default 80%
+
+            // ✅ បន្ថែមថ្មី៖ Default Values សម្រាប់ Header & Sidebar
+            'light_header_color' => '#FFFFFF',  // ពណ៌ស
+            'light_sidebar_color' => '#FFFFFF', // ពណ៌ស
+            
+            'dark_header_color' => '#1F2937',   // Dark Gray
+            'dark_sidebar_color' => '#111827',  // Darker Gray
         ];
         // ✅ END: បន្ថែម Default Values ថ្មី
 

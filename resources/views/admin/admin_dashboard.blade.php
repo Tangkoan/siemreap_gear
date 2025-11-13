@@ -57,6 +57,12 @@
                 
                 'light_card_type' => 'default', 'light_card_color1' => '#FFFFFF', 'light_card_opacity' => 80, 'light_card_color2' => '#F9FAFB', 'light_card_gradient_dir' => 'to right',
                 'dark_card_type' => 'default', 'dark_card_color1' => '#1F2937', 'dark_card_opacity' => 80, 'dark_card_color2' => '#111827', 'dark_card_gradient_dir' => 'to right',
+
+                // ✅ បន្ថែមថ្មី
+                'light_header_color' => '#FFFFFF',
+                'light_sidebar_color' => '#FFFFFF',
+                'dark_header_color' => '#1F2937',
+                'dark_sidebar_color' => '#111827',
             
             ];
             
@@ -122,6 +128,13 @@
                 /* ✅ Card Backgrounds */
                 --card-bg-light: {!! $light_card_bg_final !!};
                 --card-bg-dark: {!! $dark_card_bg_final !!};
+
+                /* ✅ បន្ថែមថ្មី៖ បង្កើត Variable សម្រាប់ Header & Sidebar */
+                --header-bg-light: {{ $s['light_header_color'] }};
+                --sidebar-bg-light: {{ $s['light_sidebar_color'] }};
+
+                --header-bg-dark: {{ $s['dark_header_color'] }};
+                --sidebar-bg-dark: {{ $s['dark_sidebar_color'] }};
             }
 
             /* អនុវត្ត (Apply) Variables ទាំងនោះ */
@@ -169,6 +182,25 @@
             }
             .text-default { color: var(--text-light); }
             .dark .text-default { color: var(--text-dark); }
+
+
+            /* កូដសម្រាប់កំណត់ Varable Header Backgroun & Sidebar Background */
+            .header-dynamic-bg {
+                background-color: var(--header-bg-light);
+                transition: background-color 0.3s;
+            }
+            .dark .header-dynamic-bg {
+                background-color: var(--header-bg-dark);
+            }
+
+            .sidebar-dynamic-bg {
+                background-color: var(--sidebar-bg-light);
+                transition: background-color 0.3s;
+            }
+            .dark .sidebar-dynamic-bg {
+                background-color: var(--sidebar-bg-dark);
+            }
+
         </style>
     @endauth
     {{-- ✅ END: DYNAMIC STYLES --}}
