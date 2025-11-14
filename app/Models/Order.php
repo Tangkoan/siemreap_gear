@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+// ✅ ជំហានទី១៖ ត្រូវប្រាកដថាបានបន្ថែម Use នេះ
+use App\Models\User;
+use App\Models\Customer; // (អ្នកប្រហែលជាមាន Customer relationship ដែរ)
+use App\Models\Orderdetails; // (អ្នកប្រហែលជាមាន Details relationship ដែរ)
+
 class Order extends Model
 {
     //
@@ -30,9 +35,28 @@ class Order extends Model
         return $this->belongsTo(Customer::class,'customer_id','id');
     }
 
+
+    /**
+     * ទំនាក់ទំនងសម្រាប់ទាញយក Order Details
+     * (អ្នកប្រហែលជាមាន Function នេះហើយ)
+     */
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class, 'order_id');
+        return $this->hasMany(Orderdetails::class, 'order_id');
+    }
+
+
+    /**
+     * ⬇️ ⬇️ ⬇️ ជំហានទី២៖ បន្ថែម Function នេះ ⬇️ ⬇️ ⬇️
+     * * ទំនាក់ទំនងសម្រាប់ទាញយក User (អ្នកលក់/Cashier)
+     * វានឹងភ្ជាប់ 'user_id' នៅក្នុងតារាង 'orders' ទៅ 'id' នៅក្នុងតារាង 'users'
+     */
+    public function user()
+    {
+        // យើងសន្មត់ថា Foreign Key គឺ 'user_id'
+        // បើ Foreign Key របស់អ្នកឈ្មោះផ្សេង សូមដាក់ក្នុង Parameter ទីពីរ
+        // ឧទាហរណ៍: return $this->belongsTo(User::class, 'cashier_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     
 

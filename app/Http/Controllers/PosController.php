@@ -26,6 +26,10 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth; // <-- ត្រូវប្រាកដថាមាន
 
 
+use App\Jobs\SendTelegramSaleAlert; // ✅ បន្ថែម Import សម្រាប់ Job 
+use Illuminate\Support\Facades\Log; // ✅ បន្ថែម Import សម្រាប់ Log
+
+
 class PosController extends Controller
 {
 
@@ -674,115 +678,6 @@ class PosController extends Controller
     } // End Method 
 
 
-    // public function FinalInvoice(Request $request)
-    // {
-    //     $cartItems = Cart::content();
-
-    //     if ($cartItems->isEmpty()) {
-    //         return back()->with(['message' => __('messages.you_mout_add_product_to_cart'), 'alert-type' => 'error']);
-    //     }
-
-    //     $subTotal = floatval(str_replace(',', '', Cart::subtotal()));
-    //     $discount = floatval($request->discount ?? 0);
-
-    //     if ($discount > $subTotal) {
-    //         return back()->with(['message' => __('messages.discount_cannot_exceed_subtotal', ['subtotal' => number_format($subTotal, 2)]), 'alert-type' => 'error'])->withInput();
-    //     }
-
-    //     $pay = floatval($request->pay);
-    //     $total = $subTotal - $discount;
-    //     $due = $total - $pay;
-
-    //     // B1: ត្រួតពិនិត្យរក Pre-Order ជាមុន (Pre-scan for Pre-Orders)
-    //     $hasPreOrder = false;
-    //     foreach ($cartItems as $item) {
-    //         $product = Product::find($item->id);
-    //         if (!$product || $product->product_store < $item->qty) {
-    //             $hasPreOrder = true;
-    //             break;
-    //         }
-    //     }
-
-    //     // B2: កំណត់ Order Status និង Order Type
-    //     $orderStatus = '';
-    //     $orderType = '';
-
-    //     if ($hasPreOrder) {
-    //         $orderStatus = 'pending';
-    //         $orderType = 'pre_order';
-    //     } else {
-    //         $orderStatus = ($due <= 0) ? 'complete' : 'pending';
-    //         $orderType = 'sale';
-    //     }
-
-    //     DB::beginTransaction();
-
-    //     try {
-    //         $data = [
-    //             'customer_id' => $request->customer_id,
-    //             'order_date' => $request->order_date ?? Carbon::now()->toDateString(),
-    //             'order_status' => $orderStatus,
-    //             'order_type' => $orderType,
-    //             'discount' => $discount,
-    //             'total_products' => Cart::count(),
-    //             'sub_total' => $subTotal,
-    //             'vat' => 0,
-    //             'invoice_no' => 'SR_GEAR' . mt_rand(10000000, 99999999),
-    //             'total' => $total,
-    //             'payment_status' => $request->payment_status,
-    //             'pay' => $pay,
-    //             'due' => max(0, $due),
-    //             'created_at' => Carbon::now(),
-    //             'exchange_rate_khr' => $request->exchange_rate_khr,
-    //         ];
-
-    //         // ✅ START: កូដដែលបានបន្ថែម
-    //         // ពិនិត្យមើល បើ Order Status គឺ complete ត្រូវបន្ថែម completion_date
-    //         if ($orderStatus === 'complete') {
-    //             $data['completion_date'] = Carbon::now();
-    //         }
-    //         // ✅ END: កូដដែលបានបន្ថែម
-
-    //         $order_id = Order::insertGetId($data);
-
-    //         foreach ($cartItems as $item) {
-    //             $product = Product::find($item->id);
-
-    //             if ($product && $product->product_store >= $item->qty) {
-    //                 $item_status = 'fulfilled';
-    //                 if ($orderStatus === 'complete') {
-    //                     $product->decrement('product_store', $item->qty);
-    //                 }
-    //             } else {
-    //                 $item_status = 'pre_ordered';
-    //             }
-
-    //             Orderdetails::insert([
-    //                 'order_id' => $order_id,
-    //                 'product_id' => $item->id,
-    //                 'quantity' => $item->qty,
-    //                 'unitcost' => $item->price,
-    //                 'total' => $item->qty * $item->price,
-    //                 'item_status' => $item_status,
-    //             ]);
-    //         }
-
-    //         DB::commit();
-    //         Cart::destroy();
-
-    //         return redirect()->route('print.invoice', $order_id)->with([
-    //             'message' => __('messages.order_completed_successfully'),
-    //             'alert-type' => 'success'
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return back()->with([
-    //             'message' => __('messages.something_went_wrong') . ': ' . $e->getMessage(),
-    //             'alert-type' => 'error'
-    //         ]);
-    //     }
-    // }
-
     // In PosController.php
 
 public function FinalInvoice(Request $request)
@@ -911,6 +806,22 @@ public function FinalInvoice(Request $request)
 
         DB::commit();
         Cart::destroy();
+
+        // ⬇️ ⬇️ ⬇️ បន្ថែម CODE ថ្មីនៅត្រង់នេះ ⬇️ ⬇️ ⬇️
+        try {
+            // 1. ទាញយក Order ពេញលេញជាមួយ Relationships
+            $newOrder = Order::with('customer', 'user')->find($order_id); 
+
+            if ($newOrder) {
+                // 2. បញ្ជូន (Dispatch) Job
+                SendTelegramSaleAlert::dispatch($newOrder);
+            }
+        } catch (\Exception $e) {
+            // បើការ Dispatch Job បរាជ័យ កុំអោយវាទាក់ដំណើរការ
+            // យើងគ្រាន់តែ Log ទុក
+            Log::error('Failed to dispatch Telegram job: ' . $e->getMessage());
+        }
+        // ⬆️ ⬆️ ⬆️ បញ្ចប់ CODE ថ្មី ⬆️ ⬆️ ⬆️
 
         return redirect()->route('print.invoice', $order_id)->with([
             'message' => __('messages.order_completed_successfully'),
