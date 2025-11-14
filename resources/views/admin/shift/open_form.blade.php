@@ -67,7 +67,7 @@
                                     {{ __('messages.starting_cash_usd') }}
                                 </label>
                                 
-                                <input class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+                                <input class="block w-full px-3 py-2 border rounded-lg shadow-sm bg-inherit text-default card-dynamic-bg border-primary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
                                         @error('starting_cash') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror" 
                                        type="number" 
                                        name="starting_cash" 

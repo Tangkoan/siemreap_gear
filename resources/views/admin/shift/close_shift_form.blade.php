@@ -108,7 +108,7 @@
                                 <label for="actual_cash" class="block mb-2 text-lg font-medium text-default">{{ __('messages.actual_cash_label') }}</label>
                                 
                                 {{-- ខ្ញុំបានប្តូរ 'form-control-lg' ទៅជា Tailwind Class --}}
-                                <input class="block w-full px-4 py-3 text-lg border rounded-lg shadow-sm bg-inherit text-default border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary @error('actual_cash') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror" 
+                                <input class="block w-full px-4 py-3 text-lg border rounded-lg shadow-sm bg-inherit text-default card-dynamic-bg border-pimary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary @error('actual_cash') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror" 
                                        type="number" 
                                        name="actual_cash" 
                                        id="actual_cash" 
@@ -131,8 +131,7 @@
 
                             <div class="mt-6 pt-2">
                                 {{-- ខ្ញុំបានប្តូរ 'btn-danger btn-lg' ទៅជា Tailwind Class --}}
-                                <button class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition duration-150 ease-in-out bg-red-500 border border-transparent rounded-lg shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" type="submit">
-                                    <svg class="w-5 h-5 mr-2 -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                                <button class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition duration-150 ease-in-out bg-primary border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" type="submit">
                                     {{ __('messages.confirm_close_shift_btn') }}
                                 </button>
                             </div>

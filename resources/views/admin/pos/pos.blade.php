@@ -25,13 +25,14 @@
         }
 
         .active-filter {
-            background-color: #dc2626 !important; /* red-600 */
-            color: white !important;
-            border-color: #dc2626 !important;
+            background-color: var(--primary) !important;
+            color: var(--primary-contrast) !important;
+            border-color: var(--primary) !important;
         }
-        .dark .active-filter {
-            background-color: #dc2626 !important; /* red-400 */
-        }
+
+            /* អ្នកមិនត្រូវការ .dark .active-filter ទៀតទេ!
+            CSS Variable នឹងប្តូរពណ៌ដោយស្វ័យប្រវត្តិនៅពេល Class .dark ត្រូវបានអនុវត្ត។
+            */
     </style>
 
     <div class="flex flex-col lg:flex-row gap-4 font-sans no-print w-full  p-4">
@@ -54,11 +55,11 @@
             {{-- Condition Filter Buttons --}}
             <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
                 <span class="text-sm  text-defalut  mr-2">{{ __('messages.condition') }}:</span>
-                <button onclick="filterProducts('condition', 'all', this)" class="condition-btn filter-btn m-1 inline-block bg-white  border border-primary px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
+                <button onclick="filterProducts('condition', 'all', this)" class="condition-btn filter-btn m-1 inline-block card-dynamic-bg  border border-primary px-4 py-2 rounded-lg  text-sm font-medium transition-colors active-filter">
                     {{ __('messages.all') }}
                 </button>
                 @foreach ($conditions as $condition)
-                    <button onclick="filterProducts('condition', {{ $condition->id }}, this)" class="condition-btn filter-btn m-1 inline-block bg-white  border border-primary px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors">
+                    <button onclick="filterProducts('condition', {{ $condition->id }}, this)" class="condition-btn filter-btn m-1 inline-block card-dynamic-bg  border border-primary px-4 py-2 rounded-lg  text-sm font-medium transition-colors">
                         {{ $condition->condition_name }}
                     </button>
                 @endforeach
@@ -67,11 +68,11 @@
             {{-- Category Filter Buttons --}}
             <div class="w-full overflow-x-auto whitespace-nowrap pb-2 mb-2">
                 <span class="text-sm  text-defalut  mr-2">{{ __('messages.category') }}:</span>
-                <button onclick="filterProducts('category', 'all', this)" class="category-btn filter-btn m-1 inline-block bg-white  border border-primary px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors active-filter">
+                <button onclick="filterProducts('category', 'all', this)" class="category-btn filter-btn m-1 inline-block  border border-primary px-4 py-2 rounded-lg  text-sm font-medium transition-colors active-filter">
                     {{ __('messages.all_category') }}
                 </button>
                 @foreach ($categories as $category)
-                    <button onclick="filterProducts('category', {{ $category->id }}, this)" class="category-btn filter-btn m-1 inline-block bg-white  border border-primary px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 text-sm font-medium transition-colors">
+                    <button onclick="filterProducts('category', {{ $category->id }}, this)" class="category-btn filter-btn m-1 inline-block card-dynamic-bg  border border-primary px-4 py-2 rounded-lg  text-sm font-medium transition-colors">
                         {{ $category->category_name }}
                     </button>
                 @endforeach
@@ -329,9 +330,9 @@
                         <td class="p-2 font-medium text-defalut">${item.name} ${preOrderLabel}</td>
                         <td class="p-2 text-defalut ">$${parseFloat(item.price).toFixed(2)}</td>
                         <td class="p-2">
-                            <input name="qty" type="number" min="1" value="${item.qty}" data-rowid="${item.rowId}" class="qty-input w-16 py-1 px-2 border border-primary rounded text-center bg-white  dark:text-white">
+                            <input name="qty" type="number" min="1" value="${item.qty}" data-rowid="${item.rowId}" class="qty-input w-16 py-1 px-2 border border-primary rounded text-center card-dynamic-bg text-defalut">
                         </td>
-                        <td class="p-2 text-right font-medium text-defalut">$${(item.price * item.qty).toFixed(2)}</td>
+                        <td class="p-2 text-right font-medium text-defalut ">$${(item.price * item.qty).toFixed(2)}</td>
                         <td class="p-2 text-center">
                             <button type="button" class="text-slate-400 hover:text-red-500 transition-colors" onclick="removeCartItem('${item.rowId}')" title="Remove Item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></button>
                         </td>
