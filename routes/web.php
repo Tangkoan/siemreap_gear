@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
@@ -7,7 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\Backend\ExpenseController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PurchaseController;
@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AppearanceController;
 
 use App\Http\Controllers\ShiftController; // ត្រូវប្រាកដថាបាន Import
+
+
 
 use App\Http\Controllers\DatabaseImportController;
 
@@ -67,6 +69,52 @@ Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('adm
 
 //Admin
 Route::middleware(['auth'])->group(callback: function () {
+
+    // Expense
+        // 1. Route សម្រាប់បង្ហាញទំព័រ (View)
+        Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+        
+        // 2. Route សម្រាប់ AJAX Search/Pagination (ដូច search.product របស់អ្នក)
+        Route::get('/search/expenses', [ExpenseController::class, 'searchExpenses'])->name('search.expense');
+
+        // 3. Routes សម្រាប់ Modal (Add, Edit, Delete)
+        // ខ្ញុំនៅតែណែនាំឲ្យប្រើ API prefix សម្រាប់ភាពច្បាស់លាស់
+        Route::prefix('api')->group(function () {
+            Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.json.store');
+            Route::get('/expenses/{expense}', [ExpenseController::class, 'show'])->name('expenses.json.show');
+            Route::put('/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.json.update');
+            Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.json.delete');
+        });
+
+
+        // 1. Route សម្រាប់បង្ហាញទំព័រ (View)
+        Route::get('/expense-categories', [ExpenseCategoryController::class, 'index'])
+            ->name('expense_categories.index');
+        
+        // 2. Route សម្រាប់ AJAX Search/Pagination
+        Route::get('/search/expense-categories', [ExpenseCategoryController::class, 'searchCategories'])
+            ->name('search.expense_category');
+
+        // 3. Routes សម្រាប់ Modal (Add, Edit, Delete)
+        Route::prefix('api')->group(function () {
+            Route::post('/expense-categories', [ExpenseCategoryController::class, 'store'])
+                ->name('expense_categories.json.store');
+                
+            Route::get('/expense-categories/{expenseCategory}', [ExpenseCategoryController::class, 'show'])
+                ->name('expense_categories.json.show');
+                
+            Route::put('/expense-categories/{expenseCategory}', [ExpenseCategoryController::class, 'update'])
+                ->name('expense_categories.json.update');
+                
+            Route::delete('/expense-categories/{expenseCategory}', [ExpenseCategoryController::class, 'destroy'])
+                ->name('expense_categories.json.delete');
+        });
+
+
+
+
+
+
 
     //
     Route::post('/appearance/update', [AppearanceController::class, 'update'])->name('appearance.update');

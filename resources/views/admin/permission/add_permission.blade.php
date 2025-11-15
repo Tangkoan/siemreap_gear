@@ -52,6 +52,7 @@
                                     <option value="customer">Customer</option>
                                     <option value="supplier">Supplier</option>
                                     <option value="category">Category</option>
+                                    <option value="expense">Expense</option>
                                     <option value="product">Product</option>
                                     <option value="stock">Stock</option>
                                     <option value="orders">Orders</option>
@@ -62,6 +63,7 @@
                                     <option value="permission">Permission</option>
                                     <option value="backup">Backup</option>
                                     <option value="setting">Setting</option>
+                                    
                                 </select>
                             </div>
                         </div>
