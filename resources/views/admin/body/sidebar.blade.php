@@ -295,6 +295,46 @@
             @endif
             {{-- End User --}}
 
+            {{-- Expense Dropdown --}}
+            @php
+                $expenseMenu = Auth::user()->can('expense.menu');
+                $categoryExpense = Auth::user()->can('expense_category.menu');
+                $isCategoryActive = request()->routeIs('expenses.index') || request()->routeIs('expenses.index');
+            @endphp
+            @if ($expenseMenu || $categoryExpense)
+                <div class="relative" data-dropdown-trigger>
+                    <a href="{{ route('expenses.index') }}"
+                        class="relative nav-link flex items-center py-2.5 px-4 rounded-lg w-full transition-colors duration-200
+                        {{ $isCategoryActive ? 'text-primary' : ' text-default hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-700/60' }}">
+                        @if($isCategoryActive)
+                            <span class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-primary"></span>
+                        @endif
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-2.25-1.313M21 7.5v2.25m0-2.25-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3 2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75 2.25-1.313M12 21.75V19.5m0 2.25-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
+                        </svg>
+                        <span class="px-2">{{ __('messages.expense') }}</span>
+                    </a>
+
+                    <div data-dropdown-menu class="absolute top-0 left-full ml-2 w-48  card-dynamic-bg backdrop-blur-none shadow-xl rounded-lg p-2 z-50 border  hidden">
+                       
+                         @if ($categoryCondition)
+                            <a href="{{ route('expenses.index') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
+                                {{ __('messages.expense') }}
+                            </a>
+                        @endif
+
+                       
+                        @if ($categoryMenu)
+                            <a href="{{ route('expense_categories.index') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
+                                {{ __('messages.expense_categories') }}
+                            </a>
+                        @endif
+                       
+                    </div>
+                </div>
+            @endif
+            {{-- End Expense Dropdown --}}
+
             {{-- Backup Menu --}}
             @if (Auth::user()->can('backup.menu'))
                 <a href="{{ route('admin.backup') }}"
