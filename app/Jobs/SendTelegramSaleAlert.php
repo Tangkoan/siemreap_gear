@@ -32,11 +32,13 @@ class SendTelegramSaleAlert implements ShouldQueue
      */
     public function handle(): void
     {
-        $botToken = config('app.telegram_bot_token', env('TELEGRAM_BOT_TOKEN'));
-        $chatId = config('app.telegram_chat_id', env('TELEGRAM_CHAT_ID'));
+        
+
+        $botToken = config('services.telegram.token');
+        $chatId = config('services.telegram.chat_id');
 
         if (!$botToken || !$chatId) {
-            Log::error('Telegram Bot Token ឬ Chat ID មិនទាន់បានកំណត់ក្នុង .env');
+            Log::error('Telegram Bot Token ឬ Chat ID មិនទាន់បានកំណត់ក្នុង .env ឬ config/services.php');
             return;
         }
 
