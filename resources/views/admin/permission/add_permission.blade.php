@@ -50,6 +50,7 @@
                                     <option value="" selected disabled>{{ __(key: 'messages.select_group_name') }}</option>
                                     <option value="pos">Pos</option>
                                     <option value="customer">Customer</option>
+                                    <option value="employee">Employee</option>
                                     <option value="supplier">Supplier</option>
                                     <option value="category">Category</option>
                                     <option value="expense">Expense</option>

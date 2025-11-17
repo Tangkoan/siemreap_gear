@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AppearanceController;
+use App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\ShiftController; // ត្រូវប្រាកដថាបាន Import
 
@@ -111,6 +113,46 @@ Route::middleware(['auth'])->group(callback: function () {
         });
 
 
+
+    // --- Routes សម្រាប់ Employee Management ---
+    
+            // 1. Route សម្រាប់បង្ហាញទំព័រ (View)
+            Route::get('/employees', [EmployeeController::class, 'index'])
+                ->name('employees.index')->middleware('permission:employee.menu');
+            
+            // 2. Route សម្រាប់ AJAX Search/Pagination
+            Route::get('/search/employees', [EmployeeController::class, 'searchEmployees'])
+                ->name('search.employee');
+
+            // 3. Routes សម្រាប់ Modal (Add, Edit, Delete)
+            Route::prefix('api')->group(function () {
+                Route::post('/employees', [EmployeeController::class, 'store'])
+                    ->name('employees.json.store');
+                    
+                Route::get('/employees/{employee}', [EmployeeController::class, 'show'])
+                    ->name('employees.json.show');
+                    
+                Route::put('/employees/{employee}', [EmployeeController::class, 'update'])
+                    ->name('employees.json.update');
+                    
+                Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])
+                    ->name('employees.json.delete');
+            });
+    // --- ចប់ Routes សម្រាប់ Employee ---
+
+
+    // --- Routes សម្រាប់ Payroll Management ---
+    
+        // 1. Route សម្រាប់បង្ហាញទំព័រ (View)
+        Route::get('/payrolls', [PayrollController::class, 'index'])
+            ->name('payrolls.index')->middleware('permission:payrolls.menu');
+
+        // 2. Route សម្រាប់ AJAX xử lý ការទូទាត់
+        Route::prefix('api')->group(function () {
+            Route::post('/payrolls', [PayrollController::class, 'store'])
+                ->name('payrolls.json.store');
+        });
+    // --- ចប់ Routes សម្រាប់ Payroll ---
 
 
 

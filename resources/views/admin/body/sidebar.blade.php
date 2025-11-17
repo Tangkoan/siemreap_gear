@@ -299,7 +299,9 @@
             @php
                 $expenseMenu = Auth::user()->can('expense.menu');
                 $categoryExpense = Auth::user()->can('expense_category.menu');
-                $isCategoryActive = request()->routeIs('expenses.index') || request()->routeIs('expenses.index');
+                $payrollsMenu = Auth::user()->can('payrolls.menu');
+                $employeeMenu = Auth::user()->can('employee.menu');
+                $isCategoryActive = request()->routeIs('expenses.index') || request()->routeIs('expenses.index') || request()->routeIs('payrolls.index') || request()->routeIs('employees.index');
             @endphp
             @if ($expenseMenu || $categoryExpense)
                 <div class="relative" data-dropdown-trigger>
@@ -327,6 +329,19 @@
                         @if ($categoryMenu)
                             <a href="{{ route('expense_categories.index') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
                                 {{ __('messages.expense_categories') }}
+                            </a>
+                        @endif
+
+                        @if ($payrollsMenu)
+                            <a href="{{ route('payrolls.index') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
+                                {{ __('messages.payrools') }}
+                            </a>
+                        @endif
+
+                       
+                        @if ($employeeMenu)
+                            <a href="{{ route('employees.index') }}" class="block w-full text-left px-3 py-2 text-sm rounded-md text-defalut hover:bg-primary">
+                                {{ __('messages.employees') }}
                             </a>
                         @endif
                        
