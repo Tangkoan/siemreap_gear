@@ -14,6 +14,7 @@ use App\Models\purchase_details;
 use App\Models\Expense;
 use App\Models\Shift;
 use App\Models\User;
+use App\Models\ExpenseCategory; // <-- បន្ថែម Use Statement នេះ (បើមិនទាន់មាន)
 
 
 
@@ -993,7 +994,12 @@ class ReportController extends Controller
         
         $salesQuery = \App\Models\OrderDetails::with('product', 'order');
         $purchasesQuery = \App\Models\purchase_details::with('product', 'purchase.supplier');
-        $expensesQuery = \App\Models\Expense::query();
+        
+        // 🟢 START UPGRADE (Eager load 'category')
+        // យើងត្រូវ load 'category' relationship ដើម្បីដឹងថា "Salary" ឬ "ថ្លៃភ្លើង"
+        $expensesQuery = \App\Models\Expense::with('category'); 
+        // 🟢 END UPGRADE
+        
         $adjustmentsQuery = \App\Models\StockAdjustment::with('product');
 
         $formattedDate = '';
@@ -1005,7 +1011,11 @@ class ReportController extends Controller
                     $endMonth = \Carbon\Carbon::parse($endValue)->endOfMonth();
                     $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startMonth, $endMonth]));
                     $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startMonth, $endMonth]));
-                    $expensesQuery->whereBetween('date', [$startMonth, $endMonth]);
+                    
+                    // 🟢 START UPGRADE (កែ 'date' ទៅ 'expense_date')
+                    $expensesQuery->whereBetween('expense_date', [$startMonth, $endMonth]);
+                    // 🟢 END UPGRADE
+                    
                     $adjustmentsQuery->whereBetween('created_at', [$startMonth, $endMonth]);
                     $formattedDate = $startMonth->isSameMonth($endMonth) ? $startMonth->format('F Y') : $startMonth->format('F Y') . ' to ' . $endMonth->format('F Y');
                     break;
@@ -1014,7 +1024,11 @@ class ReportController extends Controller
                     $endYear = \Carbon\Carbon::createFromDate($endValue)->endOfYear();
                     $salesQuery->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startYear, $endYear]));
                     $purchasesQuery->whereHas('purchase', fn($q) => $q->whereBetween('purchase_date', [$startYear, $endYear]));
-                    $expensesQuery->whereBetween('date', [$startYear, $endYear]);
+                    
+                    // 🟢 START UPGRADE (កែ 'date' ទៅ 'expense_date')
+                    $expensesQuery->whereBetween('expense_date', [$startYear, $endYear]);
+                    // 🟢 END UPGRADE
+                    
                     $adjustmentsQuery->whereBetween('created_at', [$startYear, $endYear]);
                     $formattedDate = $startYear->format('Y') . ($startYear->format('Y') != $endYear->format('Y') ? ' to ' . $endYear->format('Y') : '');
                     break;
@@ -1023,7 +1037,11 @@ class ReportController extends Controller
                     $endDate = \Carbon\Carbon::parse($endValue);
                     $salesQuery->whereHas('order', fn($q) => $q->whereDate('order_date', '>=', $startDate)->whereDate('order_date', '<=', $endDate));
                     $purchasesQuery->whereHas('purchase', fn($q) => $q->whereDate('purchase_date', '>=', $startDate)->whereDate('purchase_date', '<=', $endDate));
-                    $expensesQuery->whereDate('date', '>=', $startDate)->whereDate('date', '<=', $endDate);
+                    
+                    // 🟢 START UPGRADE (កែ 'date' ទៅ 'expense_date')
+                    $expensesQuery->whereDate('expense_date', '>=', $startDate)->whereDate('expense_date', '<=', $endDate);
+                    // 🟢 END UPGRADE
+                    
                     $adjustmentsQuery->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
                     $formattedDate = $startDate->isSameDay($endDate) ? $startDate->format('d F Y') : $startDate->format('d M Y') . ' to ' . $endDate->format('d M Y');
                     break;
@@ -1035,23 +1053,24 @@ class ReportController extends Controller
 
         $sales_details = $salesQuery->get();
         $purchase_details = $purchasesQuery->get();
-        $other_expenses = $expensesQuery->get();
+        $other_expenses = $expensesQuery->get(); // ឥឡូវនេះ $other_expenses មានទាំង "Salary" និង "General"
         $stock_adjustments = $adjustmentsQuery->get();
 
-        // ✅ START: CORRECTED CALCULATION LOGIC
-        
+        // (កូដគណនាខាងក្រោមរបស់អ្នកគឺត្រឹមត្រូវហើយ មិនចាំបាច់កែទេ)
+        // ... (Calculation Logic) ...
         // 1. Calculate Revenue
         $total_gross_revenue = $sales_details->sum('total');
         $total_sale_returns_value = $stock_adjustments
             ->where('type', 'sale_return')
             ->sum(fn($item) => $item->quantity * ($item->product->selling_price ?? 0));
-        
-        // Net Revenue is Gross Revenue MINUS Sale Returns
         $net_revenue = $total_gross_revenue - $total_sale_returns_value;
 
         // 2. Calculate Expenses
         $total_gross_purchases = $purchase_details->sum('total');
-        $total_other_expenses_sum = $other_expenses->sum('amount');
+        
+        // 🟢 UPGRADE (នេះឥឡូវបូកសរុប "Salary" + "General" ទាំងអស់)
+        $total_other_expenses_sum = $other_expenses->sum('amount'); 
+        
         $total_cleared_stock_loss = $stock_adjustments
             ->where('type', 'clear_stock')
             ->sum(fn($item) => $item->quantity * ($item->product->buying_price ?? 0));
@@ -1059,19 +1078,15 @@ class ReportController extends Controller
         $total_purchase_returns_value = $stock_adjustments
             ->where('type', 'purchase_return')
             ->sum(fn($item) => $item->quantity * ($item->product->buying_price ?? 0));
-
-        // Total Expense = (Purchases + Other Expenses + Stock Loss) MINUS Purchase Returns
         $total_expenses = ($total_gross_purchases + $total_other_expenses_sum + $total_cleared_stock_loss) - $total_purchase_returns_value;
 
         // 3. Calculate Profit or Loss
         $profit_or_loss = $net_revenue - $total_expenses; 
 
-        // ✅ END: CORRECTED CALCULATION LOGIC
-
         return [
             'sales_details' => $sales_details,
             'purchase_details' => $purchase_details,
-            'other_expenses' => $other_expenses,
+            'other_expenses' => $other_expenses, // ឥឡូវនេះ មានផ្ទុក "Category"
             'stock_adjustments' => $stock_adjustments,
             'summary' => [
                 'total_revenue' => number_format($net_revenue, 2),

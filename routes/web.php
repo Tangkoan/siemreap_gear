@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\PayrollReportController; // <-- បន្ថែម Use Statement នេះ
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ProfileController;
@@ -112,8 +113,21 @@ Route::middleware(['auth'])->group(callback: function () {
                 ->name('expense_categories.json.delete');
         });
 
+    // Expense Report Payrolls
+            // --- Routes សម្រាប់ Payroll Expense Report ---
+            Route::get('/report/payroll-expense', [PayrollReportController::class, 'index'])
+                ->name('report.payroll_expense.index')->middleware('permission:report.payrolls');
+                
+            Route::get('/report/payroll-expense-data', [PayrollReportController::class, 'getPayrollReportData'])
+                ->name('report.payroll_expense.data');
 
-
+            // 🟢 START UPGRADE: បន្ថែម Routes ថ្មី សម្រាប់ EXPORT
+            Route::get('/report/payroll-expense-export-excel', [PayrollReportController::class, 'exportExcel'])
+                ->name('report.payroll_expense.exportExcel');
+                
+            Route::get('/report/payroll-expense-export-pdf', [PayrollReportController::class, 'exportPdf'])
+                ->name('report.payroll_expense.exportPdf');
+            // 🟢 END UPGRADE
     // --- Routes សម្រាប់ Employee Management ---
     
             // 1. Route សម្រាប់បង្ហាញទំព័រ (View)
