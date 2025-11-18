@@ -69,9 +69,9 @@
                 <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
                     <td class="p-2">{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y') }}</td>
                     <td class="p-2">
-                        <span class="font-semibold text-primary">ប្រាក់ខែ (Payroll)</span>
+                        <span class="font-semibold text-primary">Payroll</span>
                     </td>
-                    <td class="p-2 text-defalut">ប្រាក់ខែ {{ $item->employee->name ?? '' }} ({{ $item->month_year }})</td>
+                    <td class="p-2 text-defalut">Payroll for : {{ $item->employee->name ?? '' }} ({{ $item->month_year }})</td>
                     <td class="p-2 text-right text-red-500">-${{ number_format($item->net_salary, 2) }}</td>
                 </tr>
 

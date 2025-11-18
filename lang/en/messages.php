@@ -636,4 +636,64 @@ return [
     'actual_cash' => 'Actual Cash',
     'difference' => 'Difference',
     'no_shifts_found_criteria' => 'No shifts found matching the selected criteria.',
+
+
+    'expense' => 'Expense',
+    'add_expense' => 'Add Expense',
+//     ថ្ងៃខែចំណាយ
+
+    'table_no' => 'No',
+    'expense_date' => 'Expense Date',
+    'expense_type' => 'Type',
+    'description' => 'Description',
+    'amount' => 'Amount',
+    'recorder' => 'Recorder',
+    'table_action' => 'Action',
+
+
+    'expense_categories' => 'Expense Category',
+    'payrools' => 'Payroll',
+    'employees' => 'Emplyees',
+
+
+    
+    'category_name' => 'Category Name',
+    'description' => 'Description',
+    'usage_count' => 'Usage Count',
+    'table_action' => 'Action',
+    'add_expense_category' => 'Add Expense Category',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'search' => 'Search',
+    'show' => 'Show',
+    'all' => 'All',
+    'expense_category' => 'Expense Category',
+    'edit_expense_category' => 'Edit Expense Category',
+    'position'=> 'Position',
+    'basic_salary'=> 'Basic Salary',
+    'salary_status'=> 'Salry Status',
+
+    'add_employee'=> 'Add Employee',
+    'day_for_work'=> 'Day Start Work',
+    'edit_employee'=> 'Edit Employee',
+    'payrool'=> 'Payroll',
+
+    'payroll_report'=> 'Payroll Report',
+
+    'sart_month'=> 'Start Month',
+    'to_month'=> 'End Month',
+
+    'net_salary'=> 'Net Salary',
+    'total_payments'=> 'Total Payments',
+    'report_for'=> 'Report For : ',
+
+
+    'payment_day'=> 'Payment Day',
+    'for_month'=> 'For Month',
+    'bonus'=> 'Bonus',
+
+    'net_salary_th'=> 'Net Salary',
+
+    
+
 ];

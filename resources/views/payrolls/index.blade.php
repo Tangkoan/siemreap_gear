@@ -21,7 +21,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h6m-6 2.25h6M12 9.75l.162.325a2.25 2.25 0 0 0 3.676 0L16.5 9.75m-4.5 0c.228-.452.486-.9.776-1.325a2.25 2.25 0 0 1 3.9 0c.29.425.548.873.776 1.325m-6 0h6m-6 0c.003.02.007.04.012.06m6 0c-.005-.02-.009-.04-.012-.06m-5.988 0h5.976c.005.02.009.04.012.06m-5.988 0c-.003-.02-.007-.04-.012-.06" />
                 </svg>
-                <div class="px-2 text-3xl font-bold text-defalut">បើកប្រាក់ខែ (Payroll)</div> 
+                <div class="px-2 text-3xl font-bold text-defalut">{{ __('messages.payrools') }}</div> 
             </h2>
             {{-- មិនចាំបាច់មានប៊ូតុង "Add New" ទេ --}}
         </div>
@@ -31,11 +31,11 @@
             <table class="w-full text-left table-auto min-w-max ">
                 <thead>
                     <tr>
-                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ឈ្មោះបុគ្គលិក</p></th>
-                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">តួនាទី</p></th>
-                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ប្រាក់ខែគោល</p></th>
-                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ស្ថានភាពបើកប្រាក់ខែ</p></th>
-                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">សកម្មភាព</p></th>
+                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.employees') }}</p></th>
+                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.position') }}</p></th>
+                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.basic_salary') }}</p></th>
+                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary"> {{ __('messages.salary_status') }}</p></th>
+                        <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.action') }}</p></th>
                     </tr>
                 </thead>
                 <tbody class="tbody">

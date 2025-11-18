@@ -68,7 +68,7 @@
                     <div class="ml-3">
                         <div class="w-72 relative">
                             <div class="relative">
-                                <input class="text-defalut card-dynamic-bg w-full pr-11 h-10 pl-3 py-2 text-sm border border-primary rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="ស្វែងរកតាមឈ្មោះ..." id="search" name="search" type="text" />
+                                <input class="text-defalut card-dynamic-bg w-full pr-11 h-10 pl-3 py-2 text-sm border border-primary rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                 <button class=" absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center rounded" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-primary">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -84,14 +84,34 @@
                     <table class="w-full text-left table-auto min-w-max ">
                         <thead>
                             <tr>
-                                {{-- កែ Headers សម្រាប់ Category --}}
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __('messages.table_no') !!}</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ឈ្មោះប្រភេទ</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ការពិពណ៌នា</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ចំនួនប្រើប្រាស់</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.table_action') }}</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.table_no') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.category_name') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.description') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.usage_count') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.table_action') !!}
+                                    </p>
+                                </th>
                             </tr>
                         </thead>
+
                         <tbody class="tbody">
                             {{-- ទិន្នន័យនឹងមកពី AJAX --}}
                         </tbody>
@@ -131,13 +151,13 @@
                     <div class="space-y-4">
                         
                          <div>
-                            <label for="name" class="block text-sm font-medium text-defalut">ឈ្មោះប្រភេទ</label>
+                            <label for="name" class="block text-sm font-medium text-defalut">{!! __('messages.category_name') !!}</label>
                             <input type="text" name="name" id="name" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_name" class="text-red-500 text-sm"></span>
                         </div>
 
                          <div>
-                            <label for="description" class="block text-sm font-medium text-defalut">ការពិពណ៌នា (Optional)</label>
+                            <label for="description" class="block text-sm font-medium text-defalut"> {!! __('messages.description') !!} (Optional)</label>
                             <textarea name="description" id="description" rows="3" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
                             <span id="error_description" class="text-red-500 text-sm"></span>
                         </div>
@@ -147,10 +167,10 @@
                 {{-- Modal Footer --}}
                 <div class="card-dynamic-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200">
                     <button type="submit" id="saveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-opacity-90 sm:ml-3 sm:w-auto sm:text-sm">
-                        រក្សាទុក
+                         {!! __('messages.save') !!}
                     </button>
                     <button type="button" id="closeModalBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-primary shadow-sm px-4 py-2 card-dynamic-bg text-base font-medium text-defalut hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        បោះបង់
+                         {!! __('messages.cancel') !!}
                     </button>
                 </div>
             </form>
@@ -228,7 +248,7 @@
         $('#addCategoryBtn').on('click', function() {
             categoryForm[0].reset(); 
             $('#categoryId').val('');
-            $('#modalTitle').text('បន្ថែមប្រភេទថ្មី');
+            $('#modalTitle').text('{!! __("messages.add_expense_category") !!}');
             $('.text-red-500').text('');
             modal.removeClass('modal-hidden');
         });
@@ -242,7 +262,7 @@
             let name = $(this).data('name');
             let description = $(this).data('description');
 
-            $('#modalTitle').text('កែសម្រួលប្រភេទ');
+            $('#modalTitle').text('{!! __("messages.edit_expense_category") !!}');
             $('#categoryId').val(id);
             $('#name').val(name);
             $('#description').val(description);

@@ -72,7 +72,7 @@
                     <div class="ml-3">
                         <div class="w-72 relative">
                             <div class="relative">
-                                <input class="text-defalut card-dynamic-bg w-full pr-11 h-10 pl-3 py-2 text-sm border border-primary rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="ស្វែងរកតាមការពិពណ៌នា..." id="search" name="search" type="text" />
+                                <input class="text-defalut card-dynamic-bg w-full pr-11 h-10 pl-3 py-2 text-sm border border-primary rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                 <button class=" absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center rounded" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-primary">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -89,13 +89,42 @@
                         <thead>
                             <tr>
                                 {{-- កែ Headers សម្រាប់ Expense --}}
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __('messages.table_no') !!}</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ថ្ងៃខែចំណាយ</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ប្រភេទ</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ការពិពណ៌នា</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ទឹកប្រាក់</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">អ្នកកត់ត្រា</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.table_action') }}</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.table_no') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.expense_date') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.expense_type') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.description') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.amount') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.recorder') !!}
+                                    </p>
+                                </th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 ">
+                                    <p class="text-sm font-normal leading-none text-primary">
+                                        {!! __('messages.table_action') !!}
+                                    </p>
+                                </th>
+
                             </tr>
                         </thead>
                         <tbody class="tbody">

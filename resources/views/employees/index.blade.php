@@ -35,18 +35,18 @@
                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v.01M15 12v.01M11.25 11.25v.01M12.75 12.75v.01M10.5 13.5v.01M13.5 10.5v.01" />
                     </svg>
                     {{-- កែ Title --}}
-                    <div class="px-2 text-3xl font-bold text-defalut">ការគ្រប់គ្រងបុគ្គលិក</div> 
+                    <div class="px-2 text-3xl font-bold text-defalut">{{ __('messages.employees') }}</div> 
                 </h2>
 
                 <div class="flex items-center gap-x-2">
                     {{-- កែប៊ូតុង Add: ប្រើ <button> និង ID សម្រាប់ Modal --}}
                     @can('employee.add')
                     <button type="button" id="addEmployeeBtn" class="bg-primary text-white py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent focus:outline-hidden">
-                        បន្ថែមបុគ្គលិកថ្មី
+                        {!! __("messages.add_employee") !!}
                     </button>
                     @else
                     <button class="bg-primary py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent focus:outline-hidden disabled:opacity-50" disabled title="You don't have permission">
-                        បន្ថែមបុគ្គលិកថ្មី
+                        {!! __("messages.add_employee") !!}
                     </button>
                     @endcan
                 </div>
@@ -69,7 +69,7 @@
                     <div class="ml-3">
                         <div class="w-72 relative">
                             <div class="relative">
-                                <input class="text-defalut card-dynamic-bg w-full pr-11 h-10 pl-3 py-2 text-sm border border-primary rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="ស្វែងរកតាមឈ្មោះ, តួនាទី..." id="search" name="search" type="text" />
+                                <input class="text-defalut card-dynamic-bg w-full pr-11 h-10 pl-3 py-2 text-sm border border-primary rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md" placeholder="{{ __('messages.search') }}" id="search" name="search" type="text" />
                                 <button class=" absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center rounded" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-primary">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -87,11 +87,11 @@
                             <tr>
                                 {{-- កែ Headers សម្រាប់ Employee --}}
                                 <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __('messages.table_no') !!}</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ឈ្មោះបុគ្គលិក</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">លេខទូរស័ព្ទ</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">តួនាទី</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ប្រាក់ខែគោល</p></th>
-                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">ស្ថានភាព</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __("messages.employees") !!}</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __("messages.phone") !!}</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __("messages.position") !!}</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __("messages.basic_salary") !!}</p></th>
+                                <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{!! __("messages.status") !!}</p></th>
                                 <th class="sticky top-0 p-4 border-b border-slate-200 "><p class="text-sm font-normal leading-none text-primary">{{ __('messages.table_action') }}</p></th>
                             </tr>
                         </thead>
@@ -125,7 +125,7 @@
                 
                 {{-- Modal Header --}}
                 <div class="card-dynamic-bg px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-slate-200">
-                    <h3 class="text-lg leading-6 font-medium text-defalut" id="modalTitle">បន្ថែមបុគ្គលិកថ្មី</h3>
+                    <h3 class="text-lg leading-6 font-medium text-defalut" id="modalTitle">{{ __('messages.add_employee') }}</h3>
                 </div>
 
                 {{-- Modal Body --}}
@@ -133,37 +133,37 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         
                          <div class="col-span-2">
-                            <label for="name" class="block text-sm font-medium text-defalut">ឈ្មោះបុគ្គលិក</label>
+                            <label for="name" class="block text-sm font-medium text-defalut">{{ __('messages.employees') }}</label>
                             <input type="text" name="name" id="name" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_name" class="text-red-500 text-sm"></span>
                         </div>
 
                          <div>
-                            <label for="phone" class="block text-sm font-medium text-defalut">លេខទូរស័ព្ទ</label>
+                            <label for="phone" class="block text-sm font-medium text-defalut">{{ __('messages.phone') }}</label>
                             <input type="text" name="phone" id="phone" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <span id="error_phone" class="text-red-500 text-sm"></span>
                         </div>
 
                          <div>
-                            <label for="position" class="block text-sm font-medium text-defalut">តួនាទី</label>
+                            <label for="position" class="block text-sm font-medium text-defalut">{{ __('messages.posigion') }}</label>
                             <input type="text" name="position" id="position" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_position" class="text-red-500 text-sm"></span>
                         </div>
                         
                         <div>
-                            <label for="base_salary" class="block text-sm font-medium text-defalut">ប្រាក់ខែគោល ($)</label>
+                            <label for="base_salary" class="block text-sm font-medium text-defalut">{{ __('messages.basic_salary') }} ($)</label>
                             <input type="number" step="0.01" name="base_salary" id="base_salary" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_base_salary" class="text-red-500 text-sm"></span>
                         </div>
 
                         <div>
-                            <label for="join_date" class="block text-sm font-medium text-defalut">ថ្ងៃចូលធ្វើការ</label>
+                            <label for="join_date" class="block text-sm font-medium text-defalut">{{ __('messages.day_for_work') }}</label>
                             <input type="date" name="join_date" id="join_date" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <span id="error_join_date" class="text-red-500 text-sm"></span>
                         </div>
 
                         <div class="col-span-2">
-                            <label for="status" class="block text-sm font-medium text-defalut">ស្ថានភាព</label>
+                            <label for="status" class="block text-sm font-medium text-defalut">{{ __('messages.status') }}</label>
                             <select name="status" id="status" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
@@ -176,10 +176,10 @@
                 {{-- Modal Footer --}}
                 <div class="card-dynamic-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200">
                     <button type="submit" id="saveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-opacity-90 sm:ml-3 sm:w-auto sm:text-sm">
-                        រក្សាទុក
+                        {{ __('messages.save') }}
                     </button>
                     <button type="button" id="closeModalBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-primary shadow-sm px-4 py-2 card-dynamic-bg text-base font-medium text-defalut hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        បោះបង់
+                        {{ __('messages.cancel') }}
                     </button>
                 </div>
             </form>
@@ -252,7 +252,7 @@
         $('#addEmployeeBtn').on('click', function() {
             employeeForm[0].reset(); 
             $('#employeeId').val('');
-            $('#modalTitle').text('បន្ថែមបុគ្គលិកថ្មី');
+            $('#modalTitle').text('{!! __("messages.add_employee") !!}');
             $('#status').val('active'); // Set default status
             $('.text-red-500').text('');
             modal.removeClass('modal-hidden');
@@ -269,7 +269,7 @@
             
             // ប្រើ AJAX $.get ព្រោះ data ស្មុគស្មាញជាង
             $.get("{{ url('api/employees') }}/" + id, function(data) {
-                $('#modalTitle').text('កែសម្រួលបុគ្គលិក');
+                $('#modalTitle').text('{!! __("messages.edit_employee") !!}');
                 $('#employeeId').val(data.id);
                 $('#name').val(data.name);
                 $('#phone').val(data.phone);
