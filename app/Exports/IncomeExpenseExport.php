@@ -16,7 +16,8 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
     protected $sales_details;
     protected $purchase_details;
     protected $other_expenses;
-    protected $stock_adjustments; // ✅ បានបន្ថែម Property នេះ
+    protected $stock_adjustments;
+    protected $payrolls; 
     protected $summary;
 
     /**
@@ -26,13 +27,69 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
      * @param mixed $stock_adjustments
      * @param mixed $summary
      */
-    public function __construct($sales_details, $purchase_details, $other_expenses, $stock_adjustments, $summary)
-    {
+    public function __construct(
+        $sales_details,
+        $purchase_details,
+        $other_expenses,
+        $stock_adjustments,
+        $payrolls,
+        $summary
+    ) {
         $this->sales_details = $sales_details;
         $this->purchase_details = $purchase_details;
         $this->other_expenses = $other_expenses;
-        $this->stock_adjustments = $stock_adjustments; 
+        $this->stock_adjustments = $stock_adjustments;
+        $this->payrolls = $payrolls;
         $this->summary = $summary;
+    }
+
+    /**
+     * ✅ ប្រើហ្វាល់ Blade ដែលយើងបាន Fix រួចហើយ
+     * វិធីនេះធានាថា Excel និង PDF របស់អ្នក មានទិន្នន័យដូចគ្នាបេះបិទ
+     */
+    public function view(): View
+    {
+        return view('admin.report.income_expense.income_expense_pdf', [
+            'sales_details' => $this->sales_details,
+            'purchase_details' => $this->purchase_details,
+            'other_expenses' => $this->other_expenses,
+            'stock_adjustments' => $this->stock_adjustments,
+            'payrolls' => $this->payrolls,
+            'summary' => $this->summary,
+        ]);
+    }
+
+    /**
+     * ✅ កំណត់ Style សម្រាប់ Excel (ស្រដៀងនឹង PDF)
+     */
+    public function styles(Worksheet $sheet)
+    {
+        // កំណត់ Font សម្រាប់ Sheet ទាំងមូល (ប្រសិនបើចង់)
+        // $sheet->getParent()->getDefaultStyle()->getFont()->setName('Khmer OS Battambang');
+
+        // Style សម្រាប់ Summary
+        $sheet->getStyle('A3:B5')->getFont()->setBold(true);
+        $sheet->getStyle('A3:A5')->getAlignment()->setHorizontal('right');
+        
+        // Style សម្រាប់ Section Headers (Income/Expense Details)
+        $sheet->getStyle('A7')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A7')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFe6e6e6');
+        
+        // ស្វែងរក Row របស់ Expense Details (នេះគ្រាន់តែជាការស្មាន)
+        // អ្នកអាចកែលេខ 20 នេះ ទៅតាមចំនួនទិន្នន័យជាក់ស្តែង
+        $expenseHeaderRow = count($this->sales_details) + count($this->stock_adjustments->where('type', 'sale_return')) + 10; 
+        
+        $sheet->getStyle('A' . $expenseHeaderRow)->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A' . $expenseHeaderRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFe6e6e6');
+
+        // Style សម្រាប់ Table Headers (Date, Description...)
+        $sheet->getStyle('A8:E8')->getFont()->setBold(true);
+        $sheet->getStyle('A' . ($expenseHeaderRow + 1) . ':E' . ($expenseHeaderRow + 1))->getFont()->setBold(true);
+
+        return [
+            // Example: Style ជួរ Profit/Loss
+            5 => ['font' => ['bold' => true, 'size' => 12]],
+        ];
     }
 
     /**
@@ -43,7 +100,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
         // 1. បង្កើត Collection សម្រាប់សរុប (Summary)
         $summaryCollection = collect([
             ['type' => 'SUMMARY_HEADER', 'details' => 'Summary Report'],
-            // ✅ បាន Un-comment និងកែไขส่วนนี้
+            // ✅ បាន Un-comment
             ['type' => 'SUMMARY_ROW', 'details' => 'Total Revenue:', 'amount' => '$' . $this->summary['total_revenue']],
             ['type' => 'SUMMARY_ROW', 'details' => 'Total Expenses:', 'amount' => '$' . $this->summary['total_expenses']],
             ['type' => 'SUMMARY_ROW', 'details' => 'Profit / Loss:', 'amount' => '$' . $this->summary['profit_or_loss']],
@@ -98,12 +155,25 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             return [
                 'type' => 'DATA_ROW',
                 'date' => Carbon::parse($item->date)->format('d-m-Y'),
-                'details' => $item->details,
+                'details' => $item->description,
                 'qty' => '-',
                 'price' => '-',
                 'total' => $item->amount
             ];
         });
+
+        $payrollExpenseData = $this->payrolls->map(function ($item) {
+            return [
+                'type'  => 'DATA_ROW',
+                'date'  => Carbon::parse($item->payroll_date)->format('d-m-Y'),
+                'details' => "Payroll: " . ($item->employee->name ?? 'Unknown Employee'),
+                'qty'   => '-',
+                'price' => '-',
+                'total' => $item->net_salary ?? $item->total_salary, // តើ Column ឈ្មោះអ្វី?
+            ];
+        });
+
+        
 
         
         $clearedStockData = $this->stock_adjustments->where('type', 'clear_stock')->map(function ($item) {
@@ -138,6 +208,7 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
             ->merge($expenseCollection)
             ->merge($purchaseData)
             ->merge($otherExpenseData)
+            ->merge($payrollExpenseData)   // ✅ បន្ថែម Payrolls នៅទីនេះ
             ->merge($clearedStockData)
             ->merge($purchaseReturnData);
     }
@@ -196,34 +267,5 @@ class IncomeExpenseExport implements FromCollection, WithHeadings, WithMapping, 
         }
     }
 
-    public function styles(Worksheet $sheet)
-    {
-        
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-
-        $currentRow = 1;
-        foreach ($this->collection() as $row) {
-            if ($row['type'] === 'SUMMARY_HEADER' || $row['type'] === 'SECTION_HEADER') {
-                $sheet->mergeCells("A{$currentRow}:E{$currentRow}");
-                $sheet->getStyle("A{$currentRow}")->getFont()->setBold(true)->setSize(14);
-                $sheet->getStyle("A{$currentRow}")->getFill()
-                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('FFD3D3D3');
-            }
-            if ($row['type'] === 'SUMMARY_ROW') {
-                $sheet->getStyle("A{$currentRow}:B{$currentRow}")->getFont()->setBold(true);
-            }
-            
-            if ($row['type'] === 'SUMMARY_ROW' && strpos($row['details'], 'Profit') !== false) {
-                $sheet->getStyle("A{$currentRow}:B{$currentRow}")->getFont()->setBold(true)->setSize(12);
-            }
-            $currentRow++;
-        }
-
-        
-        $sheet->getStyle('A6:E6')->getFont()->setBold(true); 
-        $sheet->getStyle('A' . ($this->sales_details->count() + $this->stock_adjustments->where('type', 'sale_return')->count() + 9) . ':E' . ($this->sales_details->count() + $this->stock_adjustments->where('type', 'sale_return')->count() + 9))->getFont()->setBold(true); // Style header ของ Expense
-
-        return [];
-    }
+    
 }

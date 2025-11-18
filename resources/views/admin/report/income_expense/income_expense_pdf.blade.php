@@ -1,70 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Income & Expense Report</title>
     <style>
-        /* Font setup (Kept Khmer font for compatibility with previous reports) */
-        @font-face {
-            font-family: 'Khmer OS Siemreap';
-            font-style: normal;
-            font-weight: normal;
-            src: url({{ storage_path('fonts/KhmerOS_siemreap.ttf') }}) format('truetype');
-        }
-
-        body {
-            font-family: 'Khmer OS Siemreap', sans-serif;
+        body, table, th, td, h1, p, h3, small {
+            font-family: "Khmer OS Battambang", sans-serif; 
             font-size: 11px;
             color: #333;
         }
-        .container {
-            width: 100%;
-            margin: 0 auto;
-        }
-        .report-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .report-header h1 {
-            margin: 0;
-            font-size: 20px;
-        }
-        .report-header p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 6px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .summary-table td:first-child {
-            font-weight: bold;
-            width: 70%;
-        }
-        .section-header {
-            background-color: #e6e6e6;
-            font-weight: bold;
-            font-size: 14px;
-            padding: 8px;
-            text-align: center;
-        }
+        /* ... (Style ផ្សេងៗរបស់អ្នកនៅដដែល) ... */
+        .container { width: 100%; margin: 0 auto; }
+        .report-header { text-align: center; margin-bottom: 20px; }
+        .report-header h1 { margin: 0; font-size: 20px; }
+        .report-header p { margin: 5px 0; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .summary-table td:first-child { font-weight: bold; width: 70%; }
+        .section-header { background-color: #e6e6e6; font-weight: bold; font-size: 14px; padding: 8px; text-align: center; }
         .text-right { text-align: right !important; }
         .text-center { text-align: center !important; }
         .income-total { color: #28a745; font-weight: bold; }
         .expense-total { color: #dc3545; font-weight: bold; }
         .credit-total { color: #28a745; font-weight: bold; }
-
         .profit { color: #28a745; font-weight: bold; }
         .loss { color: #dc3545; font-weight: bold; }
     </style>
@@ -93,19 +53,23 @@
             </tr>
         </table>
 
-        {{-- ✅ START: REVISED INCOME DETAILS --}}
+        {{-- INCOME DETAILS (ត្រឹមត្រូវហើយ) --}}
         @php
             $incomeItems = collect();
-            foreach ($sales_details as $item) {
-                $incomeItems->push(['date' => $item->order->order_date, 'type' => 'Sale', 'item' => $item]);
+            if(isset($sales_details)) {
+                foreach ($sales_details as $item) {
+                    $incomeItems->push(['date' => $item->order->order_date, 'type' => 'Sale', 'item' => $item]);
+                }
             }
-            foreach ($stock_adjustments->where('type', 'sale_return') as $item) {
-                $incomeItems->push(['date' => $item->created_at, 'type' => 'Sale Return', 'item' => $item]);
+            if(isset($stock_adjustments)) {
+                foreach ($stock_adjustments->where('type', 'sale_return') as $item) {
+                    $incomeItems->push(['date' => $item->created_at, 'type' => 'Sale Return', 'item' => $item]);
+                }
             }
             $sortedIncome = $incomeItems->sortBy('date');
         @endphp
         <table>
-            <thead>
+             <thead>
                 <tr><th colspan="5" class="section-header">Income Details</th></tr>
                 <tr>
                     <th>Date</th>
@@ -141,23 +105,32 @@
                 @endforelse
             </tbody>
         </table>
-        {{-- ✅ END: REVISED INCOME DETAILS --}}
 
-
-        {{-- ✅ START: REVISED EXPENSE DETAILS --}}
+        {{-- ✅ START: REVISED EXPENSE DETAILS (កូដកែសម្រួល) --}}
         @php
             $expenseItems = collect();
-            foreach ($purchase_details as $item) {
-                $expenseItems->push(['date' => $item->purchase->purchase_date, 'type' => 'Purchase', 'item' => $item]);
+            if(isset($purchase_details)) {
+                foreach ($purchase_details as $item) {
+                    $expenseItems->push(['date' => $item->purchase->purchase_date, 'type' => 'Purchase', 'item' => $item]);
+                }
             }
-            foreach ($other_expenses as $item) {
-                $expenseItems->push(['date' => $item->date, 'type' => 'Other Expense', 'item' => $item]);
+            if(isset($other_expenses)) {
+                foreach ($other_expenses as $item) {
+                    $expenseItems->push(['date' => $item->expense_date, 'type' => 'Other Expense', 'item' => $item]);
+                }
             }
-            foreach ($stock_adjustments->where('type', 'clear_stock') as $item) {
-                $expenseItems->push(['date' => $item->created_at, 'type' => 'Clear Stock', 'item' => $item]);
+            if(isset($payrolls)) {
+                foreach ($payrolls as $item) {
+                    $expenseItems->push(['date' => $item->payment_date, 'type' => 'Payroll', 'item' => $item]);
+                }
             }
-            foreach ($stock_adjustments->where('type', 'purchase_return') as $item) {
-                $expenseItems->push(['date' => $item->created_at, 'type' => 'Purchase Return', 'item' => $item]);
+            if(isset($stock_adjustments)) {
+                foreach ($stock_adjustments->where('type', 'clear_stock') as $item) {
+                    $expenseItems->push(['date' => $item->created_at, 'type' => 'Clear Stock', 'item' => $item]);
+                }
+                foreach ($stock_adjustments->where('type', 'purchase_return') as $item) {
+                    $expenseItems->push(['date' => $item->created_at, 'type' => 'Purchase Return', 'item' => $item]);
+                }
             }
             $sortedExpenses = $expenseItems->sortBy('date');
         @endphp
@@ -174,6 +147,7 @@
             </thead>
             <tbody>
                 @forelse ($sortedExpenses as $expense)
+                
                     @if ($expense['type'] == 'Purchase')
                         @php $item = $expense['item']; @endphp
                         <tr>
@@ -183,15 +157,27 @@
                             <td class="text-right">${{ number_format($item->unitcost, 2) }}</td>
                             <td class="text-right expense-total">${{ number_format($item->total, 2) }}</td>
                         </tr>
+                    
                     @elseif ($expense['type'] == 'Other Expense')
                         @php $item = $expense['item']; @endphp
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($item->date)->format('d-m-Y') }}</td>
-                            <td>{{ $item->details }}<br><small>(Other Expense)</small></td>
+                            <td>{{ \Carbon\Carbon::parse($item->expense_date)->format('d-m-Y') }}</td>
+                            <td>{{ $item->description }}<br><small>({{ $item->category->name ?? 'Other Expense' }})</small></td>
                             <td class="text-center">-</td>
                             <td class="text-right">-</td>
                             <td class="text-right expense-total">${{ number_format($item->amount, 2) }}</td>
                         </tr>
+
+                    @elseif ($expense['type'] == 'Payroll')
+                        @php $item = $expense['item']; @endphp
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-m-Y') }}</td>
+                            <td>ប្រាក់ខែ {{ $item->employee->name ?? '' }}<br><small>({{ $item->month_year }})</small></td>
+                            <td class="text-center">-</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right expense-total">${{ number_format($item->net_salary, 2) }}</td>
+                        </tr>
+
                     @elseif ($expense['type'] == 'Clear Stock')
                         @php $item = $expense['item']; @endphp
                         <tr style="background-color: #fbebeb;">

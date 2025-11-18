@@ -20,6 +20,19 @@ return [
      */
     'convert_entities' => true,
 
+    "fonts" => [
+        
+        // == ✅ បន្ថែម Entry នេះចូល ==
+        "Khmer OS Battambang" => [
+            'normal'      => storage_path('fonts/KhmerOS_battambang.ttf'),
+            'bold'        => storage_path('fonts/KhmerOS_battambang.ttf'), // ប្រើ Font ដដែល បើអ្នកគ្មាន Font ក្រាស់
+            'italic'      => storage_path('fonts/KhmerOS_battambang.ttf'), // ប្រើ Font ដដែល បើអ្នកគ្មាន Font ទ្រេត
+            'bold_italic' => storage_path('fonts/KhmerOS_battambang.ttf'), // ប្រើ Font ដដែល បើអ្នកគ្មាន Font ក្រាស់ទ្រេត
+        ],
+        // == ✅ បញ្ចប់ការបន្ថែម ==
+
+    ],
+
     'options' => [
         /**
          * The location of the DOMPDF font directory

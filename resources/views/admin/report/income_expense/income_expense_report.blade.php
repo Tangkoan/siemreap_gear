@@ -165,9 +165,9 @@
                                     <tr>
                                         <th class="p-3">{{ __('messages.date') }}</th>
                                         <th class="p-3">{{ __('messages.details') }}</th>
-                                        <th class="p-3 text-center">{{ __('messages.qty') }}</th>
+                                        <th class="p-3 text-center">{{ __('messages.qty') }} & {{ __('description') }}</th>
                                         <th class="p-3 text-right">{{ __('messages.price') }}</th>
-                                        <th class="p-3 text-right">{{ __('messages.total') }}</th>
+                                        {{-- <th class="p-3 text-right">{{ __('messages.total') }}</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody id="expense-details-body" class=" tbody divide-y divide-gray-200 dark:divide-slate-700"></tbody>
