@@ -106,6 +106,10 @@ class StockController extends Controller
             'notes' => 'required|string|max:255',
         ]);
 
+        // ✅✅✅ ជំហានទី ១៖ ចាប់យក Product មកមុន ដើម្បីឆែកមើលស្តុកបច្ចុប្បន្ន ✅✅✅
+        $product = Product::findOrFail($request->product_id);
+        $current_stock = (int) $product->product_store;
+
         if ($request->type === 'sale_return') {
             $request->validate(['sale_detail_id' => 'required|exists:orderdetails,id']);
 
@@ -127,6 +131,7 @@ class StockController extends Controller
         if ($request->type === 'purchase_return') {
             $request->validate(['purchase_detail_id' => 'required|exists:purchase_details,id']);
 
+            // 1. ឆែកមើលថាតើ Invoice នេះធ្លាប់ Return អស់ឬនៅ?
             $original_qty = DB::table('purchase_details')->where('id', $request->purchase_detail_id)->value('quantity');
             $total_returned = StockAdjustment::where('type', 'purchase_return')
                 ->where('related_id', $request->purchase_detail_id)
@@ -140,12 +145,30 @@ class StockController extends Controller
             if ($request->quantity > $returnable_qty) {
                 return redirect()->back()->with(['message' => __('messages.return_qty_exceeds_returnable', ['returnable' => $returnable_qty]), 'alert-type' => 'error']);
             }
+
+            // ✅✅✅ ជំហានទី ២ (Logic Fix)៖ ឆែកមើលស្តុកជាក់ស្តែងក្នុងហាង ✅✅✅
+            // ប្រើ Translation Key ដើម្បីឱ្យចេញជាភាសាខ្មែរ ឬ អង់គ្លេស
+            if ($request->quantity > $current_stock) {
+                return redirect()->back()->with([
+                    'message' => __('messages.stock_insufficient_for_return', ['stock' => $current_stock]), 
+                    'alert-type' => 'error'
+                ]);
+            }
+        }
+
+        // ✅✅✅ ជំហានទី ៣៖ ការពារករណី Clear Stock (ខូច) លើសចំនួនដែលមាន ✅✅✅
+        if ($request->type === 'clear_stock') {
+             if ($request->quantity > $current_stock) {
+                return redirect()->back()->with([
+                    'message' => __('messages.cannot_clear_stock_exceeds', ['stock' => $current_stock]), 
+                    'alert-type' => 'error'
+                ]);
+            }
         }
 
         try {
 
-            DB::transaction(function () use ($request) {
-                $product = Product::findOrFail($request->product_id);
+            DB::transaction(function () use ($request, $product) {
                 $before_quantity = (int) $product->product_store;
                 $quantity = (int) $request->quantity;
                 $action_message = '';

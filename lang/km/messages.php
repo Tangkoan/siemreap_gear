@@ -677,4 +677,7 @@ return [
         'bonus'=> 'ប្រាក់លើទឹកចិត្ត',
 
         'net_salary_th'=> 'ប្រាក់សុទ្ធ',
+
+        'stock_insufficient_for_return' => 'ស្តុកជាក់ស្តែង (:stock) មិនគ្រប់គ្រាន់សម្រាប់ការ Return នេះទេ។',
+        'cannot_clear_stock_exceeds' => 'មិនអាចកាត់ស្តុកខូចបានទេ ដោយសារចំនួនលើសពីស្តុកដែលមាន (:stock)។',
 ];      

@@ -694,6 +694,9 @@ return [
 
     'net_salary_th'=> 'Net Salary',
 
+    'stock_insufficient_for_return' => 'Current stock (:stock) is insufficient for this return.',
+    'cannot_clear_stock_exceeds' => 'Cannot clear stock. Input quantity exceeds current stock (:stock).',
+
     
 
 ];
