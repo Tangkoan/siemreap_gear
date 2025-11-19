@@ -680,4 +680,15 @@ return [
 
         'stock_insufficient_for_return' => 'ស្តុកជាក់ស្តែង (:stock) មិនគ្រប់គ្រាន់សម្រាប់ការ Return នេះទេ។',
         'cannot_clear_stock_exceeds' => 'មិនអាចកាត់ស្តុកខូចបានទេ ដោយសារចំនួនលើសពីស្តុកដែលមាន (:stock)។',
+
+        'payroll_for'=> 'បើកប្រាក់ខែសម្រាប់ :',
+
+        'note'=> 'កត់ចំណាំ',
+        'deduction'=> 'ប្រាក់កាត់',
+
+        'expense_month'=> 'ចំណាយប្រចាំខែ',
+        'category_expense'=> 'ប្រភេទការចំណាយ',
+        'please_select'=> 'សូមជ្រើសរើស',
+
+        'edit_expense'=> 'កែប្រែការចំណាយ',
 ];      

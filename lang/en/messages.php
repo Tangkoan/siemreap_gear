@@ -697,6 +697,17 @@ return [
     'stock_insufficient_for_return' => 'Current stock (:stock) is insufficient for this return.',
     'cannot_clear_stock_exceeds' => 'Cannot clear stock. Input quantity exceeds current stock (:stock).',
 
+
+     'payroll_for'=> 'Payroll For :',
+     'note'=> 'Note',
+     'deduction'=> 'Deduction',
+
+     'expense_month'=> 'Expense Month',
+     'category_expense'=> 'Category Expense',
+     'please_select'=> 'Please Select',
+
+     'edit_expense'=> 'Edit Expense',
+
     
 
 ];

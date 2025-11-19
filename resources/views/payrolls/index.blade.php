@@ -101,10 +101,10 @@
 <div id="payrollModal" class="fixed z-50 inset-0 overflow-y-auto modal-hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity dark:bg-gray-900 dark:bg-opacity-75" aria-hidden="true"></div>
+        <div class="fixed inset-0 card-dynamic-bg bg-opacity-75 transition-opacity " aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-        <div class="inline-block align-bottom card-dynamic-bg rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+        <div class="inline-block align-bottom card-dynamic-bg rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
             <form id="payrollForm">
                 @csrf
                 <input type="hidden" id="employee_id" name="employee_id">
@@ -121,17 +121,17 @@
                         {{-- ផ្នែកខាងឆ្វេង (ព័ត៌មាន) --}}
                         <div class="space-y-4">
                             <div>
-                                <label for="payment_date" class="block text-sm font-medium text-defalut">ថ្ងៃទូទាត់</label>
+                                <label for="payment_date" class="block text-sm font-medium text-defalut">{!! __("messages.payment_day") !!}</label>
                                 <input type="date" name="payment_date" id="payment_date" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                                 <span id="error_payment_date" class="text-red-500 text-sm"></span>
                             </div>
                             <div>
-                                <label for="month_year" class="block text-sm font-medium text-defalut">សម្រាប់ខែ/ឆ្នាំ</label>
+                                <label for="month_year" class="block text-sm font-medium text-defalut">{!! __("messages.for_month") !!}</label>
                                 <input type="text" name="month_year" id="month_year" placeholder="e.g., Nov-2025" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                                 <span id="error_month_year" class="text-red-500 text-sm"></span>
                             </div>
                             <div>
-                                <label for="notes" class="block text-sm font-medium text-defalut">កំណត់ចំណាំ (Optional)</label>
+                                <label for="notes" class="block text-sm font-medium text-defalut">{!! __("messages.note") !!} (Optional)</label>
                                 <textarea name="notes" id="notes" rows="3" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
                             </div>
                         </div>
@@ -139,22 +139,22 @@
                         {{-- ផ្នែកខាងស្តាំ (ការគណនា) --}}
                         <div class="space-y-4 p-4 card-dynamic-bg border border-primary rounded-md">
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-defalut">ប្រាក់ខែគោល ($)</label>
+                                <label class="block text-sm font-medium text-defalut">{!! __("messages.basic_salary") !!} ($)</label>
                                 <input type="number" id="base_salary" name="base_salary_display" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary bg-gray-200 dark:bg-gray-700 shadow-sm sm:text-sm" readonly>
                             </div>
                             <div class="mb-4">
-                                <label for="bonus" class="block text-sm font-medium text-defalut">ប្រាក់បូក (+)</label>
+                                <label for="bonus" class="block text-sm font-medium text-defalut">{!! __("messages.bonus") !!} (+)</label>
                                 <input type="number" step="0.01" name="bonus" id="bonus" value="0" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm calc-field" required>
                                 <span id="error_bonus" class="text-red-500 text-sm"></span>
                             </div>
                             <div class="mb-4">
-                                <label for="deduction" class="block text-sm font-medium text-defalut">ប្រាក់កាត់ (-)</label>
+                                <label for="deduction" class="block text-sm font-medium text-defalut">{!! __("messages.deduction") !!} (-)</label>
                                 <input type="number" step="0.01" name="deduction" id="deduction" value="0" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm calc-field" required>
                                 <span id="error_deduction" class="text-red-500 text-sm"></span>
                             </div>
                             <hr class="my-4 border-primary">
                             <div class="flex justify-between items-center">
-                                <span class="text-lg font-bold text-defalut">ប្រាក់ខែសុទ្ធ (NET):</span>
+                                <span class="text-lg font-bold text-defalut">{!! __("messages.net_salary_th") !!} :</span>
                                 <span id="net_salary" class="text-2xl font-bold text-green-600">$0.00</span>
                             </div>
                         </div>
@@ -164,10 +164,10 @@
                 {{-- Modal Footer --}}
                 <div class="card-dynamic-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200">
                     <button type="submit" id="saveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-opacity-90 sm:ml-3 sm:w-auto sm:text-sm">
-                        ยืนยันការទូទាត់
+                        {!! __("messages.save") !!}
                     </button>
                     <button type="button" id="closeModalBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-primary shadow-sm px-4 py-2 card-dynamic-bg text-base font-medium text-defalut hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        បោះបង់
+                        {!! __("messages.cancel") !!}
                     </button>
                 </div>
             </form>
@@ -210,7 +210,7 @@
             payrollForm[0].reset();
             $('.text-red-500').text('');
             
-            modalTitle.text('បើកប្រាក់ខែឲ្យ: ' + name);
+            modalTitle.text('{!! __("messages.payroll_for") !!} ' + name);
             $('#employee_id').val(id);
             $('#base_salary').val(parseFloat(salary).toFixed(2));
             

@@ -147,7 +147,7 @@
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         
         {{-- Background overlay --}}
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity dark:bg-gray-900 dark:bg-opacity-75" aria-hidden="true"></div>
+        <div class="fixed inset-0 card-dynamic-bg" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         {{-- Modal Panel (ប្រើ class របស់អ្នក) --}}
@@ -158,22 +158,22 @@
                 
                 {{-- Modal Header --}}
                 <div class="card-dynamic-bg px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-slate-200">
-                    <h3 class="text-lg leading-6 font-medium text-defalut" id="modalTitle">បន្ថែមការចំណាយថ្មី</h3>
+                    <h3 class="text-lg leading-6 font-medium text-defalut" id="modalTitle">{{ __('messages.add_expense') }}</h3>
                 </div>
 
                 {{-- Modal Body --}}
                 <div class="card-dynamic-bg px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="space-y-4">
                         <div>
-                            <label for="expense_date" class="block text-sm font-medium text-defalut">ថ្ងៃខែចំណាយ</label>
+                            <label for="expense_date" class="block text-sm font-medium text-defalut">{{ __('messages.expense_month') }}</label>
                             <input type="date" name="expense_date" id="expense_date" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_expense_date" class="text-red-500 text-sm"></span>
                         </div>
                         
                         <div>
-                            <label for="expense_category_id" class="block text-sm font-medium text-defalut">ប្រភេទចំណាយ</label>
+                            <label for="expense_category_id" class="block text-sm font-medium text-defalut">{{ __('messages.category_expense') }}</label>
                             <select name="expense_category_id" id="expense_category_id" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                                <option value="">-- សូមជ្រើសរើសប្រភេទ --</option>
+                                <option value="">{{ __('messages.please_select') }}</option>
                                 {{-- $categories នេះគឺមកពី function index() ក្នុង Controller --}}
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -183,19 +183,19 @@
                         </div>
                         
                          <div>
-                            <label for="description" class="block text-sm font-medium text-defalut">ការពិពណ៌នា</label>
+                            <label for="description" class="block text-sm font-medium text-defalut">{{ __('messages.description') }}</label>
                             <input type="text" name="description" id="description" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_description" class="text-red-500 text-sm"></span>
                         </div>
                         
                         <div>
-                            <label for="amount" class="block text-sm font-medium text-defalut">ទឹកប្រាក់ ($)</label>
+                            <label for="amount" class="block text-sm font-medium text-defalut">{{ __('messages.price') }} ($)</label>
                             <input type="number" step="0.01" name="amount" id="amount" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             <span id="error_amount" class="text-red-500 text-sm"></span>
                         </div>
 
                          <div>
-                            <label for="notes" class="block text-sm font-medium text-defalut">កំណត់ចំណាំ (Optional)</label>
+                            <label for="notes" class="block text-sm font-medium text-defalut">{{ __('messages.description') }} (Optional)</label>
                             <textarea name="notes" id="notes" rows="3" class="mt-1 block w-full text-defalut card-dynamic-bg rounded-md border-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
                         </div>
                     </div>
@@ -204,10 +204,10 @@
                 {{-- Modal Footer --}}
                 <div class="card-dynamic-bg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200">
                     <button type="submit" id="saveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-opacity-90 sm:ml-3 sm:w-auto sm:text-sm">
-                        រក្សាទុក
+                        {{ __('messages.save') }}
                     </button>
                     <button type="button" id="closeModalBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-primary shadow-sm px-4 py-2 card-dynamic-bg text-base font-medium text-defalut hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        បោះបង់
+                        {{ __('messages.cancel') }}
                     </button>
                 </div>
             </form>
@@ -284,7 +284,7 @@
         $('#addExpenseBtn').on('click', function() {
             expenseForm[0].reset(); // Clear form
             $('#expenseId').val(''); // Clear ID
-            $('#modalTitle').text('បន្ថែមការចំណាយថ្មី');
+            $('#modalTitle').text('{!! __('messages.add_expense') !!}');
             $('.text-red-500').text(''); // Clear validation errors
             modal.removeClass('modal-hidden');
         });
@@ -300,7 +300,7 @@
             
             $.get("{{ url('api/expenses') }}/" + id, function(data) {
                 // បញ្ចូលទិន្នន័យទៅក្នុង Form
-                $('#modalTitle').text('កែសម្រួលការចំណាយ');
+                $('#modalTitle').text('{!! __('messages.edit_expense') !!}');
                 $('#expenseId').val(data.id);
                 $('#expense_date').val(data.expense_date);
                 $('#expense_category_id').val(data.expense_category_id);

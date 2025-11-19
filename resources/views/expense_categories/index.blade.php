@@ -132,7 +132,7 @@
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         
         {{-- Background overlay --}}
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity dark:bg-gray-900 dark:bg-opacity-75" aria-hidden="true"></div>
+        <div class="fixed inset-0 card-dynamic-bg" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         {{-- Modal Panel (ប្រើ class របស់អ្នក) --}}
