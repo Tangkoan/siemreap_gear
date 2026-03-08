@@ -102,10 +102,12 @@
                         </div>
                     </div>
 
+
                     {{-- Submit Button --}}
                     <div class="flex justify-end pt-4">
                         <button type="submit"
-                            class="bg-primary hover:opacity-90 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            @if(!Auth::user()->can('admin.profile.edit')) disabled @endif
+                            class="bg-primary hover:opacity-90 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">
                             {{ __('messages.edit') }}
                         </button>
                     </div>
@@ -235,7 +237,8 @@
 
                 <div class="mt-6 flex justify-end">
                     <button type="submit" id="saveAppearanceBtn"
-                        class="px-4 py-2 bg-primary text-white rounded-md hover:opacity-90 focus:outline-none disabled:opacity-75 transition-all">
+                        @if(!Auth::user()->can('admin.profile.edit')) disabled @endif
+                        class="px-4 py-2 bg-primary text-white rounded-md hover:opacity-90 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all">
                         Save Changes
                     </button>
                 </div>

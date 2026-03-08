@@ -691,4 +691,6 @@ return [
         'please_select'=> 'សូមជ្រើសរើស',
 
         'edit_expense'=> 'កែប្រែការចំណាយ',
+     'update_password'=> 'កែពាក្យសម្ងាត់',
+
 ];      

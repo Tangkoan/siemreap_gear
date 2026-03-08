@@ -226,9 +226,9 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::get('/dashboard/data', [DashboardController::class, 'getData'])->name('dashboard.data');
     // End
     Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.admin_profile_view');
-    Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
+    Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store')->middleware('permission:admin.profile.edit');
     Route::get('/change/password', [AdminController::class, 'ChangePassword'])->name('change.password');
-    Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password');
+    Route::post('/update/password', [AdminController::class, 'UpdatePassword'])->name('update.password')->middleware('permission:admin.profile.edit');
 
 
     // ================================ Exchange Rate ==========================================

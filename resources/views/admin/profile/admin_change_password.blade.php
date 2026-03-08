@@ -75,9 +75,11 @@
                     </span>
                 </div>
 
-                <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        {{ __('messages.edit') }}
+                <div class="flex justify-end pt-4">
+                    <button type="submit" 
+                        @if(!Auth::user()->can('admin.profile.edit')) disabled @endif
+                        class="bg-primary hover:opacity-90 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                        {{ __('messages.update_password') }}
                     </button>
                 </div>
             </form>

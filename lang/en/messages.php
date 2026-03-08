@@ -707,6 +707,7 @@ return [
      'please_select'=> 'Please Select',
 
      'edit_expense'=> 'Edit Expense',
+     'update_password'=> 'Update Password',
 
     
 

@@ -96,8 +96,14 @@
             <h2 class="text-xl font-bold text-defalut pb-4 border-b border-defalut">{{ __('messages.purchase_cart') }}</h2>
 
         {{-- Add Product Button --}}
-            <button id="add-product-btn" type="button" title="{{ __('messages.add_new_product') }}" aria-label="{{ __('messages.add_new_product') }}"
-                class="flex-shrink-0 bg-primary text-white  px-3 py-0.5 rounded-md  transition-colors  flex items-center gap-1 leading-none h-6 min-h-8">
+            <button id="add-product-btn" type="button" 
+                title="{{ __('messages.add_new_product') }}" 
+                aria-label="{{ __('messages.add_new_product') }}"
+                {{-- បន្ថែមលក្ខខណ្ឌត្រង់នេះ --}}
+                @if(!Auth::user()->can('product.add')) disabled @endif
+                
+                {{-- បន្ថែម class: disabled:opacity-50 និង disabled:cursor-not-allowed --}}
+                class="flex-shrink-0 bg-primary text-white px-3 py-0.5 rounded-md transition-colors flex items-center gap-1 leading-none h-6 min-h-8 disabled:opacity-50 disabled:cursor-not-allowed">
                 
                 <span class="hidden md:inline font-medium text-sm ">{{ __('messages.add_product') }}</span>
             </button>
